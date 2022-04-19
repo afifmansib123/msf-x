@@ -21,6 +21,7 @@ import styles from "assets/jss/nextjs-material-dashboard/layouts/adminStyle.js";
 const bgImage = "/assets/img/sidebar-2.jpg";
 const logo = "/assets/img/bhalogari.png";
 
+
 let ps;
 
 export default function Admin({ children, ...rest }) {
