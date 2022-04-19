@@ -2,21 +2,20 @@
 import React from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
-// @material-ui/core
-import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
-// @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
-import BugReport from "@material-ui/icons/BugReport";
-import Code from "@material-ui/icons/Code";
-import Cloud from "@material-ui/icons/Cloud";
+import makeStyles from '@mui/styles/makeStyles';
+import Icon from "@mui/material/Icon";
+// @mui/icons-material
+import Store from "@mui/icons-material/Store";
+import Warning from "@mui/icons-material/Warning";
+import DateRange from "@mui/icons-material/DateRange";
+import LocalOffer from "@mui/icons-material/LocalOffer";
+import Update from "@mui/icons-material/Update";
+import ArrowUpward from "@mui/icons-material/ArrowUpward";
+import AccessTime from "@mui/icons-material/AccessTime";
+import Accessibility from "@mui/icons-material/Accessibility";
+import BugReport from "@mui/icons-material/BugReport";
+import Code from "@mui/icons-material/Code";
+import Cloud from "@mui/icons-material/Cloud";
 // layout for this page
 import RTL from "layouts/RTL.js";
 // core components
@@ -41,9 +40,8 @@ import {
   completedTasksChart,
 } from "variables/charts.js";
 
-import styles from "assets/jss/nextjs-material-dashboard/views/rtlStyle.js";
-
-import avatar from "assets/img/faces/marc.jpg";
+const styles = "/assets/jss/nextjs-material-dashboard/views/rtlStyle.js";
+const avatar = "/assets/img/faces/marc.jpg";
 
 let bugs = [
   "طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن؟",

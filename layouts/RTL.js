@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from '@mui/styles/makeStyles';
 // core components
 import Navbar from "components/Navbars/Navbar.js";
 import Footer from "components/Footer/Footer.js";
@@ -15,8 +14,8 @@ import routes from "routes.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/layouts/rtlStyle.js";
 
-import bgImage from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/bhalogari.png";
+const bgImage = "/assets/img/sidebar-2.jpg";
+const logo = "/assets/img/bhalogari.png";
 
 let ps;
 

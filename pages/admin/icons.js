@@ -1,8 +1,7 @@
 /*eslint-disable*/
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Hidden from "@material-ui/core/Hidden";
+import makeStyles from '@mui/styles/makeStyles';
+import Hidden from "@mui/material/Hidden";
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components

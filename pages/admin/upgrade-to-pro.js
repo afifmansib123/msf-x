@@ -1,9 +1,8 @@
 import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-import Close from "@material-ui/icons/Close";
-import Check from "@material-ui/icons/Check";
+import makeStyles from '@mui/styles/makeStyles';
+// @mui/icons-material
+import Close from "@mui/icons-material/Close";
+import Check from "@mui/icons-material/Check";
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components

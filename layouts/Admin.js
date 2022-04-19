@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 // core components
 import Navbar from "components/Navbars/Navbar.js";
 import Footer from "components/Footer/Footer.js";
@@ -15,8 +16,11 @@ import routes from "routes.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/layouts/adminStyle.js";
 
-import bgImage from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/new_logo.png";
+// import bgImage from "assets/img/sidebar-2.jpg";
+// import logo from "assets/img/bhalogari.png";
+const bgImage = "/assets/img/sidebar-2.jpg";
+const logo = "/assets/img/bhalogari.png";
+
 
 let ps;
 
@@ -88,11 +92,7 @@ export default function Admin({ children, ...rest }) {
         {...rest}
       />
       <div className={classes.mainPanel} ref={mainPanel}>
-        <Navbar
-          routes={routes}
-          handleDrawerToggle={handleDrawerToggle}
-          {...rest}
-        />
+        <Navbar routes={routes} handleDrawerToggle={handleDrawerToggle} {...rest} />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
           <div className={classes.content}>

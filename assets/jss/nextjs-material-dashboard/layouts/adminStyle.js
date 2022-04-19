@@ -4,7 +4,8 @@ import {
   container,
 } from "assets/jss/nextjs-material-dashboard.js";
 
-const appStyle = (theme) => ({
+const appStyle = (theme) => (
+  {
   wrapper: {
     position: "relative",
     top: "0",

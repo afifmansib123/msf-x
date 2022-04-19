@@ -20,18 +20,16 @@ import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import lightTheme from "/styles/theme/lightTheme";
 
 import PageChange from "components/PageChange/PageChange.js";
-
 import "assets/css/nextjs-material-dashboard.css?v=1.1.0";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
   document.body.classList.add("body-page-transition");
-  ReactDOM.render(
-    <PageChange path={url} />,
-    document.getElementById("page-transition")
-  );
+  ReactDOM.render(<PageChange path={url} />, document.getElementById("page-transition"));
 });
 Router.events.on("routeChangeComplete", () => {
   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
@@ -78,19 +76,16 @@ export default class MyApp extends App {
     const Layout = Component.layout || (({ children }) => <>{children}</>);
 
     return (
-      <React.Fragment>
+      <ThemeProvider theme={lightTheme}>
         <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <title>Bhalogari Admin Panel</title>
           <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
         </Head>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </React.Fragment>
+      </ThemeProvider>
     );
   }
 }
