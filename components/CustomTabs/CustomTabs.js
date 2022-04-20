@@ -96,3 +96,7 @@ CustomTabs.propTypes = {
   rtlActive: PropTypes.bool,
   plainTabs: PropTypes.bool,
 };
+
+CustomTabs.defaultProps  = {
+  rtlActive: false,
+}

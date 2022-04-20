@@ -31,10 +31,10 @@ export default function Sidebar(props) {
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
-        var activePro = " ";
+        var settings = " ";
         var listItemClasses;
-        if (prop.path === "/upgrade-to-pro") {
-          activePro = classes.activePro + " ";
+        if (prop.path === "/settings") {
+          settings = classes.settings + " ";
           listItemClasses = classNames({
             [" " + classes[color]]: true,
           });
@@ -50,7 +50,7 @@ export default function Sidebar(props) {
         });
         return (
           <Link href={prop.layout + prop.path} key={key}>
-            <a className={activePro + classes.item}>
+            <a className={settings + classes.item}>
               <ListItem button className={classes.itemLink + listItemClasses}>
                 {typeof prop.icon === "string" ? (
                   <Icon
@@ -169,3 +169,7 @@ Sidebar.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object),
   open: PropTypes.bool,
 };
+
+Sidebar.defaultProps  = {
+  rtlActive: false,
+}
