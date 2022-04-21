@@ -1,4 +1,7 @@
 # BG Admin Panel
+
+* [Next.js + Storybook](https://storybook.js.org/blog/get-started-with-storybook-and-next-js/)
+** [Troubleshot](https://stackoverflow.com/a/71031198/368997)
 # [Material Dashboard React](https://demos.creative-tim.com/nextjs-material-dashboard/dashboard) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fcreativetimofficial.github.io%2Fnextjs-material-dashboard&text=NextJS%20Material%20Dashboard%20-%20Free%20NextJS%20Admin%20Template&original_referer=https%3A%2F%2Fdemos.creative-tim.com%2Fnextjs-material-dashboard%2F%3F_ga%3D2.10428917.198078103.1532329372-1803433978.1528781151&via=creativetim&hashtags=react%2Cmaterial-ui)
 
 
