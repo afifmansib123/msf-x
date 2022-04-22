@@ -10,11 +10,25 @@ module.exports = {
 
   webpackFinal: async (config, { configType }) => {
     // config.resolve.modules.push(path.resolve(__dirname, '../src'));
-    config.resolve.modules.push(path.resolve(__dirname, '../'));
+    config.resolve.modules.push(path.resolve(__dirname, "../"));
 
+    config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        {
+          loader: "postcss-loader",
+          options: {
+            postcssOptions: {
+              plugins: [require("tailwindcss"), require("autoprefixer")],
+            },
+          },
+        },
+      ],
+      include: path.resolve(__dirname, "../"),
+    });
     return config;
   },
-  
+
   typescript: {
     check: false,
     checkOptions: {},

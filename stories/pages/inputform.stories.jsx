@@ -4,14 +4,14 @@
  * See [react-hook-form](https://react-hook-form.com/get-started)
  */
 
-import Sample from "./inputform.js";
+import InputForm from "./inputform.js";
 import { ThemeProvider } from "@mui/material";
 import lightTheme from "styles/theme/lightTheme";
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 export default {
-  title: "Forms/Reach Hook Form + MUI",
-  component: Sample,
+  title: "Forms/Sign In",
+  component: InputForm,
   parameters: {
     viewport: {
       viewports: INITIAL_VIEWPORTS,
@@ -23,7 +23,7 @@ export default {
 
 export const HomePage = () =>
   <ThemeProvider theme={lightTheme}>
-    <Sample />
+    <InputForm />
   </ThemeProvider>
 
 

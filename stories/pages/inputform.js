@@ -1,30 +1,10 @@
-import makeStyles from "@mui/styles/makeStyles";
-// @mui/icons-material
-import BugReport from "@mui/icons-material/BugReport";
-import Code from "@mui/icons-material/Code";
-import Cloud from "@mui/icons-material/Cloud";
-// layout for this page
-import Admin from "layouts/Admin.js";
-// core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
-import Tasks from "components/Tasks/Tasks.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-
-import { bugs, website, server } from "variables/general.js";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-
-function Sample() {
-  const useStyles = makeStyles(styles);
-  const classes = useStyles();
+import PropTypes from "prop-types";
+function InputForm(props) {
+  const { onSignIn, onSignUp } = props;
   const {
     register,
     handleSubmit,
@@ -32,41 +12,49 @@ function Sample() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const { username, password }= data;
-    alert(`Username: ${username}\nPassword: ${password}`)
-  };
+  const onSubmit = onSignIn;
+
   console.debug(watch("username"), watch("password"));
 
   return (
-      <Box className="border-2 border-black content-center m-4 flex items-center gap-2" component="form" noValidate autoComplete="off">
-      <h4 className="text-2xl font-bold text-blue">MUI Form with React-Hook-Form</h4>
-        <div>
-          <TextField
-            required
-            id="standard-required"
-            label="Required"
-            defaultValue="Username"
-            variant="standard"
-            {...register("username")}
-          />
-          <TextField
-            id="standard-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            variant="standard"
-            {...register("password", { required: true })}
-          />
-        </div>
-        <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-          Sign In
-        </Button>
-        <Button variant="outline">Sign Up</Button>
-      </Box>
+    <Box className="grid grid-cols-1" component="form" noValidate autoComplete="off">
+      <h2 className="text-2xl font-bold text-blue">Merchant Storefront</h2>
+      <div className="grid grid-col-1 mt-4 mb-4 ">
+        <TextField required id="standard-required" label="Username" variant="standard" {...register("username")} />
+        <TextField
+          id="standard-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          variant="standard"
+          {...register("password", { required: true })}
+        />
+        {(errors.password || errors.username) && (
+          <span className="text-sm text-gray-500">Username and Password fields are required</span>
+        )}
+      </div>
+      <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+        Sign In
+      </Button>
+      <Button variant="outline" onClick={onSignUp}>
+        Sign Up
+      </Button>
+    </Box>
   );
 }
 
-Sample.layout = Admin;
+export default InputForm;
+InputForm.propTypes = {
+  onSignUp: PropTypes.func,
+  onSignIn: PropTypes.func,
+};
 
-export default Sample;
+InputForm.defaultProps = {
+  onSignIn: (data) => {
+    const { username, password } = data;
+    alert(`TODO\nUsername: ${username}\nPassword: ${password}`);
+  },
+  onSignUp: () => {
+    alert("TODO Sign Up");
+  },
+};
