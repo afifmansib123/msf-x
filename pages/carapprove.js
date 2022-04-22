@@ -47,7 +47,6 @@ function CarApproveLog() {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   return (
-    <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <Card>
@@ -59,17 +58,34 @@ function CarApproveLog() {
                 tableHeaderColor="danger"
                 tableHead={["ID", "Merchant", "Car Maker", "Car Model", "Preview Image"]}
                 tableData={[
-                  ["1", "Dakota Rice", "$36,738", "Niger", (<img src="../public/assets/img/apple-icon.png"/>)],
-                  ["2", "Minerva Hooper", "$23,789", "Curaçao", ""],
-                  ["3", "Sage Rodriguez", "$56,142", "Netherlands", ""],
-                  ["4", "Philip Chaney", "$38,735", "Korea, South", ""],
+                  ["1", "Dakota Rice", "$36,738", "Niger", <img src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" width={250} height={250}/>],
+                  ["2", "Minerva Hooper", "$23,789", "Curaçao", <Image
+                  alt="The guitarist in the concert."
+                  src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2250&q=80"
+                  width={120}
+                  height={120}
+                  layout="responsive"
+                  />],
+                  ["3", "Sage Rodriguez", "$56,142", "Netherlands", <Image
+                  alt="The guitarist in the concert."
+                  src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2250&q=80"
+                  width={250}
+                  height={250}
+                  layout="responsive"
+                  />],
+                  ["4", "Philip Chaney", "$38,735", "Korea, South", <Image
+                  alt="The guitarist in the concert."
+                  src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2250&q=80"
+                  width={250}
+                  height={250}
+                  layout="responsive"
+                  />],
                 ]}
               />
             </CardBody>
           </Card>
         </GridItem>
       </GridContainer>
-    </div>
   );
 }
 

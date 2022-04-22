@@ -13,8 +13,12 @@ const path = require("path");
 // });
 
 module.exports = withPlugins([[withImages]], {
+  images: {
+      domains: ['images.unsplash.com'],
+  },
   webpack(config, options) {
     config.resolve.modules.push(path.resolve("./"));
     return config;
   },
 });
+
