@@ -20,11 +20,15 @@ import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import lightTheme from "/styles/theme/lightTheme";
+
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import PageChange from "components/PageChange/PageChange.js";
 import "assets/css/nextjs-material-dashboard.css?v=1.1.0";
+import "styles/globals.css";
+
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
@@ -40,6 +44,10 @@ Router.events.on("routeChangeError", () => {
   document.body.classList.remove("body-page-transition");
 });
 
+
+
+// Create a client
+const queryClient = new QueryClient();
 export default class MyApp extends App {
   componentDidMount() {
     let comment = document.createComment(`
@@ -76,16 +84,18 @@ export default class MyApp extends App {
     const Layout = Component.layout || (({ children }) => <>{children}</>);
 
     return (
-      <ThemeProvider theme={lightTheme}>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-          <title>Bhalogari Admin Panel</title>
-          <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-        </Head>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={lightTheme}>
+          <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            <title>Bhalogari Admin Panel</title>
+            <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+          </Head>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </QueryClientProvider>
     );
   }
 }

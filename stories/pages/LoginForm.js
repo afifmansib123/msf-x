@@ -3,8 +3,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
-function InputForm(props) {
-  const { onSignIn, onSignUp } = props;
+
+function LoginForm(props) {
+  const { title, onSignIn, onSignUp, signUp } = props;
   const {
     register,
     handleSubmit,
@@ -18,7 +19,7 @@ function InputForm(props) {
 
   return (
     <Box className="grid grid-cols-1" component="form" noValidate autoComplete="off">
-      <h2 className="text-2xl font-bold text-blue">Merchant Storefront</h2>
+      <h2 className="text-xl text-blue-800">{title}</h2>
       <div className="grid grid-col-1 mt-4 mb-4 ">
         <TextField required id="standard-required" label="Username" variant="standard" {...register("username")} />
         <TextField
@@ -33,23 +34,29 @@ function InputForm(props) {
           <span className="text-sm text-gray-500">Username and Password fields are required</span>
         )}
       </div>
-      <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+      <Button onClick={handleSubmit(onSubmit)}>
         Sign In
       </Button>
-      <Button variant="outline" onClick={onSignUp}>
-        Sign Up
-      </Button>
+      {signUp && (
+        <Button variant="outline" onClick={onSignUp}>
+          Sign Up
+        </Button>
+      )}
     </Box>
   );
 }
 
-export default InputForm;
-InputForm.propTypes = {
+export default LoginForm;
+LoginForm.propTypes = {
+  title: PropTypes.string,
   onSignUp: PropTypes.func,
   onSignIn: PropTypes.func,
+  signUp: PropTypes.bool,
 };
 
-InputForm.defaultProps = {
+LoginForm.defaultProps = {
+  title: "Login",
+  signUp: false,
   onSignIn: (data) => {
     const { username, password } = data;
     alert(`TODO\nUsername: ${username}\nPassword: ${password}`);

@@ -1,6 +1,7 @@
 import React from "react";
+import Router from "next/router";
 import classNames from "classnames";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Grow from "@mui/material/Grow";
@@ -20,6 +21,7 @@ import Button from "components/CustomButtons/Button.js";
 import useWindowSize from "components/Hooks/useWindowSize.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/components/headerLinksStyle.js";
+import { roundWithPrecision } from "chartist";
 
 export default function AdminNavbarLinks() {
   const size = useWindowSize();
@@ -47,6 +49,13 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+
+  const handleSignOut = () => {
+    // TODO clear credential tokwn
+    setOpenProfile(null);
+    Router.push("/");
+  };
+
   return (
     <div>
       <div className={classes.searchWrapper}>
@@ -100,52 +109,32 @@ export default function AdminNavbarLinks() {
           anchorEl={openNotification}
           transition
           disablePortal
-          className={
-            classNames({ [classes.popperClose]: !openNotification }) +
-            " " +
-            classes.popperNav
-          }
+          className={classNames({ [classes.popperClose]: !openNotification }) + " " + classes.popperNav}
         >
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
               id="notification-menu-list-grow"
               style={{
-                transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom",
+                transformOrigin: placement === "bottom" ? "center top" : "center bottom",
               }}
             >
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseNotification}>
                   <MenuList role="menu">
-                    <MenuItem
-                      onClick={handleCloseNotification}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseNotification} className={classes.dropdownItem}>
                       Mike John responded to your email
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseNotification}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseNotification} className={classes.dropdownItem}>
                       You have 5 new tasks
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseNotification}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseNotification} className={classes.dropdownItem}>
                       You{"'"}re now friend with Andrew
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseNotification}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseNotification} className={classes.dropdownItem}>
                       Another Notification
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseNotification}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseNotification} className={classes.dropdownItem}>
                       Another One
                     </MenuItem>
                   </MenuList>
@@ -175,41 +164,27 @@ export default function AdminNavbarLinks() {
           anchorEl={openProfile}
           transition
           disablePortal
-          className={
-            classNames({ [classes.popperClose]: !openProfile }) +
-            " " +
-            classes.popperNav
-          }
+          className={classNames({ [classes.popperClose]: !openProfile }) + " " + classes.popperNav}
         >
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
               id="profile-menu-list-grow"
               style={{
-                transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom",
+                transformOrigin: placement === "bottom" ? "center top" : "center bottom",
               }}
             >
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseProfile} className={classes.dropdownItem}>
                       Profile
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleCloseProfile} className={classes.dropdownItem}>
                       Settings
                     </MenuItem>
                     <Divider light />
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
+                    <MenuItem onClick={handleSignOut} className={classes.dropdownItem}>
                       Logout
                     </MenuItem>
                   </MenuList>
