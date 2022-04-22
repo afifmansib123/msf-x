@@ -4,12 +4,12 @@ import {
   container,
 } from "assets/jss/nextjs-material-dashboard.js";
 
-const appStyle = (theme) => ({
+const appStyle = (theme) => (
+  {
   wrapper: {
     position: "relative",
     top: "0",
     height: "100vh",
-    direction: "rtl",
   },
   mainPanel: {
     [theme.breakpoints.up("md")]: {
@@ -17,7 +17,7 @@ const appStyle = (theme) => ({
     },
     overflow: "auto",
     position: "relative",
-    float: "left",
+    float: "right",
     ...transition,
     maxHeight: "100%",
     width: "100%",
