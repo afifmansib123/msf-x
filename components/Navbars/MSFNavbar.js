@@ -10,7 +10,7 @@ import Hidden from "@mui/material/Hidden";
 // @mui/icons-material
 import Menu from "@mui/icons-material/Menu";
 // core components
-import AdminNavbarLinks from "./AdminNavbarLinks.js";
+import MSFNavbarLinks from "./MSFNavbarLinks.js";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/components/headerStyle.js";
@@ -22,7 +22,7 @@ export default function Header(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   function makeBrand() {
-    var name = "NextJS Material Dashboard";
+    var name = "Merchant Storefront";
     props.routes.map((prop) => {
       if (router.route.indexOf(prop.layout + prop.path) !== -1) {
         name = props.rtlActive ? prop.rtlName : prop.name;
