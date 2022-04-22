@@ -68,3 +68,7 @@ Header.propTypes = {
   handleDrawerToggle: PropTypes.func,
   routes: PropTypes.arrayOf(PropTypes.object),
 };
+
+Header.defaultProps  = {
+  rtlActive: false,
+}

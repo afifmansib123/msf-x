@@ -82,7 +82,7 @@ const styles = {
   },
 };
 
-function UpgradeToPro() {
+function Settings() {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   return (
@@ -211,6 +211,6 @@ function UpgradeToPro() {
   );
 }
 
-UpgradeToPro.layout = Admin;
+Settings.layout = Admin;
 
-export default UpgradeToPro;
+export default Settings;

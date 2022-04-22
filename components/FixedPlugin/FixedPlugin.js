@@ -13,10 +13,10 @@ import Button from "components/CustomButtons/Button.js";
 // import imagine3 from "assets/img/sidebar-3.jpg";
 // import imagine4 from "assets/img/sidebar-4.jpg";
 
-const imagine2 = "assets/img/sidebar-2.jpg";
-const imagine1 = "assets/img/sidebar-1.jpg";
-const imagine3 = "assets/img/sidebar-3.jpg";
-const imagine4 = "assets/img/sidebar-4.jpg";
+const imagine2 = "/assets/img/sidebar-2.jpg";
+const imagine1 = "/assets/img/sidebar-1.jpg";
+const imagine3 = "/assets/img/sidebar-3.jpg";
+const imagine4 = "/assets/img/sidebar-4.jpg";
 
 export default function FixedPlugin(props) {
   const [classes, setClasses] = React.useState("dropdown show");
@@ -212,3 +212,7 @@ FixedPlugin.propTypes = {
   handleColorClick: PropTypes.func,
   handleImageClick: PropTypes.func,
 };
+
+FixedPlugin.defaultProps  = {
+  rtlActive: false,
+}

@@ -317,7 +317,7 @@ const sidebarStyle = (theme) => ({
     zIndex: "4",
     overflowScrolling: "touch",
   },
-  activePro: {
+  settings: {
     [theme.breakpoints.up("md")]: {
       position: "absolute",
       width: "100%",
