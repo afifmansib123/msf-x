@@ -22,8 +22,8 @@ module.exports = withPlugins([
             register: true,
             skipWaiting: true,
         }
-    }]
-        [withImages]
+    }],
+    [withImages]
 ], {
     reactStrictMode: true,
     webpack(config, options) {
