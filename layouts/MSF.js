@@ -7,14 +7,14 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 // import { makeStyles } from "@material-ui/core/styles";
 import { makeStyles } from "@mui/styles";
 // core components
-import Navbar from "components/Navbars/Navbar.js";
+import Navbar from "components/Navbars/MSFNavbar.js";
 import Footer from "components/Footer/Footer.js";
-import Sidebar from "components/Sidebar/AdminSidebar.js";
+import Sidebar from "components/Sidebar/MSFSidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
-import routes from "admin-routes.js";
+import routes from "msf-routes.js";
 
-import styles from "assets/jss/nextjs-material-dashboard/layouts/adminStyle.js";
+import styles from "assets/jss/nextjs-material-dashboard/layouts/msfStyle.js";
 
 // import bgImage from "assets/img/sidebar-2.jpg";
 // import logo from "assets/img/bhalogari.png";
@@ -57,9 +57,10 @@ export default function Admin({ children, ...rest }) {
     return router.pathname !== "/admin/maps";
   };
   const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
+    alert("TODO handle resizeFunction")
+    // if (window.innerWidth >= 960) {
+    //   setMobileOpen(false);
+    // }
   };
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
@@ -83,7 +84,7 @@ export default function Admin({ children, ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"Bhalogari"}
+        logoText={"Storefront"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}
@@ -102,14 +103,6 @@ export default function Admin({ children, ...rest }) {
           <div className={classes.map}>{children}</div>
         )}
         {getRoute() ? <Footer /> : null}
-        {/* <FixedPlugin
-          handleImageClick={handleImageClick}
-          handleColorClick={handleColorClick}
-          bgColor={color}
-          bgImage={image}
-          handleFixedClick={handleFixedClick}
-          fixedClasses={fixedClasses}
-        /> */}
       </div>
     </div>
   );
