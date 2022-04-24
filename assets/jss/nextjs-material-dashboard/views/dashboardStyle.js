@@ -77,6 +77,18 @@ const dashboardStyle = {
       lineHeight: "1",
     },
   },
+
+  paperTitle: {
+    padding: "16px 16px",
+    width: "100%",
+    margin: "0px auto",
+    fontSize: "20px",
+    color: "#000000",
+    fontWeight: 700,
+    // fontFamily: "Open Sans",
+    textTransform: "uppercase",
+  },
+
 };
 
 export default dashboardStyle;
