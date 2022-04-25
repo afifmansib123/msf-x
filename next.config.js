@@ -6,7 +6,7 @@ const webpack = require("webpack");
 const path = require("path");
 
 // pwa
-const withPWA = require('next-pwa');
+const withPWA = require("next-pwa");
 
 // module.exports = withPlugins([[withSass], [withImages], [withCSS]], {
 //   webpack(config, options) {
@@ -16,6 +16,7 @@ const withPWA = require('next-pwa');
 // });
 
 module.exports = withPlugins([
+
     [withPWA, {
         pwa: {
             dest: 'public',
@@ -24,10 +25,11 @@ module.exports = withPlugins([
         }
     }],
     [withImages]
+
 ], {
-    reactStrictMode: true,
-    webpack(config, options) {
-        config.resolve.modules.push(path.resolve("./"));
-        return config;
-    },
+  reactStrictMode: true,
+  webpack(config, options) {
+    config.resolve.modules.push(path.resolve("./"));
+    return config;
+  },
 });
