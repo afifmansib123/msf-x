@@ -88,7 +88,17 @@ const dashboardStyle = {
     // fontFamily: "Open Sans",
     textTransform: "uppercase",
   },
-
+  carPriceText: {
+    padding: "0px 16px 5px",
+    width: "100%",
+    fontSize: "16px",
+  },
+  ckEditorDiv: {
+    marginTop: "-15px",
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "15px",
+  },
 };
 
 export default dashboardStyle;

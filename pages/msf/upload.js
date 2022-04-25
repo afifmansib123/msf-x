@@ -25,6 +25,9 @@ import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js
 //components
 import BasicInfo from "components/MSF/Upload/BasicInfo.js";
 import Details from "components/MSF/Upload/Details.js";
+import Features from "components/MSF/Upload/Features.js";
+import ImageUpload from "components/MSF/Upload/ImageUpload.js";
+import Price from "components/MSF/Upload/Price.js";
 
 
 function Upload() {
@@ -33,41 +36,47 @@ function Upload() {
     const classes = useStyles();
 
     return (
-            <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                    <CustomTabs
-                        title="Upload Car / Bike:"
-                        headerColor="dark"
-                        tabs={[
-                            {
-                                tabName: "Car",
-                                tabIcon: Car,
-                                tabContent: (
-                                  <GridContainer spacing={2}>
+        <GridContainer>
+            <GridItem xs={12} sm={12} md={12}>
+                <CustomTabs
+                    title="Upload Car / Bike:"
+                    headerColor="dark"
+                    tabs={[
+                        {
+                            tabName: "Car",
+                            tabIcon: Car,
+                            tabContent: (
+                                <GridContainer spacing={2}>
                                     <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
+                                        <ImageUpload/>
                                     </GridItem>
                                     <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
-                                      <BasicInfo />
+                                        <BasicInfo/>
                                     </GridItem>
-
-                                    <GridItem item xs={12} sm={12} md={12} className={classes.uploadOptions}>
-                                      <Details />
+                                    <GridItem item xs={12} className={classes.uploadOptions}>
+                                        <Details/>
                                     </GridItem>
-                                  </GridContainer>
+                                    <GridItem item xs={12} className={classes.uploadOptions}>
+                                        <Features/>
+                                    </GridItem>
+                                    <GridItem item xs={12} className={classes.uploadOptions}>
+                                        <Price/>
+                                    </GridItem>
+                                </GridContainer>
 
-                                ),
-                            },
-                            {
-                                tabName: "Bike",
-                                tabIcon: Bike,
-                                tabContent: (
-                                    <div></div>
-                                ),
-                            },
-                        ]}
-                    />
-                </GridItem>
-            </GridContainer>
+                            ),
+                        },
+                        {
+                            tabName: "Bike",
+                            tabIcon: Bike,
+                            tabContent: (
+                                <div></div>
+                            ),
+                        },
+                    ]}
+                />
+            </GridItem>
+        </GridContainer>
     );
 }
 
