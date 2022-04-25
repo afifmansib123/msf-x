@@ -16,14 +16,16 @@ const withPWA = require("next-pwa");
 // });
 
 module.exports = withPlugins([
-  [withPWA, {
-    pwa: {
-      dest: "public",
-      register: true,
-      skipWaiting: true,
-    }
-  }],
-  [withImages]
+
+    [withPWA, {
+        pwa: {
+            dest: 'public',
+            register: true,
+            skipWaiting: true,
+        }
+    }],
+    [withImages]
+
 ], {
   reactStrictMode: true,
   webpack(config, options) {
