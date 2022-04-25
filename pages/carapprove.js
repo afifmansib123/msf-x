@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import makeStyles from '@mui/styles/makeStyles';
 
 // layout for this page
@@ -25,14 +25,13 @@ function CarApproveLog(props) {
 
   const useStyles = makeStyles(styles);
   const classes = useStyles();
+  const inputElement = useRef();
   
   const onClickAccept = (carRecord) => {
-    console.log("Accept record", carRecord);
     handleClickOpen(carRecord, "approve");
   }
 
   const onClickReject = (carRecord) => {
-    console.log("reject record", carRecord)
     handleClickOpen(carRecord, "reject");
   }
 
@@ -46,8 +45,23 @@ function CarApproveLog(props) {
     setOpen(false);
     setSelected(null);
     setType("");
-    
   };
+
+  const handleSubmit = () => {
+    setOpen(false);
+    const reason = inputElement.current.value;
+
+    const data = {
+      car: selectedCar,
+      reason: reason,
+      type: type
+    }
+
+    props.callback(data)
+    setSelected(null);
+    setType("");
+
+  }
 
   const showedData = props.tableData.map((value, index) => {
 
@@ -59,7 +73,7 @@ function CarApproveLog(props) {
   return (
     <>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+        <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color={props.tableHeaderColor}>
               <h4 className={classes.cardTitleWhite}>Car Approve Log</h4>
@@ -86,13 +100,13 @@ function CarApproveLog(props) {
               explain your reason
             </DialogContentText>
             <TextField
+              inputRef={inputElement}
               autoFocus
               margin="dense"
               id="name"
               label="Reason"
               type="text"
               multiline
-              fullScreen
               fullWidth
               variant="filled"
               defaultValue={" "}
@@ -105,7 +119,7 @@ function CarApproveLog(props) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Submit</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -144,6 +158,7 @@ CarApproveLog.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
+  callback: PropTypes.func
 };
 
 

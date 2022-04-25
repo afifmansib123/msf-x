@@ -41,7 +41,8 @@ CarApprove.args = {
       "Car_Model": "plymouth satellite", 
       "Preview_Image": "https://upload.wikimedia.org/wikipedia/commons/f/f0/66Sat.jpg"
   }
-    ]
+    ],
+  callback: (value) => {console.log(value)}
 };
 
 
