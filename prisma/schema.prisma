@@ -112,6 +112,7 @@ model BikesApp_bike {
   BikesApp_rearsuspension     BikesApp_rearsuspension?      @relation(fields: [rear_suspension_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bike_rear_suspension_id_9fe2d9a9_fk_BikesApp_")
   BikesApp_tyretype           BikesApp_tyretype?            @relation(fields: [tyre_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bike_tyre_type_id_43549acb_fk_BikesApp_tyretype_id")
   BikesApp_bike_bike_features BikesApp_bike_bike_features[]
+  BikesApp_bikeapprovallog    BikesApp_bikeapprovallog[]
   BikesApp_bikeimage          BikesApp_bikeimage[]
 
   @@index([bike_body_type_id], map: "BikesApp_bike_bike_body_type_id_67119148")
@@ -401,6 +402,7 @@ model CarsApp_car {
   CarsApp_carmodel                                                 CarsApp_carmodel?          @relation(fields: [model_name_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_car_model_name_id_9bc624da_fk_CarsApp_carmodel_id")
   CarsApp_carwheel                                                 CarsApp_carwheel?          @relation(fields: [wheel_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_car_wheel_type_id_b396620d_fk_CarsApp_carwheel_id")
   CarsApp_car_car_features                                         CarsApp_car_car_features[]
+  CarsApp_carapprovallog                                           CarsApp_carapprovallog[]
   CarsApp_carimage                                                 CarsApp_carimage[]
   CarsApp_carrating                                                CarsApp_carrating[]
   CarsApp_notifyuser                                               CarsApp_notifyuser[]
@@ -1012,8 +1014,10 @@ model UsersApp_customuser {
   LocationsApp_district                LocationsApp_district?                 @relation(fields: [user_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_user_district_id_28140f4e_fk_Locations")
   AuctionsApp_auctioncustomer          AuctionsApp_auctioncustomer[]
   BikesApp_bike                        BikesApp_bike[]
+  BikesApp_bikeapprovallog             BikesApp_bikeapprovallog[]
   BikesApp_bikeimage                   BikesApp_bikeimage[]
   CarsApp_car                          CarsApp_car[]
+  CarsApp_carapprovallog               CarsApp_carapprovallog[]
   CarsApp_carbacklight                 CarsApp_carbacklight[]
   CarsApp_carbodytype                  CarsApp_carbodytype[]
   CarsApp_carbrake                     CarsApp_carbrake[]
@@ -1243,4 +1247,32 @@ model MerchantStorefront_paymenthistory {
   @@index([package_id_id], map: "MerchantStorefront_paymenthistory_package_id_id_f41ce17e")
   @@index([payment_method_id], map: "MerchantStorefront_paymenthistory_payment_method_id_a71cdcdf")
   @@index([user_id_id], map: "MerchantStorefront_paymenthistory_user_id_id_6723fe7e")
+}
+
+model BikesApp_bikeapprovallog {
+  id                  BigInt               @id @default(autoincrement())
+  approved            Boolean?
+  created_at          DateTime             @db.Timestamptz(6)
+  updated_at          DateTime             @db.Timestamptz(6)
+  approved_by_id      BigInt?
+  bike_id_id          BigInt?
+  UsersApp_customuser UsersApp_customuser? @relation(fields: [approved_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bikeapprova_approved_by_id_12e1b342_fk_UsersApp_")
+  BikesApp_bike       BikesApp_bike?       @relation(fields: [bike_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bikeapprova_bike_id_id_91dfd91f_fk_BikesApp_")
+
+  @@index([approved_by_id], map: "BikesApp_bikeapprovallog_approved_by_id_12e1b342")
+  @@index([bike_id_id], map: "BikesApp_bikeapprovallog_bike_id_id_91dfd91f")
+}
+
+model CarsApp_carapprovallog {
+  id                  BigInt               @id @default(autoincrement())
+  is_approved         Boolean?
+  created_at          DateTime             @db.Timestamptz(6)
+  updated_at          DateTime             @db.Timestamptz(6)
+  approved_by_id      BigInt?
+  car_id_id           BigInt?
+  UsersApp_customuser UsersApp_customuser? @relation(fields: [approved_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_carapprovall_approved_by_id_18d93341_fk_UsersApp_")
+  CarsApp_car         CarsApp_car?         @relation(fields: [car_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_carapprovallog_car_id_id_b1288272_fk_CarsApp_car_id")
+
+  @@index([approved_by_id], map: "CarsApp_carapprovallog_approved_by_id_18d93341")
+  @@index([car_id_id], map: "CarsApp_carapprovallog_car_id_id_b1288272")
 }

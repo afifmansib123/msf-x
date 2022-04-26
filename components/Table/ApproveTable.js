@@ -59,12 +59,14 @@ function CarApproveLog(props) {
 
   }
 
-  const showedData = props.tableData.map((value, index) => {
+  var showedData = props.tableData.map((value, index) => {
 
     return [value.record_ID, value.Merchant_Name, value.Car_Maker, value.Car_Model, (<img src={value.Preview_Image} width={350} height={350}/>),
      (<Button variant="outlined" onClick={() => onClickAccept(value)} color="success">Accept</Button>),
       <Button variant="outlined" onClick={() => onClickReject(value)} color="error">Reject</Button>]
-  });
+  } );
+
+  console.log(showedData)
 
   return (
     <>

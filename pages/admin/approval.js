@@ -22,15 +22,33 @@ function Approval(props) {
   );
 }
 
-export async function getServerSideProps() {
-    
-  var url = "http://localhost:3000/log.json"
+export async function getServerSideProps(context) {
+  var url = "http://localhost:3000/api/approve-log"
 
-  const tableData = await fetch(url).then(value => value.json()).catch(err => console.log(err));
+  const host = context.req.headers.host
+  console.log(host)
 
-  return {
-    props: {
-      tableData: tableData
+  const response = await fetch(url).then(value => value.json()).catch(err => console.log(err));
+  if(response.result != null) {
+    const tableData = response.result.map(value => {
+      return {
+        record_ID: value.id,
+        Merchant_Name: value.merchant,
+        Car_Maker: value.carMaker,
+        Car_Model: value.carModel,
+        Preview_Image: value.carImage == "" ? `http://${host}/assets/img/car_placeholder.png`: value.carImage
+      }
+    });
+    return {
+      props: {
+        tableData: tableData
+      }
+    }
+  } else {
+    return {
+      props: {
+        tableData: []
+      }
     }
   }
 }
