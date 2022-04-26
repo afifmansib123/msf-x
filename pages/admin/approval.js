@@ -23,6 +23,7 @@ function Approval(props) {
 }
 
 export async function getServerSideProps() {
+    
   var url = "http://localhost:3000/log.json"
 
   const tableData = await fetch(url).then(value => value.json()).catch(err => console.log(err));
