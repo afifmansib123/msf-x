@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from "react";
+import React, {useState, useEffect, useRef} from "react";
 // import axios from "axios";
 import PropTypes from "prop-types";
 import {useQuery} from "react-query";
@@ -16,18 +16,28 @@ import makeStyles from "@mui/styles/makeStyles";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import Button from "@mui/material/Button";
 
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 
 // plugins
 import Joi, {errors} from "joi-browser";
-import {CKEditor} from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import Button from "@mui/material/Button";
+
 
 export default function Price() {
+    const editorRef = useRef()
+    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    const { CKEditor, ClassicEditor} = editorRef.current || {}
+
+    useEffect( () => {
+        editorRef.current = {
+            CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor, //Added .CKEditor
+            ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' ),
+        }
+        setEditorLoaded( true )
+    }, [] );
+
+
     const [carAskingPrice, setAskingPrice] = useState({
         price: undefined,
         sale_price: undefined,
@@ -158,12 +168,15 @@ export default function Price() {
             </GridItem>
 
             <GridItem item xs={12} sm={12} md={8}>
-                <CKEditor
-                    name="description"
-                    editor={ClassicEditor}
-                    onChange={onCarDescriptionChange}
-                    config={{placeholder: "Add Description"}}
-                />
+                {editorLoaded ? <CKEditor
+                  editor={ ClassicEditor }
+                  data={carDescription}
+                  onReady={ editor => {
+                      // You can store the "editor" and use when it is needed.
+                      console.log('Editor is ready to use!', editor);
+                  } }
+                  onChange={onCarDescriptionChange}
+                /> : <p>...</p>}
             </GridItem>
 
             <GridItem item xs={12} sm={12} md={4}>

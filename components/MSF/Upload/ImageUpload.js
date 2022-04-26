@@ -3,26 +3,18 @@ import React, {useState, useMemo, Component} from "react";
 import PropTypes from "prop-types";
 import {useQuery} from "react-query";
 
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-
 // react plugin for creating charts
 import makeStyles from "@mui/styles/makeStyles";
 
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import Box from "@mui/material/Box";
 
-// plugins
-import { Dropzone, FileItem } from "@dropzone-ui/react";
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 
+// plugins
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 
 export default function ImageUpload() {
     const [images, setImages] = useState([]);
@@ -62,57 +54,70 @@ export default function ImageUpload() {
         setImages((list) => [...list.slice(0, indexOfItemToRemove), ...list.slice(indexOfItemToRemove + 1)]);
     };
 
-    const [files, setFiles] = React.useState([]);
+
+    const [files, setFiles] = useState([]);
+    const [imageSrc, setImageSrc] = useState(undefined);
     const updateFiles = (incommingFiles) => {
+        console.log("incomming files", incommingFiles);
         setFiles(incommingFiles);
+    };
+    const onDelete = (id) => {
+        setFiles(files.filter((x) => x.id !== id));
+    };
+    const handleSee = (imageSource) => {
+        setImageSrc(imageSource);
+    };
+    const handleClean = (files) => {
+        console.log("list cleaned", files);
     };
 
 
     return (
         <GridContainer>
             <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
-            <GridItem item xs={12} sm={12} md={4}>
-                <Dropzone onChange={updateFiles} value={files}>
+            <GridItem item xs={12}>
+                <Dropzone
+                  style={{ minHeight: "450px", maxHeight: "450px" }}
+                  //view={"list"}
+                  onChange={updateFiles}
+                  minHeight="195px"
+                  onClean={handleClean}
+                  value={files}
+                  maxFiles={15}
+                  //header={false}
+                  // footer={false}
+                  maxFileSize={20998000}
+                  //label="Drag'n drop files here or click to browse"
+                  //label="Suleta tus archivos aquí"
+                  accept=".png,image/*"
+                  // uploadingMessage={"Uploading..."}
+                  url="https://my-awsome-server/upload-my-file"
+                  //of course this url doens´t work, is only to make upload button visible
+                  //uploadOnDrop
+                  //clickable={false}
+                  fakeUploading
+                  //localization={"FR-fr"}
+                  // disableScroll
+                >
                     {files.map((file) => (
-                      <FileItem {...file} preview />
+                      <FileItem
+                        {...file}
+                        key={file.id}
+                        onDelete={onDelete}
+                        onSee={handleSee}
+                        //localization={"ES-es"}
+                        resultOnTooltip
+                        preview
+                        info
+                        hd
+                      />
                     ))}
+                    <FullScreenPreview
+                      imgSource={imageSrc}
+                      openImage={imageSrc}
+                      onClose={(e) => handleSee(undefined)}
+                    />
                 </Dropzone>
-                {/*<DropzoneArea*/}
-                {/*  acceptedFiles={["image/*"]}*/}
-                {/*  dropzoneProps={{ disabled: fileLimitExceeded }}*/}
-                {/*  dropzoneClass={classes.dropZone}*/}
-                {/*  previewGridClasses={{*/}
-                {/*      container: classes.previewContainer,*/}
-                {/*      item: classes.preview,*/}
-                {/*      image: classes.previewImg,*/}
-                {/*  }}*/}
-                {/*  // initialFiles={['https://bhalogari-static.s3.amazonaws.com/media/2005-Honda-Civic-FrontSide_HOCIVSED051_505x375.jpg']}*/}
-                {/*  getPreviewIcon={(file) => {*/}
-                {/*      if (file.file.type.split("/")[0] === "image")*/}
-                {/*          return (*/}
-                {/*            <img*/}
-                {/*              className={classes.previewImg}*/}
-                {/*              role="presentation"*/}
-                {/*              alt="presentation"*/}
-                {/*              src={file.data}*/}
-                {/*            />*/}
-                {/*          );*/}
-                {/*  }}*/}
-                {/*  // open={true}*/}
-                {/*  previewText={false}*/}
-                {/*  dropzoneText={*/}
-                {/*      fileLimitExceeded*/}
-                {/*        ? "You have already uploaded 15 photos"*/}
-                {/*        : "Drag & Drop file you want to upload"*/}
-                {/*  }*/}
-                {/*  filesLimit={15}*/}
-                {/*  maxFileSize={10000000}*/}
-                {/*  onChange={(files) => onImageUpload(files)}*/}
-                {/*  onDelete={(file) => onImageDelete(file)}*/}
-                {/*  showAlerts={["error"]}*/}
-                {/*  showPreviewsInDropzone={false}*/}
-                {/*  showPreviews={true}*/}
-                {/*/>*/}
             </GridItem>
 
         </GridContainer>
