@@ -33,3 +33,4 @@ module.exports = withPlugins([
     return config;
   },
 });
+

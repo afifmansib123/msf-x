@@ -829,11 +829,12 @@ model LocationsApp_districtarea {
 }
 
 model PaymentsApp_paymentmethod {
-  id                         BigInt                       @id @default(autoincrement())
-  payment_method             String                       @db.VarChar(255)
-  created_at                 DateTime                     @db.Timestamptz(6)
-  updated_at                 DateTime                     @db.Timestamptz(6)
-  AuctionsApp_auctionpayment AuctionsApp_auctionpayment[]
+  id                                BigInt                              @id @default(autoincrement())
+  payment_method                    String                              @db.VarChar(255)
+  created_at                        DateTime                            @db.Timestamptz(6)
+  updated_at                        DateTime                            @db.Timestamptz(6)
+  AuctionsApp_auctionpayment        AuctionsApp_auctionpayment[]
+  MerchantStorefront_paymenthistory MerchantStorefront_paymenthistory[]
 }
 
 model PaymentsApp_sslipn {
@@ -1034,6 +1035,9 @@ model UsersApp_customuser {
   CarsApp_notifyuser                   CarsApp_notifyuser[]
   CarsApp_searchphrases                CarsApp_searchphrases[]
   FeedbacksApp_customerfeedback        FeedbacksApp_customerfeedback[]
+  MerchantStorefront_package           MerchantStorefront_package[]
+  MerchantStorefront_packagedetails    MerchantStorefront_packagedetails[]
+  MerchantStorefront_paymenthistory    MerchantStorefront_paymenthistory[]
   ServicesApp_customeraddress          ServicesApp_customeraddress[]
   ServicesApp_service                  ServicesApp_service[]
   UsersApp_customuser_groups           UsersApp_customuser_groups[]
@@ -1192,4 +1196,51 @@ model drf_api_logs {
   @@index([method], map: "drf_api_logs_method_f610a90b")
   @@index([method], map: "drf_api_logs_method_f610a90b_like")
   @@index([status_code], map: "drf_api_logs_status_code_4ffd4334")
+}
+
+model MerchantStorefront_package {
+  id                                BigInt                              @id @default(autoincrement())
+  package_name                      String                              @db.VarChar(255)
+  description                       String?
+  created_at                        DateTime                            @db.Timestamptz(6)
+  updated_at                        DateTime                            @db.Timestamptz(6)
+  created_by_id                     BigInt?
+  UsersApp_customuser               UsersApp_customuser?                @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_1a5f9d64_fk_UsersApp_")
+  MerchantStorefront_packagedetails MerchantStorefront_packagedetails[]
+  MerchantStorefront_paymenthistory MerchantStorefront_paymenthistory[]
+
+  @@index([created_by_id], map: "MerchantStorefront_package_created_by_id_1a5f9d64")
+}
+
+model MerchantStorefront_packagedetails {
+  id                         BigInt                      @id @default(autoincrement())
+  package_name               String?                     @db.VarChar(255)
+  description                String?
+  created_at                 DateTime                    @db.Timestamptz(6)
+  updated_at                 DateTime                    @db.Timestamptz(6)
+  created_by_id              BigInt?
+  package_id_id              BigInt?
+  UsersApp_customuser        UsersApp_customuser?        @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_0d503119_fk_UsersApp_")
+  MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_bdfbe02a_fk_MerchantS")
+
+  @@index([created_by_id], map: "MerchantStorefront_packagedetails_created_by_id_0d503119")
+  @@index([package_id_id], map: "MerchantStorefront_packagedetails_package_id_id_bdfbe02a")
+}
+
+model MerchantStorefront_paymenthistory {
+  id                         BigInt                      @id @default(autoincrement())
+  status                     Boolean?
+  remark                     String?
+  timestamp                  DateTime                    @db.Timestamptz(6)
+  updated_at                 DateTime                    @db.Timestamptz(6)
+  package_id_id              BigInt?
+  payment_method_id          BigInt?
+  user_id_id                 BigInt?
+  MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_f41ce17e_fk_MerchantS")
+  PaymentsApp_paymentmethod  PaymentsApp_paymentmethod?  @relation(fields: [payment_method_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_payment_method_id_a71cdcdf_fk_PaymentsA")
+  UsersApp_customuser        UsersApp_customuser?        @relation(fields: [user_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_user_id_id_6723fe7e_fk_UsersApp_")
+
+  @@index([package_id_id], map: "MerchantStorefront_paymenthistory_package_id_id_f41ce17e")
+  @@index([payment_method_id], map: "MerchantStorefront_paymenthistory_payment_method_id_a71cdcdf")
+  @@index([user_id_id], map: "MerchantStorefront_paymenthistory_user_id_id_6723fe7e")
 }

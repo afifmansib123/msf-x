@@ -35,6 +35,14 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
+    path: "/approval",
+    name: "Approval",
+    rtlName: "",
+    icon: Dashboard,
+
+    layout: "/admin",
+  },
+  {
     path: "/notifications",
     name: "Notifications",
     rtlName: "إخطارات",
