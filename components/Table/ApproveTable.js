@@ -1,10 +1,6 @@
 import React from "react";
 import { useState, useRef } from "react";
 import makeStyles from '@mui/styles/makeStyles';
-
-// layout for this page
-import Admin from "layouts/Admin.js";
-// core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
@@ -73,7 +69,7 @@ function CarApproveLog(props) {
   return (
     <>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color={props.tableHeaderColor}>
               <h4 className={classes.cardTitleWhite}>Car Approve Log</h4>
@@ -126,20 +122,6 @@ function CarApproveLog(props) {
     </>
   );
 }
-
-
-export async function getServerSideProps() {
-  var url = "http://localhost:3000/log.json"
-
-  const tableData = await fetch(url).then(value => value.json()).catch(err => console.log(err));
-
-  return {
-    props: {
-      tableData: tableData
-    }
-  }
-}
-
 
 CarApproveLog.defaultProps = {
   tableHeaderColor: "danger",
