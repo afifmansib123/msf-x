@@ -62,6 +62,13 @@ const dashboardRoutes = [
     icon: "content_paste",
     layout: "/admin",
   },  
+
+  {
+    path: "/package",
+    name: "Package",
+    icon: "content_paste",
+    layout: "/admin",
+  },  
   // {
   //   path: "/typography",
   //   name: "Typography",
@@ -98,17 +105,13 @@ const dashboardRoutes = [
   {
     path: "/settings",
     name: "Settings",
-    rtlName: "التطور للاحترافية",
     icon: Unarchive,
-
     layout: "/admin",
   },
   {
     path: "/user-profile",
     name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
-
     layout: "/admin",
   },
 

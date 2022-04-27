@@ -10,7 +10,7 @@ export default function _error() {
   // TODO Default Error Page
   return (
     <div>
-      <h1>Error</h1>
+      <h1>404</h1>
       <p>{error}</p>
     </div>
   );

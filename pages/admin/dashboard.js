@@ -265,5 +265,5 @@ function Dashboard() {
 }
 
 Dashboard.layout = Admin;
-
+Dashboard.auth = true
 export default Dashboard;

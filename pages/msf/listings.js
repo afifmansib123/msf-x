@@ -94,7 +94,7 @@ export async function getServerSideProps() {
     where: {
       created_by_id: 19,
     },
-    include: {
+  include: {
       CarsApp_carmanufacturer: true,
       CarsApp_carmodel: true,
     },
