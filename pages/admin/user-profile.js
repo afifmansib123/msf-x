@@ -13,9 +13,13 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import { signOut } from "next-auth/react";
 
 const avatar = "/assets/img/faces/marc.jpg";
 
+const handleSignOut = () => {
+  signOut({callbackUrl:"/"})
+}
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -169,6 +173,10 @@ function UserProfile() {
               <Button color="primary" round>
                 Follow
               </Button>
+              <Button color="secondary" round onClick={handleSignOut}>
+                Sign Out
+              </Button>
+
             </CardBody>
           </Card>
         </GridItem>
@@ -178,5 +186,6 @@ function UserProfile() {
 }
 
 UserProfile.layout = Admin;
+UserProfile.auth = true;
 
 export default UserProfile;
