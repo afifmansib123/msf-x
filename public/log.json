@@ -1,0 +1,23 @@
+[
+    {
+        "record_ID": "0000",
+        "Merchant_Name": "test1",
+        "Car_Maker": "Chevrolet", 
+        "Car_Model": "chevrolet chevelle malibu", 
+        "Preview_Image": "https://upload.wikimedia.org/wikipedia/commons/c/c2/1966_Chevrolet_Chevelle_SS_%2832985111206%29.jpg"
+    },
+    {
+        "record_ID": "0001",
+        "Merchant_Name": "test2",
+        "Car_Maker": "Buick", 
+        "Car_Model": "buick skylark 320", 
+        "Preview_Image": "https://upload.wikimedia.org/wikipedia/commons/1/1d/1972_Buick_Skylark_Front.jpg"
+    },
+    {
+        "record_ID": "0002",
+        "Merchant_Name": "test3",
+        "Car_Maker": "Chrysler Corporation", 
+        "Car_Model": "plymouth satellite", 
+        "Preview_Image": "https://upload.wikimedia.org/wikipedia/commons/f/f0/66Sat.jpg"
+    }
+]

@@ -16,6 +16,7 @@ const withPWA = require("next-pwa");
 // });
 
 module.exports = withPlugins([
+
   [withPWA, {
     pwa: {
       dest: "public",
@@ -24,6 +25,7 @@ module.exports = withPlugins([
     }
   }],
   [withImages]
+
 ], {
   reactStrictMode: true,
   webpack(config, options) {
@@ -31,3 +33,4 @@ module.exports = withPlugins([
     return config;
   },
 });
+
