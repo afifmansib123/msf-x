@@ -31,3 +31,5 @@ package-lock.json
 # pwa
 /public/sw*
 /public/workbox*
+
+.idea/
