@@ -28,13 +28,15 @@ export async function getServerSideProps(context) {
   const response = await fetch(url).then(value => value.json()).catch(err => console.log(err));
   if(response.result != null) {
     const tableData = response.result.map((value, index) => {
-      console.log(value)
       return {
         record_ID: value.id,
         Merchant_Name: value.merchant,
         Car_Maker: value.carMaker,
         Car_Model: value.carModel,
-        Preview_Image: (value.carImage == undefined || value.carImage == []) ? `/assets/img/car_placeholder.png`: value.carImage[0]
+        Preview_Image: (value.carImage == undefined || value.carImage == []) ? `/assets/img/car_placeholder.png`: value.carImage,
+        modelData: value.modelData,
+        manufacturerData: value.manufacturerData,
+        carOverview: value.carOverview
       }
     });
     return {

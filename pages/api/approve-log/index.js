@@ -59,7 +59,7 @@ async function createData(car_id) {
 }
 
 async function getAllApprove() {
-    const data = await prisma.CarsApp_carapprovallog.findMany({
+    const data = await prisma.CarsApp_carapprovallogs.findMany({
         where: {
           is_approved: false
         },
@@ -68,12 +68,16 @@ async function getAllApprove() {
             include: {
               CarsApp_carmanufacturer: {
                 select: {
-                  maker_name: true
+                  maker_name: true,
+                    maker_country: true,
+                    maker_logo_url: true,
+                    serial: true
                 }
               },
               CarsApp_carmodel: {
                 select: {
-                  model_name: true
+                  model_name: true,
+                    release_year: true,
                 }
               },
               CarsApp_carimage: {
@@ -124,7 +128,18 @@ async function getAllApprove() {
               carModel: value.CarsApp_car.CarsApp_carmodel.model_name,
               carImage: img,
               carMaker: value.CarsApp_car.CarsApp_carmanufacturer.maker_name,
-              merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`
+              merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
+              modelData: value.CarsApp_car.CarsApp_carmodel,
+              manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
+              carOverview: {
+                  carName: value.CarsApp_car.car_name,
+                  seatingCapacity: value.CarsApp_car.seating_capacity,
+                  engineCapacity: value.CarsApp_car.engine_capacity,
+                  drive: value.CarsApp_car.drive,
+                  mileage: value.CarsApp_car.mileage,
+                  transmission_type: value.CarsApp_car.transmission_type,
+                  description: value.CarsApp_car.description
+              }
           }
       })) : []
 
