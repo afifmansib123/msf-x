@@ -110,17 +110,17 @@ export default function CarUpload() {
     {id: "A", title: "Automatic"},
     {id: "M", title: "Manual"},
   ]);
+  const [carFeaturesInput, setCarFeaturesInput] = useState([]);
   const [carFeatures, setCarFeatures] = useState([]);
-  const [checkBoxInput, setCheckBoxInput] = useState([]);
   const editorRef = useRef()
   const [editorLoaded, setEditorLoaded] = useState(false)
   const {CKEditor, ClassicEditor} = editorRef.current || {}
   const [images, setImages] = useState([]);
   const [fileLimitExceeded, setFileLimitExceeded] = useState(false);
-  const [carAskingPrice, setAskingPrice] = useState({
-    price: undefined,
-    sale_price: undefined,
-    custom_price: "Call for price",
+  const [carPrice, setCarPrice] = useState({
+    asking_price: undefined,
+    selling_price: undefined,
+    custom_price: "Call for Price",
   });
 
   useEffect(() => {
@@ -156,18 +156,17 @@ export default function CarUpload() {
 
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
-  const updateFiles = (incommingFiles) => {
-    setFiles(incommingFiles);
-    if (incommingFiles) {
-      const listSize = incommingFiles.length;
+  const updateFiles = (incomingFiles) => {
+    setFiles(incomingFiles);
+    if (incomingFiles) {
+      const listSize = incomingFiles.length;
       const prevListSize = images.length;
       const newImageLength = listSize - prevListSize;
-      if(listSize === 0){
+      if (listSize === 0) {
         setImages([]);
       }
-      console.log(incommingFiles.length);
       for (let i = listSize - 1; i >= prevListSize; i--) {
-        const image1 = incommingFiles[i];
+        const image1 = incomingFiles[i];
         const imageName = image1.name;
         setImages((prev) => [...prev, image1.file]);
       }
@@ -192,10 +191,68 @@ export default function CarUpload() {
   };
 
   const [inputErrors, setError] = useState({});
-  const schema = {
-    asking_price: Joi.number().positive().integer().min(100000).max(500000000).required(),
-    selling_price: Joi.number().positive().integer().min(100000).max(500000000).required(),
-  };
+
+  const schema = isUsed
+    ? {
+      car_chassis_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .label("Chassis"),
+      car_engine_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Engine No"),
+      car_registration_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Registration No"),
+      car_type: Joi.number().required().label("Type"),
+      car_maker: Joi.number().required().label("Maker"),
+      car_model: Joi.number().required().label("Model"),
+      asking_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Asking Price"),
+      car_mileage: Joi.number().min(-1).max(999999).allow("").label("Mileage"),
+      car_seat: Joi.number().positive().integer().min(1).max(45).allow("").label("Seat"),
+      car_engine_cc: Joi.number().precision(2).min(660).max(9999).allow("").label("Engine Capacity"),
+      car_body_type: Joi.number().required().label("Body Type"),
+      car_fuel_type: Joi.number().required().label("Fuel Type"),
+      car_reg_year: isRegYear
+        ? Joi.required().label("Registration Year")
+        : Joi.allow().label("Registration Year"),
+      selling_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Selling Price"),
+    }
+    : {
+      car_chassis_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .required()
+        .label("Chassis"),
+      car_engine_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Engine No"),
+      car_registration_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Registration No"),
+      car_type: Joi.number().required().label("Type"),
+      car_maker: Joi.number().required().label("Maker"),
+      car_model: Joi.number().required().label("Model"),
+      asking_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Asking Price"),
+      car_mileage: Joi.number().min(-1).max(999999).allow("").label("Mileage"),
+      car_seat: Joi.number().positive().integer().min(1).max(45).allow("").label("Seat"),
+      car_engine_cc: Joi.number().precision(2).min(660).max(9999).allow("").label("Engine Capacity"),
+      car_body_type: Joi.number().required().label("Body Type"),
+      car_fuel_type: Joi.number().required().label("Fuel Type"),
+      car_reg_year: isRegYear
+        ? Joi.required().label("Registration Year")
+        : Joi.allow().label("Registration Year"),
+      selling_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Selling Price"),
+    };
+
   const propertyValidate = (name, value) => {
     const obj = {[name]: value};
     const singleSchema = {[name]: schema[name]};
@@ -203,6 +260,7 @@ export default function CarUpload() {
 
     return error ? error.details[0].message : null;
   };
+
   const propertyValidationHelper = (name, value) => {
     const errors = {...inputErrors};
     const errorMessage = propertyValidate(name, value);
@@ -218,7 +276,7 @@ export default function CarUpload() {
     } else if (name === "asking_price") {
       propertyValidationHelper("asking_price", value);
     }
-    setAskingPrice({...carAskingPrice, [name]: value});
+    setCarPrice({...carPrice, [name]: value});
   };
 
   const [carDescription, setCarDescription] = useState("");
@@ -263,8 +321,8 @@ export default function CarUpload() {
     }
     setCarType(e.target.value);
   };
-  const onCarMakerChange = (e, name) => {
-    setCarMaker(e.target.value);
+  const onCarMakerChange = (e, id, name) => {
+    setCarMaker(id);
     (async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${name}`)
@@ -302,7 +360,6 @@ export default function CarUpload() {
     setCarRegNumber(e.target.value);
   };
   const onCarBodyTypeChange = (e) => {
-
     setCarBodyType(e.target.value);
   };
   const onCarFuelTypeChange = (e) => {
@@ -330,109 +387,158 @@ export default function CarUpload() {
     setCarTransmission(e.target.value);
   };
   const onCarFeaturesInputChange = (e) => {
-
     const {name} = e.target;
-    const index = checkBoxInput.indexOf(parseInt(name));
+    const index = carFeatures.indexOf(parseInt(name));
     if (index !== -1) {
-      const newBox = [...checkBoxInput];
+      const newBox = [...carFeatures];
       newBox.splice(index, 1);
-      setCheckBoxInput(newBox);
+      setCarFeatures(newBox);
     } else {
-      setCheckBoxInput([...checkBoxInput, parseInt(name)]);
+      setCarFeatures([...carFeatures, parseInt(name)]);
     }
   };
   const onCarVideoLinkChange = ({target: input}) => {
     setCarVideoLink({...carVideoLink, [input.name]: input.value});
   };
 
+  const [open, setOpen] = useState(false);
+  const [snackMsg, setSnackMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleClose = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const validate = () => {
+    const inputs = isUsed
+      ? {
+        // carEngineNumber: carEngineNumber,
+        // carChassisNumber: carChassisNumber,
+        car_type: carType,
+        car_maker: carMaker,
+        car_model: carModel,
+        asking_price: carPrice.asking_price,
+        car_fuel_type: carFuelType,
+        car_body_type: carBodyType,
+        selling_price: carPrice.selling_price,
+        car_reg_year: carRegYear,
+        car_engine_cc: carEngineCC,
+      }
+      : {
+        // carEngineNumber: carEngineNumber,
+        car_chassis_number: carChassisNumber,
+        car_type: carType,
+        car_maker: carMaker,
+        car_model: carModel,
+        asking_price: carPrice.asking_price,
+        car_fuel_type: carFuelType,
+        car_body_type: carBodyType,
+        selling_price: carPrice.selling_price,
+        car_reg_year: carRegYear,
+        car_engine_cc: carEngineCC,
+      };
+    const {error} = Joi.validate(inputs, schema, {abortEarly: false});
+    if (!error) return null;
+
+    const errors = {}; // TODO what is the point to set error to empty and iterate later?
+    for (let item of error.details) {
+      errors[item.path[0]] = `${item.context.label} is required!`;
+    }
+
+    return Object.keys(errors).length === 0 ? {} : errors;
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    // const errors = validate();
-    // setError(errors || {});
-    // if (errors) {
-    //   console.log(errors);
-    //   console.log(isUsed);
-    //   setSnackMsg("Please fill out the mandatory fields before submitting your listing!");
-    //   setOpen(true);
-    //   return;
-    // }
+    const errors = validate();
+    setError(errors || {});
+    if (errors) {
+      console.log(errors);
+      console.log(isUsed);
+      setSnackMsg("Please fill out the mandatory fields before submitting your listing!");
+      setOpen(true);
+      return;
+    }
 
     // const user_id = parseInt(localStorage.getItem("user_id"));
     const user_id = 41;
 
-    // let carObject = {
-    //   mileage: carMileage !== "" ? carMileage : 0,
-    //   fixed_price: askingPrice.price !== "" ? askingPrice.price : 0.0,
-    //   price_to: askingPrice.price !== "" ? askingPrice.price : 0.0,
-    //   affiliated_price: askingPrice.sale_price,
-    //   price_from: askingPrice.sale_price,
-    //   // call_for_price: askingPrice.custom_price !== "" ? askingPrice.custom_price : "-",
-    //   // enforce no call_for_price policy. Every car must disclose the price.
-    //   call_for_price: "no",
-    //   transmission_type: transmission !== "" ? transmission : "N/A",
-    //   car_manufacturer: maker,
-    //   model_name: model,
-    //   interior_color: carInteriorColor !== "" ? carInteriorColor : 21,
-    //   exterior_color: carExteriorColor !== "" ? carExteriorColor : 54,
-    //   car_body_type: carBody,
-    //   engine_capacity: carEngine !== "" ? carEngine : 0.0,
-    //   car_fuel: carFuelType,
-    //   created_by: user_id,
-    //   car_video_link: videoLink.video1 !== "" ? videoLink.video1 : "-",
-    //   car_type: type,
-    //   drive: drive !== "" ? drive : "N/A",
-    //   seating_capacity: seat !== undefined ? seat : 0,
-    //   description: editorData !== "" ? editorData : "-",
-    //   car_features: checkBoxInput,
-    //   car_year: year,
-    //   engine_no: carEngineNumber !== "" ? carEngineNumber : "-",
-    //   chassis_no: carChasisNumber,
-    //   registration_year: regYear,
-    //   registration_no: carRegistrationNumber,
-    //   grade: carGrade,
-    // };
+    let carObject = {
+      mileage: carMileage !== "" ? carMileage : 0,
+      fixed_price: carPrice.asking_price !== "" ? carPrice.asking_price : 0.0,
+      price_to: carPrice.asking_price !== "" ? carPrice.asking_price : 0.0,
+      affiliated_price: carPrice.selling_price,
+      price_from: carPrice.selling_price,
+      call_for_price: "no",
+      transmission_type: carTransmission !== "" ? carTransmission : "N/A",
+      car_manufacturer: carMaker,
+      model_name: carModel,
+      interior_color: carInteriorColor !== "" ? carInteriorColor : 21,
+      exterior_color: carExteriorColor !== "" ? carExteriorColor : 54,
+      car_body_type: carBodyType,
+      engine_capacity: carEngineCC !== "" ? carEngineCC : 0.0,
+      car_fuel: carFuelType,
+      created_by: user_id,
+      car_video_link: carVideoLink.video1 !== "" ? carVideoLink.video1 : "-",
+      car_type: carType,
+      drive: carDrive !== "" ? carDrive : "N/A",
+      seating_capacity: carSeat !== undefined ? carSeat : 0,
+      description: carDescription !== "" ? carDescription : "-",
+      car_features: carFeatures,
+      car_year: carModelYear,
+      engine_no: carEngineNumber !== "" ? carEngineNumber : "-",
+      chassis_no: carChassisNumber,
+      registration_year: carRegYear,
+      registration_no: carRegNumber,
+      grade: carGrade,
+    };
 
     if (images.length === 0) {
-      // setSnackMsg("Please! Provide Image.");
-      // setOpen(true);
+      setSnackMsg("Please! Provide Image.");
+      setOpen(true);
+    } else if (fileLimitExceeded) {
+      setSnackMsg("Maximum Image limit exceeded. Please keep 15 images at most");
+      setOpen(true);
     } else {
-      // setLoading(true);
-      // console.log(carObject);
-      // const response = await api.post("api/cars/upload/", carObject);
-      // console.log(response);
-      // if (response.status === 201) {
-      //   const id = response.data.car_id;
-      //   const id = response.data.car_id;
-      //   localStorage.setItem("car_id", id);
-      let formData = new FormData();
-      formData.append("car_id", 592);
-      formData.append("created_by", user_id);
-      Object.keys(images).forEach((item) => {
-        if (images[item] !== null) {
-          formData.append("image", images[item]);
+      setLoading(true);
+      console.log(carObject);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}cars/upload/`, carObject);
+      console.log(response);
+      if (response.status === 201) {
+        const id = response.data.car_id;
+        // localStorage.setItem("car_id", id);
+        let formData = new FormData();
+        formData.append("car_id", id);
+        formData.append("created_by", user_id);
+        Object.keys(images).forEach((item) => {
+          if (images[item] !== null) {
+            formData.append("image", images[item]);
+          }
+        });
+        console.log(images);
+        const response1 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/image-upload/`, {
+          method: "post",
+          body: formData,
+        });
+        console.log(response1);
+        if (response1.status === 201) {
+          setSnackMsg("");
+          setOpen(true);
+          setLoading(false);
+          // setRedirect(true);
+        } else {
+          setLoading(false);
+          setSnackMsg("Please fill all the required fields");
+          setOpen(true);
         }
-      });
-      // console.log(images);
-      // const response1 = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_API}cars/image-upload/`, {
-      //   method: "post",
-      //   body: formData,
-      // });
-      // console.log(response1);
-      // if (response1.status === 201) {
-      //   // setSnackMsg(false);
-      //   // setOpen(true);
-      //   // setLoading(false);
-      //   // setRedirect(true);
-      // } else {
-      //   // setLoading(false);
-      //   // setSnackMsg("Please fill all the required fields");
-      //   // setOpen(true);
-      // }
-      // } else {
-      //   setLoading(false);
-      //   setSnackMsg("Please fill all the required fields");
-      //   setOpen(true);
-      // }
+      } else {
+        setLoading(false);
+        setSnackMsg("Please fill all the required fields");
+        setOpen(true);
+      }
     }
   };
 
@@ -445,7 +551,7 @@ export default function CarUpload() {
         const json1 = await response1.json();
         setCarTypes(json);
         setCarMakers(json1);
-        // console.log(json1);
+        console.log(json1);
       } catch (err) {
         console.error(err);
       }
@@ -482,7 +588,7 @@ export default function CarUpload() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/features-list/`);
         const json = await response.json();
-        setCarFeatures(json);
+        setCarFeaturesInput(json);
       } catch (err) {
         console.error(err);
       }
@@ -577,11 +683,12 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 value={carMaker}
                 label="Car Makers"
+                name="car_maker"
                 // onChange={onCarMakerChange}
               >
                 {carMakers.map((l, index) => {
                   return <MenuItem key={index} value={l.maker_id}
-                                   onClick={(event) => onCarMakerChange(event, l.maker_name)}
+                                   onClick={(event) => onCarMakerChange(event, l.maker_id, l.maker_name)}
                   >{l.maker_name}</MenuItem>;
                 })}
               </Select>
@@ -596,6 +703,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 value={carModel}
                 label="Car Models"
+                name="car_model"
                 onChange={onCarModelChange}
               >
                 {carModels.map((l, index) => {
@@ -609,7 +717,7 @@ export default function CarUpload() {
           <GridItem item xs={12}>
             <TextField
               value={carGrade}
-              name={"Car Grade"}
+              name={"car_grade"}
               autoComplete="off"
               fullWidth
               onChange={onCarGradeChange}
@@ -625,6 +733,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 value={carModelYear}
                 label="Car Model Years"
+                name="car_model_year"
                 onChange={onCarModelYearChange}
               >
                 {carModelYears.map((l, index) => {
@@ -644,6 +753,7 @@ export default function CarUpload() {
                   id="demo-simple-select"
                   value={carRegYear}
                   label="Car Reg Years"
+                  name="car_reg_year"
                   onChange={onCarRegYearChange}
                 >
                   {carRegYears.map((l, index) => {
@@ -658,7 +768,7 @@ export default function CarUpload() {
             <GridItem item xs={12}>
               <TextField
                 value={carChassisNumber}
-                name={"Car Chassis Number"}
+                name={"car_chassis_number"}
                 autoComplete="off"
                 fullWidth
                 onChange={onCarChassisNumberChange}
@@ -671,7 +781,7 @@ export default function CarUpload() {
             <GridItem item xs={12}>
               <TextField
                 value={carEngineNumber}
-                name={"Car Engine Number"}
+                name={"car_engine_number"}
                 autoComplete="off"
                 fullWidth
                 onChange={onCarEngineNumberChange}
@@ -684,7 +794,7 @@ export default function CarUpload() {
             <GridItem item xs={12}>
               <TextField
                 value={carRegNumber}
-                name={"Car Registration Number"}
+                name={"car_registration_number"}
                 autoComplete="off"
                 fullWidth
                 onChange={onCarRegNumberChange}
@@ -720,7 +830,7 @@ export default function CarUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               value={carEngineCC}
-              name={"Car Engine CC"}
+              name={"car_engine_cc"}
               autoComplete="off"
               fullWidth
               onChange={onCarEngineCCChange}
@@ -750,7 +860,7 @@ export default function CarUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               value={carMileage}
-              name={"Car Mileage"}
+              name={"car_mileage"}
               autoComplete="off"
               fullWidth
               onChange={onCarMileageChange}
@@ -761,7 +871,7 @@ export default function CarUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               value={carSeat}
-              name={"Car Engine CC"}
+              name={"car_seat"}
               autoComplete="off"
               fullWidth
               onChange={onCarSeatChange}
@@ -796,6 +906,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 value={carFuelType}
                 label="Car Fuel Type"
+                name="car_fuel_type"
                 onChange={onCarFuelTypeChange}
               >
                 {carFuelTypes.map((l, index) => {
@@ -813,6 +924,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 value={carInteriorColor}
                 label="Car Interior Color"
+                name="car_interior_color"
                 onChange={onCarInteriorColorChange}
               >
                 {carInteriorColors.map((l, index) => {
@@ -831,6 +943,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 value={carExteriorColor}
                 label="Car Exterior Color"
+                name="car_exterior_color"
                 onChange={onCarExteriorColorChange}
               >
                 {carExteriorColors.map((l, index) => {
@@ -849,7 +962,7 @@ export default function CarUpload() {
         <GridContainer>
           <h2 className={classes.paperTitle}>Select Your Car Features</h2>
 
-          {carFeatures.map((item, index) => (
+          {carFeaturesInput.map((item, index) => (
             <GridItem item xs={12} sm={12} md={4}>
               <FormControl className="w-full">
                 <div key={index}>
@@ -876,7 +989,7 @@ export default function CarUpload() {
           </p>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carAskingPrice.price}
+              value={carPrice.asking_price}
               name={"asking_price"}
               autoComplete="off"
               fullWidth
@@ -900,7 +1013,7 @@ export default function CarUpload() {
 
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carAskingPrice.price}
+              value={carPrice.selling_price}
               name={"selling_price"}
               autoComplete="off"
               fullWidth
