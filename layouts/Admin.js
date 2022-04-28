@@ -11,7 +11,7 @@ import Navbar from "components/Navbars/Navbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/AdminSidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
-
+import { useSession } from "next-auth/react";
 import routes from "admin-routes.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/layouts/adminStyle.js";
@@ -21,11 +21,12 @@ import styles from "assets/jss/nextjs-material-dashboard/layouts/adminStyle.js";
 const bgImage = "/assets/img/sidebar-2.jpg";
 const logo = "/assets/img/bhalogari.png";
 
-
 let ps;
 
-export default function Admin({ children, ...rest }) {
+function Admin({ children, ...rest }) {
   // used for checking current route
+  const { data: session } = useSession();
+  console.log("Admin Session", session);
   const router = useRouter();
   // styles
   const useStyles = makeStyles(styles);
@@ -114,3 +115,5 @@ export default function Admin({ children, ...rest }) {
     </div>
   );
 }
+
+export default Admin;

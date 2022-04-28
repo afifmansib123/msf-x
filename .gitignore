@@ -31,5 +31,7 @@ package-lock.json
 # pwa
 /public/sw*
 /public/workbox*
+.vercel
+
 
 .idea/
