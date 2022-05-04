@@ -43,13 +43,14 @@ export default async function handler(req, res) {
 }
 
 async function createData(car_id) {
-    const car_approve = await prisma.CarsApp_carapprovallog.create({
+    const car_approve = await prisma.CarsApp_carapprovallogs.create({
         data: {
             is_approved: false,
             created_at: new Date(),
             updated_at: new Date(),
             approved_by_id: null,
-            car_id_id: car_id
+            car_id_id: car_id,
+            review: null
         }
     }).catch(err => {
         throw new Error(err);
@@ -91,6 +92,12 @@ async function getAllApprove() {
                     last_name: true
                 }
             },
+                CarsApp_carbodytype: true,
+                CarsApp_cartype: true,
+                CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor: true,
+                CarsApp_carwheel: true,
+                CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor: true,
+                CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel: true
             }
           }
         },
@@ -138,7 +145,14 @@ async function getAllApprove() {
                   drive: value.CarsApp_car.drive,
                   mileage: value.CarsApp_car.mileage,
                   transmission_type: value.CarsApp_car.transmission_type,
-                  description: value.CarsApp_car.description
+                  description: value.CarsApp_car.description,
+                  fuelType: value.CarsApp_car.CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel.fuel_type,
+                  condition: value.CarsApp_car.CarsApp_cartype.car_type,
+                  sell_option: value.CarsApp_car.sell_option,
+                  body: value.CarsApp_car.CarsApp_carbodytype.body_name,
+                  status: value.CarsApp_car.car_status,
+                  interior_color: value.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor.car_color,
+                  exterior_color: value.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor.car_color
               }
           }
       })) : []

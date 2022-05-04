@@ -3,10 +3,10 @@ import makeStyles from '@mui/styles/makeStyles';
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components
-import CarTable from '../../components/Table/ApproveTable';
+import CarTable from '../../../components/Table/ApproveTable';
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 
-function Approval(props) {
+function Index(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
 
@@ -53,6 +53,6 @@ export async function getServerSideProps(context) {
   }
 }
 
-Approval.layout = Admin;
+Index.layout = Admin;
 
-export default Approval;
+export default Index;
