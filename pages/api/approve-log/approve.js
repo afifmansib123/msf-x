@@ -4,7 +4,7 @@ const prisma = new PrismaClient() ;
 
 export default async function handler(req, res) {
     try {
-        if (req.method == "PUT") {
+        if (req.method == "POST") {
             const data = await updateApprove(req.body);
             if (data != null || data != undefined) {
                 return res.status(200).json({
