@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "react-query";
-import LoginForm from "/components/LoginForm"
+import LoginForm from "/components/LoginForm";
 
 export async function getStaticProps(context) {
-  console.log("LANDING_PAGE", process.env.LANDING_PAGE);
+  // console.log("LANDING_PAGE", process.env.LANDING_PAGE);
   return {
     props: {
-      landingPage: process.env.LANDING_PAGE ? process.env.LANDING_PAGE : null,
+      // landingPage: process.env.LANDING_PAGE ? process.env.LANDING_PAGE : null,
     },
   };
 }
