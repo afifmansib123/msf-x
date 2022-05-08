@@ -11,6 +11,7 @@ import CusButton from "components/CustomButtons/Button"
 import CardIcon from "components/Card/CardIcon.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Icon from "@mui/material/Icon";
+import Image from 'next/image'
 
 import PropTypes from 'prop-types';
 
@@ -94,11 +95,13 @@ function CarApproveLog(props) {
                                         {props.pendingTab.map(v => {
                                             return (
                                                 <GridItem >
-                                                    <Card style={{height: 300, overflowY: "auto"}}>
-                                                        <CardBody>
+                                                    <Card>
+                                                        {/*<Image src={v.Preview_Image[0]} alt="" title="" width="100%" height="100%" layout="responsive" objectFit="contain"/>*/}
                                                             <img src={v.Preview_Image[0]}  width={250} height={250}/>
-                                                            <CusButton>History</CusButton>
+                                                        <CardBody>
+                                                            <p>Some text information to filled</p>
                                                         </CardBody>
+                                                            <Button >History</Button>
 
                                                     </Card>
                                                 </GridItem>
