@@ -6,30 +6,16 @@ import Admin from "layouts/Admin.js";
 // core components
 import CarTable from '../../../components/Table/ApproveTable';
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import { PrismaClient } from "@prisma/client";
-import {get} from "react-hook-form";
-
-const prisma = new PrismaClient() ;
+import prisma from "../../../PrismaConnect";
+import {getPending} from "../../api/approve-log";
 
 function Index(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const router = useRouter()
 
-  // const tabHandler = (index) => {
-  //   if(index === 0) {
-  //     router.push({pathname: '/admin/approval/', query: {tab: 0}})
-  //   }
-  //   else if (index === 1) {
-  //     router.push({pathname: '/admin/approval/', query: {tab: 1}})
-  //   } else {
-  //     router.push({pathname: '/admin/approval/', query: {tab: 2}})
-  //   }
-  // }
-
-  const callback = (carid, recordid) => {
-      // router.push(`/admin/approval/${carid}`);
-    router.push({pathname: `/admin/approval/${carid}`, query: {record_id: recordid}});
+  const callback = (carid) => {
+    router.push({pathname: `/admin/approval/${carid}`});
   }
 
 
@@ -50,10 +36,11 @@ export async function getServerSideProps(context) {
   var approvedTabResponse ;
   var rejectTabResponse;
   try {
-    tableResponse = await getAllApprove();
-    pendingTabResponse = tableResponse;
-    approvedTabResponse = await getCompleteApprove();
-    rejectTabResponse = await getRejectedApprove();
+    tableResponse = await getPending()
+    console.table(tableResponse)
+    pendingTabResponse = await getPendingApprove();
+    approvedTabResponse = await getApproveApproval();
+    rejectTabResponse = await getRejectedApproval();
   } catch (e) {
     console.error(e)
     return {
@@ -68,7 +55,6 @@ export async function getServerSideProps(context) {
 
   const tableData = (tableResponse !== undefined)? (tableResponse.map((value, index) => {
       return {
-        record_ID: value.id,
         Merchant_Name: value.merchant,
         Car_Maker: value.carMaker,
         Car_Model: value.carModel,
@@ -128,14 +114,10 @@ export async function getServerSideProps(context) {
     }
 }
 
-async function getRejectedApprove() {
-  const data = await prisma.CarsApp_carapprovallogs.findMany({
+async function getRejectedApproval() {
+  const data = await prisma.CarsApp_carapprovallog.findMany({
     where: {
-      NOT: {
-        approved_by_id:  null,
-        review: null,
-      },
-      is_approved: false
+      status: "R",
     },
     include: {
       CarsApp_car: {
@@ -212,14 +194,10 @@ async function getRejectedApprove() {
   return d
 }
 
-async function getCompleteApprove() {
-  const data = await prisma.CarsApp_carapprovallogs.findMany({
+async function getApproveApproval() {
+  const data = await prisma.CarsApp_carapprovallog.findMany({
     where: {
-      NOT: {
-        approved_by_id:  null,
-        review: null,
-      },
-      is_approved: true
+      status: "A"
     },
     include: {
       CarsApp_car: {
@@ -297,11 +275,10 @@ async function getCompleteApprove() {
 }
 
 
-async function getAllApprove() {
-  const data = await prisma.CarsApp_carapprovallogs.findMany({
+async function getPendingApprove() {
+  const data = await prisma.CarsApp_carapprovallog.findMany({
     where: {
-      approved_by_id: {equals: null},
-      review: null
+      status: "P"
     },
     include: {
       CarsApp_car: {

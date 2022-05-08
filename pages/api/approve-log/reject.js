@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient() ;
+import prisma from "../../../PrismaConnect";
 
 export default async function handler(req, res) {
     try {
@@ -26,20 +24,20 @@ export default async function handler(req, res) {
     }
 }
 
-async function updateApprove({review_string, approval_id, record_id}) {
-    const updateLog = await prisma.CarsApp_carapprovallogs.update({
-        where: {
-            id: record_id
-        },
+async function updateApprove({review_string, approval_id, car_id}) {
+    const car_approve = await prisma.CarsApp_carapprovallog.create({
         data: {
             is_approved: false,
+            created_at: new Date(),
             updated_at: new Date(),
             approved_by_id: approval_id,
-            review: review_string
+            car_id_id: car_id,
+            review: review_string,
+            status: "R"
         }
-    }).catch(e => {
-        throw new Error(e)
+    }).catch(err => {
+        throw new Error(err);
     });
 
-    return updateLog
+    return car_approve
 }

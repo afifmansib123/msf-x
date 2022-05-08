@@ -38,17 +38,27 @@ function CarApproveLog(props) {
     const classes = useStyles();
 
     const handleClickOpen = (carRecord) => {
-        props.callback(carRecord.carId, carRecord.record_ID);
+        props.callback(carRecord.carId);
     };
-
 
     var showedData = props.tableData.map((value, index) => {
 
-        return [value.record_ID, value.Merchant_Name, value.Car_Maker, value.Car_Model, (
-            <img src={value.Preview_Image[0]} width={350} height={350}/>),
-            (<Button onClick={() => handleClickOpen(value)}>Detail</Button>), "", ""]
+        return [(
+            <img src={value.Preview_Image[0]}/>), "", "",
+            (<GridContainer>
+                <GridItem xs={3} sm={3} md={3}>Merchant Name</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Merchant_Name}</GridItem>
+                <GridItem xs={3} sm={3} md={3}>Car Maker</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+            </GridContainer>),
+            (<Button onClick={() => handleClickOpen(value)}>Detail</Button>),  "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", ""]
     });
-
+    // value.Merchant_Name, value.Car_Maker, value.Car_Model
 
     return (
         <>
@@ -80,19 +90,21 @@ function CarApproveLog(props) {
                                 tabName: "Pending",
                                 tabIcon: BugReport,
                                 tabContent: (
-                                    <Container>
+                                    <GridContainer>
                                         {props.pendingTab.map(v => {
                                             return (
-                                                <Card>
-                                                    <CardHeader>
-                                                        <img src={v.Preview_Image[0]} width={100} height={100}/>
-                                                    </CardHeader>
-                                                    <CardBody>
+                                                <GridItem >
+                                                    <Card style={{height: 300, overflowY: "auto"}}>
+                                                        <CardBody>
+                                                            <img src={v.Preview_Image[0]}  width={250} height={250}/>
+                                                            <CusButton>History</CusButton>
+                                                        </CardBody>
 
-                                                    </CardBody>
-                                                </Card>)
+                                                    </Card>
+                                                </GridItem>
+                                            )
                                         })}
-                                    </Container>
+                                    </GridContainer>
                                 )
                             },
                             {
@@ -104,7 +116,7 @@ function CarApproveLog(props) {
                                             return (
                                                 <Card>
                                                     <CardHeader>
-                                                        <img src={v.Preview_Image[0]} width={100} height={100}/>
+                                                        <img src={v.Preview_Image[0]} width={250} height={250}/>
                                                     </CardHeader>
                                                     <CardBody>
 
@@ -123,7 +135,7 @@ function CarApproveLog(props) {
                                             return (
                                                 <Card>
                                                     <CardHeader>
-                                                        <img src={v.Preview_Image[0]} width={100} height={100}/>
+                                                        <img src={v.Preview_Image[0]} width={250} height={250}/>
                                                     </CardHeader>
                                                     <CardBody>
 
@@ -142,8 +154,7 @@ function CarApproveLog(props) {
 }
 
 CarApproveLog.defaultProps = {
-    tableHeaderColor: "danger",
-    tableHead: ["RecordID", "Merchant", "Car Maker", "Car Model", "Preview Image", "", "", ""],
+    tableHeaderColor: "danger"
 };
 
 CarApproveLog.propTypes = {

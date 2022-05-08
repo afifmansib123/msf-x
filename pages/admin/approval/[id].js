@@ -12,10 +12,10 @@ import CusButton from "../../../components/CustomButtons/Button";
 import React  from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import styles from "../../../assets/jss/nextjs-material-dashboard/views/dashboardStyle";
-import { PrismaClient } from "@prisma/client";
 import { useState, useRef } from "react";
+import prisma from "../../../PrismaConnect";
 
-const prisma = new PrismaClient() ;
+
 
 function DetailCarLog(props) {
     const useStyles = makeStyles(styles);
@@ -24,7 +24,6 @@ function DetailCarLog(props) {
     const selectedCar = props.car;
     const router = useRouter();
 
-    // const [pageLoading, setPageLoading] = React.useState(false)
     const handleSubmit = async (type) => {
         const reason = inputElement.current.value;
         if (reason.trim() !== "") {
@@ -36,10 +35,10 @@ function DetailCarLog(props) {
         }
 
         if(type == "approve") {
-            await handleApprove(reason, 19, parseInt(router.query.record_id))
+            await handleApprove(reason, 19, parseInt(router.query.id))
             router.push(`/admin/approval/`);
         } else {
-            await handleReject(reason, 19, parseInt(router.query.record_id))
+            await handleReject(reason, 19, parseInt(router.query.id))
             router.push(`/admin/approval/`);
         }
     }
@@ -249,7 +248,7 @@ export async function getServerSideProps(context) {
     }
 }
 
-async function handleApprove(review_string, approval_id, record_id) {
+async function handleApprove(review_string, approval_id, car_id) {
     await fetch('http://localhost:3000/api/approve-log/approve',
         {method: 'POST',
             headers: {
@@ -258,12 +257,12 @@ async function handleApprove(review_string, approval_id, record_id) {
             body: JSON.stringify({
                 review_string: review_string,
                 approval_id: approval_id,
-                record_id: record_id
+                car_id: car_id
             }),
         })
 }
 
-async function handleReject(review_string, approval_id, record_id) {
+async function handleReject(review_string, approval_id, car_id) {
     await fetch('http://localhost:3000/api/approve-log/reject',
         {method: 'POST',
             headers: {
@@ -272,7 +271,7 @@ async function handleReject(review_string, approval_id, record_id) {
             body: JSON.stringify({
                 review_string: review_string,
                 approval_id: approval_id,
-                record_id: record_id
+                car_id: car_id
             }),
         })
 }
@@ -286,7 +285,7 @@ async function getHistory(id) {
 }
 
 async function getDetail(car_id) {
-    const data = await prisma.CarsApp_carapprovallogs.findFirst({
+    const data = await prisma.CarsApp_carapprovallog.findFirst({
         where: {
             car_id_id: car_id
         },

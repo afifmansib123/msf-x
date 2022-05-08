@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient() ;
+import prisma from "../../../PrismaConnect";
 
 export default async function handler(req, res) {
     try {
@@ -23,7 +21,7 @@ export default async function handler(req, res) {
 }
 
 async function getDetail(id) {
-    const data = await prisma.CarsApp_carapprovallogs.findUnique({
+    const data = await prisma.CarsApp_carapprovallog.findUnique({
         where: {
             id: id
         },
