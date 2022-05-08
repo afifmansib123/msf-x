@@ -1,14 +1,23 @@
 import React from "react";
-import makeStyles from '@mui/styles/makeStyles';
+import Link from "next/link";
+import makeStyles from "@mui/styles/makeStyles";
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
+// import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import { PrismaClient } from "@prisma/client";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 const styles = {
   cardCategoryWhite: {
@@ -40,77 +49,87 @@ const styles = {
   },
 };
 
-function TableList() {
+function MerchantPage(props) {
+  const { merchants } = props;
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Simple Table</h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-                ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-                ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-                ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-                ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"],
-              ]}
-            />
-          </CardBody>
-        </Card>
+        <Table>
+          <TableHead>
+            <TableRow>
+            <TableCell>Class</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Phone Number</TableCell>
+              <TableCell align="center">Paid</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {merchants.map((m, i) => {
+              return (
+                <TableRow>
+                  <TableCell>
+                      {m.first_name} {m.last_name}
+
+                  </TableCell>
+                  <TableCell>
+                    <a href={`/admin/merchants/${m.id}`}>
+                      {m.first_name} {m.last_name}
+                    </a>
+                  </TableCell>
+                  <TableCell>{m.contact_number}</TableCell>
+                  {/* <TableCell align="center">
+                    <img className="w-[120px]" src={m.image_url} />
+                  </TableCell> */}
+                  <TableCell align="center">{m.is_paid ? "Paid": "Not yet"}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
       </GridItem>
-      <GridItem xs={12} sm={12} md={12}>
-        <Card plain>
-          <CardHeader plain color="primary">
-            <h4 className={classes.cardTitleWhite}>
-              Table on Plain Background
-            </h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["ID", "Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                [
-                  "4",
-                  "Philip Chaney",
-                  "$38,735",
-                  "Korea, South",
-                  "Overland Park",
-                ],
-                [
-                  "5",
-                  "Doris Greene",
-                  "$63,542",
-                  "Malawi",
-                  "Feldkirchen in Kärnten",
-                ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"],
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem>
+
     </GridContainer>
   );
 }
 
-TableList.layout = Admin;
+MerchantPage.layout = Admin;
 
-export default TableList;
+export async function getServerSideProps() {
+  const prisma = new PrismaClient();
+  var allMerchants = await prisma.UsersApp_customuser.findMany({
+    where: {
+      business_user: true,
+    },
+    // include: {
+    //     CarsApp_carmanufacturer: true,
+    //     CarsApp_carmodel: true,
+    //   },
+  });
+
+  allMerchants = JSON.parse(
+    JSON.stringify(allMerchants, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  );
+
+  console.log("Original", allMerchants[0]);
+  // allCars = allCars.map((car) => {
+  //   // Convert each fields.
+  //   // Ex: the id was a BigInt and cannot be serialised to JSON, so convert to Number
+  //   let car2 = {};
+  //   car2["id"] = Number(car.id);
+  //   car2["maker"] = car.CarsApp_carmanufacturer.maker_name;
+  //   car2["fixed_price"] = Number(car.fixed_price);
+  //   car2["view_count"] =
+  //   return car2;
+  // });
+  console.log("Transformed", allMerchants[0]);
+
+  return {
+    props: {
+      merchants: allMerchants,
+    },
+  };
+}
+
+export default MerchantPage;
