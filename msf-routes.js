@@ -22,6 +22,7 @@ import LibraryBooks from "@mui/icons-material/LibraryBooks";
 import BubbleChart from "@mui/icons-material/BubbleChart";
 import LocationOn from "@mui/icons-material/LocationOn";
 import Notifications from "@mui/icons-material/Notifications";
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import Unarchive from "@mui/icons-material/Unarchive";
 import Language from "@mui/icons-material/Language";
 import Car from '@mui/icons-material/DirectionsCar';
@@ -54,7 +55,7 @@ const dashboardRoutes = [
   {
     path: "/subscriptions",
     name: "Subscriptions",
-    icon: "content_paste",
+    icon: SubscriptionsIcon,
     layout: "/msf",
   },  
   {
