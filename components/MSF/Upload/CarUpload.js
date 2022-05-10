@@ -1077,7 +1077,7 @@ export default function CarUpload() {
                   name={"car_chassis_number"}
                   autoComplete="off"
                   fullWidth
-                  onChange={onCarChassisNumberChange}
+                  onChange={(e) => searchItems(e.target.value)}
                   placeholder={"Enter Chassis Number *"}
                   variant="outlined"
                 />
