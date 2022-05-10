@@ -22,7 +22,7 @@ const SellCar = ({ data }) => {
   } = data;
   return (
     <div>
-      <div className="sm:w-72 mb-2 min-h-full  bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+      <div className="w-full mb-2  bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
         <img
           className="rounded-t-lg h-36 w-full"
           src={images?.image_url}
@@ -49,26 +49,31 @@ const SellCar = ({ data }) => {
             Model Year: {car_year}
           </h6>
 
-          <div className="flex items-center space-x-6 ">
+          <div className="flex items-center space-x-4 ">
             <div className="flex  items-center  flex-col w-1/4">
-              <img src={Milage} className=" bg-gray-200 rounded-full" />
+              <img src={Milage} className=" bg-gray-200 rounded-full width-1" />
 
-              <p>{mileage}</p>
+              <p className="text-sm">{mileage}</p>
             </div>
             <div className="flex  items-center flex-col w-1/4">
-              <img src={Fuel} className=" bg-gray-200 rounded-full" />
+              <img src={Fuel} className=" bg-gray-200 rounded-full width-1" />
 
-              <p>{car_fuel.fuel_type}</p>
+              <p className="text-sm">{car_fuel.fuel_type}</p>
             </div>
             <div className="flex items-center flex-col w-1/4">
-              <img src={Calendar} className=" bg-gray-200 rounded-full" />
-              <p>{car_year}</p>
+              <img
+                src={Calendar}
+                className=" bg-gray-200 rounded-full width-1"
+              />
+              <p className="text-sm">{car_year}</p>
             </div>
             <div className="flex  justify-center items-center flex-col w-1/4">
-              <img src={Used} className=" bg-gray-200 rounded-full" />
+              <img src={Used} className=" bg-gray-200 rounded-full width-1" />
 
-              {transmission_type === "A" && <p>Automatic</p>}
-              {transmission_type === "M" && <p>Manual</p>}
+              {transmission_type === "A" && (
+                <p className="text-sm">Automatic</p>
+              )}
+              {transmission_type === "M" && <p className="text-sm">Manual</p>}
             </div>
           </div>
           <button

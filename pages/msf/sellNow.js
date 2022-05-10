@@ -46,13 +46,16 @@ const sellNow = ({ data }) => {
   return (
     <div>
       <h1>{data.results.length}</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-4 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32  mt-20 ">
+      {/* <div className="grid grid-cols-4  md:grid-cols-3  justify-center items-center rounded-lg border bg-white px-10 py-10 mt-20 "> */}
+      {/* <div className="grid  sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center rounded-lg border bg-white sm:p-8 md:p-1 p-2 sm:mx-32 lg:mx-40 mt-20  "> */}
+      <div className="grid lg:grid-cols-4 sm:grid-cols-1 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0  mt-20 lg:space-x-1 gap-5 ">
         {data.results.map((data) => (
           <SellCar key={data.car_id} data={data}></SellCar>
         ))}
       </div>
     </div>
   );
+  SS;
 };
 export async function getServerSideProps() {
   // Fetch data from external API
