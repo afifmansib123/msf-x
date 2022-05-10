@@ -197,7 +197,7 @@ function DetailCarLog(props) {
                         Approve History
                         <Divider/>
                         <Container>
-
+                            <Button>Detail</Button>
                         </Container>
                     </GridItem>
 

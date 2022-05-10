@@ -47,17 +47,17 @@ function CarApproveLog(props) {
         return [(
             <img src={value.Preview_Image[0]}/>), "", "",
             (<GridContainer>
-                <GridItem xs={3} sm={3} md={3}>Merchant Name</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Merchant_Name}</GridItem>
-                <GridItem xs={3} sm={3} md={3}>Car Maker</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
-                <GridItem xs={9} sm={9} md={9}>{value.Car_Maker}</GridItem>
+                <GridItem xs={4} sm={4} md={4} style={{fontWeight: 'bold'}}>Merchant Name</GridItem>
+                <GridItem xs={8} sm={8} md={8}>{value.Merchant_Name}</GridItem>
+                <GridItem xs={4} sm={4} md={4} style={{fontWeight: 'bold'}}>Car Maker</GridItem>
+                <GridItem xs={8} sm={8} md={8}>{value.Car_Maker}</GridItem>
+                <GridItem xs={4} sm={4} md={4} style={{fontWeight: 'bold'}}>Car Country</GridItem>
+                <GridItem xs={8} sm={8} md={8}>{value.manufacturerData.maker_country}</GridItem>
+                <GridItem xs={4} sm={4} md={4} style={{fontWeight: 'bold'}}>Car Model</GridItem>
+                <GridItem xs={8} sm={8} md={8}>{value.Car_Model}</GridItem>
+
             </GridContainer>),
-            (<Button onClick={() => handleClickOpen(value)}>Detail</Button>),  "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", ""]
+            (<CusButton color="rose" onClick={() => handleClickOpen(value)}>Approval Detail</CusButton>),  "", "", "", "", "", "", ""]
     });
     // value.Merchant_Name, value.Car_Maker, value.Car_Model
 
@@ -67,7 +67,7 @@ function CarApproveLog(props) {
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardHeader color={props.tableHeaderColor}>
-                            <h4 className={classes.cardTitleWhite}>Car Approve Log</h4>
+                            <h4 className={classes.cardTitleWhite} style={{fontWeight: 'bolder'}}>APPROVE LOG</h4>
                             <p className={classes.cardCategoryWhite}>
                                 Pending Car's approve
                             </p>
@@ -94,15 +94,20 @@ function CarApproveLog(props) {
                                     <GridContainer>
                                         {props.pendingTab.map(v => {
                                             return (
-                                                <GridItem >
+                                                <GridItem>
                                                     <Card>
                                                         {/*<Image src={v.Preview_Image[0]} alt="" title="" width="100%" height="100%" layout="responsive" objectFit="contain"/>*/}
-                                                            <img src={v.Preview_Image[0]}  width={250} height={250}/>
+                                                        <CardHeader>
+                                                            <img src={v.Preview_Image[0]}  width={250}/>
+                                                        </CardHeader>
                                                         <CardBody>
-                                                            <p>Some text information to filled</p>
+                                                            <p>Request Date:</p>
+                                                            {console.log(v.create_at)}
+                                                            <p>{v.create_at}</p>
                                                         </CardBody>
+                                                        <CardFooter>
                                                             <Button >History</Button>
-
+                                                        </CardFooter>
                                                     </Card>
                                                 </GridItem>
                                             )

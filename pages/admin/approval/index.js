@@ -37,10 +37,10 @@ export async function getServerSideProps(context) {
   var rejectTabResponse;
   try {
     tableResponse = await getPending()
-    console.table(tableResponse)
     pendingTabResponse = await getPendingApprove();
     approvedTabResponse = await getApproveApproval();
     rejectTabResponse = await getRejectedApproval();
+    console.log("date", pendingTabResponse[0].create_at)
   } catch (e) {
     console.error(e)
     return {
@@ -66,6 +66,7 @@ export async function getServerSideProps(context) {
     })) : [];
 
     const pendingTabData = (pendingTabResponse !== undefined) ? pendingTabResponse.map((value, index) => {
+      console.log("table Date:", value.create_at)
       return {
         record_ID: value.id,
         Merchant_Name: value.merchant,
@@ -74,7 +75,8 @@ export async function getServerSideProps(context) {
         Preview_Image: (value.carImage === undefined || value.carImage === []) ? `/assets/img/car_placeholder.png`: value.carImage,
         modelData: value.modelData,
         manufacturerData: value.manufacturerData,
-        carId: value.carId
+        carId: value.carId,
+        create_at: value.create_at || null
       }
     }) : [];
 
@@ -87,7 +89,8 @@ export async function getServerSideProps(context) {
       Preview_Image: (value.carImage === undefined || value.carImage === []) ? `/assets/img/car_placeholder.png`: value.carImage,
       modelData: value.modelData,
       manufacturerData: value.manufacturerData,
-      carId: value.carId
+      carId: value.carId,
+      create_at: value.create_at || null
     }
   }) : [];
 
@@ -100,7 +103,8 @@ export async function getServerSideProps(context) {
       Preview_Image: (value.carImage === undefined || value.carImage === []) ? `/assets/img/car_placeholder.png`: value.carImage,
       modelData: value.modelData,
       manufacturerData: value.manufacturerData,
-      carId: value.carId
+      carId: value.carId,
+      create_at: value.create_at || null
     }
   }) : [];
 
@@ -185,7 +189,8 @@ async function getRejectedApproval() {
       merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
       modelData: value.CarsApp_car.CarsApp_carmodel,
       manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
-      carId: value.car_id_id
+      carId: value.car_id_id,
+      created_at: value.created_at
     }
   })) : []
 
@@ -265,7 +270,8 @@ async function getApproveApproval() {
       merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
       modelData: value.CarsApp_car.CarsApp_carmodel,
       manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
-      carId: value.car_id_id
+      carId: value.car_id_id,
+      created_at: value.created_at
     }
   })) : []
 
@@ -336,6 +342,7 @@ async function getPendingApprove() {
     }).catch(err => {
       throw new Error(err)
     })
+    // console.log(value.created_at)
 
 
     return {
@@ -346,7 +353,8 @@ async function getPendingApprove() {
       merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
       modelData: value.CarsApp_car.CarsApp_carmodel,
       manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
-      carId: value.car_id_id
+      carId: value.car_id_id,
+      create_at: value.created_at
     }
   })) : []
 
