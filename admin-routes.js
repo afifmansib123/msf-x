@@ -35,6 +35,14 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
+    path: "/approval",
+    name: "Approval",
+    rtlName: "",
+    icon: Dashboard,
+
+    layout: "/admin",
+  },
+  {
     path: "/notifications",
     name: "Notifications",
     rtlName: "إخطارات",
@@ -59,6 +67,13 @@ const dashboardRoutes = [
   {
     path: "/subscriptions",
     name: "Subscriptions",
+    icon: "content_paste",
+    layout: "/admin",
+  },  
+
+  {
+    path: "/package",
+    name: "Package",
     icon: "content_paste",
     layout: "/admin",
   },  
@@ -98,17 +113,13 @@ const dashboardRoutes = [
   {
     path: "/settings",
     name: "Settings",
-    rtlName: "التطور للاحترافية",
     icon: Unarchive,
-
     layout: "/admin",
   },
   {
     path: "/user-profile",
     name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
-
     layout: "/admin",
   },
 

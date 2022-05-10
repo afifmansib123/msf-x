@@ -27,3 +27,9 @@ yarn-error.log*
 package-lock.json
 
 .next
+
+# pwa
+/public/sw*
+/public/workbox*
+.vercel
+

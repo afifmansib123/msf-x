@@ -24,6 +24,7 @@ import LocationOn from "@mui/icons-material/LocationOn";
 import Notifications from "@mui/icons-material/Notifications";
 import Unarchive from "@mui/icons-material/Unarchive";
 import Language from "@mui/icons-material/Language";
+import Car from '@mui/icons-material/DirectionsCar';
 
 const dashboardRoutes = [
   {
@@ -55,14 +56,14 @@ const dashboardRoutes = [
     name: "Subscriptions",
     icon: "content_paste",
     layout: "/msf",
-  },
-  // {
-  //   path: "/typography",
-  //   name: "Typography",
-  //   icon: LibraryBooks,
+  },  
+  {
+    path: "/upload",
+    name: "Upload",
+    icon: Car,
 
-  //   layout: "/msf",
-  // },
+    layout: "/msf",
+  },
   // {
   //   path: "/icons",
   //   name: "Icons",

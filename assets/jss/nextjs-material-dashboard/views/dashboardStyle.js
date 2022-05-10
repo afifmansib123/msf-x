@@ -77,6 +77,34 @@ const dashboardStyle = {
       lineHeight: "1",
     },
   },
+
+  paperTitle: {
+    padding: "16px 16px",
+    width: "100%",
+    margin: "0px auto",
+    fontSize: "20px",
+    color: "#000000",
+    fontWeight: 700,
+    // fontFamily: "Open Sans",
+    textTransform: "uppercase",
+  },
+  carPriceText: {
+    padding: "0px 16px 5px",
+    width: "100%",
+    fontSize: "16px",
+  },
+  ckEditorDiv: {
+    marginTop: "-15px",
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "15px",
+  },
+  errorDiv: {
+    marginTop: "5px",
+    color: "#ff2d2d",
+    position: "absolute",
+    bottom: "-20px",
+  },
 };
 
 export default dashboardStyle;
