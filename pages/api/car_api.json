@@ -21,7 +21,8 @@
       "engines_number": "3000",
       "car_fuel_type": "petrol/diese",
       "drive": "fwd",
-      "car_year": "2004-2010",
+      "car_year": "2010",
+      "mileage": 43000.0,
       "car_features": [],
       "images": ["Car-Wallpaper1.webp", "download.jpg"]
     },
@@ -39,7 +40,8 @@
       "engines_number": "3500",
       "car_fuel_type": "petrol/diese",
       "drive": "fwd",
-      "car_year": "2010-2014",
+      "car_year": "2014",
+      "mileage": 43000.0,
       "car_features": [],
       "images": ["Car-Wallpaper1.webp", "download.jpg"]
     },
@@ -63,7 +65,8 @@
       "engines_number": "5700",
       "car_fuel_type": "petrol/diese",
       "drive": "fwd",
-      "car_year": "2010-2014",
+      "car_year": "2014",
+      "mileage": 43000.0,
       "car_features": [],
       "images": ["Car-Wallpaper1.webp", "download.jpg"]
     },
@@ -81,7 +84,8 @@
       "engines_number": "1200",
       "car_fuel_type": "Octane",
       "drive": "fwd",
-      "car_year": "2002-2011",
+      "car_year": "2011",
+      "mileage": 43000.0,
       "car_features": [],
       "images": ["Car-Wallpaper1.webp", "download.jpg"]
     },

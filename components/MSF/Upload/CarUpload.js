@@ -760,101 +760,252 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Choose your car model</h2>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Car Type</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carType}
-                label="Car Types"
-                name="car_type"
-                onChange={onCarTypeChange}
-              >
-                {carTypes.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.type_id}>
-                      {l.type_name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">
+                    Car Type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carType}
+                    label="Car Types"
+                    name="car_type"
+                    onChange={onCarTypeChange}
+                  >
+                    {carTypes.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.type_id}>
+                          {l.type_name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarTypeChange}
+                >
+                  <option>{filteredResults[0]?.car_type}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Maker</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carMaker}
-                label="Car Makers"
-                name="car_maker"
-                // onChange={onCarMakerChange}
-              >
-                {carMakers.map((l, index) => {
-                  return (
-                    <MenuItem
-                      key={index}
-                      value={l.maker_id}
-                      onClick={(event) =>
-                        onCarMakerChange(event, l.maker_id, l.maker_name)
-                      }
-                    >
-                      {l.maker_name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">Maker</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carMaker}
+                    label="Car Makers"
+                    name="car_maker"
+                    // onChange={onCarMakerChange}
+                  >
+                    {carMakers.map((l, index) => {
+                      return (
+                        <MenuItem
+                          key={index}
+                          value={l.maker_id}
+                          onClick={(event) =>
+                            onCarMakerChange(event, l.maker_id, l.maker_name)
+                          }
+                        >
+                          {l.maker_name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarModelYearChange}
+                >
+                  <option>{filteredResults[0]?.maker_name}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Model</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carModel}
-                label="Car Models"
-                name="car_model"
-                onChange={onCarModelChange}
-              >
-                {carModels.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.model_id}>
-                      {l.model_name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">Model</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carModel}
+                    label="Car Models"
+                    name="car_model"
+                    onChange={onCarModelChange}
+                  >
+                    {carModels.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.model_id}>
+                          {l.model_name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarModelChange}
+                >
+                  <option>{filteredResults[0]?.model_name}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
-            <TextField
-              value={filteredResults[0]?.package_type.map((p) => p)}
-              name={"car_grade"}
-              fullWidth
-              onChange={onCarGradeChange}
-              placeholder={"Enter Grade/Package"}
-            />
-          </GridItem>
-          <GridItem item xs={12}>
-            <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Model Year</InputLabel>
-              <Select
+            {filteredResults == 0 ? (
+              <>
+                <TextField
+                  // value={filteredResults[0]?.package_type.map((p) => p)}
+                  name={"car_grade"}
+                  fullWidth
+                  onChange={onCarGradeChange}
+                  placeholder={"Enter Grade/Package"}
+                />
+              </>
+            ) : (
+              <select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carModelYear}
                 label="Car Model Years"
                 name="car_model_year"
-                onChange={onCarModelYearChange}
+                className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                onChange={onCarGradeChange}
               >
-                {carModelYears.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.id}>
-                      {l.year}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+                {filteredResults[0]?.package_type?.map((p) => (
+                  <option>{p} </option>
+                ))}
+              </select>
+            )}
+          </GridItem>
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">
+                    Model Year
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carModelYear}
+                    label="Car Model Years"
+                    name="car_model_year"
+                    onChange={onCarModelYearChange}
+                  >
+                    {carModelYears.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.id}>
+                          {l.year}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarModelYearChange}
+                >
+                  <option>{filteredResults[0]?.car_year}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           {isRegYear && (
@@ -930,17 +1081,19 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Choose Details</h2>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                <Car /> Car Body
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Car Body Types"
-                name="car_body_type"
-                onChange={onCarBodyTypeChange}
-              >
-                {/* {filteredResults
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">
+                    <Car /> Car Body
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Body Types"
+                    name="car_body_type"
+                    onChange={onCarBodyTypeChange}
+                  >
+                    {/* {filteredResults
                   ? filteredResults?.body_name
                   : carBodyTypes.map((l, index) => {
                       return (
@@ -950,13 +1103,41 @@ export default function CarUpload() {
                       );
                     })} */}
 
-                <MenuItem value={filteredResults[0]?.body_name}></MenuItem>
-              </Select>
+                    <MenuItem value={filteredResults[0]?.body_name}></MenuItem>
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarModelYearChange}
+                >
+                  <option>{filteredResults[0]?.body_name}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carEngineCC}
+              // value={carEngineCC}
+              value={filteredResults[0]?.engines_number}
               name={"car_engine_cc"}
               autoComplete="off"
               fullWidth
@@ -967,28 +1148,58 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label"> Drive</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carDrive}
-                label="Car Drive"
-                name="car_drive"
-                onChange={onCarDriveChange}
-              >
-                {carDrives.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.option}>
-                      {l.option}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label"> Drive</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carDrive}
+                    label="Car Drive"
+                    name="car_drive"
+                    onChange={onCarDriveChange}
+                  >
+                    {carDrives.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.option}>
+                          {l.option}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarDriveChange}
+                >
+                  <option>{filteredResults[0]?.drive}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carMileage}
+              // value={carMileage}
+              value={filteredResults[0]?.mileage}
               name={"car_mileage"}
               autoComplete="off"
               fullWidth
@@ -999,7 +1210,8 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carSeat}
+              // value={carSeat}
+              value={filteredResults[0]?.no_of_seat}
               name={"car_seat"}
               autoComplete="off"
               fullWidth
@@ -1010,47 +1222,107 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                {" "}
-                Transmission
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carTransmission}
-                label="Car Transmission"
-                name="car_transmission"
-                onChange={onCarTransmissionChange}
-              >
-                {carTransmissions.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.id}>
-                      {l.title}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">
+                    {" "}
+                    Transmission
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carTransmission}
+                    label="Car Transmission"
+                    name="car_transmission"
+                    onChange={onCarTransmissionChange}
+                  >
+                    {carTransmissions.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.id}>
+                          {l.title}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarTransmissionChange}
+                >
+                  <option>{filteredResults[0]?.transmission_type}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Fuel Type</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carFuelType}
-                label="Car Fuel Type"
-                name="car_fuel_type"
-                onChange={onCarFuelTypeChange}
-              >
-                {carFuelTypes.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.fuel_id}>
-                      {l.fuel_type}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              {filteredResults == 0 ? (
+                <>
+                  <InputLabel id="demo-simple-select-label">
+                    Fuel Type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={carFuelType}
+                    label="Car Fuel Type"
+                    name="car_fuel_type"
+                    onChange={onCarFuelTypeChange}
+                  >
+                    {carFuelTypes.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.fuel_id}>
+                          {l.fuel_type}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              ) : (
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  onChange={onCarFuelTypeChange}
+                >
+                  <option>{filteredResults[0]?.car_fuel_type}</option>
+                </select>
+              )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
