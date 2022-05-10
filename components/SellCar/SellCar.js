@@ -5,6 +5,7 @@ import Fuel from "../../assets/carListPageIcons/fuel.svg";
 import Calendar from "../../assets/carListPageIcons/calendar.svg";
 import Used from "../../assets/carListPageIcons/transmission.svg";
 import taka from "../../assets/carListPageIcons/taka.fb378b29.svg";
+import Image from "next/image";
 
 const SellCar = ({ data }) => {
   const {
@@ -38,7 +39,7 @@ const SellCar = ({ data }) => {
           </h5>
 
           <div className="flex space-x-1 mb-1">
-            <img src={taka}></img>
+            <Image src={taka}></Image>
             <h5 className=" text-sm font-bold tracking-tight text-gray-900 dark:text-white">
               {fixed_price}
             </h5>
@@ -53,7 +54,7 @@ const SellCar = ({ data }) => {
           <div className="">
             <div className="flex items-center space-x-1 ">
               <div className="flex  items-center  flex-col w-1/4">
-                <img
+                <Image
                   src={Milage}
                   className=" bg-gray-200 rounded-full width-1"
                 />
@@ -61,19 +62,25 @@ const SellCar = ({ data }) => {
                 <p className="text-sm">{mileage}</p>
               </div>
               <div className="flex  items-center flex-col w-1/4">
-                <img src={Fuel} className=" bg-gray-200 rounded-full width-1" />
+                <Image
+                  src={Fuel}
+                  className=" bg-gray-200 rounded-full width-1"
+                />
 
                 <p className="text-sm">{car_fuel.fuel_type}</p>
               </div>
               <div className="flex items-center flex-col w-1/4">
-                <img
+                <Image
                   src={Calendar}
                   className=" bg-gray-200 rounded-full width-1"
                 />
                 <p className="text-sm">{registration_year}</p>
               </div>
               <div className="flex  justify-center items-center flex-col w-1/4">
-                <img src={Used} className=" bg-gray-200 rounded-full width-1" />
+                <Image
+                  src={Used}
+                  className=" bg-gray-200 rounded-full width-1"
+                />
 
                 {transmission_type === "A" && (
                   <p className="text-sm">Automatic</p>
