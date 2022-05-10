@@ -19,6 +19,7 @@ const SellCar = ({ data }) => {
     date,
     transmission_type,
     car_type,
+    registration_year,
   } = data;
   return (
     <div>
@@ -28,13 +29,14 @@ const SellCar = ({ data }) => {
           src={images?.image_url}
           alt="Landscape picture"
         />
-        <div className="p-5">
+        <div className="px-5 py-5">
           <h6 className="mb-1 text-sm tracking-tight text-gray-600 dark:text-white font-sans ">
             {car_manufacturer.maker_name}
           </h6>
           <h5 className="mb-1 text-xl font-bold tracking-tight text-orange-500 dark:text-white font-sans">
             {model_name.model_name}
           </h5>
+
           <div className="flex space-x-1 mb-1">
             <img src={taka}></img>
             <h5 className=" text-sm font-bold tracking-tight text-gray-900 dark:text-white">
@@ -48,32 +50,36 @@ const SellCar = ({ data }) => {
           <h6 className="mb-1 text-sm tracking-tight text-gray-900 dark:text-white">
             Model Year: {car_year}
           </h6>
+          <div className="">
+            <div className="flex items-center space-x-1 ">
+              <div className="flex  items-center  flex-col w-1/4">
+                <img
+                  src={Milage}
+                  className=" bg-gray-200 rounded-full width-1"
+                />
 
-          <div className="flex items-center space-x-4 ">
-            <div className="flex  items-center  flex-col w-1/4">
-              <img src={Milage} className=" bg-gray-200 rounded-full width-1" />
+                <p className="text-sm">{mileage}</p>
+              </div>
+              <div className="flex  items-center flex-col w-1/4">
+                <img src={Fuel} className=" bg-gray-200 rounded-full width-1" />
 
-              <p className="text-sm">{mileage}</p>
-            </div>
-            <div className="flex  items-center flex-col w-1/4">
-              <img src={Fuel} className=" bg-gray-200 rounded-full width-1" />
+                <p className="text-sm">{car_fuel.fuel_type}</p>
+              </div>
+              <div className="flex items-center flex-col w-1/4">
+                <img
+                  src={Calendar}
+                  className=" bg-gray-200 rounded-full width-1"
+                />
+                <p className="text-sm">{registration_year}</p>
+              </div>
+              <div className="flex  justify-center items-center flex-col w-1/4">
+                <img src={Used} className=" bg-gray-200 rounded-full width-1" />
 
-              <p className="text-sm">{car_fuel.fuel_type}</p>
-            </div>
-            <div className="flex items-center flex-col w-1/4">
-              <img
-                src={Calendar}
-                className=" bg-gray-200 rounded-full width-1"
-              />
-              <p className="text-sm">{car_year}</p>
-            </div>
-            <div className="flex  justify-center items-center flex-col w-1/4">
-              <img src={Used} className=" bg-gray-200 rounded-full width-1" />
-
-              {transmission_type === "A" && (
-                <p className="text-sm">Automatic</p>
-              )}
-              {transmission_type === "M" && <p className="text-sm">Manual</p>}
+                {transmission_type === "A" && (
+                  <p className="text-sm">Automatic</p>
+                )}
+                {transmission_type === "M" && <p className="text-sm">Manual</p>}
+              </div>
             </div>
           </div>
           <button
