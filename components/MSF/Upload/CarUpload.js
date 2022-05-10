@@ -1,16 +1,37 @@
-import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
-// @mui/icons-material
-import Car from "@mui/icons-material/DirectionsCar";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
+import React, {useState, useEffect, useRef} from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
+import {useQuery} from "react-query";
+
+// react plugin for creating charts
+
+import makeStyles from "@mui/styles/makeStyles";
+// core components
+
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import Snackbar from "components/Snackbar/Snackbar.js";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-// react plugin for creating charts
-import makeStyles from "@mui/styles/makeStyles";
+
+
+// @mui/icons-material
+import Car from "@mui/icons-material/DirectionsCar";
+import Wheel from "assets/img/car-upload/wheel.svg";
+import AddAlert from "@mui/icons-material/AddAlert";
+
+// plugins
+import Joi, {errors} from "joi-browser";
+import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
+import {useSession} from "next-auth/react"
+
+
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import axios from "axios";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -38,7 +59,7 @@ export default function CarUpload() {
   const [carChassisNumber, setCarChassisNumber] = useState();
   const [carEngineNumber, setCarEngineNumber] = useState();
   const [carRegNumber, setCarRegNumber] = useState();
-  const [modelOptions] = React.useState([
+  const [modelOptions] = useState([
     {
       title: "Condition*",
       selectText: "Select Condition",
@@ -130,6 +151,7 @@ export default function CarUpload() {
     selling_price: undefined,
     custom_price: "Call for Price",
   });
+  const {data: session, status} = useSession();
 
   useEffect(() => {
     if (images.length >= 15) {
@@ -325,6 +347,23 @@ export default function CarUpload() {
           .label("Selling Price"),
       };
 
+  useEffect(() => {
+    if (parseInt(carPrice.asking_price) > 0 && parseInt(carPrice.selling_price) > parseInt(carPrice.asking_price)) {
+      setError({
+        ...inputErrors,
+        selling_price: "Selling Price must be less than asking price!",
+      });
+    } else if (parseInt(carPrice.asking_price) < parseInt(carPrice.selling_price)) {
+      if (Object.keys(inputErrors).includes("selling_price")) {
+        delete inputErrors["selling_price"];
+      }
+    } else if (parseInt(carPrice.asking_price) > parseInt(carPrice.selling_price)) {
+      if (Object.keys(inputErrors).includes("selling_price")) {
+        delete inputErrors["selling_price"];
+      }
+    }
+  }, [carPrice.selling_price, carPrice.asking_price]);
+
   const propertyValidate = (name, value) => {
     const obj = { [name]: value };
     const singleSchema = { [name]: schema[name] };
@@ -394,6 +433,7 @@ export default function CarUpload() {
       setIsRegYear(false);
       setIsUsed(false);
     }
+    propertyValidationHelper("car_type", e.target.value);
     setCarType(e.target.value);
   };
   const onCarMakerChange = (e, id, name) => {
@@ -411,9 +451,11 @@ export default function CarUpload() {
         }
       } catch (err) {}
     })();
+    propertyValidationHelper("car_maker", e.target.value);
   };
   const onCarModelChange = (e) => {
     setCarModel(e.target.value);
+    propertyValidationHelper("car_model", e.target.value);
   };
   const onCarGradeChange = (e) => {
     setCarGrade(e.target.value);
@@ -426,6 +468,7 @@ export default function CarUpload() {
   };
   const onCarChassisNumberChange = (e) => {
     setCarChassisNumber(e.target.value);
+    propertyValidationHelper("car_chassis_number", e.target.value);
   };
   const onCarEngineNumberChange = (e) => {
     setCarEngineNumber(e.target.value);
@@ -435,9 +478,11 @@ export default function CarUpload() {
   };
   const onCarBodyTypeChange = (e) => {
     setCarBodyType(e.target.value);
+    propertyValidationHelper("car_body_type", e.target.value);
   };
   const onCarFuelTypeChange = (e) => {
     setCarFuelType(e.target.value);
+    propertyValidationHelper("car_fuel_type", e.target.value);
   };
   const onCarInteriorColorChange = (e) => {
     setCarInteriorColor(e.target.value);
@@ -528,13 +573,12 @@ export default function CarUpload() {
   const onSubmit = async (e) => {
     e.preventDefault();
     const errors = validate();
+    // console.log(session);
     setError(errors || {});
     if (errors) {
       console.log(errors);
-      console.log(isUsed);
-      setSnackMsg(
-        "Please fill out the mandatory fields before submitting your listing!"
-      );
+      // console.log(isUsed);
+      setSnackMsg("Please fill out the mandatory fields before submitting your listing!");
       setOpen(true);
       return;
     }
@@ -590,7 +634,7 @@ export default function CarUpload() {
       console.log(response);
       if (response.status === 201) {
         const id = response.data.car_id;
-        // localStorage.setItem("car_id", id);
+        localStorage.setItem("car_id", id);
         let formData = new FormData();
         formData.append("car_id", id);
         formData.append("created_by", user_id);
@@ -613,6 +657,7 @@ export default function CarUpload() {
           setOpen(true);
           setLoading(false);
           // setRedirect(true);
+          setSnackMsg("Successfully Uploaded");
         } else {
           setLoading(false);
           setSnackMsg("Please fill all the required fields");
@@ -640,7 +685,6 @@ export default function CarUpload() {
 
         setCarTypes(json);
         setCarMakers(json1);
-        console.log(json1);
       } catch (err) {
         console.error(err);
       }
@@ -712,7 +756,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{ minHeight: "450px", maxHeight: "450px" }}
+              style={{minHeight: "542px", maxHeight: "450px"}}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -1036,15 +1080,20 @@ export default function CarUpload() {
           )}
           {!isUsed && (
             <GridItem item xs={12}>
-              <TextField
-                value={carChassisNumber}
-                name={"car_chassis_number"}
-                autoComplete="off"
-                fullWidth
-                onChange={(e) => searchItems(e.target.value)}
-                placeholder={"Enter Chassis Number"}
-                variant="outlined"
-              />
+              <FormControl className="w-full">
+                <TextField
+                  value={carChassisNumber}
+                  name={"car_chassis_number"}
+                  autoComplete="off"
+                  fullWidth
+                  onChange={onCarChassisNumberChange}
+                  placeholder={"Enter Chassis Number *"}
+                  variant="outlined"
+                />
+                {inputErrors.car_chassis_number && (
+                  <div className={classes.errorDiv}>{inputErrors.car_chassis_number}</div>
+                )}
+              </FormControl>
             </GridItem>
           )}
           {!isUsed && (
@@ -1412,7 +1461,7 @@ export default function CarUpload() {
               autoComplete="off"
               fullWidth
               onChange={onCarPriceChange}
-              placeholder={"Asking Price"}
+              placeholder={"Asking Price *"}
               variant="outlined"
             />
             {inputErrors.asking_price && (
@@ -1436,7 +1485,7 @@ export default function CarUpload() {
               autoComplete="off"
               fullWidth
               onChange={onCarPriceChange}
-              placeholder={"Selling Price"}
+              placeholder={"Selling Price *"}
               variant="outlined"
             />
             {inputErrors.selling_price && (
@@ -1492,6 +1541,16 @@ export default function CarUpload() {
             >
               submit listing
             </Button>
+            <Snackbar
+              place="br"
+              color="bhalogari"
+              icon={AddAlert}
+              message={snackMsg}
+              open={open}
+              onclose={handleClose}
+              closeNotification={() => setOpen(false)}
+              close
+            />
           </GridItem>
         </GridContainer>
       </GridItem>

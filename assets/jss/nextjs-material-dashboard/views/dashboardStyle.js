@@ -99,6 +99,12 @@ const dashboardStyle = {
     justifyContent: "space-between",
     marginBottom: "15px",
   },
+  errorDiv: {
+    marginTop: "5px",
+    color: "#ff2d2d",
+    position: "absolute",
+    bottom: "-20px",
+  },
 };
 
 export default dashboardStyle;
