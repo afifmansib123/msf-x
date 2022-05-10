@@ -10,12 +10,12 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-// react plugin for creating charts
+// react plugin for creating chart
 import makeStyles from "@mui/styles/makeStyles";
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import axios from "axios";
 import GridContainer from "components/Grid/GridContainer.js";
-// core components
+// core component
 import GridItem from "components/Grid/GridItem.js";
 import Snackbar from "components/Snackbar/Snackbar.js";
 // plugins
