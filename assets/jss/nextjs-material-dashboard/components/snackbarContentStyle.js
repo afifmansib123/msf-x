@@ -75,6 +75,11 @@ const snackbarContentStyle = {
   rose: {
     backgroundColor: roseColor[3],
     color: whiteColor,
+    ...warningBoxShadow,
+  },
+  bhalogari: {
+    backgroundColor: "#f06424",
+    color: whiteColor,
     ...roseBoxShadow,
   },
   message: {
