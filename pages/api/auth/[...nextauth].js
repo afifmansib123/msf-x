@@ -55,7 +55,8 @@ export default NextAuth({
         const { username, password } = credentials;
 
         // Call BG API to verify the credential
-        const res = await axios.post("https://backend.bhalogari.com/api/user/verify-password/", {
+        // const res = await axios.post("https://backend.bhalogari.com/api/user/verify-password/", {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}api/user/verify-password/`, {
           contact_number: username,
           password: password,
           // user_email: user_mail1,
@@ -85,12 +86,12 @@ export default NextAuth({
               },
               update: {
                 access_token: token.access,
-                refresh_token: token.fresh
+                refresh_token: token.fresh,
               },
               create: {
-                id: user_id,
+                id: user_id.toString(),
                 access_token: token.access,
-                refresh_token: token.fresh
+                refresh_token: token.fresh,
               },
             });
 
@@ -115,6 +116,7 @@ export default NextAuth({
           // return data;
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
+          console.log("Login Failed",res)
           return null;
         }
         // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
