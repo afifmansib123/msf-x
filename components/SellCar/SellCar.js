@@ -24,7 +24,7 @@ const SellCar = ({ data }) => {
     <div>
       <div className="w-full mb-2  bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
         <img
-          className="rounded-t-lg h-36 w-full"
+          className="rounded-t-lg h-36 w-full object-cover"
           src={images?.image_url}
           alt="Landscape picture"
         />
