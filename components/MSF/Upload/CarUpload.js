@@ -1,34 +1,25 @@
-import React, {useState, useEffect, useRef} from "react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import {useQuery} from "react-query";
-
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-
-// react plugin for creating charts
-import makeStyles from "@mui/styles/makeStyles";
-
-// core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
-
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 // @mui/icons-material
 import Car from "@mui/icons-material/DirectionsCar";
-import Wheel from "assets/img/car-upload/wheel.svg";
-
-// plugins
-import Joi, {errors} from "joi-browser";
-import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
-
-
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+// react plugin for creating charts
+import makeStyles from "@mui/styles/makeStyles";
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import axios from "axios";
+import GridContainer from "components/Grid/GridContainer.js";
+// core components
+import GridItem from "components/Grid/GridItem.js";
+// plugins
+import Joi from "joi-browser";
+import React, { useEffect, useRef, useState } from "react";
+import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
   const [carType, setCarType] = useState();
@@ -100,21 +91,38 @@ export default function CarUpload() {
   const [carMileage, setCarMileage] = useState();
   const [carSeat, setCarSeat] = useState();
   const [carDrive, setCarDrive] = useState();
+
+  const [jsonData, setJsonData] = useState([]);
+  const [filteredResults, setFilteredResults] = useState([]);
+  const searchItems = (searchValue) => {
+    const filteredData = jsonData?.chassis_number_prefix.filter((item) => {
+      return Object.values(item)
+        .join("")
+        .toLowerCase()
+        .includes(searchValue.toLowerCase());
+    });
+    setCarBodyType(parseInt(filteredData[0].body_name));
+    setFilteredResults(filteredData);
+  };
+  console.log(filteredResults);
+  useEffect(() => {
+    setJsonData(fakeData);
+  }, [filteredResults]);
   const [carDrives] = useState([
-    {id: 1, option: "Front Wheel Drive (FWD)"},
-    {id: 2, option: "Rear Wheel Drive (RWD)"},
-    {id: 3, option: "All Wheel Drive (AWD)"},
-    {id: 4, option: "4-Wheel Drive (4WD)"},
+    { id: 1, option: "Front Wheel Drive (FWD)" },
+    { id: 2, option: "Rear Wheel Drive (RWD)" },
+    { id: 3, option: "All Wheel Drive (AWD)" },
+    { id: 4, option: "4-Wheel Drive (4WD)" },
   ]);
   const [carTransmissions, setCarTransmissions] = useState([
-    {id: "A", title: "Automatic"},
-    {id: "M", title: "Manual"},
+    { id: "A", title: "Automatic" },
+    { id: "M", title: "Manual" },
   ]);
   const [carFeaturesInput, setCarFeaturesInput] = useState([]);
   const [carFeatures, setCarFeatures] = useState([]);
-  const editorRef = useRef()
-  const [editorLoaded, setEditorLoaded] = useState(false)
-  const {CKEditor, ClassicEditor} = editorRef.current || {}
+  const editorRef = useRef();
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
   const [images, setImages] = useState([]);
   const [fileLimitExceeded, setFileLimitExceeded] = useState(false);
   const [carPrice, setCarPrice] = useState({
@@ -147,11 +155,16 @@ export default function CarUpload() {
 
   const onImageDelete = (file) => {
     const deleteFileName = file.name;
-    const indexOfItemToRemove = images.findIndex((item) => item.name === deleteFileName);
+    const indexOfItemToRemove = images.findIndex(
+      (item) => item.name === deleteFileName
+    );
     if (indexOfItemToRemove === -1) {
       return;
     }
-    setImages((list) => [...list.slice(0, indexOfItemToRemove), ...list.slice(indexOfItemToRemove + 1)]);
+    setImages((list) => [
+      ...list.slice(0, indexOfItemToRemove),
+      ...list.slice(indexOfItemToRemove + 1),
+    ]);
   };
 
   const [files, setFiles] = useState([]);
@@ -174,13 +187,18 @@ export default function CarUpload() {
   };
   const onDelete = (id) => {
     setFiles(files.filter((x) => x.id !== id));
-    let image = files.find(o => o.id === id);
+    let image = files.find((o) => o.id === id);
     const deleteFileName = image.file.name;
-    const indexOfItemToRemove = images.findIndex((item) => item.name === deleteFileName);
+    const indexOfItemToRemove = images.findIndex(
+      (item) => item.name === deleteFileName
+    );
     if (indexOfItemToRemove === -1) {
       return;
     }
-    setImages((list) => [...list.slice(0, indexOfItemToRemove), ...list.slice(indexOfItemToRemove + 1)]);
+    setImages((list) => [
+      ...list.slice(0, indexOfItemToRemove),
+      ...list.slice(indexOfItemToRemove + 1),
+    ]);
   };
   const handleSee = (imageSource) => {
     setImageSrc(imageSource);
@@ -194,89 +212,143 @@ export default function CarUpload() {
 
   const schema = isUsed
     ? {
-      car_chassis_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .label("Chassis"),
-      car_engine_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Engine No"),
-      car_registration_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Registration No"),
-      car_type: Joi.number().required().label("Type"),
-      car_maker: Joi.number().required().label("Maker"),
-      car_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Asking Price"),
-      car_mileage: Joi.number().min(-1).max(999999).allow("").label("Mileage"),
-      car_seat: Joi.number().positive().integer().min(1).max(45).allow("").label("Seat"),
-      car_engine_cc: Joi.number().precision(2).min(660).max(9999).allow("").label("Engine Capacity"),
-      car_body_type: Joi.number().required().label("Body Type"),
-      car_fuel_type: Joi.number().required().label("Fuel Type"),
-      car_reg_year: isRegYear
-        ? Joi.required().label("Registration Year")
-        : Joi.allow().label("Registration Year"),
-      selling_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Selling Price"),
-    }
+        car_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .label("Chassis"),
+        car_engine_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Engine No"),
+        car_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        car_type: Joi.number().required().label("Type"),
+        car_maker: Joi.number().required().label("Maker"),
+        car_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Asking Price"),
+        car_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        car_seat: Joi.number()
+          .positive()
+          .integer()
+          .min(1)
+          .max(45)
+          .allow("")
+          .label("Seat"),
+        car_engine_cc: Joi.number()
+          .precision(2)
+          .min(660)
+          .max(9999)
+          .allow("")
+          .label("Engine Capacity"),
+        car_body_type: Joi.number().required().label("Body Type"),
+        car_fuel_type: Joi.number().required().label("Fuel Type"),
+        car_reg_year: isRegYear
+          ? Joi.required().label("Registration Year")
+          : Joi.allow().label("Registration Year"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Selling Price"),
+      }
     : {
-      car_chassis_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .required()
-        .label("Chassis"),
-      car_engine_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Engine No"),
-      car_registration_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Registration No"),
-      car_type: Joi.number().required().label("Type"),
-      car_maker: Joi.number().required().label("Maker"),
-      car_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Asking Price"),
-      car_mileage: Joi.number().min(-1).max(999999).allow("").label("Mileage"),
-      car_seat: Joi.number().positive().integer().min(1).max(45).allow("").label("Seat"),
-      car_engine_cc: Joi.number().precision(2).min(660).max(9999).allow("").label("Engine Capacity"),
-      car_body_type: Joi.number().required().label("Body Type"),
-      car_fuel_type: Joi.number().required().label("Fuel Type"),
-      car_reg_year: isRegYear
-        ? Joi.required().label("Registration Year")
-        : Joi.allow().label("Registration Year"),
-      selling_price: Joi.number().positive().integer().min(100000).max(500000000).required().label("Selling Price"),
-    };
+        car_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .required()
+          .label("Chassis"),
+        car_engine_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Engine No"),
+        car_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        car_type: Joi.number().required().label("Type"),
+        car_maker: Joi.number().required().label("Maker"),
+        car_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Asking Price"),
+        car_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        car_seat: Joi.number()
+          .positive()
+          .integer()
+          .min(1)
+          .max(45)
+          .allow("")
+          .label("Seat"),
+        car_engine_cc: Joi.number()
+          .precision(2)
+          .min(660)
+          .max(9999)
+          .allow("")
+          .label("Engine Capacity"),
+        car_body_type: Joi.number().required().label("Body Type"),
+        car_fuel_type: Joi.number().required().label("Fuel Type"),
+        car_reg_year: isRegYear
+          ? Joi.required().label("Registration Year")
+          : Joi.allow().label("Registration Year"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Selling Price"),
+      };
 
   const propertyValidate = (name, value) => {
-    const obj = {[name]: value};
-    const singleSchema = {[name]: schema[name]};
-    const {error} = Joi.validate(obj, singleSchema);
+    const obj = { [name]: value };
+    const singleSchema = { [name]: schema[name] };
+    const { error } = Joi.validate(obj, singleSchema);
 
     return error ? error.details[0].message : null;
   };
 
   const propertyValidationHelper = (name, value) => {
-    const errors = {...inputErrors};
+    const errors = { ...inputErrors };
     const errorMessage = propertyValidate(name, value);
     if (errorMessage) errors[name] = errorMessage;
     else delete errors[name];
     setError(errors);
   };
 
-  const onCarPriceChange = ({target: input}) => {
-    const {name, value} = input;
+  const onCarPriceChange = ({ target: input }) => {
+    const { name, value } = input;
     if (name === "selling_price") {
       propertyValidationHelper("selling_price", value);
     } else if (name === "asking_price") {
       propertyValidationHelper("asking_price", value);
     }
-    setCarPrice({...carPrice, [name]: value});
+    setCarPrice({ ...carPrice, [name]: value });
   };
 
   const [carDescription, setCarDescription] = useState("");
@@ -301,7 +373,7 @@ export default function CarUpload() {
   const getYears = () => {
     const arr = [];
     for (let i = new Date().getFullYear(); i >= 1971; i--) {
-      arr.push({id: i, year: i});
+      arr.push({ id: i, year: i });
     }
     return arr;
   };
@@ -315,7 +387,10 @@ export default function CarUpload() {
       setCarRegYears(getYears());
       setIsRegYear(true);
       setIsUsed(true);
-    } else if (e.target.name === "car_type" && (e.target.value === 1 || e.target.value === 3)) {
+    } else if (
+      e.target.name === "car_type" &&
+      (e.target.value === 1 || e.target.value === 3)
+    ) {
       setIsRegYear(false);
       setIsUsed(false);
     }
@@ -325,17 +400,16 @@ export default function CarUpload() {
     setCarMaker(id);
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${name}`)
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${name}`
+        );
         const json = await response.json();
         if (response.status === 200) {
           setCarModels(json.result);
           setCarModelYears(getYears());
         } else {
-
         }
-      } catch (err) {
-
-      }
+      } catch (err) {}
     })();
   };
   const onCarModelChange = (e) => {
@@ -387,7 +461,7 @@ export default function CarUpload() {
     setCarTransmission(e.target.value);
   };
   const onCarFeaturesInputChange = (e) => {
-    const {name} = e.target;
+    const { name } = e.target;
     const index = carFeatures.indexOf(parseInt(name));
     if (index !== -1) {
       const newBox = [...carFeatures];
@@ -397,8 +471,8 @@ export default function CarUpload() {
       setCarFeatures([...carFeatures, parseInt(name)]);
     }
   };
-  const onCarVideoLinkChange = ({target: input}) => {
-    setCarVideoLink({...carVideoLink, [input.name]: input.value});
+  const onCarVideoLinkChange = ({ target: input }) => {
+    setCarVideoLink({ ...carVideoLink, [input.name]: input.value });
   };
 
   const [open, setOpen] = useState(false);
@@ -415,32 +489,32 @@ export default function CarUpload() {
   const validate = () => {
     const inputs = isUsed
       ? {
-        // carEngineNumber: carEngineNumber,
-        // carChassisNumber: carChassisNumber,
-        car_type: carType,
-        car_maker: carMaker,
-        car_model: carModel,
-        asking_price: carPrice.asking_price,
-        car_fuel_type: carFuelType,
-        car_body_type: carBodyType,
-        selling_price: carPrice.selling_price,
-        car_reg_year: carRegYear,
-        car_engine_cc: carEngineCC,
-      }
+          // carEngineNumber: carEngineNumber,
+          // carChassisNumber: carChassisNumber,
+          car_type: carType,
+          car_maker: carMaker,
+          car_model: carModel,
+          asking_price: carPrice.asking_price,
+          car_fuel_type: carFuelType,
+          car_body_type: carBodyType,
+          selling_price: carPrice.selling_price,
+          car_reg_year: carRegYear,
+          car_engine_cc: carEngineCC,
+        }
       : {
-        // carEngineNumber: carEngineNumber,
-        car_chassis_number: carChassisNumber,
-        car_type: carType,
-        car_maker: carMaker,
-        car_model: carModel,
-        asking_price: carPrice.asking_price,
-        car_fuel_type: carFuelType,
-        car_body_type: carBodyType,
-        selling_price: carPrice.selling_price,
-        car_reg_year: carRegYear,
-        car_engine_cc: carEngineCC,
-      };
-    const {error} = Joi.validate(inputs, schema, {abortEarly: false});
+          // carEngineNumber: carEngineNumber,
+          car_chassis_number: carChassisNumber,
+          car_type: carType,
+          car_maker: carMaker,
+          car_model: carModel,
+          asking_price: carPrice.asking_price,
+          car_fuel_type: carFuelType,
+          car_body_type: carBodyType,
+          selling_price: carPrice.selling_price,
+          car_reg_year: carRegYear,
+          car_engine_cc: carEngineCC,
+        };
+    const { error } = Joi.validate(inputs, schema, { abortEarly: false });
     if (!error) return null;
 
     const errors = {}; // TODO what is the point to set error to empty and iterate later?
@@ -458,7 +532,9 @@ export default function CarUpload() {
     if (errors) {
       console.log(errors);
       console.log(isUsed);
-      setSnackMsg("Please fill out the mandatory fields before submitting your listing!");
+      setSnackMsg(
+        "Please fill out the mandatory fields before submitting your listing!"
+      );
       setOpen(true);
       return;
     }
@@ -500,12 +576,17 @@ export default function CarUpload() {
       setSnackMsg("Please! Provide Image.");
       setOpen(true);
     } else if (fileLimitExceeded) {
-      setSnackMsg("Maximum Image limit exceeded. Please keep 15 images at most");
+      setSnackMsg(
+        "Maximum Image limit exceeded. Please keep 15 images at most"
+      );
       setOpen(true);
     } else {
       setLoading(true);
       console.log(carObject);
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}cars/upload/`, carObject);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BG_API}cars/upload/`,
+        carObject
+      );
       console.log(response);
       if (response.status === 201) {
         const id = response.data.car_id;
@@ -519,10 +600,13 @@ export default function CarUpload() {
           }
         });
         console.log(images);
-        const response1 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/image-upload/`, {
-          method: "post",
-          body: formData,
-        });
+        const response1 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/image-upload/`,
+          {
+            method: "post",
+            body: formData,
+          }
+        );
         console.log(response1);
         if (response1.status === 201) {
           setSnackMsg("");
@@ -545,10 +629,15 @@ export default function CarUpload() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/car-type/`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/car-type/`
+        );
         const json = await response.json();
-        let response1 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/car-manufacturer/`);
+        let response1 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/car-manufacturer/`
+        );
         const json1 = await response1.json();
+
         setCarTypes(json);
         setCarMakers(json1);
         console.log(json1);
@@ -561,17 +650,28 @@ export default function CarUpload() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/body-type/`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/body-type/`
+        );
         const json = await response.json();
-        const response1 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/interior-color/`);
+        const response1 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/interior-color/`
+        );
         const json1 = await response1.json();
-        const response2 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/fuel-economy/`);
+        const response2 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/fuel-economy/`
+        );
         const json2 = await response2.json();
-        const response3 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/fuel-type/`);
+        const response3 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/fuel-type/`
+        );
         const json3 = await response3.json();
-        const response4 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/exterior-color/`);
+        const response4 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/exterior-color/`
+        );
         const json4 = await response4.json();
 
+        console.log(json);
         setCarBodyTypes(json);
         setCarInteriorColors(json1);
         setCarFuelEconomys(json2);
@@ -586,7 +686,9 @@ export default function CarUpload() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/features-list/`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/features-list/`
+        );
         const json = await response.json();
         setCarFeaturesInput(json);
       } catch (err) {
@@ -599,8 +701,8 @@ export default function CarUpload() {
     editorRef.current = {
       CKEditor: require("@ckeditor/ckeditor5-react").CKEditor, //Added .CKEditor
       ClassicEditor: require("@ckeditor/ckeditor5-build-classic"),
-    }
-    setEditorLoaded(true)
+    };
+    setEditorLoaded(true);
   }, []);
 
   return (
@@ -610,7 +712,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{minHeight: "450px", maxHeight: "450px"}}
+              style={{ minHeight: "450px", maxHeight: "450px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -668,12 +770,14 @@ export default function CarUpload() {
                 onChange={onCarTypeChange}
               >
                 {carTypes.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.type_id}>{l.type_name}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.type_id}>
+                      {l.type_name}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
@@ -687,13 +791,20 @@ export default function CarUpload() {
                 // onChange={onCarMakerChange}
               >
                 {carMakers.map((l, index) => {
-                  return <MenuItem key={index} value={l.maker_id}
-                                   onClick={(event) => onCarMakerChange(event, l.maker_id, l.maker_name)}
-                  >{l.maker_name}</MenuItem>;
+                  return (
+                    <MenuItem
+                      key={index}
+                      value={l.maker_id}
+                      onClick={(event) =>
+                        onCarMakerChange(event, l.maker_id, l.maker_name)
+                      }
+                    >
+                      {l.maker_name}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
@@ -707,22 +818,22 @@ export default function CarUpload() {
                 onChange={onCarModelChange}
               >
                 {carModels.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.model_id}>{l.model_name}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.model_id}>
+                      {l.model_name}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12}>
             <TextField
-              value={carGrade}
+              value={filteredResults[0]?.package_type.map((p) => p)}
               name={"car_grade"}
-              autoComplete="off"
               fullWidth
               onChange={onCarGradeChange}
               placeholder={"Enter Grade/Package"}
-              variant="outlined"
             />
           </GridItem>
           <GridItem item xs={12}>
@@ -737,8 +848,11 @@ export default function CarUpload() {
                 onChange={onCarModelYearChange}
               >
                 {carModelYears.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.id}>{l.year}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.year}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -746,7 +860,9 @@ export default function CarUpload() {
           {isRegYear && (
             <GridItem item xs={12}>
               <FormControl className="w-full">
-                <InputLabel id="demo-simple-select-label">Registration Year</InputLabel>
+                <InputLabel id="demo-simple-select-label">
+                  Registration Year
+                </InputLabel>
 
                 <Select
                   labelId="demo-simple-select-label"
@@ -757,8 +873,11 @@ export default function CarUpload() {
                   onChange={onCarRegYearChange}
                 >
                   {carRegYears.map((l, index) => {
-                    return <MenuItem key={index}
-                                     value={l.id}>{l.year}</MenuItem>;
+                    return (
+                      <MenuItem key={index} value={l.id}>
+                        {l.year}
+                      </MenuItem>
+                    );
                   })}
                 </Select>
               </FormControl>
@@ -771,7 +890,7 @@ export default function CarUpload() {
                 name={"car_chassis_number"}
                 autoComplete="off"
                 fullWidth
-                onChange={onCarChassisNumberChange}
+                onChange={(e) => searchItems(e.target.value)}
                 placeholder={"Enter Chassis Number"}
                 variant="outlined"
               />
@@ -780,7 +899,8 @@ export default function CarUpload() {
           {!isUsed && (
             <GridItem item xs={12}>
               <TextField
-                value={carEngineNumber}
+                // value={carEngineNumber}
+                value={filteredResults[0]?.engines_number}
                 name={"car_engine_number"}
                 autoComplete="off"
                 fullWidth
@@ -810,22 +930,29 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Choose Details</h2>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label"> <Car/> Car Body</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                <Car /> Car Body
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carBodyType}
                 label="Car Body Types"
                 name="car_body_type"
                 onChange={onCarBodyTypeChange}
               >
-                {carBodyTypes.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.id}>{l.body_name}</MenuItem>;
-                })}
+                {/* {filteredResults
+                  ? filteredResults?.body_name
+                  : carBodyTypes.map((l, index) => {
+                      return (
+                        <MenuItem key={index} value={l.id}>
+                          {l.body_name}
+                        </MenuItem>
+                      );
+                    })} */}
+
+                <MenuItem value={filteredResults[0]?.body_name}></MenuItem>
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
@@ -850,12 +977,14 @@ export default function CarUpload() {
                 onChange={onCarDriveChange}
               >
                 {carDrives.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.option}>{l.option}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.option}>
+                      {l.option}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
@@ -881,7 +1010,10 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label"> Transmission</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                {" "}
+                Transmission
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -891,12 +1023,14 @@ export default function CarUpload() {
                 onChange={onCarTransmissionChange}
               >
                 {carTransmissions.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.id}>{l.title}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.title}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
@@ -910,15 +1044,20 @@ export default function CarUpload() {
                 onChange={onCarFuelTypeChange}
               >
                 {carFuelTypes.map((l, index) => {
-                  return <MenuItem key={index} value={l.fuel_id}>{l.fuel_type}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.fuel_id}>
+                      {l.fuel_type}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Interior Color</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                Interior Color
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -928,16 +1067,20 @@ export default function CarUpload() {
                 onChange={onCarInteriorColorChange}
               >
                 {carInteriorColors.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.id}>{l.int_color}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.int_color}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Exterior Color</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                Exterior Color
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -947,15 +1090,15 @@ export default function CarUpload() {
                 onChange={onCarExteriorColorChange}
               >
                 {carExteriorColors.map((l, index) => {
-                  return <MenuItem key={index}
-                                   value={l.id}>{l.car_color}</MenuItem>;
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.car_color}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
-
           </GridItem>
-
-
         </GridContainer>
       </GridItem>
       <GridItem item xs={12} className={classes.uploadOptions}>
@@ -966,26 +1109,29 @@ export default function CarUpload() {
             <GridItem item xs={12} sm={12} md={4}>
               <FormControl className="w-full">
                 <div key={index}>
-                                <span>
-                                  <FormControlLabel
-                                    control={<Checkbox onChange={onCarFeaturesInputChange} name={`${item.id}`}/>}
-                                    label={item.feature_name}
-                                  />
-                                </span>
+                  <span>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onChange={onCarFeaturesInputChange}
+                          name={`${item.id}`}
+                        />
+                      }
+                      label={item.feature_name}
+                    />
+                  </span>
                 </div>
               </FormControl>
             </GridItem>
           ))}
-
         </GridContainer>
       </GridItem>
       <GridItem item xs={12} className={classes.uploadOptions}>
         <GridContainer>
           <h2 className={classes.paperTitle}>Set your asking price</h2>
           <p className={classes.carPriceText}>
-            Please kindly set the asking price and final price for your car. You can also opt for our buyers to call
-            for
-            price of your car.
+            Please kindly set the asking price and final price for your car. You
+            can also opt for our buyers to call for price of your car.
           </p>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
@@ -1048,15 +1194,19 @@ export default function CarUpload() {
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={8}>
-            {editorLoaded ? <CKEditor
-              editor={ClassicEditor}
-              data={carDescription}
-              onReady={editor => {
-                // You can store the "editor" and use when it is needed.
-                // console.log("Editor is ready to use!", editor);
-              }}
-              onChange={onCarDescriptionChange}
-            /> : <p>...</p>}
+            {editorLoaded ? (
+              <CKEditor
+                editor={ClassicEditor}
+                data={carDescription}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  // console.log("Editor is ready to use!", editor);
+                }}
+                onChange={onCarDescriptionChange}
+              />
+            ) : (
+              <p>...</p>
+            )}
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={4}>
@@ -1071,7 +1221,6 @@ export default function CarUpload() {
               submit listing
             </Button>
           </GridItem>
-
         </GridContainer>
       </GridItem>
     </GridContainer>
