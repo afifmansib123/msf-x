@@ -17,9 +17,11 @@ import Snackbar from "components/Snackbar/Snackbar.js";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -35,7 +37,7 @@ import Joi, {errors} from "joi-browser";
 import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
 
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-
+import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
   const [carType, setCarType] = useState();
@@ -151,6 +153,7 @@ export default function CarUpload() {
   const [imageSrc, setImageSrc] = useState(undefined);
   const {data: session, status} = useSession();
   const router = useRouter();
+
 
   useEffect(() => {
     if (images.length >= 15) {
@@ -345,16 +348,23 @@ export default function CarUpload() {
     };
 
   useEffect(() => {
-    if (parseInt(carPrice.asking_price) > 0 && parseInt(carPrice.selling_price) > parseInt(carPrice.asking_price)) {
+    if (
+      parseInt(carPrice.asking_price) > 0 &&
+      parseInt(carPrice.selling_price) > parseInt(carPrice.asking_price)
+    ) {
       setError({
         ...inputErrors,
         selling_price: "Selling Price must be less than asking price!",
       });
-    } else if (parseInt(carPrice.asking_price) < parseInt(carPrice.selling_price)) {
+    } else if (
+      parseInt(carPrice.asking_price) < parseInt(carPrice.selling_price)
+    ) {
       if (Object.keys(inputErrors).includes("selling_price")) {
         delete inputErrors["selling_price"];
       }
-    } else if (parseInt(carPrice.asking_price) > parseInt(carPrice.selling_price)) {
+    } else if (
+      parseInt(carPrice.asking_price) > parseInt(carPrice.selling_price)
+    ) {
       if (Object.keys(inputErrors).includes("selling_price")) {
         delete inputErrors["selling_price"];
       }
@@ -575,7 +585,9 @@ export default function CarUpload() {
     if (errors) {
       console.log(errors);
       // console.log(isUsed);
-      setSnackMsg("Please fill out the mandatory fields before submitting your listing!");
+      setSnackMsg(
+        "Please fill out the mandatory fields before submitting your listing!"
+      );
       setOpen(true);
       return;
     }
@@ -753,7 +765,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{minHeight: "542px", maxHeight: "450px"}}
+              style={{ minHeight: "542px", maxHeight: "450px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -1083,12 +1095,14 @@ export default function CarUpload() {
                   name={"car_chassis_number"}
                   autoComplete="off"
                   fullWidth
-                  onChange={onCarChassisNumberChange}
+                  onChange={(e) => searchItems(e.target.value)}
                   placeholder={"Enter Chassis Number *"}
                   variant="outlined"
                 />
                 {inputErrors.car_chassis_number && (
-                  <div className={classes.errorDiv}>{inputErrors.car_chassis_number}</div>
+                  <div className={classes.errorDiv}>
+                    {inputErrors.car_chassis_number}
+                  </div>
                 )}
               </FormControl>
             </GridItem>
