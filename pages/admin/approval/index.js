@@ -66,7 +66,6 @@ export async function getServerSideProps(context) {
     })) : [];
 
     const pendingTabData = (pendingTabResponse !== undefined) ? pendingTabResponse.map((value, index) => {
-      console.log("table Date:", value.create_at)
       return {
         record_ID: value.id,
         Merchant_Name: value.merchant,
@@ -76,7 +75,8 @@ export async function getServerSideProps(context) {
         modelData: value.modelData,
         manufacturerData: value.manufacturerData,
         carId: value.carId,
-        create_at: value.create_at || null
+        create_at: value.create_at || null,
+        carName: value.carName || ""
       }
     }) : [];
 
@@ -90,7 +90,8 @@ export async function getServerSideProps(context) {
       modelData: value.modelData,
       manufacturerData: value.manufacturerData,
       carId: value.carId,
-      create_at: value.create_at || null
+      create_at: value.create_at || null,
+      carName: value.carName || ""
     }
   }) : [];
 
@@ -104,7 +105,8 @@ export async function getServerSideProps(context) {
       modelData: value.modelData,
       manufacturerData: value.manufacturerData,
       carId: value.carId,
-      create_at: value.create_at || null
+      create_at: value.create_at || null,
+      carName: value.carName || ""
     }
   }) : [];
 
@@ -190,7 +192,8 @@ async function getRejectedApproval() {
       modelData: value.CarsApp_car.CarsApp_carmodel,
       manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
       carId: value.car_id_id,
-      created_at: value.created_at
+      created_at: value.created_at,
+      carName: value.CarsApp_car.car_name
     }
   })) : []
 
@@ -271,7 +274,8 @@ async function getApproveApproval() {
       modelData: value.CarsApp_car.CarsApp_carmodel,
       manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
       carId: value.car_id_id,
-      created_at: value.created_at
+      created_at: value.created_at,
+      carName: value.CarsApp_car.car_name
     }
   })) : []
 
@@ -322,6 +326,7 @@ async function getPendingApprove() {
 
 
   const parsedData = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+  console.log(parsedData)
 
   const endResultData = parsedData != undefined?(parsedData.map(async (value) => {
     const first_name = value.CarsApp_car.UsersApp_customuser.first_name;
@@ -342,7 +347,6 @@ async function getPendingApprove() {
     }).catch(err => {
       throw new Error(err)
     })
-    // console.log(value.created_at)
 
 
     return {
@@ -354,7 +358,8 @@ async function getPendingApprove() {
       modelData: value.CarsApp_car.CarsApp_carmodel,
       manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
       carId: value.car_id_id,
-      create_at: value.created_at
+      create_at: value.created_at,
+      carName: value.CarsApp_car.car_name
     }
   })) : []
 

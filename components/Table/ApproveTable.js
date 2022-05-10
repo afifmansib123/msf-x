@@ -33,6 +33,7 @@ import Tasks from "../Tasks/Tasks";
 import {bugs, server, website} from "../../variables/general";
 import Code from "@mui/icons-material/Code";
 import Cloud from "@mui/icons-material/Cloud";
+import CardAvatar from "../Card/CardAvatar";
 
 function CarApproveLog(props) {
     const useStyles = makeStyles(styles);
@@ -95,18 +96,33 @@ function CarApproveLog(props) {
                                         {props.pendingTab.map(v => {
                                             return (
                                                 <GridItem>
-                                                    <Card>
+                                                    <Card className="border-2 border-sky-500 border-solid" style={{height: 450}}>
                                                         {/*<Image src={v.Preview_Image[0]} alt="" title="" width="100%" height="100%" layout="responsive" objectFit="contain"/>*/}
-                                                        <CardHeader>
-                                                            <img src={v.Preview_Image[0]}  width={250}/>
+                                                        <CardHeader color="warning" className="text-center">
+                                                            <h1 className="text-center font-medium text-lg my-2">{v.carName}</h1>
                                                         </CardHeader>
+
                                                         <CardBody>
-                                                            <p>Request Date:</p>
-                                                            {console.log(v.create_at)}
-                                                            <p>{v.create_at}</p>
+                                                            <CardAvatar plain>
+                                                                <img src={v.Preview_Image[0]} style={{width: 250, alignContent:"center", alignItems:"center"}}/>
+                                                            </CardAvatar>
+                                                            <div className="mt-10">
+                                                                <span className="font-medium mr-4">Request Date:</span>
+                                                                <span>{v.create_at}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span className="font-medium mr-4">Requested Name:</span>
+                                                                <span>{v.create_at}</span>
+                                                            </div>
+
+
                                                         </CardBody>
-                                                        <CardFooter>
-                                                            <Button >History</Button>
+                                                        <CardFooter plain>
+                                                            <Button variant="outlined">History</Button>
+                                                            <div className="text-right">
+                                                                <span className="mr-4 text-sm">Status:</span>
+                                                                <CusButton disabled round color="warning" size="sm">PENDING</CusButton>
+                                                            </div>
                                                         </CardFooter>
                                                     </Card>
                                                 </GridItem>
