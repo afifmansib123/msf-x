@@ -56,7 +56,7 @@ export default NextAuth({
 
         // Call BG API to verify the credential
         // const res = await axios.post("https://backend.bhalogari.com/api/user/verify-password/", {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}api/user/verify-password/`, {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}user/verify-password/`, {
           contact_number: username,
           password: password,
           // user_email: user_mail1,
