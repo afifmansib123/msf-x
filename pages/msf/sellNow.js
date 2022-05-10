@@ -46,7 +46,7 @@ const sellNow = ({ data }) => {
   return (
     <div>
       <h1>{data.results.length}</h1>
-      <div className="flex flex-wrap py-5 justify-center items-center gap-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-4 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32  mt-20 ">
         {data.results.map((data) => (
           <SellCar key={data.car_id} data={data}></SellCar>
         ))}
