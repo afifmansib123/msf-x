@@ -45,7 +45,7 @@ const dashboardRoutes = [
   //   icon: "content_paste",
   //   layout: "/msf",
   // },
- 
+
   {
     path: "/listing",
     name: "Listing",
@@ -90,13 +90,6 @@ const dashboardRoutes = [
   {
     path: "/user-profile",
     name: "User Profile",
-    icon: Person,
-
-    layout: "/msf",
-  },
-  {
-    path: "/sellNow",
-    name: "Sell Now",
     icon: Person,
 
     layout: "/msf",
