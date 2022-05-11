@@ -20,12 +20,27 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 function Subscriptions() {
 
   const [expanded, setExpanded] = useState(false);
+  const [carTypes, setCarTypes] = useState([]);
 
   const  handleChange = (panel) => (event, isExpanded) => {
       event.preventDefault();
       setExpanded(isExpanded ? panel : false);
   }
 
+  useEffect(() => {
+      (async () => {
+          try{
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/packages/`);
+            const json = await response.json();
+            setCarTypes(json);
+        }catch (err){
+            console.log("Error", err)
+        }
+    })
+},[])
+
+  console.log("Car Types =>",carTypes);
+  
   return (
     // <div>
     // </div>
