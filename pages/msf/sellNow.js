@@ -2,6 +2,7 @@ import React from "react";
 // layout for this page
 import MSF from "layouts/MSF.js";
 import SellCar from "../../components/Sellcar/SellCar";
+// import { useEffect, useState } from "react";
 
 const styles = {
   cardCategoryWhite: {
@@ -34,20 +35,21 @@ const styles = {
 };
 
 const sellNow = ({ data }) => {
-  // const {maker_name,maker_country} = data.results.carmanufacturer;
-  //   const carRow = data.results.map((car) => [
-  //     car?.car_manufacturer?.maker_name,
-  //     car?.car_id,
-  //     car?.car_manufacturer?.maker_country,
-  //     car?.car_year,
-  //   ]);
-  //   const [items, setItems] = React.useState([]);
-  //   setItems(data.results);
+  // const [items, setItems] = useState([]);
+
+  // useEffect(() => {
+  //   fetch(`https://car-app.vercel.app/api/cars/${searchKey}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setItems(data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, [searchKey]);
+  // const id = localStorage.getItem("id");
   return (
     <div>
-      {/* <h1>{data.results.length}</h1> */}
-      {/* <div className="grid grid-cols-4  md:grid-cols-3  justify-center items-center rounded-lg border bg-white px-10 py-10 mt-20 "> */}
-      {/* <div className="grid  sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-center items-center rounded-lg border bg-white sm:p-8 md:p-1 p-2 sm:mx-32 lg:mx-40 mt-20  "> */}
       <div className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt-20 lg:space-x-1 gap-5 ">
         {data.results.map((data) => (
           <SellCar key={data.car_id} data={data}></SellCar>
