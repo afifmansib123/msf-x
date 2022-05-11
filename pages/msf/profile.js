@@ -42,6 +42,8 @@ function Profile(props) {
   const [editFlag, setEditFlag] = useState(false);
   // console.log(object.keys(localStorage));
   const id = localStorage.getItem("user_id");
+
+  //get the user id from useSession
   // Switch functionality between Profile and Edit Profile
   const handleEdit = (e) => {
     setEditFlag(e);
@@ -51,7 +53,7 @@ function Profile(props) {
   React.useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/?user_id=${id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_API}api/user/profile/?user_id=${id}`);
         const res = await response.json();
         setData(res);
         setDate(res.date_of_birth);

@@ -88,35 +88,35 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
       const onSubmit = async (userData) => {
             console.log(userData);
 
-            // let formData = new FormData();
-            // formData.append("image", img );
-            // formData.append("first_name", userData.first_name);
-            // formData.append("last_name", userData.last_name);
-            // formData.append("contact_number", userData.contact_number);
-            // formData.append("email", userData.email);
-            // formData.append("date_of_birth", userData.date_of_birth);
-            // formData.append("gender", userData.gender);
-            // formData.append("post_code", userData.post_code);
-            // formData.append("user_district", userData.user_district);
-            // formData.append("nid_number", userData.nid_number);
-            // formData.append("country", userData.country);
-            // formData.append("tin_number", userData.tin_number);
-            // formData.append("address", userData.address);
+            let formData = new FormData();
+            formData.append("image", img );
+            formData.append("first_name", userData.first_name);
+            formData.append("last_name", userData.last_name);
+            formData.append("contact_number", userData.contact_number);
+            formData.append("email", userData.email);
+            formData.append("date_of_birth", userData.date_of_birth);
+            formData.append("gender", userData.gender);
+            formData.append("post_code", userData.post_code);
+            formData.append("user_district", userData.user_district);
+            formData.append("nid_number", userData.nid_number);
+            formData.append("country", userData.country);
+            formData.append("tin_number", userData.tin_number);
+            formData.append("address", userData.address);
 
-            // console.log(formData);
-            // const token = session.accessToken;
-            // try {
-            //       const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, formData,
-            //             {
-            //                   headers: {
-            //                         Authorization: `Bearer ${token}`,
-            //                         "Content-Type": "multipart/form-data"
-            //                   },
-            //             })
-            //       console.log(response);
-            // } catch (error) {
-            //       console.log(error);
-            // }
+            console.log(formData);
+            const token = session.accessToken;
+            try {
+                  const response = await axios.patch(`${process.env.NEXT_PUBLIC_LOCAL_API}api/user/profile/update/${userID}/`, formData,
+                        {
+                              headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    "Content-Type": "multipart/form-data"
+                              },
+                        })
+                  console.log(response);
+            } catch (error) {
+                  console.log(error);
+            }
             // handleEdit(false);
       };
       return (
