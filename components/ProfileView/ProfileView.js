@@ -13,7 +13,7 @@ const ProfileView = ({ data }) => {
                                     <Image
                                           //   loader={myLoader}
                                           src={data?.image_url == null ? ProfileImg : data.image_url}
-                                          alt={ProfileImg}
+                                          alt="Profile Image"
                                           width={125}
                                           height={125}
                                     />

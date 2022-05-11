@@ -7,12 +7,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import proImage from "../../assets/img/profile/add-picture.svg";
 import axios from "axios";
 import { useSession } from "next-auth/react"
-import Cryptr from "cryptr";
 
 const useStyles = makeStyles((theme) => ({
       rootBox: {
@@ -76,27 +75,49 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileForm = ({ data, date, userID, handleEdit }) => {
       const classes = useStyles();
-      const cryptr = new Cryptr(process.env.NEXT_PUBLIC_BG_API_SECRET_KEY);
       const { register, handleSubmit } = useForm();
       const { data: session, status } = useSession();
-
+      const [img, setImg] = useState();
+      const [userimg, setUserimg] = useState(proImage);
+      console.log(img);
+      
+      const handleImage = e => {
+            setImg(e.target.files[0]);
+            setUserimg(URL.createObjectURL(e.target.files[0]));
+      }
       const onSubmit = async (userData) => {
             console.log(userData);
-            const token = session.accessToken;
-            //     const token = cryptr.decrypt(access_token);
-            //     handleEdit(false);
-            try {
-                  const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, userData,
-                        {
-                              headers: {
-                                    Authorization: `Bearer ${token}`,
-                              },
-                        })
-                  console.log(response);
-            } catch (error) {
-                  console.log(error);
-            }
 
+            // let formData = new FormData();
+            // formData.append("image", img );
+            // formData.append("first_name", userData.first_name);
+            // formData.append("last_name", userData.last_name);
+            // formData.append("contact_number", userData.contact_number);
+            // formData.append("email", userData.email);
+            // formData.append("date_of_birth", userData.date_of_birth);
+            // formData.append("gender", userData.gender);
+            // formData.append("post_code", userData.post_code);
+            // formData.append("user_district", userData.user_district);
+            // formData.append("nid_number", userData.nid_number);
+            // formData.append("country", userData.country);
+            // formData.append("tin_number", userData.tin_number);
+            // formData.append("address", userData.address);
+
+            // console.log(formData);
+            // const token = session.accessToken;
+            // try {
+            //       const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, formData,
+            //             {
+            //                   headers: {
+            //                         Authorization: `Bearer ${token}`,
+            //                         "Content-Type": "multipart/form-data"
+            //                   },
+            //             })
+            //       console.log(response);
+            // } catch (error) {
+            //       console.log(error);
+            // }
+            // handleEdit(false);
       };
       return (
             <div className={classes.rootBox}>
@@ -105,26 +126,23 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                               <Typography component="h1">Create your account</Typography>
                               <div className={classes.box}>
                                     <form onSubmit={handleSubmit(onSubmit)}>
-                                          {/* <div className={classes.profileImage}>
-                <label for="file-input">
-                  <Image
-                    src={proImage}
-                    alt="Profile"
-                    className={classes.image}
-                  // src={image ? image : proImage}
-                  />
-                </label>
-                <input
-                  type="file"
-                  id="file-input"
-                  style={{ display: "none" }}
-                  name="image"
-                  {...register("image")}
-                // onChange={handleImage}
-                // ref={inputFile}
-                // accept="image/*"
-                />
-              </div> */}
+                                          <div className={classes.profileImage}>
+                                                <label for="file-input">
+                                                      <Image
+                                                      layout='fill'
+                                                            src={data.image? data.image : userimg}
+                                                            alt="Profile Image"
+                                                            className={classes.image}
+                                                      />
+                                                </label>
+                                                <input
+                                                      type="file"
+                                                      id="file-input"
+                                                      style={{ display: "none" }}
+                                                      name="image"
+                                                      onChange={handleImage}
+                                                />
+                                          </div>
                                           <div className={classes.editProfileLayout}>
                                                 <TextField
                                                       required
