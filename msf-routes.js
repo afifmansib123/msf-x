@@ -45,23 +45,19 @@ const dashboardRoutes = [
   //   icon: "content_paste",
   //   layout: "/msf",
   // },
+ 
   {
-    path: "/uploadedCars",
-    name: "Uploaded Cars",
+    path: "/listing",
+    name: "Listing",
     icon: Car,
 
-    layout: "/msf",
-  },
-  {
-    path: "/customers",
-    name: "Customers",
-    icon: "content_paste",
     layout: "/msf",
   },
   {
     path: "/subscriptions",
     name: "Subscriptions",
     icon: "content_paste",
+
     layout: "/msf",
   },
   {
