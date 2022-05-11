@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 
 const styles = {
   grid: {
-    padding: "0 15px 10px !important",
+    padding: "0 15px 25px !important",
   },
 };
 

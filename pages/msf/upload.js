@@ -23,6 +23,7 @@ import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 
 //components
+import CarUpload from "components/MSF/Upload/CarUpload.js";
 import BasicInfo from "components/MSF/Upload/BasicInfo.js";
 import Details from "components/MSF/Upload/Details.js";
 import Features from "components/MSF/Upload/Features.js";
@@ -46,24 +47,9 @@ function Upload() {
                             tabName: "Car",
                             tabIcon: Car,
                             tabContent: (
-                                <GridContainer spacing={2}>
-                                    <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
-                                        <ImageUpload/>
-                                    </GridItem>
-                                    <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
-                                        <BasicInfo/>
-                                    </GridItem>
-                                    <GridItem item xs={12} className={classes.uploadOptions}>
-                                        <Details/>
-                                    </GridItem>
-                                    <GridItem item xs={12} className={classes.uploadOptions}>
-                                        <Features/>
-                                    </GridItem>
-                                    <GridItem item xs={12} className={classes.uploadOptions}>
-                                        <Price/>
-                                    </GridItem>
-                                </GridContainer>
-
+                              <>
+                                <CarUpload/>
+                              </>
                             ),
                         },
                         {

@@ -15,22 +15,30 @@ const withPWA = require("next-pwa");
 //   },
 // });
 
-module.exports = withPlugins([
-
-  [withPWA, {
-    pwa: {
-      dest: "public",
-      register: true,
-      skipWaiting: true,
-    }
-  }],
-  [withImages]
-
-], {
+const settings = {
   reactStrictMode: true,
   webpack(config, options) {
     config.resolve.modules.push(path.resolve("./"));
     return config;
   },
-});
+};
 
+const settingsPWA = withPlugins(
+  [
+    [
+      withPWA,
+      {
+        pwa: {
+          dest: "public",
+          register: true,
+          skipWaiting: true,
+        },
+      },
+    ],
+    [withImages],
+  ],
+  settings
+);
+
+module.exports = process.env.NODE_ENV === 'development' ? settings : withPWA(settings);
+module.exports = process.env.NODE_ENV === 'development' ? settings : settingsPWA;

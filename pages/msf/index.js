@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "react-query";
-import LoginForm from "/components/LoginForm"
+import LoginForm from "/components/LoginForm";
 
 export async function getStaticProps(context) {
-  console.log("LANDING_PAGE", process.env.LANDING_PAGE);
+  // console.log("LANDING_PAGE", process.env.LANDING_PAGE);
   return {
     props: {
-      landingPage: process.env.LANDING_PAGE ? process.env.LANDING_PAGE : null,
+      // landingPage: process.env.LANDING_PAGE ? process.env.LANDING_PAGE : null,
     },
   };
 }
@@ -26,18 +26,9 @@ function Index(props) {
     // Router.push("/admin/dashboard");
     if (router.query["error"] == "SessionRequired") {
       setError("Must Login");
+      console.log(router.query)
     }
-
-    if (session) {
-      console.log("Index", session);
-      router.push("/msf");
-    }
-
-    // Only force direct to certain development section
-    if (landingPage) {
-      Router.push(landingPage);
-    }
-  });
+  },[]);
 
   const handleSignIn = (cred) => {
     console.log("Index handleSignIn", cred);
@@ -45,6 +36,8 @@ function Index(props) {
       username: cred.username,
       password: cred.password,
       callbackUrl: "/msf/dashboard",
+    }).then(ret => {
+      console.log("RET",ret)
     });
   };
 

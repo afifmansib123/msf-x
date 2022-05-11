@@ -88,13 +88,12 @@ export default function ImageUpload() {
                   // footer={false}
                   maxFileSize={20998000}
                   //label="Drag'n drop files here or click to browse"
-                  //label="Suleta tus archivos aquí"
                   accept=".png,image/*"
                   // uploadingMessage={"Uploading..."}
                   url="https://my-awsome-server/upload-my-file"
                   //of course this url doens´t work, is only to make upload button visible
                   //uploadOnDrop
-                  //clickable={false}
+                  clickable={true}
                   fakeUploading
                   //localization={"FR-fr"}
                   // disableScroll
