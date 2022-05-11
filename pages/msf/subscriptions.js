@@ -36,7 +36,7 @@ function Subscriptions() {
                 setPackages(json);
             }
             else{
-                console.log("No Such Data in the Database")
+                console.log("Data Not Found")
             }
         }catch (err){
             console.log("Error", err);
@@ -69,7 +69,7 @@ function Subscriptions() {
                                                     packages.slice(0,1).map((item,index) => {
                                                         return (
                                                             <>
-                                                              <p>Individual Basic</p>
+                                                              <p>{item.description}</p>
                                                               <p>({item.package_name})</p>
                                                             </>
                                                         )
@@ -135,7 +135,7 @@ function Subscriptions() {
                                                     packages.slice(1,2).map((item,index) => {
                                                         return (
                                                             <>
-                                                              <p>Business Regular</p>
+                                                              <p>{item.description}</p>
                                                               <p>({item.package_name})</p>
                                                             </>
                                                         )
@@ -207,7 +207,7 @@ function Subscriptions() {
                                                     packages.slice(2,3).map((item,index) => {
                                                         return (
                                                             <>
-                                                              <p>Business Plus</p>
+                                                              <p>{item.description}</p>
                                                               <p>({item.package_name})</p>
                                                             </>
                                                         )
