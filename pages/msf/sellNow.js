@@ -1,4 +1,6 @@
 import React from "react";
+import {getSession} from "next-auth/react"
+
 // layout for this page
 import MSF from "layouts/MSF.js";
 import SellCar from "../../components/Sellcar/SellCar";
@@ -34,6 +36,7 @@ const styles = {
 };
 
 const sellNow = ({ data }) => {
+
   // const {maker_name,maker_country} = data.results.carmanufacturer;
   //   const carRow = data.results.map((car) => [
   //     car?.car_manufacturer?.maker_name,
@@ -55,12 +58,14 @@ const sellNow = ({ data }) => {
       </div>
     </div>
   );
-  SS;
 };
+
 export async function getServerSideProps() {
   // Fetch data from external API
+  const session = await getSession()
+  console.log(session);
   const res = await fetch(
-    `https://backend.bhalogari.com/api/cars/user-car-list/22/?format=json`
+    `${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/41/?format=json`
   );
   const data = await res.json();
   console.table(data);
