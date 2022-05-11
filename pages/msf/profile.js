@@ -51,7 +51,7 @@ function Profile(props) {
   React.useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}user/profile/?user_id=${id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/?user_id=${id}`);
         const res = await response.json();
         setData(res);
         setDate(res.date_of_birth);
@@ -73,6 +73,7 @@ function Profile(props) {
           data={data}
           date={date}
           userID={id}
+          handleEdit={handleEdit}
         />
       ) : (
         <>

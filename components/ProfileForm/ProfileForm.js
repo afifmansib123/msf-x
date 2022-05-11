@@ -11,7 +11,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import proImage from "../../assets/img/profile/add-picture.svg";
 import axios from "axios";
-import Cryptr from "cryptr";
+// import Cryptr from "cryptr";
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -73,28 +73,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ProfileForm = ({ data, date, userID }) => {
+const ProfileForm = ({ data, date, userID, handleEdit }) => {
   const classes = useStyles();
-  const access_token = localStorage.getItem("access_token");
-  const cryptr = new Cryptr(process.env.NEXT_PUBLIC_BG_API_SECRET_KEY);
+//   const access_token = localStorage.getItem("access_token");
+//   const cryptr = new Cryptr(process.env.NEXT_PUBLIC_BG_API_SECRET_KEY);
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (userData) => {
     console.log(userData);;
-    const token = cryptr.decrypt(access_token);
-
-    try {
-      const response = await axios.patch(`${process.env.NEXT_PUBLIC_LOCAL_API}user/profile/update/${userID}/`, userData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-type": "multipart/form-data"
-          },
-        })
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+//     const token = cryptr.decrypt(access_token);
+    handleEdit(false);
+//     try {
+//       const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, userData,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-type": "multipart/form-data"
+//           },
+//         })
+//       console.log(response);
+//     } catch (error) {
+//       console.log(error);
+//     }
 
   };
   return (
