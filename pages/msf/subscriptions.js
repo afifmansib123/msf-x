@@ -20,7 +20,7 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 function Subscriptions() {
 
   const [expanded, setExpanded] = useState(false);
-  const [carTypes, setCarTypes] = useState([]);
+  const [packages, setPackages] = useState([]);
 
   const  handleChange = (panel) => (event, isExpanded) => {
       event.preventDefault();
@@ -30,16 +30,21 @@ function Subscriptions() {
   useEffect(() => {
       (async () => {
           try{
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/packages/`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}api/merchant-storefront/packages/`);
             const json = await response.json();
-            setCarTypes(json);
+            if(response.status === 200){
+                setPackages(json);
+            }
+            else{
+                console.log("No Such Data in the Database")
+            }
         }catch (err){
-            console.log("Error", err)
+            console.log("Error", err);
         }
-    })
+    })();
 },[])
 
-  console.log("Car Types =>",carTypes);
+//   console.log("Packages =>", packages);
   
   return (
     // <div>
@@ -60,8 +65,16 @@ function Subscriptions() {
                                         className="flex justify-center bg-[#f06424] rounded-lg m-5 text-white"
                                     >
                                         <CardHeader className="text-2xl font-bold text-center">
-                                                    <p>Individual Basic</p>
-                                                    <p>(Silver)</p>
+                                                {
+                                                    packages.slice(0,1).map((item,index) => {
+                                                        return (
+                                                            <>
+                                                              <p>Individual Basic</p>
+                                                              <p>({item.package_name})</p>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
                                         </CardHeader>
                                     </AccordionSummary>
 
@@ -109,9 +122,7 @@ function Subscriptions() {
                 <Card>
                     <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
                                 
-                                            {/* <div className="m-3">
-                                                <ExpandMoreIcon />
-                                            </div> */}
+                                             {/*  */}
                                 <div className="w-full flex flex-col">
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon className="text-white text-6xl"/>}
@@ -120,8 +131,16 @@ function Subscriptions() {
                                         className="flex justify-center bg-[#f06424] rounded-lg m-5 text-white"
                                     >
                                         <CardHeader className="text-2xl font-bold text-center">
-                                                    <p>Business Regular</p>
-                                                    <p>(Gold)</p>
+                                                {
+                                                    packages.slice(1,2).map((item,index) => {
+                                                        return (
+                                                            <>
+                                                              <p>Business Regular</p>
+                                                              <p>({item.package_name})</p>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
                                         </CardHeader>
                                     </AccordionSummary>
 
@@ -184,8 +203,16 @@ function Subscriptions() {
                                         className="flex justify-center bg-[#f06424] rounded-lg m-5 text-white"
                                     >
                                         <CardHeader className="text-2xl font-bold text-center">
-                                                    <p>Business Plus</p>
-                                                    <p>(Diamond)</p>
+                                                {
+                                                    packages.slice(2,3).map((item,index) => {
+                                                        return (
+                                                            <>
+                                                              <p>Business Plus</p>
+                                                              <p>({item.package_name})</p>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
                                         </CardHeader>
                                     </AccordionSummary>
 
