@@ -1,7 +1,6 @@
 import {useRouter} from 'next/router'
 import {
-    Button, Container,
-    Divider,
+    Button, CardContent, Container,
     TextField
 } from "@mui/material";
 import GridContainer from "../../../components/Grid/GridContainer";
@@ -9,12 +8,11 @@ import GridItem from "../../../components/Grid/GridItem";
 import Card from "../../../components/Card/Card";
 import CardBody from "../../../components/Card/CardBody";
 import CusButton from "../../../components/CustomButtons/Button";
-import React  from "react";
+import React from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import styles from "../../../assets/jss/nextjs-material-dashboard/views/dashboardStyle";
-import { useState, useRef } from "react";
 import prisma from "../../../PrismaConnect";
-
+import CardHeader from "../../../components/Card/CardHeader";
 
 
 function DetailCarLog(props) {
@@ -24,215 +22,251 @@ function DetailCarLog(props) {
     const selectedCar = props.car;
     const router = useRouter();
 
+    const showFeatureCard = () => {
+        if (props.carFeature === null || props.carFeature === undefined) {
+            return (
+                <p>None</p>
+            );
+        }
+        return props.carFeature.map(v => {
+            return (
+                <>
+                    <GridItem>
+                        <Card>
+                            <CardHeader>
+                                {v.CarsApp_carfeatures.feature_name}
+                            </CardHeader>
+
+                        </Card>
+                    </GridItem>
+                </>
+            )
+        });
+    }
+
     const handleSubmit = async (type) => {
         const reason = inputElement.current.value;
-        if (reason.trim() !== "") {
-            console.log("reason is filled")
-        } else {
+        if (reason.trim() === "") {
             alert("Please specify your reason.")
             inputElement.current.focus();
             return
         }
 
-        if(type == "approve") {
-            await handleApprove(reason, 19, parseInt(router.query.id))
+        if (type == "approve") {
+            await handleApprove(reason, 1, parseInt(router.query.id))
             router.push(`/admin/approval/`);
         } else {
-            await handleReject(reason, 19, parseInt(router.query.id))
+            await handleReject(reason, 1, parseInt(router.query.id))
             router.push(`/admin/approval/`);
         }
     }
 
     return (
-        <Container>
-            <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                    {
-                        (selectedCar != null) ? (selectedCar.carOverview.carName) : ""
-                    }
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                    <ul style={{overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0}}>
-                        {
-                            selectedCar != null ? (selectedCar.carImage.map((value) => {
-                                return (
-                                    <li style={{display: "inline-block", marginInlineEnd: 18}}>
-                                        <img src={value} width={350} height={350}/>
-                                    </li>
-                                )
-                            })) : ""
-                        }
-                    </ul>
-                    <br/>
+        <Container className="px-0">
+            <div>
+                <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
-                        Description
-                        <Divider/>
-                        <p>
+                        <h1 className="text-center text-2xl font-bold">
                             {
-                                (selectedCar != null) ? (selectedCar.carOverview.description) : "-"
+                                (selectedCar != null) ? (selectedCar.carOverview.carName) : ""
                             }
-                        </p>
+                        </h1>
                     </GridItem>
-
-                    <br/>
                     <GridItem xs={12} sm={12} md={12}>
-                        Car's Model
-                        <Divider/>
-                        <div>
-                            condition: {(selectedCar != null) ? (selectedCar.carOverview.condition) : "-"}
-                        </div>
-                    </GridItem>
-
-                    <br/>
-                    <GridItem xs={12} sm={12} md={12}>
-                        Car's Detail
-                        <Divider/>
-                        <GridContainer>
-                            <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
-                                Body : {(selectedCar != null) ? (selectedCar.carOverview.body) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Engine (cc) : {(selectedCar != null) ? (selectedCar.carOverview.engineCapacity) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Drive : {(selectedCar != null) ? (selectedCar.carOverview.drive) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
-                                Mileage (km) : {(selectedCar != null) ? (selectedCar.carOverview.mileage) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                No. of Seats : {(selectedCar != null) ? (selectedCar.carOverview.seatingCapacity) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Transmission
-                                : {(selectedCar != null) ? (selectedCar.carOverview.transmission_type) : "-"}
-                            </GridItem>
-
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Fuel Type : {(selectedCar != null) ? (selectedCar.carOverview.fuelType) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Exterior Colour
-                                : {(selectedCar != null) ? (selectedCar.carOverview.exterior_color) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Interior Colour
-                                : {(selectedCar != null) ? (selectedCar.carOverview.interior_color) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                City : {(selectedCar != null) ? (selectedCar.carOverview.body) : "-"}
-                            </GridItem>
-
-                            <GridItem xs={3} sm={3} md={3}>
-                                Status : {(selectedCar != null) ? (selectedCar.carOverview.status) : "-"}
-                            </GridItem>
-
-                        </GridContainer>
-                    </GridItem>
-
-                    <br/>
-                    <GridItem xs={12} sm={12} md={12}>
-                        Car's Features
-                        <Divider/>
-
-                        <GridContainer>
-                            <GridItem>
-                                <Card>
-                                    <CardBody>
-                                        <GridContainer>
-                                            <GridItem>
-                                                Body
-                                            </GridItem>
-                                            <GridItem>
-                                                Smt
-                                            </GridItem>
-                                        </GridContainer>
-                                    </CardBody>
-                                </Card>
-                            </GridItem>
-
-                            <GridItem>
-                                <Card>
-                                    <CardBody>
-                                        <GridContainer>
-                                            <GridItem>
-                                                Body
-                                            </GridItem>
-                                            <GridItem>
-                                                Smt
-                                            </GridItem>
-                                        </GridContainer>
-                                    </CardBody>
-                                </Card>
-                            </GridItem>
-
-                            <GridItem>
-                                <Card>
-                                    <CardBody>
-                                        <GridContainer>
-                                            <GridItem>
-                                                Body
-                                            </GridItem>
-                                            <GridItem>
-                                                Smt
-                                            </GridItem>
-                                        </GridContainer>
-                                    </CardBody>
-                                </Card>
-                            </GridItem>
-
-                        </GridContainer>
+                        <ul style={{overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0}}>
+                            {
+                                selectedCar != null ? (selectedCar.carImage.map((value) => {
+                                    return (
+                                        <li style={{display: "inline-block", marginInlineEnd: 18}}>
+                                            <img src={value} width={350} height={350}/>
+                                        </li>
+                                    )
+                                })) : ""
+                            }
+                        </ul>
                     </GridItem>
 
                     <GridItem xs={12} sm={12} md={12}>
-                        Approve History
-                        <Divider/>
-                        <Container>
-                            <Button>Detail</Button>
-                        </Container>
+                        <Card profile>
+                            <CardHeader color="info">
+                                <h2 className="font-medium">
+                                    Description
+                                </h2>
+                            </CardHeader>
+                            <CardContent>
+                                <CardBody>
+                                    <p>
+                                        {
+                                            (selectedCar != null) ? (selectedCar.carOverview.description) : "-"
+                                        }
+                                    </p>
+                                </CardBody>
+                            </CardContent>
+
+                        </Card>
                     </GridItem>
 
                     <GridItem xs={12} sm={12} md={12}>
-                        Explain your reason <span style={{color: "red"}}>**</span>
+                        <Card profile>
+                            <CardHeader color="info">
+                                <h2 className="font-medium text-center">
+                                    Car's Model
+                                </h2>
+                            </CardHeader>
+
+                            <CardContent>
+                                <CardBody>
+                                    <div>
+                                        condition: {selectedCar.carOverview.condition || "-"}
+                                    </div>
+                                    <div >
+                                        Maker: {selectedCar.carMaker || "-"}
+                                    </div>
+                                    <div>Model: {selectedCar.modelData.model_name || "-"}</div>
+                                    <div>Car Grade/Package: {selectedCar.carOverview.grade || "-"}</div>
+                                    <div>Model year: {selectedCar.modelData.release_year || "-"}</div>
+                                    <div>Chassis Number: {selectedCar.carOverview.chassis_no || "-"}</div>
+                                    <div>Engine Number: {selectedCar.carOverview.engine_no || "-"}</div>
+                                </CardBody>
+                            </CardContent>
+
+                        </Card>
                     </GridItem>
-                    <TextField
-                        inputRef={inputElement}
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Reason"
-                        type="text"
-                        multiline
-                        fullWidth
-                        variant="outlined"
-                        defaultValue={" "}
-                        rows={10}
-                        inputProps={{
-                            style: {
-                                scrollBehavior: "auto"
-                            },
-                        }}
-                    />
 
-                </GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Card >
+                            <CardHeader color="info">
+                                <h2 className="font-medium text-center">Car's Detail</h2>
+                            </CardHeader>
 
-                <GridItem xs={12} sm={12} md={12}>
+                            <CardContent>
+                                <CardBody>
+                                    <GridContainer>
+                                        <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
+                                            Body : {selectedCar.carOverview.body || "-"}
+                                        </GridItem>
 
-                    <CusButton color="success" round={true} onClick={() => handleSubmit("approve")}>Approve</CusButton>
-                    <CusButton color="danger" round={true} onClick={() => handleSubmit("reject")}>Reject</CusButton>
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Engine (cc) : {selectedCar.carOverview.engineCapacity || "-"}
+                                        </GridItem>
 
-                </GridItem>
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Drive : {selectedCar.carOverview.drive || "-"}
+                                        </GridItem>
 
-            </GridContainer>
+                                        <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
+                                            Mileage (km) : {selectedCar.carOverview.mileage || "-"}
+                                        </GridItem>
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            No. of Seats : {selectedCar.carOverview.seatingCapacity || "-"}
+                                        </GridItem>
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Transmission
+                                            : {selectedCar.carOverview.transmission_type || "-"}
+                                        </GridItem>
+
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Fuel Type : {selectedCar.carOverview.fuelType || "-"}
+                                        </GridItem>
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Exterior Colour
+                                            : {selectedCar.carOverview.exterior_color || "-"}
+                                        </GridItem>
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Interior Colour
+                                            : {selectedCar.carOverview.interior_color || "-"}
+                                        </GridItem>
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            City : {selectedCar.carOverview.body || "-"}
+                                        </GridItem>
+
+                                        <GridItem xs={3} sm={3} md={3}>
+                                            Status : {selectedCar.carOverview.status || "-"}
+                                        </GridItem>
+
+                                    </GridContainer>
+                                </CardBody>
+                            </CardContent>
+                        </Card>
+                    </GridItem>
+
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Card profile>
+                            <CardHeader color="info">
+                                <h2 className="font-medium">
+                                    Car's Features
+                                </h2>
+
+                            </CardHeader>
+                            <CardBody>
+                                <GridContainer>
+                                    {showFeatureCard()}
+                                </GridContainer>
+                            </CardBody>
+
+                        </Card>
+                    </GridItem>
+
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Card plain profile>
+                            <CardHeader color="info">
+                                <h2 className="font-medium">Approve History</h2>
+                            </CardHeader>
+                            <CardBody>
+                                <Container>
+                                    <Button onClick={() => {
+                                        router.push(`/admin/approval/${parseInt(router.query.id)}/history`);
+                                    }}>Detail</Button>
+                                </Container>
+                            </CardBody>
+                        </Card>
+                    </GridItem>
+
+                    <GridItem xs={12} sm={12} md={12}>
+                        <Card profile plain>
+                            <CardHeader color="info">
+                                <h2 className="font-medium">
+                                    Explain your reason <span style={{color: "red"}}>**</span>
+                                </h2>
+                            </CardHeader>
+                            <CardBody>
+                                <TextField
+                                    inputRef={inputElement}
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Reason"
+                                    type="text"
+                                    multiline
+                                    fullWidth
+                                    variant="outlined"
+                                    defaultValue={" "}
+                                    rows={10}
+                                    inputProps={{
+                                        style: {
+                                            scrollBehavior: "auto"
+                                        },
+                                    }}
+                                />
+                            </CardBody>
+                        </Card>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
+
+                        <CusButton color="success" round={true}
+                                   onClick={() => handleSubmit("approve")}>Approve</CusButton>
+                        <CusButton color="danger" round={true} onClick={() => handleSubmit("reject")}>Reject</CusButton>
+
+                    </GridItem>
+
+                </GridContainer>
+            </div>
         </Container>
     )
 }
@@ -240,17 +274,22 @@ function DetailCarLog(props) {
 export async function getServerSideProps(context) {
     const id = context.params.id;
     const car = await getDetail(parseInt(id));
+    const carFeature = await getCarFeature(parseInt(id));
+    const carHistory = await getHistory(parseInt(id));
 
     return {
         props: {
-            car: (car !== undefined)? car : null
+            car: (car !== undefined) ? car : null,
+            carFeature: carFeature || null,
+            carHistory: carHistory || null
         }, // will be passed to the page component as props
     }
 }
 
 async function handleApprove(review_string, approval_id, car_id) {
     await fetch('http://localhost:3000/api/approve-log/approve',
-        {method: 'POST',
+        {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -264,7 +303,8 @@ async function handleApprove(review_string, approval_id, car_id) {
 
 async function handleReject(review_string, approval_id, car_id) {
     await fetch('http://localhost:3000/api/approve-log/reject',
-        {method: 'POST',
+        {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -277,11 +317,30 @@ async function handleReject(review_string, approval_id, car_id) {
 }
 
 async function getHistory(id) {
-    // const data = await prisma.CarsApp_carapprovallogs.findfirst({
-    //     where: {
-    //         id: id
-    //     }
-    // })
+    const data = await prisma.CarsApp_carapprovallog.findMany({
+        where: {
+            car_id_id: id
+        }
+    }).catch(err => {
+        throw new Error(err)
+    });
+
+    const parsedData = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+    return parsedData;
+}
+
+async function getCarFeature(car_id) {
+    const data = await prisma.CarsApp_car_car_features.findMany({
+        where: {
+            car_id: car_id
+        },
+        include: {CarsApp_carfeatures: true}
+    }).catch(err => {
+        throw new Error(err)
+    });
+    const parsedData = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+
+    return parsedData;
 }
 
 async function getDetail(car_id) {
@@ -327,7 +386,9 @@ async function getDetail(car_id) {
             }
         },
 
-    }).catch(err => {throw new Error(err)});
+    }).catch(err => {
+        throw new Error(err)
+    });
 
     const parsedData = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
 
@@ -372,7 +433,10 @@ async function getDetail(car_id) {
             body: parsedData.CarsApp_car.CarsApp_carbodytype.body_name,
             status: parsedData.CarsApp_car.car_status,
             interior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor.car_color,
-            exterior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor.car_color
+            exterior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor.car_color,
+            chassis_no: parsedData.CarsApp_car.chassis_no,
+            engine_no: parsedData.CarsApp_car.engine_no,
+            grade: parsedData.CarsApp_car.grade
         }
     }
 

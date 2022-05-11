@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["groupBy"]
 }
 
@@ -1278,4 +1278,10 @@ model CarsApp_carapprovallog {
 
   @@index([approved_by_id], map: "CarsApp_carapprovallog_approved_by_id_18d93341")
   @@index([car_id_id], map: "CarsApp_carapprovallog_car_id_id_b1288272")
+}
+
+model user_session {
+  id            String  @id
+  access_token  String
+  refresh_token String?
 }
