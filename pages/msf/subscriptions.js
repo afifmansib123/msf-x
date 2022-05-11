@@ -21,6 +21,7 @@ function Subscriptions() {
 
   const [expanded, setExpanded] = useState(false);
   const [packages, setPackages] = useState([]);
+  const [details,setDetails] = useState([]);
 
   const  handleChange = (panel) => (event, isExpanded) => {
       event.preventDefault();
@@ -30,10 +31,13 @@ function Subscriptions() {
   useEffect(() => {
       (async () => {
           try{
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}api/merchant-storefront/packages/`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/packages/`);
+            const information = await fetch(`${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/package-details/`);
             const json = await response.json();
+            const value = await information.json();
             if(response.status === 200){
                 setPackages(json);
+                setDetails(value);
             }
             else{
                 console.log("Data Not Found")
@@ -45,6 +49,8 @@ function Subscriptions() {
 },[])
 
 //   console.log("Packages =>", packages);
+
+// console.log("package Informations =>", details);
   
   return (
     // <div>
@@ -92,13 +98,15 @@ function Subscriptions() {
                                 <div className="p-4 rounded-lg text-white text-xl bg-[#f06425]">
                                         <p className="p-2 text-center font-bold text-2xl underline">Key Features</p>
                                         <ul className="py-4 px-10 list-disc text-center">
-                                            <li>Free Registration</li>
-                                            <li>Ad Live within 24 Hours</li>
-                                            <li>Sales Commission Not Required</li>
-                                            <li>2 Months Ad-Life</li>
-                                            <li>TK. 200 Ad Renewal Fee</li>
-                                            <li>Monthly Paid Advertisement Benefits.</li>
-                                            <li>No Paid Advertisements</li>
+                                            {
+                                                details.map((item,index) => {
+                                                    if(item.package_id === 1){
+                                                        return (
+                                                            <li key={index}>{item.package_name}</li>
+                                                        )
+                                                    }
+                                                })
+                                            }
                                         </ul>
 
                                         
@@ -158,20 +166,20 @@ function Subscriptions() {
                                 <div className="p-4 rounded-lg text-white text-xl bg-[#f06425]">
                                         <p className="p-2 text-center font-bold text-2xl underline">Key Features</p>
                                         <ul className="py-4 px-10 list-disc text-center">
-                                            <li>Free Registration</li>
-                                            <li>Maximum 70 Car/Bike Ads per Month (TK. 1,000 Per Additional Listing)</li>
-                                            <li>Ad Live nithin 8 Hours</li>
-                                            <li>Advanced User Dashboard</li>
-                                            <li>Analytics-Traffic, Click Through Rate (CTR) Data, Demographics, Leads/Sales Summary</li>
-                                            <li>Sales Commission Not Required</li>
-                                            <li>4 Months Ad-Life</li>
-                                            <li>TK. 500 Ad Renewal Fee</li>
-                                            <li>Regular Verified Memebrship Badge</li>
+                                            {
+                                                details.map((item,index) => {
+                                                    if(item.package_id === 2){
+                                                        return (
+                                                            <li key={index}>{item.package_name}</li>
+                                                        )
+                                                    }
+                                                })
+                                            }
                                         </ul>
 
                                         <div className="p-2 text-center">
                                             <p className="font-bold text-2xl underline">Monthly Paid Advertisement Benefits-</p>
-                                            <p className="text-1xl">Slider Banners(1), Featured Section Cars(2), Facebook-Static-Posts(4), Bolg/Articles(1)</p>
+                                            <p className="text-1xl">Slider Banners(1), Featured Section Cars(2), Facebook-Static-Posts(4), Blog/Articles(1)</p>
                                         </div>
                                 </div>
                             {/* </ReadMore> */}
@@ -230,21 +238,20 @@ function Subscriptions() {
                                 <div className="p-4 rounded-lg text-white text-xl bg-[#f06425]">
                                         <p className="p-2 text-center font-bold text-2xl underline">Key Features</p>
                                         <ul className="py-4 px-10 list-disc text-center">
-                                            <li>Free Registration</li>
-                                            <li>Weekly 2 Times CRM Outbound Sales Calls</li>
-                                            <li>Unlimited Car/Bike Ads Per Month</li>
-                                            <li>Advanced User Dashboard + Company Profile</li>
-                                            <li>Analytics-Traffic, Click Through Rate (CTR) Data, Demographics, Leads/Sales Summary</li>
-                                            <li>Live Chat/ Query Management Tool</li>
-                                            <li>Sales Commission Not Required</li>
-                                            <li>8 Months Ad-Life</li>
-                                            <li>TK. 500 Ad Renewal Fee</li>
-                                            <li>Exclusive Verified Memebrship Badge</li>
+                                            {
+                                                details.map((item,index) => {
+                                                    if(item.package_id === 3){
+                                                        return (
+                                                            <li key={index}>{item.package_name}</li>
+                                                        )
+                                                    }
+                                                })
+                                            }
                                         </ul>
 
                                         <div className="p-2 text-center">
                                             <p className="font-bold text-2xl underline">Monthly Paid Advertisement Benefits-</p>
-                                            <p className="text-1xl">Slider Banners(2), Featured Section Cars(4), Facebook-Static-Posts(3), Dynamic/Motion (2), Bolg/Articles(3), Review Videos (1)</p>
+                                            <p className="text-1xl">Slider Banners(2), Featured Section Cars(4), Facebook-Static-Posts(3), Dynamic/Motion (2), Blog/Articles(3), Review Videos (1)</p>
                                         </div>
                                 </div>
                             {/* </ReadMore> */}
