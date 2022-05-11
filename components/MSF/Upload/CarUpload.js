@@ -818,12 +818,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Condition*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -838,10 +845,34 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarTypeChange}
-                >
-                  <option>{filteredResults[0]?.car_type}</option>
-                </select>
+                    onChange={onCarTypeChange}
+                    defaultValue={filteredResults[0]?.car_type?.map(
+                      (car_type) => car_type
+                    )}
+                  >
+                    <option disabled selected>
+                      Select Condition
+                    </option>
+                    {filteredResults[0]?.car_type?.map((car_type) => (
+                      <>
+                        <option selected>{car_type}</option>
+                      </>
+                    ))}
+                  </select>
+
+                  {/* <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filteredResults[0]?.car_type}
+                    label="Car Types"
+                    name="car_type"
+                    onChange={onCarTypeChange}
+                  >
+                    <MenuItem value={filteredResults[0]?.car_type}>
+                      {filteredResults[0]?.car_type}
+                    </MenuItem>
+                  </Select> */}
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -874,12 +905,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Maker*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -894,10 +932,21 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelYearChange}
-                >
-                  <option>{filteredResults[0]?.maker_name}</option>
-                </select>
+                    defaultValue={filteredResults[0]?.maker_name?.map(
+                      (maker_name) => maker_name
+                    )}
+                    onChange={onCarModelYearChange}
+                  >
+                    <option disabled selected>
+                      Select Maker Name
+                    </option>
+                    {filteredResults[0]?.maker_name?.map((maker_name) => (
+                      <>
+                        <option selected>{maker_name}</option>
+                      </>
+                    ))}
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -924,6 +973,70 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Model*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    defaultValue={filteredResults[0]?.model_name?.map(
+                      (model_name) => model_name
+                    )}
+                    onChange={onCarModelYearChange}
+                  >
+                    <option disabled selected>
+                      Select Model Name
+                    </option>
+                    {filteredResults[0]?.model_name?.map((model_name) => (
+                      <>
+                        <option selected>{model_name}</option>
+                      </>
+                    ))}
+                  </select>
+                </>
+              )}
+            </FormControl>
+          </GridItem>
+          <GridItem item xs={12}>
+            {filteredResults == 0 ? (
+              <>
+                <TextField
+                  // value={filteredResults[0]?.package_type.map((p) => p)}
+                  name={"car_grade"}
+                  fullWidth
+                  onChange={onCarGradeChange}
+                  placeholder={"Enter Grade/Package"}
+                />
+              </>
+            ) : (
+              <>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-0"
+                  for="username"
+                >
+                  Grade/Package*
+                </label>
                 <select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -944,51 +1057,13 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelChange}
-                >
-                  <option>{filteredResults[0]?.model_name}</option>
-                </select>
-              )}
-            </FormControl>
-          </GridItem>
-          <GridItem item xs={12}>
-            {filteredResults == 0 ? (
-              <>
-                <TextField
-                  // value={filteredResults[0]?.package_type.map((p) => p)}
-                  name={"car_grade"}
-                  fullWidth
                   onChange={onCarGradeChange}
-                  placeholder={"Enter Grade/Package"}
-                />
+                >
+                  {filteredResults[0]?.package_type?.map((p) => (
+                    <option>{p} </option>
+                  ))}
+                </select>
               </>
-            ) : (
-              <select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Car Model Years"
-                name="car_model_year"
-                className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                onChange={onCarGradeChange}
-              >
-                {filteredResults[0]?.package_type?.map((p) => (
-                  <option>{p} </option>
-                ))}
-              </select>
             )}
           </GridItem>
           <GridItem item xs={12}>
@@ -1016,12 +1091,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Model Year*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1036,10 +1118,11 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelYearChange}
-                >
-                  <option>{filteredResults[0]?.car_year}</option>
-                </select>
+                    onChange={onCarModelYearChange}
+                  >
+                    <option>{filteredResults[0]?.car_year}</option>
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -1093,7 +1176,7 @@ export default function CarUpload() {
             <GridItem item xs={12}>
               <TextField
                 // value={carEngineNumber}
-                value={filteredResults[0]?.engines_number}
+                defaultValue={filteredResults[0]?.engines_number}
                 name={"car_engine_number"}
                 autoComplete="off"
                 fullWidth
