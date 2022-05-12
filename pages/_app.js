@@ -7,10 +7,11 @@ import { ThemeProvider } from "@mui/material";
 import lightTheme from "/styles/theme/lightTheme";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import {useSession} from "next-auth/react"
+import { useSession } from "next-auth/react";
 import PageChange from "components/PageChange/PageChange.js";
 import "assets/css/nextjs-material-dashboard.css?v=1.1.0";
 import "styles/globals.css";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
@@ -35,6 +36,10 @@ export default class MyApp extends App {
     document.insertBefore(comment, document.documentElement);
   }
 
+  static ErrorFallback(e) {
+    console.error("ErrorFallback", e);
+  }
+
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
 
@@ -44,6 +49,7 @@ export default class MyApp extends App {
 
     return { pageProps };
   }
+
   render() {
     const {
       Component,
@@ -53,26 +59,28 @@ export default class MyApp extends App {
     const Layout = Component.layout || (({ children }) => <>{children}</>);
 
     return (
-      <SessionProvider session={session}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={lightTheme}>
-            <Head>
-              <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-              <title>Bhalogari Merchant Storefront</title>
-              {/* <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> */}
-            </Head>
-            <Layout>
-              {Component.auth ? (
-                <Auth>
+      <ErrorBoundary FallbackComponent={this.ErrorFallback}>
+        <SessionProvider session={session}>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={lightTheme}>
+              <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                <title>Bhalogari Merchant Storefront</title>
+                {/* <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> */}
+              </Head>
+              <Layout>
+                {Component.auth ? (
+                  <Auth>
+                    <Component {...pageProps} />
+                  </Auth>
+                ) : (
                   <Component {...pageProps} />
-                </Auth>
-              ) : (
-                <Component {...pageProps} />
-              )}
-            </Layout>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </SessionProvider>
+                )}
+              </Layout>
+            </ThemeProvider>
+          </QueryClientProvider>
+        </SessionProvider>
+      </ErrorBoundary>
     );
   }
 }
@@ -81,7 +89,7 @@ function Auth({ children }) {
   // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
   const { status } = useSession({ required: true });
 
-  console.debug("Authenticating...",status)
+  console.debug("Authenticating...", status);
   if (status === "loading") {
     return <div>Loading...</div>;
   }

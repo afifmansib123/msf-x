@@ -1,11 +1,14 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import TopBar from "../components/TopBar/TopBar";
 
 function Index(props) {
+  const router = useRouter();
+  const { error } = router.query;
   return (
     <div>
-      <TopBar></TopBar>
+      <TopBar />
       <h1 className="font-bold text-3xl">Bhalogari Merchant Storefront</h1>
       Sell Your Cars Like a Pro!
       <ul>
@@ -16,6 +19,12 @@ function Index(props) {
           <Link href="/admin">BG Admin Panel</Link>
         </li>
       </ul>
+      {error && (
+        <div>
+          <h1>Error</h1>
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 }
