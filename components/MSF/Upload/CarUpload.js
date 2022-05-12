@@ -1,7 +1,18 @@
-import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
-import AddAlert from "@mui/icons-material/AddAlert";
+import React, { useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import axios from "axios";
+
 // @mui/icons-material
+import AddAlert from "@mui/icons-material/AddAlert";
 import Car from "@mui/icons-material/DirectionsCar";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+
+// react plugin for creating charts
+import makeStyles from "@mui/styles/makeStyles";
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+
+// core components
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,19 +23,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-// react plugin for creating charts
-import makeStyles from "@mui/styles/makeStyles";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import axios from "axios";
-import GridContainer from "components/Grid/GridContainer.js";
-// core components
 import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
 import Snackbar from "components/Snackbar/Snackbar.js";
+
 // plugins
 import Joi from "joi-browser";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
+
 import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
@@ -175,7 +181,7 @@ export default function CarUpload() {
   // };
 
   if (redirect) {
-    router.push("/sellNow");
+    router.push("/msf/listings");
   }
 
   const updateFiles = (incomingFiles) => {
@@ -751,7 +757,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{ minHeight: "542px", maxHeight: "450px" }}
+              style={{ minHeight: "542px", maxHeight: "542px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -802,7 +808,7 @@ export default function CarUpload() {
               {filteredResults == 0 ? (
                 <>
                   <InputLabel id="demo-simple-select-label">
-                    Car Type
+                    Car Type *
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -820,6 +826,11 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
+                  {inputErrors.car_maker && (
+                    <div className={classes.errorDiv}>
+                      {inputErrors.car_maker}
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
@@ -884,7 +895,7 @@ export default function CarUpload() {
             <FormControl className="w-full">
               {filteredResults == 0 ? (
                 <>
-                  <InputLabel id="demo-simple-select-label">Maker</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -958,7 +969,7 @@ export default function CarUpload() {
             <FormControl className="w-full">
               {filteredResults == 0 ? (
                 <>
-                  <InputLabel id="demo-simple-select-label">Model</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Model *</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -975,6 +986,11 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
+                  {inputErrors.car_model && (
+                    <div className={classes.errorDiv}>
+                      {inputErrors.car_model}
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
@@ -1027,6 +1043,7 @@ export default function CarUpload() {
               <>
                 <TextField
                   // value={filteredResults[0]?.package_type.map((p) => p)}
+                  label="Grade/Package"
                   name={"car_grade"}
                   fullWidth
                   onChange={onCarGradeChange}
@@ -1160,6 +1177,7 @@ export default function CarUpload() {
             <GridItem item xs={12}>
               <FormControl className="w-full">
                 <TextField
+                  label="Chassis Number *"
                   value={carChassisNumber}
                   name={"car_chassis_number"}
                   autoComplete="off"
@@ -1179,8 +1197,9 @@ export default function CarUpload() {
           {!isUsed && (
             <GridItem item xs={12}>
               <TextField
-                // value={carEngineNumber}
-                value={filteredResults[0]?.engines_number}
+                value={carEngineNumber}
+                label="Engine Number"
+                // value={filteredResults[0]?.engines_number}
                 name={"car_engine_number"}
                 autoComplete="off"
                 fullWidth
@@ -1193,6 +1212,7 @@ export default function CarUpload() {
           {isUsed && (
             <GridItem item xs={12}>
               <TextField
+                label="Registration Number"
                 value={carRegNumber}
                 name={"car_registration_number"}
                 autoComplete="off"
@@ -1213,7 +1233,7 @@ export default function CarUpload() {
               {filteredResults == 0 ? (
                 <>
                   <InputLabel id="demo-simple-select-label">
-                    <Car /> Car Body
+                    Car Body *
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -1230,6 +1250,11 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
+                  {inputErrors.car_body_type && (
+                    <div className={classes.errorDiv}>
+                      {inputErrors.car_body_type}
+                    </div>
+                  )}
                 </>
               ) : (
                 <select
@@ -1261,8 +1286,9 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              // value={carEngineCC}
-              value={filteredResults[0]?.engines_number}
+              label="Engine CC"
+              value={carEngineCC}
+              // value={filteredResults[0]?.engines_number}
               name={"car_engine_cc"}
               autoComplete="off"
               fullWidth
@@ -1323,8 +1349,9 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              // value={carMileage}
-              value={filteredResults[0]?.mileage}
+              label="Mileage"
+              value={carMileage}
+              // value={filteredResults[0]?.mileage}
               name={"car_mileage"}
               autoComplete="off"
               fullWidth
@@ -1335,8 +1362,9 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              // value={carSeat}
-              value={filteredResults[0]?.no_of_seat}
+              label="Seats"
+              value={carSeat}
+              // value={filteredResults[0]?.no_of_seat}
               name={"car_seat"}
               autoComplete="off"
               fullWidth
@@ -1403,7 +1431,7 @@ export default function CarUpload() {
               {filteredResults == 0 ? (
                 <>
                   <InputLabel id="demo-simple-select-label">
-                    Fuel Type
+                    Fuel Type *
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -1421,6 +1449,11 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
+                  {inputErrors.car_fuel_type && (
+                    <div className={classes.errorDiv}>
+                      {inputErrors.car_fuel_type}
+                    </div>
+                  )}
                 </>
               ) : (
                 <select
@@ -1532,6 +1565,7 @@ export default function CarUpload() {
           </p>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
+              label="Asking Price *"
               value={carPrice.asking_price}
               name={"asking_price"}
               autoComplete="off"
@@ -1544,7 +1578,7 @@ export default function CarUpload() {
               <div
                 style={{
                   position: "absolute",
-                  color: "#ff2d2d",
+                  color: "#f06424",
                   paddingTop: "2px",
                   fontSize: "12px",
                 }}
@@ -1556,6 +1590,10 @@ export default function CarUpload() {
 
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
+              label="Selling Price *"
+              InputLabelProps={{
+                className: 'focus:text-bhalogari',
+              }}
               value={carPrice.selling_price}
               name={"selling_price"}
               autoComplete="off"
@@ -1568,7 +1606,7 @@ export default function CarUpload() {
               <div
                 style={{
                   position: "absolute",
-                  color: "#ff2d2d",
+                  color: "#f06424",
                   paddingTop: "2px",
                   fontSize: "12px",
                 }}
@@ -1580,6 +1618,7 @@ export default function CarUpload() {
 
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
+              label="Video Link"
               value={carVideoLink.video1}
               name={videoName[0]}
               autoComplete="off"
@@ -1591,10 +1630,13 @@ export default function CarUpload() {
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={8}>
+            <InputLabel>
+              Car Description
+            </InputLabel>
             {editorLoaded ? (
               <CKEditor
                 editor={ClassicEditor}
-                data={carDescription}
+                // data={carDescription}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
                   // console.log("Editor is ready to use!", editor);
@@ -1616,7 +1658,7 @@ export default function CarUpload() {
                   }}
                   unmountOnExit
                 >
-                  <CircularProgress />
+                  <CircularProgress className={"text-bhalogari"}/>
                 </Fade>
               </div>
             )}
@@ -1624,8 +1666,8 @@ export default function CarUpload() {
               variant="contained"
               color="inherit"
               // disabled={loading}
-              className={classes.button}
-              // startIcon={<AirportShuttleIcon />}
+              className={classes.button+" mt-6 bg-bhalogari text-white hover:text-bhalogari"}
+              startIcon={<AirportShuttleIcon />}
               onClick={onSubmit}
             >
               submit listing
