@@ -57,7 +57,7 @@ export default function Admin({ children, ...rest }) {
     return router.pathname !== "/admin/maps";
   };
   const resizeFunction = () => {
-    alert("TODO handle resizeFunction")
+    console.debug("TODO handle resizeFunction")
     // if (window.innerWidth >= 960) {
     //   setMobileOpen(false);
     // }

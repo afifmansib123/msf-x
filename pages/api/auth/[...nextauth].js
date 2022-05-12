@@ -56,13 +56,22 @@ export default NextAuth({
 
         // Call BG API to verify the credential
         // const res = await axios.post("https://backend.bhalogari.com/api/user/verify-password/", {
-        const authenticationURL = `${process.env.NEXT_PUBLIC_BG_API}api/user/verify-password/`;
-        console.log("authenticationURL", authenticationURL);
-        const res = await axios.post(authenticationURL, {
-          contact_number: username,
-          password: password,
-          // user_email: user_mail1,
-        });
+        const authenticationURL = `${process.env.NEXT_PUBLIC_BG_API}user/verify-password/`;
+        console.log("authenticationURL", authenticationURL,{username,password});
+
+        let res;
+        try {
+
+          res = await axios.post(authenticationURL, {
+            contact_number: username,
+            password: password,
+            // user_email: user_mail1,
+          });
+        } catch(err) {
+          console.error("Axios",err)
+        }
+
+        console.log("res",res)
 
         if (res.status === 200) {
           const { data } = res;
