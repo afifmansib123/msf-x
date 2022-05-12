@@ -18,7 +18,7 @@ function Login() {
                 Merchant Storefront
               </Link>
             </li>
-            <li className="text-3xl mt-3 text-center bg-gray-200 text-orange-600 mb-5">
+            <li className="text-3xl mt-3 text-center bg-gray-200 text-orange-600 mb-6">
               <Link href="/admin">BG Admin Panel</Link>
             </li>
           </ul>
