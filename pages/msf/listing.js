@@ -11,6 +11,20 @@ import UploadedCarsList from "../../components/UploadedCarsList/UploadedCarsList
 const listing = ({ data }) => {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
+  // const [items, setItems] = useState([]);
+
+  // const { data: session, status } = useSession();
+  // console.log("Session Status", status);
+
+  // fetch(`${process.env.NEXT_PUBLIC_BG_API}api/cars/user-car-list/${id}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setItems(data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, [searchKey]);
   return (
     <div>
       <div className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt lg:space-x-1 gap-5 ">

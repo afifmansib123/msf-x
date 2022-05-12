@@ -94,13 +94,7 @@ const dashboardRoutes = [
 
     layout: "/msf",
   },
-  {
-    path: "/sellNow",
-    name: "Sell Now",
-    icon: Person,
-
-    layout: "/msf",
-  },
+  
 ];
 
 export default dashboardRoutes;
