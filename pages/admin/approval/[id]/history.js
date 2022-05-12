@@ -148,6 +148,6 @@ async function getMerchantName(car_id) {
 }
 
 HistoryLog.layout = Admin;
-// HistoryLog.auth = true;
+HistoryLog.auth = true;
 
 export default HistoryLog;

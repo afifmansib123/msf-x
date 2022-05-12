@@ -441,6 +441,6 @@ async function getDetail(car_id) {
   return jsonData;
 }
 DetailCarLog.layout = Admin;
-// DetailCarLog.auth = true;
+DetailCarLog.auth = true;
 
 export default DetailCarLog;
