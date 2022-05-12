@@ -34,9 +34,7 @@ function LoginForm(props) {
           <span className="text-sm text-gray-500">Username and Password fields are required</span>
         )}
       </div>
-      <Button onClick={handleSubmit(onSubmit)}>
-        Sign In
-      </Button>
+      <Button onClick={handleSubmit(onSubmit)}>Sign In</Button>
       {signUp && (
         <Button variant="outline" onClick={onSignUp}>
           Sign Up
