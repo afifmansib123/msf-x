@@ -7,6 +7,7 @@ export default function _error() {
   //   Router.push("/admin/dashboard");
   // });
 
+  //  errror route handlers
   const { error } = useRouter().query;
   // TODO Default Error Page
   return (
