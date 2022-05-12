@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function Login() {
   return (
-    <div className="flex h-screen">
+    <div className="flex mt-44">
       <div className="m-auto">
         <h1 className="font-bold text-3xl">Bhalogari Merchant Storefront</h1>
         Sell Your Cars Like a Pro!
