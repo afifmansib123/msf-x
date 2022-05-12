@@ -1,15 +1,16 @@
 import { useRouter } from "next/router";
 import { Button, CardContent, Container, TextField } from "@mui/material";
-import GridContainer from "../../../components/Grid/GridContainer";
-import GridItem from "../../../components/Grid/GridItem";
-import Card from "../../../components/Card/Card";
-import CardBody from "../../../components/Card/CardBody";
-import CusButton from "../../../components/CustomButtons/Button";
+import GridContainer from "components/Grid/GridContainer";
+import GridItem from "components/Grid/GridItem";
+import Card from "components/Card/Card";
+import CardBody from "components/Card/CardBody";
+import CusButton from "components/CustomButtons/Button";
 import React from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import styles from "../../../assets/jss/nextjs-material-dashboard/views/dashboardStyle";
-import prisma from "../../../PrismaConnect";
-import CardHeader from "../../../components/Card/CardHeader";
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle";
+import prisma from "PrismaConnect";
+import CardHeader from "components/Card/CardHeader";
+import Admin from "layouts/Admin.js";
 
 function DetailCarLog(props) {
   const useStyles = makeStyles(styles);
@@ -425,5 +426,7 @@ async function getDetail(car_id) {
 
   return jsonData;
 }
+DetailCarLog.layout = Admin;
+DetailCarLog.auth = true;
 
 export default DetailCarLog;
