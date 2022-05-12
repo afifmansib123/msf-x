@@ -11,9 +11,6 @@ export default function _error() {
   // TODO Default Error Page
   return (
       <div>
-      {/* <h1>404</h1> */}
-
-      {/* my code start */}
       <div
         className="
         
@@ -48,7 +45,6 @@ export default function _error() {
           </div>
         </div>
       </div>
-      {/* my code end */}
 
       <p>{error}</p>
       {/* <Link href="/">Back to store</Link> */}
