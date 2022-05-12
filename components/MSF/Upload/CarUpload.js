@@ -1,6 +1,6 @@
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import AddAlert from "@mui/icons-material/AddAlert";
-// @mui/icons-material
+// @mui/icons-material /////
 import Car from "@mui/icons-material/DirectionsCar";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -99,21 +99,21 @@ export default function CarUpload() {
   const [carDrive, setCarDrive] = useState();
 
   const [jsonData, setJsonData] = useState([]);
-  const [filteredResults, setFilteredResults] = useState([]);
+  const [filteredResults, setFilteredResults] = useState("");
   const searchItems = (searchValue) => {
-    const filteredData = jsonData?.chassis_number_prefix.filter((item) => {
+    const filteredData = jsonData?.chassis_number_prefix?.filter((item) => {
       return Object.values(item)
         .join("")
         .toLowerCase()
         .includes(searchValue.toLowerCase());
     });
-    setCarBodyType(parseInt(filteredData[0].body_name));
+    // setCarBodyType(parseInt(filteredData[0]?.body_name));
     setFilteredResults(filteredData);
   };
   console.log(filteredResults);
   useEffect(() => {
     setJsonData(fakeData);
-  }, [filteredResults]);
+  }, []);
   const [carDrives] = useState([
     { id: 1, option: "Front Wheel Drive (FWD)" },
     { id: 2, option: "Rear Wheel Drive (RWD)" },
@@ -797,6 +797,28 @@ export default function CarUpload() {
       <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
         <GridContainer>
           <h2 className={classes.paperTitle}>Choose your car model</h2>
+
+          {!isUsed && (
+            <GridItem item xs={12}>
+              <FormControl className="w-full">
+                <TextField
+                  value={carChassisNumber}
+                  label="Enter Chassis Number "
+                  name={"car_chassis_number"}
+                  autoComplete="off"
+                  fullWidth
+                  onChange={(e) => searchItems(e.target.value)}
+                  variant="outlined"
+                  placeholder="Enter Chassis Number"
+                />
+                {inputErrors.car_chassis_number && (
+                  <div className={classes.errorDiv}>
+                    {inputErrors.car_chassis_number}
+                  </div>
+                )}
+              </FormControl>
+            </GridItem>
+          )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
               {filteredResults == 0 ? (
@@ -1028,6 +1050,7 @@ export default function CarUpload() {
                 <TextField
                   // value={filteredResults[0]?.package_type.map((p) => p)}
                   name={"car_grade"}
+                  label="Enter Grade/Package"
                   fullWidth
                   onChange={onCarGradeChange}
                   placeholder={"Enter Grade/Package"}
@@ -1156,38 +1179,38 @@ export default function CarUpload() {
               </FormControl>
             </GridItem>
           )}
+
           {!isUsed && (
             <GridItem item xs={12}>
-              <FormControl className="w-full">
+              {filteredResults == 0 ? (
                 <TextField
-                  value={carChassisNumber}
-                  name={"car_chassis_number"}
+                  value={carEngineNumber}
+                  name={"car_engine_number"}
                   autoComplete="off"
                   fullWidth
-                  onChange={(e) => searchItems(e.target.value)}
-                  placeholder={"Enter Chassis Number *"}
+                  onChange={onCarEngineNumberChange}
+                  label="Enter Engine Number"
+                  placeholder={"Enter Engine Number"}
                   variant="outlined"
                 />
-                {inputErrors.car_chassis_number && (
-                  <div className={classes.errorDiv}>
-                    {inputErrors.car_chassis_number}
-                  </div>
-                )}
-              </FormControl>
-            </GridItem>
-          )}
-          {!isUsed && (
-            <GridItem item xs={12}>
-              <TextField
-                // value={carEngineNumber}
-                value={filteredResults[0]?.engines_number}
-                name={"car_engine_number"}
-                autoComplete="off"
-                fullWidth
-                onChange={onCarEngineNumberChange}
-                placeholder={"Enter Engine Number"}
-                variant="outlined"
-              />
+              ) : (
+                <>
+                  <label
+                    for="email"
+                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Engine Number
+                  </label>
+                  <input
+                    type="text"
+                    id="engine_number"
+                    defaultValue={filteredResults[0]?.engines_number}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter Engine Number"
+                    required
+                  />
+                </>
+              )}
             </GridItem>
           )}
           {isUsed && (
@@ -1232,12 +1255,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-0"
+                    for="username"
+                  >
+                    Car Body*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1252,24 +1282,44 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarBodyTypeChange}
-                >
-                  <option>{filteredResults[0]?.body_name}</option>
-                </select>
+                    onChange={onCarBodyTypeChange}
+                  >
+                    <option>{filteredResults[0]?.body_name}</option>
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            <TextField
-              // value={carEngineCC}
-              value={filteredResults[0]?.engines_number}
-              name={"car_engine_cc"}
-              autoComplete="off"
-              fullWidth
-              onChange={onCarEngineCCChange}
-              placeholder={"Enter Engine CC"}
-              variant="outlined"
-            />
+            {filteredResults == 0 ? (
+              <TextField
+                value={carEngineCC}
+                name={"car_engine_cc"}
+                label="Enter Engine CC"
+                autoComplete="off"
+                fullWidth
+                onChange={onCarEngineCCChange}
+                placeholder={"Enter Engine CC"}
+                variant="outlined"
+              />
+            ) : (
+              <>
+                <label
+                  for="email"
+                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Engine Number
+                </label>
+                <input
+                  type="text"
+                  id="engine_number"
+                  defaultValue={filteredResults[0]?.engines_number}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Enter Engine Number"
+                  required
+                />
+              </>
+            )}
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
@@ -1294,12 +1344,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-0"
+                    for="username"
+                  >
+                    Car Body*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1314,36 +1371,75 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarDriveChange}
-                >
-                  <option>{filteredResults[0]?.drive}</option>
-                </select>
+                    onChange={onCarDriveChange}
+                  >
+                    <option>{filteredResults[0]?.drive}</option>
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            <TextField
-              // value={carMileage}
-              value={filteredResults[0]?.mileage}
-              name={"car_mileage"}
-              autoComplete="off"
-              fullWidth
-              onChange={onCarMileageChange}
-              placeholder={"Enter Mileage"}
-              variant="outlined"
-            />
+            {filteredResults == 0 ? (
+              <TextField
+                value={carMileage}
+                name={"car_mileage"}
+                autoComplete="off"
+                label="Enter Mileage"
+                fullWidth
+                onChange={onCarMileageChange}
+                placeholder={"Enter Mileage"}
+                variant="outlined"
+              />
+            ) : (
+              <>
+                <label
+                  for="email"
+                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Mileage
+                </label>
+                <input
+                  type="text"
+                  id="engine_number"
+                  defaultValue={filteredResults[0]?.mileage}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Enter Engine Number"
+                  required
+                />
+              </>
+            )}
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            <TextField
-              // value={carSeat}
-              value={filteredResults[0]?.no_of_seat}
-              name={"car_seat"}
-              autoComplete="off"
-              fullWidth
-              onChange={onCarSeatChange}
-              placeholder={"Enter No of Seats"}
-              variant="outlined"
-            />
+            {filteredResults == 0 ? (
+              <TextField
+                value={carSeat}
+                name={"car_seat"}
+                autoComplete="off"
+                label="Enter No of Seats"
+                fullWidth
+                onChange={onCarSeatChange}
+                placeholder={"Enter No of Seats"}
+                variant="outlined"
+              />
+            ) : (
+              <>
+                <label
+                  for="email"
+                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Mileage
+                </label>
+                <input
+                  type="text"
+                  id="engine_number"
+                  defaultValue={filteredResults[0]?.no_of_seat}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Enter Engine Number"
+                  required
+                />
+              </>
+            )}
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
@@ -1371,12 +1467,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    for="email"
+                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Transmission
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1391,10 +1494,11 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarTransmissionChange}
-                >
-                  <option>{filteredResults[0]?.transmission_type}</option>
-                </select>
+                    onChange={onCarTransmissionChange}
+                  >
+                    <option>{filteredResults[0]?.transmission_type}</option>
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -1423,12 +1527,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    for="email"
+                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Transmission
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1443,10 +1554,11 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarFuelTypeChange}
-                >
-                  <option>{filteredResults[0]?.car_fuel_type}</option>
-                </select>
+                    onChange={onCarFuelTypeChange}
+                  >
+                    <option>{filteredResults[0]?.car_fuel_type}</option>
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
