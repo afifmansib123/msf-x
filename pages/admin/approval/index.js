@@ -14,12 +14,12 @@ function Index(props) {
   const classes = useStyles();
   const router = useRouter();
 
-  const callback = (carid) => {
-    router.push({ pathname: `/admin/approval/${carid}` });
+  const callback = (car_id) => {
+    router.push({ pathname: `/admin/approval/${car_id}`});
   };
 
-  const onHistoryClicked = (carid) => {
-    router.push(`/admin/approval/${carid}/history`);
+  const onHistoryClicked = (car_id) => {
+    router.push(`/admin/approval/${car_id}/history`);
   };
 
   return (

@@ -18,7 +18,7 @@ function DetailCarLog(props) {
   const inputElement = React.useRef();
   const selectedCar = props.car;
   const router = useRouter();
-
+  console.log(parseInt(router.query.id))
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {
       return <p>None</p>;
@@ -37,8 +37,8 @@ function DetailCarLog(props) {
   };
 
   const handleSubmit = async (type) => {
-    if (type == "cancel") {
-      router.push(`/admin/approval/`);
+    if (type === "cancel") {
+      await router.push(`/admin/approval/`);
       return;
     }
 
@@ -50,12 +50,16 @@ function DetailCarLog(props) {
       return;
     }
 
-    if (type == "approve") {
-      await handleApprove(reason, 1, parseInt(router.query.id));
-      router.push(`/admin/approval/`);
-    } else {
-      await handleReject(reason, 1, parseInt(router.query.id));
-      router.push(`/admin/approval/`);
+    try {
+      if (type === "approve") {
+        await handleApprove(reason, 1, parseInt(router.query.id));
+        await router.push(`/admin/approval/`);
+      } else {
+        await handleReject(reason, 1, parseInt(router.query.id));
+        await router.push(`/admin/approval/`);
+      }
+    } catch (e) {
+      alert("Something went wrong");
     }
   };
 
@@ -266,7 +270,8 @@ export async function getServerSideProps(context) {
 }
 
 async function handleApprove(review_string, approval_id, car_id) {
-  await fetch("http://localhost:3000/api/approve-log/approve", {
+  console.log(car_id)
+  const response = await fetch("http://localhost:3000/api/approve-log/review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -275,12 +280,18 @@ async function handleApprove(review_string, approval_id, car_id) {
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
+      status: "A"
     }),
   });
+
+  if(response.status !== 200) {
+    throw new Error();
+  }
 }
 
 async function handleReject(review_string, approval_id, car_id) {
-  await fetch("http://localhost:3000/api/approve-log/reject", {
+  console.log(car_id)
+  const response = await fetch("http://localhost:3000/api/approve-log/review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -289,8 +300,13 @@ async function handleReject(review_string, approval_id, car_id) {
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
+      status: "R"
     }),
   });
+
+  if(response.status !== 200) {
+    throw new Error();
+  }
 }
 
 async function getHistory(id) {
@@ -427,6 +443,6 @@ async function getDetail(car_id) {
   return jsonData;
 }
 DetailCarLog.layout = Admin;
-DetailCarLog.auth = true;
+// DetailCarLog.auth = true;
 
 export default DetailCarLog;
