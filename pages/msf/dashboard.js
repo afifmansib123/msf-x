@@ -37,9 +37,10 @@ function Storefront() {
 
   const handleTestUpdateInfo = () => {
     // This is to test call the API to update info
-    const access_token = localStorage.getItem("access_token");
-    const token = cryptr.decrypt(access_token);
-    console.log("Decrypted Token", token);
+    // const access_token = localStorage.getItem("access_token");
+    // const token = cryptr.decrypt(access_token);
+    console.log("Sessoin Info", session);
+    alert("See session info in Dev Console")
   };
 
   return (

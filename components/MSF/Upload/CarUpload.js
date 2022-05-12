@@ -4,24 +4,27 @@ import AddAlert from "@mui/icons-material/AddAlert";
 import Car from "@mui/icons-material/DirectionsCar";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
+import Fade from "@mui/material/Fade";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-// react plugin for creating chart
+// react plugin for creating charts
 import makeStyles from "@mui/styles/makeStyles";
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import axios from "axios";
 import GridContainer from "components/Grid/GridContainer.js";
-// core component
+// core components
 import GridItem from "components/Grid/GridItem.js";
 import Snackbar from "components/Snackbar/Snackbar.js";
 // plugins
 import Joi from "joi-browser";
 import { useSession } from "next-auth/react";
-import { default as React, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
@@ -133,7 +136,11 @@ export default function CarUpload() {
     selling_price: undefined,
     custom_price: "Call for Price",
   });
+  const [redirect, setRedirect] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [imageSrc, setImageSrc] = useState(undefined);
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (images.length >= 15) {
@@ -143,36 +150,34 @@ export default function CarUpload() {
     }
   }, [images]);
 
-  const onImageUpload = async (file) => {
-    if (file) {
-      const listSize = file.length;
-      const prevListSize = images.length;
-      const newImageLength = listSize - prevListSize;
-      for (let i = listSize - 1; i >= prevListSize; i--) {
-        const image1 = file[i];
-        const imageName = image1.name;
-        console.log(image1);
-        setImages((prev) => [...prev, image1]);
-      }
-    }
-  };
+  // const onImageUpload = async (file) => {
+  //   if (file) {
+  //     const listSize = file.length;
+  //     const prevListSize = images.length;
+  //     const newImageLength = listSize - prevListSize;
+  //     for (let i = listSize - 1; i >= prevListSize; i--) {
+  //       const image1 = file[i];
+  //       const imageName = image1.name;
+  //       console.log(image1);
+  //       setImages((prev) => [...prev, image1]);
+  //     }
+  //   }
+  //
+  // };
+  // const onImageDelete = (file) => {
+  //   const deleteFileName = file.name;
+  //   const indexOfItemToRemove = images.findIndex((item) => item.name === deleteFileName);
+  //   if (indexOfItemToRemove === -1) {
+  //     return;
+  //   }
+  //   setImages((list) => [...list.slice(0, indexOfItemToRemove), ...list.slice(indexOfItemToRemove + 1)]);
+  //
+  // };
 
-  const onImageDelete = (file) => {
-    const deleteFileName = file.name;
-    const indexOfItemToRemove = images.findIndex(
-      (item) => item.name === deleteFileName
-    );
-    if (indexOfItemToRemove === -1) {
-      return;
-    }
-    setImages((list) => [
-      ...list.slice(0, indexOfItemToRemove),
-      ...list.slice(indexOfItemToRemove + 1),
-    ]);
-  };
+  if (redirect) {
+    router.push("/sellNow");
+  }
 
-  const [files, setFiles] = useState([]);
-  const [imageSrc, setImageSrc] = useState(undefined);
   const updateFiles = (incomingFiles) => {
     setFiles(incomingFiles);
     if (incomingFiles) {
@@ -562,7 +567,6 @@ export default function CarUpload() {
   const onSubmit = async (e) => {
     e.preventDefault();
     const errors = validate();
-    // console.log(session);
     setError(errors || {});
     if (errors) {
       console.log(errors);
@@ -574,8 +578,8 @@ export default function CarUpload() {
       return;
     }
 
-    // const user_id = parseInt(localStorage.getItem("user_id"));
-    const user_id = 41;
+    const user_id = session.token.id;
+    // const user_id = 41;
 
     let carObject = {
       mileage: carMileage !== "" ? carMileage : 0,
@@ -646,9 +650,9 @@ export default function CarUpload() {
         if (response1.status === 201) {
           setSnackMsg("");
           setOpen(true);
-          setLoading(false);
-          // setRedirect(true);
           setSnackMsg("Successfully Uploaded");
+          setLoading(false);
+          setRedirect(true);
         } else {
           setLoading(false);
           setSnackMsg("Please fill all the required fields");
@@ -818,12 +822,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Condition*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -838,10 +849,34 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarTypeChange}
-                >
-                  <option>{filteredResults[0]?.car_type}</option>
-                </select>
+                    onChange={onCarTypeChange}
+                    defaultValue={filteredResults[0]?.car_type?.map(
+                      (car_type) => car_type
+                    )}
+                  >
+                    <option disabled selected>
+                      Select Condition
+                    </option>
+                    {filteredResults[0]?.car_type?.map((car_type) => (
+                      <>
+                        <option selected>{car_type}</option>
+                      </>
+                    ))}
+                  </select>
+
+                  {/* <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filteredResults[0]?.car_type}
+                    label="Car Types"
+                    name="car_type"
+                    onChange={onCarTypeChange}
+                  >
+                    <MenuItem value={filteredResults[0]?.car_type}>
+                      {filteredResults[0]?.car_type}
+                    </MenuItem>
+                  </Select> */}
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -874,12 +909,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Maker*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -894,10 +936,21 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelYearChange}
-                >
-                  <option>{filteredResults[0]?.maker_name}</option>
-                </select>
+                    defaultValue={filteredResults[0]?.maker_name?.map(
+                      (maker_name) => maker_name
+                    )}
+                    onChange={onCarModelYearChange}
+                  >
+                    <option disabled selected>
+                      Select Maker Name
+                    </option>
+                    {filteredResults[0]?.maker_name?.map((maker_name) => (
+                      <>
+                        <option selected>{maker_name}</option>
+                      </>
+                    ))}
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -924,6 +977,70 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Model*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    defaultValue={filteredResults[0]?.model_name?.map(
+                      (model_name) => model_name
+                    )}
+                    onChange={onCarModelYearChange}
+                  >
+                    <option disabled selected>
+                      Select Model Name
+                    </option>
+                    {filteredResults[0]?.model_name?.map((model_name) => (
+                      <>
+                        <option selected>{model_name}</option>
+                      </>
+                    ))}
+                  </select>
+                </>
+              )}
+            </FormControl>
+          </GridItem>
+          <GridItem item xs={12}>
+            {filteredResults == 0 ? (
+              <>
+                <TextField
+                  // value={filteredResults[0]?.package_type.map((p) => p)}
+                  name={"car_grade"}
+                  fullWidth
+                  onChange={onCarGradeChange}
+                  placeholder={"Enter Grade/Package"}
+                />
+              </>
+            ) : (
+              <>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-0"
+                  for="username"
+                >
+                  Grade/Package*
+                </label>
                 <select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -944,51 +1061,13 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelChange}
-                >
-                  <option>{filteredResults[0]?.model_name}</option>
-                </select>
-              )}
-            </FormControl>
-          </GridItem>
-          <GridItem item xs={12}>
-            {filteredResults == 0 ? (
-              <>
-                <TextField
-                  // value={filteredResults[0]?.package_type.map((p) => p)}
-                  name={"car_grade"}
-                  fullWidth
                   onChange={onCarGradeChange}
-                  placeholder={"Enter Grade/Package"}
-                />
+                >
+                  {filteredResults[0]?.package_type?.map((p) => (
+                    <option>{p} </option>
+                  ))}
+                </select>
               </>
-            ) : (
-              <select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Car Model Years"
-                name="car_model_year"
-                className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                onChange={onCarGradeChange}
-              >
-                {filteredResults[0]?.package_type?.map((p) => (
-                  <option>{p} </option>
-                ))}
-              </select>
             )}
           </GridItem>
           <GridItem item xs={12}>
@@ -1016,12 +1095,19 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
+                <>
+                  <label
+                    class="block text-gray-700 text-sm font-bold"
+                    for="username"
+                  >
+                    Model Year*
+                  </label>
+                  <select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Car Model Years"
+                    name="car_model_year"
+                    className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1036,10 +1122,11 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelYearChange}
-                >
-                  <option>{filteredResults[0]?.car_year}</option>
-                </select>
+                    onChange={onCarModelYearChange}
+                  >
+                    <option>{filteredResults[0]?.car_year}</option>
+                  </select>
+                </>
               )}
             </FormControl>
           </GridItem>
@@ -1135,17 +1222,13 @@ export default function CarUpload() {
                     name="car_body_type"
                     onChange={onCarBodyTypeChange}
                   >
-                    {/* {filteredResults
-                  ? filteredResults?.body_name
-                  : carBodyTypes.map((l, index) => {
+                    {carBodyTypes.map((l, index) => {
                       return (
                         <MenuItem key={index} value={l.id}>
                           {l.body_name}
                         </MenuItem>
                       );
-                    })} */}
-
-                    <MenuItem value={filteredResults[0]?.body_name}></MenuItem>
+                    })}
                   </Select>
                 </>
               ) : (
@@ -1169,7 +1252,7 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarModelYearChange}
+                  onChange={onCarBodyTypeChange}
                 >
                   <option>{filteredResults[0]?.body_name}</option>
                 </select>
@@ -1524,6 +1607,19 @@ export default function CarUpload() {
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={4}>
+            {loading && (
+              <div className={classes.buttonLoader}>
+                <Fade
+                  in={loading}
+                  style={{
+                    transitionDelay: loading ? "800ms" : "0ms",
+                  }}
+                  unmountOnExit
+                >
+                  <CircularProgress />
+                </Fade>
+              </div>
+            )}
             <Button
               variant="contained"
               color="inherit"
