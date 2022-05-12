@@ -1,3 +1,6 @@
+/**
+ * TODO SUSPECT UNUSED
+ */
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -15,6 +18,7 @@ import Cryptr from "cryptr";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 function LoginPage(props) {
+  const cryptr = new Cryptr(process.env.NEXT_PUBLIC_BG_API_SECRET_KEY);
   const router = useRouter();
   const { data: session } = useSession();
   const [contact_number, setContact_number] = useState("");
@@ -65,7 +69,8 @@ function LoginPage(props) {
       }
 
       // We expect the user to already have the username/password
-      // TODO handle registration here?
+      // TODO handle registration here
+      // TODO change the API endpoint to ENV VAR
       await axios
         .post("https://backend.bhalogari.com/api/user/verify-password/", {
           contact_number: contact_number,
@@ -73,9 +78,8 @@ function LoginPage(props) {
           // user_email: user_mail1,
         })
         .then((res) => {
-          console.log(res);
-          if (res.status === 200) {
-            console.log(res);
+          console.log("Success Loading",res);
+          if (res.status === 200) { // TODO need to change 200 code?
             setStatus("password matched");
             const encryptedToken = cryptr.encrypt(res.data.token.access);
             window.localStorage.setItem("access_token", encryptedToken);

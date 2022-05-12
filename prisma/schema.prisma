@@ -1099,6 +1099,12 @@ model UsersApp_otpmodel {
   updated_at     DateTime @db.Timestamptz(6)
 }
 
+model user_session {
+  id            String  @id
+  access_token  String
+  refresh_token String?
+}
+
 model auth_group {
   id                         Int                          @id @default(autoincrement())
   name                       String                       @unique @db.VarChar(150)
@@ -1210,6 +1216,7 @@ model MerchantStorefront_package {
   created_at                        DateTime                            @db.Timestamptz(6)
   updated_at                        DateTime                            @db.Timestamptz(6)
   created_by_id                     BigInt?
+  price                             String?                             @db.VarChar(25)
   UsersApp_customuser               UsersApp_customuser?                @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_1a5f9d64_fk_UsersApp_")
   MerchantStorefront_packagedetails MerchantStorefront_packagedetails[]
   MerchantStorefront_paymenthistory MerchantStorefront_paymenthistory[]
@@ -1225,6 +1232,8 @@ model MerchantStorefront_packagedetails {
   updated_at                 DateTime                    @db.Timestamptz(6)
   created_by_id              BigInt?
   package_id_id              BigInt?
+  amount                     String?                     @db.VarChar(20)
+  price                      String?                     @db.VarChar(25)
   UsersApp_customuser        UsersApp_customuser?        @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_0d503119_fk_UsersApp_")
   MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_bdfbe02a_fk_MerchantS")
 
@@ -1278,10 +1287,4 @@ model CarsApp_carapprovallog {
 
   @@index([approved_by_id], map: "CarsApp_carapprovallog_approved_by_id_18d93341")
   @@index([car_id_id], map: "CarsApp_carapprovallog_car_id_id_b1288272")
-}
-
-model user_session {
-  id            String  @id
-  access_token  String
-  refresh_token String?
 }
