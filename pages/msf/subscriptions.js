@@ -48,7 +48,7 @@ function Subscriptions() {
     })();
 },[])
 
-  console.log("Packages =>", packages);
+//   console.log("Packages =>", packages);
 
 // console.log("package Informations =>", details);
   
@@ -86,7 +86,15 @@ function Subscriptions() {
 
                                     <CardHeader>
                                         <div className="-mt-5 text-center font-bold text-[#f06424]">
-                                            <p className="text-4xl">TK. 500</p>
+                                        {
+                                                    packages.slice(0,1).map((item,index) => {
+                                                        return (
+                                                            <>
+                                                              <p className="text-4xl">TK. {item.price}</p>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
                                             <p className="text-2xl">Per Ad Post</p>
                                         </div>
                                     </CardHeader>
@@ -156,7 +164,17 @@ function Subscriptions() {
 
                                     <CardHeader>
                                         <div className="-mt-5 text-center font-bold text-[#f06424]">
-                                            <p className="text-4xl">TK. 12,000</p>
+                                            {
+                                                    packages.map((item,index) => {
+                                                        if(item.id === 2){
+                                                            return (
+                                                                <>
+                                                                  <p className="text-4xl">TK. {item.price}</p>
+                                                                </>
+                                                            )
+                                                        }
+                                                    })
+                                            }
                                             <p className="text-2xl">Per Month</p>
                                         </div>
                                     </CardHeader>
@@ -230,7 +248,17 @@ function Subscriptions() {
 
                                     <CardHeader>
                                         <div className="-mt-5 text-center font-bold text-[#f06424]">
-                                            <p className="text-4xl">TK. 20,000</p>
+                                            {
+                                                    packages.map((item,index) => {
+                                                        if(item.id === 3){
+                                                            return (
+                                                                <>
+                                                                  <p className="text-4xl">TK. {item.price}</p>
+                                                                </>
+                                                            )
+                                                        }
+                                                    })
+                                            }
                                             <p className="text-2xl">Per Month</p>
                                         </div>
                                     </CardHeader>
