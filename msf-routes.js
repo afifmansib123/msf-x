@@ -45,7 +45,7 @@ const dashboardRoutes = [
   //   icon: "content_paste",
   //   layout: "/msf",
   // },
- 
+
   {
     path: "/listing",
     name: "Listing",
@@ -94,7 +94,6 @@ const dashboardRoutes = [
 
     layout: "/msf",
   },
-  
 ];
 
 export default dashboardRoutes;
