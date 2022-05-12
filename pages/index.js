@@ -1,51 +1,23 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { signIn, useSession } from "next-auth/react";
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "react-query";
-import LoginForm from "/components/LoginForm";
-import TopBar from "../../components/TopBar/TopBar";
-
+import Login from "../components/Login/Login";
+import TopBar from "../components/TopBar/TopBar";
 
 function Index(props) {
-  // const { landingPage } = props;
-  // const { data: session } = useSession();
-  // const [error, setError] = useState("");
-  const router = useRouter();
-  const { error } = router.query
-  // Only for CSR
-  // const queryClient = useQueryClient()
-  // const query = useQuery('todos', getTodos)
-
-  React.useEffect(() => {
-    // Router.push("/admin/dashboard");
-    if (router.query["error"] == "SessionRequired") {
-      console.log(router.query);
-    }
-  }, []);
-
-  const handleSignIn = (cred) => {
-    console.log("Index handleSignIn", cred);
-    signIn("credentials", {
-      username: cred.username,
-      password: cred.password,
-      callbackUrl: "/msf/dashboard",
-    }).then((ret) => {
-      console.log("RET", ret);
-    });
-  };
-
-  // TODO Show default MSF page
-
   return (
     <div className="">
-      <TopBar/>
-      {error && <div><h1>Error</h1><p>{error}</p></div>}
-      <h1 className="text-2xl text-green p-10">Merchant Storefront</h1>
-      <div className="grid grid-cols-1">
-        <LoginForm title="Member Signin" onSignIn={handleSignIn} />
-      </div>
-      <Link href="/"><h1 className="text-2xl text-green p-10">Back to Store</h1></Link>
+      <TopBar></TopBar>
+      {/* <h1 className="font-bold text-3xl">Bhalogari Merchant Storefront</h1>
+      Sell Your Cars Like a Pro!
+      <ul>
+        <li>
+          <Link href="/msf">Merchant Storefront</Link>
+        </li>
+        <li>
+          <Link href="/admin">BG Admin Panel</Link>
+        </li>
+      </ul> */}
+      <Login />
     </div>
   );
 }
