@@ -86,7 +86,7 @@ const dashboardRoutes = [
     layout: "/msf",
   },
   {
-    path: "/user-profile",
+    path: "/profile",
     name: "User Profile",
     icon: Person,
 
