@@ -11,10 +11,11 @@ import { PrismaClient } from "@prisma/client";
 
 export default NextAuth({
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/msf",
     // signIn: "/",
     // signOut: '/auth/signout',
-    error: "/auth/error", // Error code passed in query string as ?error=
+    // error: "/auth/error", // Error code passed in query string as ?error=
+    error: "/", // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
@@ -57,23 +58,24 @@ export default NextAuth({
         // Call BG API to verify the credential
         // const res = await axios.post("https://backend.bhalogari.com/api/user/verify-password/", {
         const authenticationURL = `${process.env.NEXT_PUBLIC_BG_API}user/verify-password/`;
-        console.log("authenticationURL", authenticationURL,{username,password});
+        console.log("authenticationURL", authenticationURL, { username, password });
 
         let res;
         try {
-
           res = await axios.post(authenticationURL, {
             contact_number: username,
             password: password,
             // user_email: user_mail1,
           });
-        } catch(err) {
-          console.error("Axios",err)
+        } catch (err) {
+          // console.error("Axios", err.response);
+          const { response } = err;
+          console.error("Axios", response.status, response.statusText, response.data);
         }
 
-        console.log("res",res)
+        // console.log("res", res.status, res.statusText);
 
-        if (res.status === 200) {
+        if (res.status && res.status === 200) {
           const { data } = res;
           console.log("NextAuth Authenticated", data);
           // JWT cannot add other info into it?
@@ -113,11 +115,6 @@ export default NextAuth({
           }
 
           console.log("3...");
-
-          // const cryptr = new Cryptr(process.env.NEXT_PUBLIC_BG_API_SECRET_KEY);
-          // const encryptedToken = cryptr.encrypt(data.token.access);
-          // window.localStorage.setItem("access_token", encryptedToken);
-          // window.localStorage.setItem("user_id", data.id);
 
           // Any object returned will be saved in `user` property of the JWT
           //backend.bhalogari.com/api/user/profile/?user_id=22
