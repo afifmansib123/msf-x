@@ -6,7 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    fontFamily: {
+      sans: ["open sans"],
+    },
   },
   // purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   plugins: [],
-}
+};

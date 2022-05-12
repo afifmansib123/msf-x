@@ -1,23 +1,15 @@
-import React, {useState, useMemo} from "react";
-// import axios from "axios";
-import PropTypes from "prop-types";
-import {useQuery} from "react-query";
-
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-
 // react plugin for creating charts
 import makeStyles from "@mui/styles/makeStyles";
-
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import GridContainer from "components/Grid/GridContainer.js";
 // core components
 import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import React, { useState } from "react";
 
 export default function BasicInfo() {
   const [carType, setCarType] = useState();
@@ -81,7 +73,7 @@ export default function BasicInfo() {
   const getYears = () => {
     const arr = [];
     for (let i = new Date().getFullYear(); i >= 1971; i--) {
-      arr.push({id: i, year: i});
+      arr.push({ id: i, year: i });
     }
     return arr;
   };
@@ -96,7 +88,10 @@ export default function BasicInfo() {
       setCarRegYears(getYears());
       setIsRegYear(true);
       setIsUsed(true);
-    } else if (e.target.name === "car_type" && (e.target.value === 1 || e.target.value === 3)) {
+    } else if (
+      e.target.name === "car_type" &&
+      (e.target.value === 1 || e.target.value === 3)
+    ) {
       setIsRegYear(false);
       setIsUsed(false);
     }
@@ -106,17 +101,16 @@ export default function BasicInfo() {
     setCarMaker(e.target.value);
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${name}`)
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}api/cars/model-list/?maker_name=${name}`
+        );
         const json = await response.json();
         if (response.status === 200) {
           setCarModels(json.result);
           setCarModelYears(getYears());
         } else {
-
         }
-      } catch (err) {
-
-      }
+      } catch (err) {}
     })();
   };
   const onCarModelChange = (e) => {
@@ -144,9 +138,13 @@ export default function BasicInfo() {
   React.useEffect(() => {
     (async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/car-type/`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/car-type/`
+        );
         const json = await response.json();
-        let response1 = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/car-manufacturer/`);
+        let response1 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/car-manufacturer/`
+        );
         const json1 = await response1.json();
         setCarTypes(json);
         setCarMakers(json1);
@@ -172,12 +170,14 @@ export default function BasicInfo() {
             onChange={onCarTypeChange}
           >
             {carTypes.map((l, index) => {
-              return <MenuItem key={index}
-                               value={l.type_id}>{l.type_name}</MenuItem>;
+              return (
+                <MenuItem key={index} value={l.type_id}>
+                  {l.type_name}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
-
       </GridItem>
       <GridItem item xs={12}>
         <FormControl className="w-full">
@@ -190,13 +190,18 @@ export default function BasicInfo() {
             // onChange={onCarMakerChange}
           >
             {carMakers.map((l, index) => {
-              return <MenuItem key={index} value={l.maker_id}
-                               onClick={(event) => onCarMakerChange(event, l.maker_name)}
-              >{l.maker_name}</MenuItem>;
+              return (
+                <MenuItem
+                  key={index}
+                  value={l.maker_id}
+                  onClick={(event) => onCarMakerChange(event, l.maker_name)}
+                >
+                  {l.maker_name}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
-
       </GridItem>
       <GridItem item xs={12}>
         <FormControl className="w-full">
@@ -209,12 +214,14 @@ export default function BasicInfo() {
             onChange={onCarModelChange}
           >
             {carModels.map((l, index) => {
-              return <MenuItem key={index}
-                               value={l.model_id}>{l.model_name}</MenuItem>;
+              return (
+                <MenuItem key={index} value={l.model_id}>
+                  {l.model_name}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
-
       </GridItem>
       <GridItem item xs={12}>
         <TextField
@@ -238,8 +245,11 @@ export default function BasicInfo() {
             onChange={onCarModelYearChange}
           >
             {carModelYears.map((l, index) => {
-              return <MenuItem key={index}
-                               value={l.id}>{l.year}</MenuItem>;
+              return (
+                <MenuItem key={index} value={l.id}>
+                  {l.year}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
@@ -247,7 +257,9 @@ export default function BasicInfo() {
       {isRegYear && (
         <GridItem item xs={12}>
           <FormControl className="w-full">
-            <InputLabel id="demo-simple-select-label">Registration Year</InputLabel>
+            <InputLabel id="demo-simple-select-label">
+              Registration Year
+            </InputLabel>
 
             <Select
               labelId="demo-simple-select-label"
@@ -257,8 +269,11 @@ export default function BasicInfo() {
               onChange={onCarRegYearChange}
             >
               {carRegYears.map((l, index) => {
-                return <MenuItem key={index}
-                                 value={l.id}>{l.year}</MenuItem>;
+                return (
+                  <MenuItem key={index} value={l.id}>
+                    {l.year}
+                  </MenuItem>
+                );
               })}
             </Select>
           </FormControl>

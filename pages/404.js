@@ -1,5 +1,6 @@
 import React from "react";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function _error() {
   // React.useEffect(() => {
@@ -12,6 +13,7 @@ export default function _error() {
     <div>
       <h1>404</h1>
       <p>{error}</p>
+      <Link href="/">Back to store</Link>
     </div>
   );
 }
