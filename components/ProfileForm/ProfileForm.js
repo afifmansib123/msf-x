@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import proImage from "../../assets/img/profile/add-picture.svg";
 import axios from "axios";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
 
 const useStyles = makeStyles((theme) => ({
       rootBox: {
@@ -86,7 +86,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
             setUserimg(URL.createObjectURL(e.target.files[0]));
       }
       const onSubmit = async (userData) => {
-            console.log(userData);
+            
 
             let formData = new FormData();
             formData.append("image", img );
@@ -103,10 +103,9 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
             formData.append("tin_number", userData.tin_number);
             formData.append("address", userData.address);
 
-            console.log(formData);
             const token = session.accessToken;
             try {
-                  const response = await axios.patch(`${process.env.NEXT_PUBLIC_LOCAL_API}api/user/profile/update/${userID}/`, formData,
+                  const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, formData,
                         {
                               headers: {
                                     Authorization: `Bearer ${token}`,
@@ -117,7 +116,10 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
             } catch (error) {
                   console.log(error);
             }
-            // handleEdit(false);
+            if(response == '200'){
+                  handleEdit(false);
+            }
+            
       };
       return (
             <div className={classes.rootBox}>
