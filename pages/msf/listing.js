@@ -16,7 +16,7 @@ const listing = ({ data }) => {
   // const { data: session, status } = useSession();
   // console.log("Session Status", status);
 
-  // fetch(`${process.env.NEXT_PUBLIC_BG_API}api/cars/user-car-list/${id}`)
+  // fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/${id}`)
   //     .then((res) => res.json())
   //     .then((data) => {
   //       setItems(data);
@@ -41,7 +41,7 @@ export async function getServerSideProps() {
   const session = await getSession();
   console.log(session);
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BG_API}api/cars/user-car-list/41/?format=json`
+    `${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/41/?format=json`
   );
   const data = await res.json();
   console.table(data);

@@ -119,7 +119,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
 
                   const token = session.accessToken;
                   try {
-                        const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, formData,
+                        const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}user/profile/update/${userID}/`, formData,
                               {
                                     headers: {
                                           Authorization: `Bearer ${token}`,

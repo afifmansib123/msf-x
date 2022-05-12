@@ -102,7 +102,7 @@ export default function BasicInfo() {
     (async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BG_API}api/cars/model-list/?maker_name=${name}`
+          `${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${name}`
         );
         const json = await response.json();
         if (response.status === 200) {
