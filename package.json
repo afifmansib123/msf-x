@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-material-dashboard",
+  "name": "bhalogari-msf",
   "version": "1.1.2",
   "private": true,
   "scripts": {
@@ -7,6 +7,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "update-schema": "prisma db pull",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && rm -rf .next/ && npm install && npm run dev",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
