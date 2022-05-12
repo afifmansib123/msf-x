@@ -1205,7 +1205,7 @@ export default function CarUpload() {
                     type="text"
                     id="engine_number"
                     defaultValue={filteredResults[0]?.engines_number}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="  border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 "
                     placeholder="Enter Engine Number"
                     required
                   />
@@ -1306,7 +1306,7 @@ export default function CarUpload() {
               <>
                 <label
                   for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900"
                 >
                   Engine Number
                 </label>
@@ -1314,8 +1314,8 @@ export default function CarUpload() {
                   type="text"
                   id="engine_number"
                   defaultValue={filteredResults[0]?.engines_number}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
+                  className="  border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 "
+                  placeholder=" Enter Engine Number"
                   required
                 />
               </>
@@ -1403,7 +1403,7 @@ export default function CarUpload() {
                   type="text"
                   id="engine_number"
                   defaultValue={filteredResults[0]?.mileage}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="  border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 "
                   placeholder="Enter Engine Number"
                   required
                 />
@@ -1428,13 +1428,13 @@ export default function CarUpload() {
                   for="email"
                   className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
-                  Mileage
+                  Enter No of Seats
                 </label>
                 <input
                   type="text"
                   id="engine_number"
                   defaultValue={filteredResults[0]?.no_of_seat}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="  border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 "
                   placeholder="Enter Engine Number"
                   required
                 />
@@ -1532,7 +1532,7 @@ export default function CarUpload() {
                     for="email"
                     className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Transmission
+                    Car Fuel Type
                   </label>
                   <select
                     labelId="demo-simple-select-label"

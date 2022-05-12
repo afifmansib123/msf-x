@@ -4,11 +4,10 @@
     {
       "_id": "01",
       "maker_name": [
-        "chrysler",
+        "Nissan",
         "Toyota",
         "Honda",
         "Mitsubishi",
-        "Nissan",
         "Hyundai",
         "Kia",
         "BMW",
@@ -77,10 +76,9 @@
     {
       "_id": "02",
       "maker_name": [
-        "chrysler",
+        "Mitsubishi",
         "Toyota",
         "Honda",
-        "Mitsubishi",
         "Nissan",
         "Hyundai",
         "Kia",
@@ -144,7 +142,6 @@
     {
       "_id": "03",
       "maker_name": [
-        "chrysler",
         "Toyota",
         "Honda",
         "Mitsubishi",
@@ -192,7 +189,7 @@
         "Kizashi",
         "Baleno"
       ],
-      "body_name": "1",
+      "body_name": "sedan",
       "body_image": "image-url",
       "no_of_seat": "5",
       "transmission_type": "automatic",
@@ -282,9 +279,8 @@
     {
       "_id": "05",
       "maker_name": [
-        "chrysler",
-        "Toyota",
         "Honda",
+        "Toyota",
         "Mitsubishi",
         "Nissan",
         "Hyundai",
