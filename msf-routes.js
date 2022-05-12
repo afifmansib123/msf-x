@@ -22,10 +22,10 @@ import LibraryBooks from "@mui/icons-material/LibraryBooks";
 import BubbleChart from "@mui/icons-material/BubbleChart";
 import LocationOn from "@mui/icons-material/LocationOn";
 import Notifications from "@mui/icons-material/Notifications";
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import Unarchive from "@mui/icons-material/Unarchive";
 import Language from "@mui/icons-material/Language";
-import Car from '@mui/icons-material/DirectionsCar';
+import Car from "@mui/icons-material/DirectionsCar";
 
 const dashboardRoutes = [
   {
@@ -40,16 +40,18 @@ const dashboardRoutes = [
     icon: Notifications,
     layout: "/msf",
   },
+  // {
+  //   path: "/listings",
+  //   name: "Listings",
+  //   icon: "content_paste",
+  //   layout: "/msf",
+  // },
+
   {
-    path: "/listings",
-    name: "Listings",
-    icon: "content_paste",
-    layout: "/msf",
-  },
-  {
-    path: "/customers",
-    name: "Customers",
-    icon: "content_paste",
+    path: "/listing",
+    name: "Listing",
+    icon: Car,
+
     layout: "/msf",
   },
   {
@@ -57,7 +59,7 @@ const dashboardRoutes = [
     name: "Subscriptions",
     icon: SubscriptionsIcon,
     layout: "/msf",
-  },  
+  },
   {
     path: "/upload",
     name: "Upload",
@@ -86,15 +88,8 @@ const dashboardRoutes = [
     layout: "/msf",
   },
   {
-    path: "/user-profile",
+    path: "/profile",
     name: "User Profile",
-    icon: Person,
-
-    layout: "/msf",
-  },
-  {
-    path: "/sellNow",
-    name: "Sell Now",
     icon: Person,
 
     layout: "/msf",
