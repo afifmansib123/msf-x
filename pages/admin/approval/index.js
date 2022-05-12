@@ -438,5 +438,6 @@ async function getPendingApprove() {
 }
 
 Index.layout = Admin;
+// Index.auth = true;
 
 export default Index;

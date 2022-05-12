@@ -18,7 +18,7 @@ function DetailCarLog(props) {
   const inputElement = React.useRef();
   const selectedCar = props.car;
   const router = useRouter();
-  console.log(parseInt(router.query.id))
+
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {
       return <p>None</p>;
@@ -270,7 +270,6 @@ export async function getServerSideProps(context) {
 }
 
 async function handleApprove(review_string, approval_id, car_id) {
-  console.log(car_id)
   const response = await fetch("http://localhost:3000/api/approve-log/review", {
     method: "POST",
     headers: {
@@ -290,8 +289,7 @@ async function handleApprove(review_string, approval_id, car_id) {
 }
 
 async function handleReject(review_string, approval_id, car_id) {
-  console.log(car_id)
-  const response = await fetch("http://localhost:3000/api/approve-log/review", {
+  const response = await fetch("/api/approve-log/review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

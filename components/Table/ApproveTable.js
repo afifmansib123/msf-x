@@ -59,37 +59,40 @@ function CarApproveLog(props) {
   });
 
   const CarCard = ({ data, status }) => {
-    // console.log("Card", data);
-    if (!data) return <>No Data</>;
-    return (
-      <div className="grid grid-cols-1">
-        <div className="flex flex-row">
-          <img src={data.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
-          <div className="">
-            <h1 className="font-medium text-lg my-2">{data.carName}</h1>
-            <div className="mt-10">
-              <span className="font-medium mr-4">Requested Name:</span>
-              <span>{data.Merchant_Name}</span>
+    if (data === null || !data || data.length === 0) {
+      return <h2 className="text-black">No Data</h2>
+    } else {
+      return (
+          <div className="grid grid-cols-1">
+            <div className="flex flex-row">
+              <img src={data.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
+              <div className="">
+                <h1 className="font-medium text-lg my-2">{data.carName}</h1>
+                <div className="mt-10">
+                  <span className="font-medium mr-4">Requested Name:</span>
+                  <span>{data.Merchant_Name}</span>
+                </div>
+                <div>
+                  <span className="font-medium mr-4">Request Date:</span>
+                  <span>{data.create_at}</span>
+                </div>
+                <Button
+                    variant="outlined"
+                    onClick={() => {
+                      onClickedHistoryBtn(data.carId);
+                    }}
+                >
+                  History
+                </Button>
+                <CusButton disabled round color="warning" size="sm">
+                  {status}
+                </CusButton>
+              </div>
             </div>
-            <div>
-              <span className="font-medium mr-4">Request Date:</span>
-              <span>{data.create_at}</span>
-            </div>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                onClickedHistoryBtn(data.carId);
-              }}
-            >
-              History
-            </Button>
-            <CusButton disabled round color="warning" size="sm">
-              {status}
-            </CusButton>
           </div>
-        </div>
-      </div>
-    );
+      );
+    }
+
   };
   const pendingActivityLogCard = () => {
     return props.pendingTab.map((v) => {

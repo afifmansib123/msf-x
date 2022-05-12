@@ -7,15 +7,12 @@ export default async function handler(req, res) {
       const data = await createData(parseInt(req.body.car_id));
       res.status(200).json("sucessful");
     } else if (req.method === "GET") {
-      console.log("getPending()");
       const dataGet = await getPending();
-      console.table(dataGet);
       res.status(200).json(dataGet);
     } else {
       throw new Error("No body");
     }
   } catch (e) {
-    console.log("error case");
     res.status(400).json({
       error: e,
       result: null,
@@ -40,40 +37,6 @@ async function createData(car_id) {
   return car_approve;
 }
 export async function getPending() {
-  //   var data = await prisma.CarsApp_carapprovallog.groupBy({
-  //     by: ["car_id_id", "status", "created_at"],
-  //     orderBy: {
-  //       created_at: "desc",
-  //     },
-  //     where: {
-  //       status: { in: ["A", "R"] },
-  //     },
-  //   });
-
-  //   const parsedData = JSON.parse(
-  //     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-  //   );
-  //   var approved_id_data = parsedData.map((v) => {
-  //     return parseInt(v.car_id_id);
-  //   });
-
-  //   var filter_non_approve = await prisma.CarsApp_carapprovallog.groupBy({
-  //     by: ["car_id_id", "status"],
-  //     where: {
-  //       car_id_id: {
-  //         notIn: approved_id_data,
-  //       },
-  //       status: "P",
-  //     },
-  //   });
-  //   const endResult = JSON.parse(
-  //     JSON.stringify(filter_non_approve, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-  //   );
-
-  //   const id = endResult.map((v) => {
-  //     return parseInt(v.car_id_id);
-  //   });
-
   var data = await prisma.CarsApp_carapprovallog.groupBy({
     by: ["car_id_id", "status", "created_at"],
     orderBy: {

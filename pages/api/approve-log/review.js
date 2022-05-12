@@ -30,7 +30,7 @@ async function updateApprove({review_string, approval_id, car_id, status}) {
         },
     });
     const parsed_data = JSON.parse(JSON.stringify(lastest_record, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
-    console.log(parsed_data);
+
     const car_approve = await prisma.CarsApp_carapprovallog.update({
         where: {
             id: parseInt(parsed_data.id)
