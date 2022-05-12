@@ -11,7 +11,7 @@ import UploadedCarsList from "../../components/UploadedCarsList/UploadedCarsList
 const listing = ({ data }) => {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-  // const [items, setItems] = useState([]);
+  // const [item, setItem] = useState([]);
 
   // const { data: session, status } = useSession();
   // console.log("Session Status", status);
