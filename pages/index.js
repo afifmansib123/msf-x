@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Login from "../components/Login/Login";
 import TopBar from "../components/TopBar/TopBar";
@@ -20,6 +20,15 @@ function Index(props) {
       <Login />
     </div>
   );
+}
+
+export async function getStaticProps(context) {
+  // console.log("LANDING_PAGE", process.env.LANDING_PAGE);
+  return {
+    props: {
+      // landingPage: process.env.LANDING_PAGE ? process.env.LANDING_PAGE : null,
+    },
+  };
 }
 
 export default Index;
