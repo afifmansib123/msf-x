@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import ProfileImg from "../../assets/img/profile/profile-default.svg";
 
 const ProfileView = ({ data }) => {
@@ -10,9 +10,9 @@ const ProfileView = ({ data }) => {
                         <div className="flex justify-center">
                               <div className="-mt-24">
                                     {/* <Image src={data?.image_url == null ? ProfileImg : data.image_url} alt={ProfileImg}/> */}
-                                    <Image
+                                    <img
                                           //   loader={myLoader}
-                                          src={data?.image_url == null ? ProfileImg : data.image_url}
+                                          src={data.image ? data.image : ProfileImg}
                                           alt="Profile Image"
                                           width={125}
                                           height={125}

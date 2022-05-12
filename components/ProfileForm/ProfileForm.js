@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import Image from 'next/image';
+// import Image from 'next/image';
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -79,47 +79,63 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
       const { data: session, status } = useSession();
       const [img, setImg] = useState();
       const [userimg, setUserimg] = useState(proImage);
-      console.log(img);
-      
+      const [errorText, setErrorText] = useState("");
+      let okay = false;
+
+
       const handleImage = e => {
             setImg(e.target.files[0]);
             setUserimg(URL.createObjectURL(e.target.files[0]));
       }
       const onSubmit = async (userData) => {
-            
-
             let formData = new FormData();
-            formData.append("image", img );
-            formData.append("first_name", userData.first_name);
-            formData.append("last_name", userData.last_name);
-            formData.append("contact_number", userData.contact_number);
-            formData.append("email", userData.email);
-            formData.append("date_of_birth", userData.date_of_birth);
-            formData.append("gender", userData.gender);
-            formData.append("post_code", userData.post_code);
-            formData.append("user_district", userData.user_district);
-            formData.append("nid_number", userData.nid_number);
-            formData.append("country", userData.country);
-            formData.append("tin_number", userData.tin_number);
-            formData.append("address", userData.address);
 
-            const token = session.accessToken;
-            try {
-                  const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}api/user/profile/update/${userID}/`, formData,
-                        {
-                              headers: {
-                                    Authorization: `Bearer ${token}`,
-                                    "Content-Type": "multipart/form-data"
-                              },
-                        })
-                  console.log(response);
-            } catch (error) {
-                  console.log(error);
+            var regex = /(^(\+8801|01))?[3-9]{1}(\d){8}/;
+
+            if (regex.test(userData.contact_number) && (userData.contact_number.length == 11 || userData.contact_number.length == 14)) {
+
+                  formData.append("contact_number", userData.contact_number);
+                  setErrorText("");
+                  okay = true;
+            } else {
+                  setErrorText("Phone number not valid");
+                  okay = false;
             }
-            if(response == '200'){
-                  handleEdit(false);
+
+            // console.log("I am being triggered", okay);
+            if (okay == true) {
+                  formData.append("image", img);
+                  formData.append("first_name", userData.first_name);
+                  formData.append("last_name", userData.last_name);
+                  formData.append("email", userData.email);
+                  formData.append("date_of_birth", userData.date_of_birth);
+                  formData.append("gender", userData.gender);
+                  formData.append("post_code", userData.post_code);
+                  formData.append("user_district", userData.user_district);
+                  formData.append("nid_number", userData.nid_number);
+                  formData.append("country", userData.country);
+                  formData.append("tin_number", userData.tin_number);
+                  formData.append("address", userData.address);
+
+                  const token = session.accessToken;
+                  try {
+                        const response = await axios.patch(`${process.env.NEXT_PUBLIC_LOCAL_API}api/user/profile/update/${userID}/`, formData,
+                              {
+                                    headers: {
+                                          Authorization: `Bearer ${token}`,
+                                          "Content-Type": "multipart/form-data"
+                                    },
+                              })
+                        if (response.status == '200') {
+                              alert("Profile Updated");
+                              handleEdit(false);
+                        }
+                  } catch (error) {
+                        console.log(error);
+                  }
             }
-            
+
+
       };
       return (
             <div className={classes.rootBox}>
@@ -130,9 +146,9 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                                     <form onSubmit={handleSubmit(onSubmit)}>
                                           <div className={classes.profileImage}>
                                                 <label for="file-input">
-                                                      <Image
-                                                      layout='fill'
-                                                            src={data.image? data.image : userimg}
+                                                      <img
+                                                            layout='fill'
+                                                            src={data.image ? data.image : userimg}
                                                             alt="Profile Image"
                                                             className={classes.image}
                                                       />
@@ -168,10 +184,11 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                                                       required
                                                       id="outlined-required"
                                                       name="contact_number"
-                                                      type="number"
+                                                      type="text"
                                                       label="Your Mobile Number"
-                                                      defaultValue={parseInt(data.contact_number)}
+                                                      defaultValue={data.contact_number}
                                                       helpertext={data.contact_number}
+                                                      error={errorText}
                                                       {...register("contact_number")}
                                                 />
                                                 <TextField
