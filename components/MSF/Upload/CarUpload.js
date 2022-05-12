@@ -1,6 +1,6 @@
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import AddAlert from "@mui/icons-material/AddAlert";
-// @mui/icons-material
+// @mui/icons-material /////
 import Car from "@mui/icons-material/DirectionsCar";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
