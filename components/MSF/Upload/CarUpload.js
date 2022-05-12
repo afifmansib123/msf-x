@@ -1,6 +1,6 @@
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import AddAlert from "@mui/icons-material/AddAlert";
-// @mui/icons-material /////
+// @mui/icons-material
 import Car from "@mui/icons-material/DirectionsCar";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -99,15 +99,15 @@ export default function CarUpload() {
   const [carDrive, setCarDrive] = useState();
 
   const [jsonData, setJsonData] = useState([]);
-  const [filteredResults, setFilteredResults] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
   const searchItems = (searchValue) => {
-    const filteredData = jsonData?.chassis_number_prefix?.filter((item) => {
+    const filteredData = jsonData?.chassis_number_prefix.filter((item) => {
       return Object.values(item)
         .join("")
         .toLowerCase()
         .includes(searchValue.toLowerCase());
     });
-    // setCarBodyType(parseInt(filteredData[0]?.body_name));
+    setCarBodyType(parseInt(filteredData[0].body_name));
     setFilteredResults(filteredData);
   };
   console.log(filteredResults);
