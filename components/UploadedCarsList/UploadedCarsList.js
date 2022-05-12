@@ -7,7 +7,7 @@ import Used from "../../assets/carListPageIcons/transmission.svg";
 import taka from "../../assets/carListPageIcons/taka.fb378b29.svg";
 import Image from "next/image";
 
-const SellCar = ({ data }) => {
+const UploadedCarsList = ({ data }) => {
   const {
     car_manufacturer,
     images,
@@ -104,4 +104,4 @@ const SellCar = ({ data }) => {
   );
 };
 
-export default SellCar;
+export default UploadedCarsList;

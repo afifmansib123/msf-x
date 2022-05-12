@@ -23,11 +23,6 @@ function Storefront() {
   console.log("Session Status", status);
   // if (typeof window !== "undefined" && status) return null;
 
-  // If no session exists, display access denied message
-  if (!session) {
-    return <AccessDenied />;
-  }
-
   // If session exists, display content
   console.log("MSF HomePage", session);
 
@@ -40,7 +35,7 @@ function Storefront() {
     // const access_token = localStorage.getItem("access_token");
     // const token = cryptr.decrypt(access_token);
     console.log("Sessoin Info", session);
-    alert("See session info in Dev Console")
+    alert("See session info in Dev Console");
   };
 
   return (

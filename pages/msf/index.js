@@ -19,7 +19,6 @@ function Index(props) {
   React.useEffect(() => {
     // Router.push("/admin/dashboard");
     if (router.query["error"] == "SessionRequired") {
-      setError("Must Login");
       console.log(router.query);
     }
   }, []);
