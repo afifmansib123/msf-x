@@ -1197,6 +1197,7 @@ export default function CarUpload() {
               </FormControl>
             </GridItem>
           )}
+
           {!isUsed && (
             <GridItem item xs={12}>
               {filteredResults == 0 ? (
