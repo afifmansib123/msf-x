@@ -48,7 +48,7 @@ function Subscriptions() {
     })();
 },[])
 
-//   console.log("Packages =>", packages);
+  console.log("Packages =>", packages);
 
 // console.log("package Informations =>", details);
   
@@ -140,13 +140,15 @@ function Subscriptions() {
                                     >
                                         <CardHeader className="text-2xl font-bold text-center">
                                                 {
-                                                    packages.slice(1,2).map((item,index) => {
-                                                        return (
-                                                            <>
-                                                              <p>{item.description}</p>
-                                                              <p>({item.package_name})</p>
-                                                            </>
-                                                        )
+                                                    packages.map((item,index) => {
+                                                        if(item.id === 2){
+                                                            return (
+                                                                <>
+                                                                  <p>{item.description}</p>
+                                                                  <p>({item.package_name})</p>
+                                                                </>
+                                                            )
+                                                        }
                                                     })
                                                 }
                                         </CardHeader>
@@ -212,13 +214,15 @@ function Subscriptions() {
                                     >
                                         <CardHeader className="text-2xl font-bold text-center">
                                                 {
-                                                    packages.slice(2,3).map((item,index) => {
-                                                        return (
-                                                            <>
-                                                              <p>{item.description}</p>
-                                                              <p>({item.package_name})</p>
-                                                            </>
-                                                        )
+                                                    packages.map((item,index) => {
+                                                        if(item.id === 3){
+                                                            return (
+                                                                <>
+                                                                  <p>{item.description}</p>
+                                                                  <p>({item.package_name})</p>
+                                                                </>
+                                                            )
+                                                        }
                                                     })
                                                 }
                                         </CardHeader>
