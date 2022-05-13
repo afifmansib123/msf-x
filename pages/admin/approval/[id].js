@@ -11,6 +11,7 @@ import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle";
 import prisma from "PrismaConnect";
 import CardHeader from "components/Card/CardHeader";
 import Admin from "layouts/Admin.js";
+import { useSession } from "next-auth/react";
 
 function DetailCarLog(props) {
   const useStyles = makeStyles(styles);
@@ -18,6 +19,12 @@ function DetailCarLog(props) {
   const inputElement = React.useRef();
   const selectedCar = props.car;
   const router = useRouter();
+  const { data: session, status } = useSession();
+  console.log("useSession", session);
+  const { token } = session;
+  const { id } = token;
+
+  console.log("User ID", id);
 
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {
@@ -52,10 +59,10 @@ function DetailCarLog(props) {
 
     try {
       if (type === "approve") {
-        await handleApprove(reason, 1, parseInt(router.query.id));
+        await handleApprove(reason, id, parseInt(router.query.id));
         await router.push(`/admin/approval/`);
       } else {
-        await handleReject(reason, 1, parseInt(router.query.id));
+        await handleReject(reason, id, parseInt(router.query.id));
         await router.push(`/admin/approval/`);
       }
     } catch (e) {
@@ -270,7 +277,7 @@ export async function getServerSideProps(context) {
 }
 
 async function handleApprove(review_string, approval_id, car_id) {
-  const response = await fetch("http://localhost:3000/api/approve-log/review", {
+  const response = await fetch("/api/approve-log/review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
