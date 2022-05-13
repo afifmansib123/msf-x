@@ -36,3 +36,5 @@ package-lock.json
 /public/workbox*
 .vercel
 
+
+.idea/

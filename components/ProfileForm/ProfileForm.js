@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import Image from 'next/image';
+import Image from 'next/image';
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -146,7 +146,8 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                                     <form onSubmit={handleSubmit(onSubmit)}>
                                           <div className={classes.profileImage}>
                                                 <label for="file-input">
-                                                      <img
+                                                      <Image
+                                                            unoptimized
                                                             layout='fill'
                                                             src={data.image ? data.image : userimg}
                                                             alt="Profile Image"
