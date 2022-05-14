@@ -104,9 +104,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
 
             // console.log("I am being triggered", okay);
             if (okay == true) {
-                  if (img === undefined) {
-                        formData.append("image", data.image);
-                  } else {
+                  if (img !== undefined) {
                         formData.append("image", img);
                   }
                   formData.append("first_name", userData.first_name);
