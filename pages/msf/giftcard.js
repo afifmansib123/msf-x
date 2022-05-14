@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 import MSF from "layouts/MSF.js";
-import { useSession} from "next-auth/react";
-import {Button, CardContent, Container} from "@mui/material";
+import { useSession } from "next-auth/react";
+import { Button, CardContent, Container, Divider } from "@mui/material";
 import GridContainer from "../../components/Grid/GridContainer";
 import GridItem from "../../components/Grid/GridItem";
 import Card from "../../components/Card/Card";
@@ -12,7 +12,11 @@ import CardFooter from "../../components/Card/CardFooter";
 import CustomButton from '../../components/CustomButtons/Button'
 
 function merchantGiftCard() {
-    return(
+    const onBuyClicked = () => {
+        console.log("test clicked")
+    }
+
+    return (
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
                 <h1 className={"text-center text-bold text-5xl font-bold text-bhalogari"} >GiftCard Package</h1>
@@ -26,7 +30,50 @@ function merchantGiftCard() {
                 <Card>
                     <CardHeader color={"bhalogari"} className={"m-3"}>
                         <h1 className="text-center text-xl font-semibold">
-                            Package 1
+                            Sedan/Hatcback/Wagon
+                        </h1>
+
+                    </CardHeader>
+
+                    <CardBody>
+                        <CardContent className="text-center my-[50px]">
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                        </CardContent>
+
+                    </CardBody>
+                    
+                    <CardFooter>
+                        <div>
+                            <span className="font-bold text-3xl text-bhalogari">
+                            TK. 35,000
+                            </span>
+                            {' '}{' '}{' '}{' '}
+                            <span className="font-semibold text-2xl text-red-600">
+                            /Annal
+                            </span>
+                        </div>
+                    </CardFooter>
+                </Card>
+                <div className="text-center">
+                    <CustomButton onClick={() => {
+                        onBuyClicked()
+                    }}
+                    color={"primary"} size="lg" round style={{fontWeight: "bold", background: "linear-gradient(60deg, #f06424, #fb8c00)", paddingLeft: "100px", paddingRight: "100px"}}>BUY NOW</CustomButton>
+                </div>
+
+            </GridItem>
+
+            <GridItem xs={12} sm={12} md={4}>
+                <Card>
+                    <CardHeader color={"bhalogari"} className={"m-3"}>
+                        <h1 className="text-center text-xl font-semibold">
+                        SUV/Crossover/Compact
                         </h1>
 
                     </CardHeader>
@@ -44,60 +91,66 @@ function merchantGiftCard() {
 
                     </CardBody>
                     <CardFooter>
-                        <div>Some Description</div>
+                        <div>
+                            <span className="font-bold text-3xl text-bhalogari">
+                            TK. 75,000
+                            </span>
+                            {' '}{' '}{' '}{' '}
+                            <span className="font-semibold text-2xl text-red-600">
+                            /Annal
+                            </span>
+                        </div>
                     </CardFooter>
                 </Card>
-                <div className="justify-center item-center text-center">
-                    <CustomButton  color={"primary"}>BUY NOW</CustomButton>
+                <div className="text-center">
+                    <CustomButton 
+                    onClick={() => {
+                        onBuyClicked()
+                    }}
+                    color={"primary"} size="lg" round style={{fontWeight: "bold", background: "linear-gradient(60deg, #f06424, #fb8c00)", paddingLeft: "100px", paddingRight: "100px"}}>BUY NOW</CustomButton>
                 </div>
-
             </GridItem>
 
             <GridItem xs={12} sm={12} md={4}>
                 <Card>
-                    <CardHeader color={"bhalogari"}>
+                    <CardHeader color={"bhalogari"} className={"m-3"}>
                         <h1 className="text-center text-xl font-semibold">
-                            Package 2
+                        Mini Bus/Van/Jeep
                         </h1>
 
                     </CardHeader>
-                    <CardBody className="text-center my-[50px]">
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                    </CardBody>
-                    <CardFooter>
-                        <div>Some Description</div>
-                        <CustomButton round>BUY</CustomButton>
-                    </CardFooter>
-                </Card>
-            </GridItem>
 
-            <GridItem xs={12} sm={12} md={4}>
-                <Card>
-                    <CardHeader color={"bhalogari"}>
-                        <h1 className="text-center text-xl font-semibold">
-                            Package 3
-                        </h1>
-                    </CardHeader>
-                    <CardBody className="text-center my-[50px]">
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
-                        <div>Some Description</div>
+                    <CardBody>
+                        <CardContent className="text-center my-[50px]">
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                            <div>Some Description</div>
+                        </CardContent>
+
                     </CardBody>
                     <CardFooter>
-                        <div>Some Description</div>
-                        <CustomButton round>BUY</CustomButton>
+                        <div>
+                            <span className="font-bold text-3xl text-bhalogari">
+                            TK. 1,00,000
+                            </span>
+                            {' '}{' '}{' '}{' '}
+                            <span className="font-semibold text-2xl text-red-600">
+                            /Annal
+                            </span>
+                        </div>
                     </CardFooter>
                 </Card>
+                <div className="text-center">
+                    <CustomButton 
+                    onClick={() => {
+                        onBuyClicked()
+                    }}
+                    color={"primary"} size="lg" round style={{fontWeight: "bold", background: "linear-gradient(60deg, #f06424, #fb8c00)", paddingLeft: "100px", paddingRight: "100px"}}>BUY NOW</CustomButton>
+                </div>
             </GridItem>
         </GridContainer>
     );

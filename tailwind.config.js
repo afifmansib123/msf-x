@@ -14,6 +14,6 @@ module.exports = {
       sans: ["open sans"],
     },
   },
-  purge: ['./src/**/*.{js,jsx,ts,tsx}'],
+  // purge: ['./src/**/*.{js,jsx,ts,tsx}'], 
   plugins: [],
 };
