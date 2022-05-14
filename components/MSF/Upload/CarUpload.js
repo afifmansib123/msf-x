@@ -872,18 +872,20 @@ export default function CarUpload() {
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     onChange={onCarTypeChange}
-                    defaultValue={filteredResults[0]?.car_type?.map(
-                      (car_type) => car_type
+                    defaultValue={filteredResults[0]?.car_condition_type?.map(
+                      (condition_type) => condition_type
                     )}
                   >
                     <option disabled selected>
                       Select Condition
                     </option>
-                    {filteredResults[0]?.car_type?.map((car_type) => (
-                      <>
-                        <option selected>{car_type}</option>
-                      </>
-                    ))}
+                    {filteredResults[0]?.car_condition_type?.map(
+                      (condition) => (
+                        <>
+                          <option selected>{condition}</option>
+                        </>
+                      )
+                    )}
                   </select>
 
                   {/* <Select
@@ -1036,7 +1038,7 @@ export default function CarUpload() {
                     </option>
                     {filteredResults[0]?.model_name?.map((model_name) => (
                       <>
-                        <option selected>{model_name}</option>
+                        <option>{model_name}</option>
                       </>
                     ))}
                   </select>
@@ -1145,9 +1147,14 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    defaultValue={filteredResults[0]?.car_year?.map(
+                      (year) => year
+                    )}
                     onChange={onCarModelYearChange}
                   >
-                    <option>{filteredResults[0]?.car_year}</option>
+                    {filteredResults[0]?.car_year?.map((year) => (
+                      <option>{year}</option>
+                    ))}
                   </select>
                 </>
               )}
@@ -1283,8 +1290,13 @@ export default function CarUpload() {
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     onChange={onCarBodyTypeChange}
+                    defaultValue={filteredResults[0]?.car_body_type?.map(
+                      (body) => body
+                    )}
                   >
-                    <option>{filteredResults[0]?.body_name}</option>
+                    {filteredResults[0]?.car_body_type?.map((body) => (
+                      <option>{body}</option>
+                    ))}
                   </select>
                 </>
               )}
@@ -1308,16 +1320,38 @@ export default function CarUpload() {
                   for="email"
                   className="block  mb-1 ml-1 text-sm font-medium text-gray-900"
                 >
-                  Engine Number
+                  Engine CC
                 </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.engines_number}
-                  className="  border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 "
-                  placeholder=" Enter Engine Number"
-                  required
-                />
+
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
+                  block
+                  w-full
+                  px-3
+                  py-4
+                  text-base
+                  font-normal
+                  text-gray-700
+                  bg-white bg-clip-padding bg-no-repeat
+                  border border-solid border-gray-300
+                  rounded
+                  transition
+                  ease-in-out
+                  m-0
+                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  defaultValue={filteredResults[0]?.engines_cc?.map(
+                    (engines) => engines
+                  )}
+                  onChange={onCarBodyTypeChange}
+                >
+                  {filteredResults[0]?.engines_cc?.map((engines) => (
+                    <option>{engines}</option>
+                  ))}
+                </select>
               </>
             )}
           </GridItem>
@@ -1349,7 +1383,7 @@ export default function CarUpload() {
                     class="block text-gray-700 text-sm font-bold mb-0"
                     for="username"
                   >
-                    Car Body*
+                    Drive*
                   </label>
                   <select
                     labelId="demo-simple-select-label"
@@ -1371,9 +1405,14 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    defaultValue={filteredResults[0]?.car_drive.map(
+                      (drive) => drive
+                    )}
                     onChange={onCarDriveChange}
                   >
-                    <option>{filteredResults[0]?.drive}</option>
+                    {filteredResults[0]?.car_drive.map((drive) => (
+                      <option>{drive}</option>
+                    ))}
                   </select>
                 </>
               )}
@@ -1554,9 +1593,14 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    defaultValue={filteredResults[0]?.fuel_type?.map(
+                      (fuel) => fuel
+                    )}
                     onChange={onCarFuelTypeChange}
                   >
-                    <option>{filteredResults[0]?.car_fuel_type}</option>
+                    {filteredResults[0]?.fuel_type?.map((fuel) => (
+                      <option>{fuel}</option>
+                    ))}
                   </select>
                 </>
               )}
