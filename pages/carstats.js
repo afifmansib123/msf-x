@@ -1,9 +1,5 @@
 import React from "react"
-import { PrismaClient } from "@prisma/client";
-import { useState } from "react";
-import Admin from "layouts/Admin.js";
-
-const prisma = new PrismaClient();
+import prisma from "../PrismaConnect";
 
 function Cars(props) { 
     const cars = props.cars;

@@ -6,6 +6,7 @@ import {
   primaryCardHeader,
   roseCardHeader,
   darkCardHeader,
+  bhalogariCardHeader,
   whiteColor,
 } from "assets/jss/nextjs-material-dashboard.js";
 
@@ -124,6 +125,12 @@ const cardHeaderStyle = {
     color: whiteColor,
     "&:not($cardHeaderIcon)": {
       ...darkCardHeader,
+    },
+  },
+  bhalogariCardHeader: {
+    color: whiteColor,
+    "&:not($cardHeaderIcon)": {
+      ...bhalogariCardHeader,
     },
   },
 };
