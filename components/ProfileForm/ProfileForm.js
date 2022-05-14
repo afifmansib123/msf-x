@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
             h1: {
                   fontFamily: "30px",
             },
+            "@media(max-width: 520px)": {
+                  marginTop:"100px"
+            },
       },
       box: {
             display: "flex",
@@ -46,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
             justifyContent: "center",
             alignItems: "center",
             marginTop: "15px",
+            "@media(max-width: 520px)": {
+                  gridTemplateColumns: "1fr",
+            },
       },
       profileImage: {
             position: "absolute",
@@ -64,6 +70,23 @@ const useStyles = makeStyles((theme) => ({
             "@media(max-width: 767px)": {
                   marginRight: "-82px",
                   marginTop: "20px",
+            },
+            "@media(max-width: 520px)": {
+                  marginRight: "0px",
+                  marginTop: "0px",
+                  // position: "absolute",
+                  top: "30px",
+                  marginLeft: "0px",
+                  // cursor: "pointer",
+                  border: "5px solid #fff",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  width: "164px",
+                  height: "164px",
+                  background: "#fff",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
             },
       },
       image: {
@@ -102,7 +125,6 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                   okay = false;
             }
 
-            // console.log("I am being triggered", okay);
             if (okay == true) {
                   if (img !== undefined) {
                         formData.append("image", img);
@@ -145,7 +167,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                         <div>
                               <Typography component="h1">Create your account</Typography>
                               <div className={classes.box}>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                    <form onSubmit={handleSubmit(onSubmit)} className="">
                                           <div className={classes.profileImage}>
                                                 <label for="file-input">
                                                       <Image

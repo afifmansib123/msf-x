@@ -80,7 +80,7 @@ function Profile(props) {
         <>
           <ProfileView data={data} />
           <div className="container">
-            <div className="flex justify-end -mx-20 p-5">
+            <div className="flex justify-end mx-20 p-5">
               <button
                 className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-5 px-10 rounded-full transition-all"
                 onClick={() => {
