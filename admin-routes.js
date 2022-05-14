@@ -69,7 +69,7 @@ const dashboardRoutes = [
     name: "Subscriptions",
     icon: "content_paste",
     layout: "/admin",
-  },  
+  },
 
   {
     path: "/package",
