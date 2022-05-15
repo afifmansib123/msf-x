@@ -21,6 +21,7 @@ function merchantGiftCard() {
             <GridItem xs={12} sm={12} md={12}>
                 <h1 className={"text-center text-bold text-5xl font-bold text-bhalogari"} >GiftCard Package</h1>
                 <Card profile plain>
+                    {/* TODO change this description to be more meaningful */}
                     <h1>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent quis dapibus augue, id faucibus justo. In sed ornare sem. In eleifend ante sed nulla consequat, eu rutrum massa blandit. Nulla vitae neque sed metus gravida condimentum vel quis lacus. Cras eu est fringilla, venenatis nisl a, congue dui. Nam at enim facilisis, ultricies dolor a, cursus nulla. Integer bibendum volutpat ultrices. Suspendisse sit amet ex purus. Duis id nibh viverra enim dapibus tincidunt. Integer erat ipsum, gravida vitae euismod sit amet, tincidunt non lorem. Aliquam leo lorem, suscipit nec pharetra nec, vulputate nec purus. Nulla ac felis vitae leo luctus euismod eget non ligula.
                     </h1>
