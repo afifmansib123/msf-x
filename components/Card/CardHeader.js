@@ -38,6 +38,7 @@ CardHeader.propTypes = {
     "primary",
     "rose",
     "dark",
+    "bhalogari",
   ]),
   plain: PropTypes.bool,
   stats: PropTypes.bool,
