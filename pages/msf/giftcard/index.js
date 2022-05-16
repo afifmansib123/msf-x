@@ -56,7 +56,8 @@ function merchantGiftCard(props) {
             `/api/payment/payonline`,
             dataParams
         );
-        await router.push(response.data);
+        // await router.push(response.data);
+        await router.replace(response.data);
     }
 
 
