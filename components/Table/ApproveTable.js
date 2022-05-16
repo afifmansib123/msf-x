@@ -1,179 +1,147 @@
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
+import { useState, useRef } from "react";
+import makeStyles from '@mui/styles/makeStyles';
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 
 import CardBody from "components/Card/CardBody.js";
-import CusButton from "components/CustomButtons/Button";
-import CardFooter from "components/Card/CardFooter.js";
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import { Button } from "@mui/material";
-import CustomTabs from "../CustomTabs/CustomTabs";
-
-import CancelIcon from "@mui/icons-material/Cancel";
-import AddTaskIcon from "@mui/icons-material/AddTask";
-import PendingIcon from "@mui/icons-material/Pending";
-import CardAvatar from "../Card/CardAvatar";
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 function CarApproveLog(props) {
+  const [open, setOpen] = useState(false);
+  const [selectedCar, setSelected] = useState(null);
+  const [type, setType] = useState("");
+
   const useStyles = makeStyles(styles);
   const classes = useStyles();
+  const inputElement = useRef();
+  
+  const onClickAccept = (carRecord) => {
+    handleClickOpen(carRecord, "approve");
+  }
 
-  const handleClickOpen = (carRecord) => {
-    props.callback(carRecord.carId);
+  const onClickReject = (carRecord) => {
+    handleClickOpen(carRecord, "reject");
+  }
+
+  const handleClickOpen = (carRecord, type) => {
+    setSelected(carRecord);
+    setOpen(true);
+    setType(type)
   };
 
-  const onClickedHistoryBtn = (carid) => {
-    props.historyBtnClicked(carid);
+  const handleClose = () => {
+    setOpen(false);
+    setSelected(null);
+    setType("");
   };
 
-  var showedData = props.tableData.map((value, index) => {
-    return [
-      <img src={value.Preview_Image[0]} className="w-[200px] md:w-[300px]" />,
-      <div className="grid grid-cols-2">
-        <div className="col mr-4 font-medium">Car Name</div>
-        <div className="col-md-8">{value.carName}</div>
+  const handleSubmit = () => {
+    setOpen(false);
+    const reason = inputElement.current.value;
 
-        <div className="col-3 mr-4 font-medium">Merchant Name</div>
-        <div className="col-md-8">{value.Merchant_Name}</div>
-
-        <span className="mr-4 font-medium">Car Maker</span>
-        <span>{value.Car_Maker}</span>
-
-        <span className="mr-4 font-medium">Car Country</span>
-        <span>{value.manufacturerData.maker_country}</span>
-
-        <span className="mr-4 font-medium">Car Model</span>
-        <span>{value.Car_Model}</span>
-        <div className="col-span-2">
-          <CusButton round color="danger" onClick={() => handleClickOpen(value)}>
-            Review
-          </CusButton>
-        </div>
-      </div>,
-    ];
-  });
-
-  const CarCard = ({ data, status }) => {
-    if (data === null || !data || data.length === 0) {
-      return <h2 className="text-black">No Data</h2>
-    } else {
-      return (
-          <div className="grid grid-cols-1">
-            <div className="flex flex-row">
-              <img src={data.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
-              <div className="">
-                <h1 className="font-medium text-lg my-2">{data.carName}</h1>
-                <div className="mt-10">
-                  <span className="font-medium mr-4">Requested Name:</span>
-                  <span>{data.Merchant_Name}</span>
-                </div>
-                <div>
-                  <span className="font-medium mr-4">Request Date:</span>
-                  <span>{data.create_at}</span>
-                </div>
-                <Button
-                    variant="outlined"
-                    onClick={() => {
-                      onClickedHistoryBtn(data.carId);
-                    }}
-                >
-                  History
-                </Button>
-                <CusButton disabled round color="warning" size="sm">
-                  {status}
-                </CusButton>
-              </div>
-            </div>
-          </div>
-      );
+    const data = {
+      car: selectedCar,
+      reason: reason,
+      type: type
     }
 
-  };
-  const pendingActivityLogCard = () => {
-    return props.pendingTab.map((v) => {
-      return <CarCard data={v} status="Pending" />;
-    });
-  };
+    props.callback(data)
+    setSelected(null);
+    setType("");
 
-  const rejectedActivityLogCard = () => {
-    return props.rejectedTab.map((v) => {
-      console.log(v.create_at);
-      return <CarCard data={v} status="Rejected" />;
-    });
-  };
+  }
 
-  const approvedActivityLogCard = () => {
-    return props.approvedTab.map((v) => {
-      return <CarCard data={v} status="Accepted" />;
-    });
-  };
+  const showedData = props.tableData.map((value, index) => {
+
+    return [value.record_ID, value.Merchant_Name, value.Car_Maker, value.Car_Model, (<img src={value.Preview_Image} width={350} height={350}/>),
+     (<Button variant="outlined" onClick={() => onClickAccept(value)} color="success">Accept</Button>),
+      <Button variant="outlined" onClick={() => onClickReject(value)} color="error">Reject</Button>]
+  });
 
   return (
     <>
-      <Card>
-        <CardHeader color={props.tableHeaderColor}>
-          <h4 className={classes.cardTitleWhite} style={{ fontWeight: "bolder" }}>
-            Waiting for Review ({showedData.length})
-          </h4>
-          <p className={classes.cardCategoryWhite}>
-            Merchants have submitted the cars to be approved. Once these are approved, they will be shown on the public
-            listing.
-          </p>
-        </CardHeader>
-        <CardBody>
-          {showedData.length > 0 && <Table tableHeaderColor={props.tableHeaderColor} tableHead={props.tableHead} tableData={showedData} />}
-          {showedData.length === 0 && <div className=" h-[200px]">
-            <div className=" absolute right-1/2 bottom-1/2 text-4xl text-gray-200 font-semibold">No Data</div>
-          </div>}
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color={props.tableHeaderColor}>
+              <h4 className={classes.cardTitleWhite}>Car Approve Log</h4>
+              <p className={classes.cardCategoryWhite}>
+                Pending Car's approve
+              </p>
+            </CardHeader>
+            <CardBody>
+              <Table
+                tableHeaderColor={props.tableHeaderColor}
+                tableHead={props.tableHead}
+                tableData={showedData}
+              />
+            </CardBody>
+          </Card>
+        </GridItem>
+      </GridContainer>
 
-        </CardBody>
-      </Card>
-
-      <Card>
-        <CustomTabs
-          title="Approval History"
-          headerColor="info"
-          tabs={[
-            {
-              tabName: "Pending",
-              tabIcon: PendingIcon,
-              tabContent: <div>{pendingActivityLogCard()}</div>,
-            },
-            {
-              tabName: "Rejected",
-              tabIcon: CancelIcon,
-              tabContent: <div>{rejectedActivityLogCard()}</div>,
-            },
-            {
-              tabName: "Approved",
-              tabIcon: AddTaskIcon,
-              tabContent: <div>{approvedActivityLogCard()}</div>,
-            },
-          ]}
-        />
-      </Card>
+      <div>
+        <Dialog open={open} onClose={handleClose} fullWidth>
+          <DialogTitle>{type == "approve" ? "Aprroval Reason": "Rejected Reason"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              explain your reason
+            </DialogContentText>
+            <TextField
+              inputRef={inputElement}
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Reason"
+              type="text"
+              multiline
+              fullWidth
+              variant="filled"
+              defaultValue={" "}
+              inputProps={{
+                style: {
+                  height: "400px",
+                },
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </>
   );
 }
 
 CarApproveLog.defaultProps = {
-  tableHeaderColor: "warning",
+  tableHeaderColor: "danger",
+  tableHead: ["RecordID", "Merchant", "Car Maker", "Car Model", "Preview Image", "", ""],
 };
 
 CarApproveLog.propTypes = {
-  tableHeaderColor: PropTypes.oneOf(["warning", "primary", "danger", "success", "info", "rose", "gray"]),
+  tableHeaderColor: PropTypes.oneOf([
+    "warning",
+    "primary",
+    "danger",
+    "success",
+    "info",
+    "rose",
+    "gray",
+  ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
-  callback: PropTypes.func,
-  pendingTab: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
-  rejectedTab: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
-  approvedTab: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
-  historyBtnClicked: PropTypes.func,
+  callback: PropTypes.func
 };
+
 
 export default CarApproveLog;

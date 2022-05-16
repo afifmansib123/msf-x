@@ -200,12 +200,6 @@ const darkCardHeader = {
   ...darkBoxShadow,
 };
 
-const bhalogariCardHeader = {
-  background:
-    "linear-gradient(60deg, " + "#f06424" + ", " + warningColor[2] + ")",
-  ...roseBoxShadow,
-};
-
 const cardActions = {
   margin: "0 20px 10px",
   paddingTop: "10px",
@@ -316,7 +310,6 @@ export {
   primaryCardHeader,
   roseCardHeader,
   darkCardHeader,
-  bhalogariCardHeader,
   cardActions,
   cardHeader,
   defaultBoxShadow,

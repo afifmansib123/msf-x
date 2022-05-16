@@ -57,11 +57,13 @@ function LoginForm(props) {
       </Box> */}
 
       {/* my code start */}
-      <section class="">
+      <section class=""> 
         <div class="px-4 py-5 mx-auto border-2 border-orange-600 rounded-xl w-1/3">
           <div class="max-w-lg mx-auto">
             <div class="text-center mb-8">
-              <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Merchant Storefront</h2>
+              <h2 class="text-3xl md:text-4xl font-extrabold mb-4">
+                Merchant Storefront
+              </h2>
               <h2 class="text-lg md:text-lg font-extrabold mb-2">{title}</h2>
             </div>
             <form action="">
@@ -76,7 +78,6 @@ function LoginForm(props) {
                   type="text"
                   autocomplete="name"
                   required
-                  {...register("username")}
                 />
               </div>
               <div class="mb-6">
@@ -90,14 +91,10 @@ function LoginForm(props) {
                   type="password"
                   autocomplete="name"
                   required
-                  {...register("password", { required: true })}
                 />
               </div>
 
-              <button
-                onClick={handleSubmit(onSubmit)}
-                class="border-2 border-orange-600 inline-block w-full py-4 px-6 mb-6 text-center text-lg leading-6 text-white hover:text-orange-600 font-extrabold bg-orange-600 hover:bg-slate-100 border-3 shadow rounded transition duration-200"
-              >
+              <button class="border-2 border-orange-600 inline-block w-full py-4 px-6 mb-6 text-center text-lg leading-6 text-white hover:text-orange-600 font-extrabold bg-orange-600 hover:bg-slate-100 border-3 shadow rounded transition duration-200">
                 Sign in
               </button>
             </form>

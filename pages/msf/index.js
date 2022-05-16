@@ -5,12 +5,13 @@ import { signIn, useSession } from "next-auth/react";
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "react-query";
 import LoginForm from "/components/LoginForm";
 
+
 function Index(props) {
   // const { landingPage } = props;
   // const { data: session } = useSession();
   // const [error, setError] = useState("");
   const router = useRouter();
-  const { error } = router.query;
+  const { error } = router.query
   // Only for CSR
   // const queryClient = useQueryClient()
   // const query = useQuery('todos', getTodos)
@@ -29,7 +30,7 @@ function Index(props) {
       password: cred.password,
       callbackUrl: "/msf/dashboard",
     }).then((ret) => {
-      console.log("handleSignIn.ret", ret);
+      console.log("RET", ret);
     });
   };
 
@@ -37,12 +38,7 @@ function Index(props) {
 
   return (
     <div className="m-10">
-      {error && (
-        <div>
-          <h1>Error</h1>
-          <p>{error}</p>
-        </div>
-      )}
+      {error && <div><h1>Error</h1><p>{error}</p></div>}
       <h1 className="text-2xl text-green">Merchant Storefront</h1>
       <div className="grid grid-cols-1">
         <LoginForm title="Member Signin" onSignIn={handleSignIn} />

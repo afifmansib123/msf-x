@@ -5,11 +5,7 @@ module.exports = {
     "./stories/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
-      colors: {
-        'bhalogari': '#f06424',
-      },
-    },
+    extend: {},
     fontFamily: {
       sans: ["open sans"],
     },

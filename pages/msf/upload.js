@@ -41,7 +41,7 @@ function Upload() {
             <GridItem xs={12} sm={12} md={12}>
                 <CustomTabs
                     title="Upload Car / Bike:"
-                    headerColor="bhalogari"
+                    headerColor="dark"
                     tabs={[
                         {
                             tabName: "Car",

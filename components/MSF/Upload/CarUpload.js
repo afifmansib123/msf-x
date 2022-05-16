@@ -1,18 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useSession} from "next-auth/react";
-import {useRouter} from "next/router";
-import axios from "axios";
-
-// @mui/icons-material
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import AddAlert from "@mui/icons-material/AddAlert";
+// @mui/icons-material
 import Car from "@mui/icons-material/DirectionsCar";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-
-// react plugin for creating charts
-import makeStyles from "@mui/styles/makeStyles";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-
-// core components
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -23,14 +12,19 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import GridItem from "components/Grid/GridItem.js";
+// react plugin for creating charts
+import makeStyles from "@mui/styles/makeStyles";
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import axios from "axios";
 import GridContainer from "components/Grid/GridContainer.js";
+// core components
+import GridItem from "components/Grid/GridItem.js";
 import Snackbar from "components/Snackbar/Snackbar.js";
-
 // plugins
 import Joi from "joi-browser";
-import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
@@ -105,36 +99,36 @@ export default function CarUpload() {
   const [carDrive, setCarDrive] = useState();
 
   const [jsonData, setJsonData] = useState([]);
-  const [filteredResults, setFilteredResults] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
   const searchItems = (searchValue) => {
-    const filteredData = jsonData?.chassis_number_prefix?.filter((item) => {
+    const filteredData = jsonData?.chassis_number_prefix.filter((item) => {
       return Object.values(item)
         .join("")
         .toLowerCase()
         .includes(searchValue.toLowerCase());
     });
-    // setCarBodyType(parseInt(filteredData[0]?.body_name));
+    setCarBodyType(parseInt(filteredData[0].body_name));
     setFilteredResults(filteredData);
   };
   console.log(filteredResults);
   useEffect(() => {
     setJsonData(fakeData);
-  }, []);
+  }, [filteredResults]);
   const [carDrives] = useState([
-    {id: 1, option: "Front Wheel Drive (FWD)"},
-    {id: 2, option: "Rear Wheel Drive (RWD)"},
-    {id: 3, option: "All Wheel Drive (AWD)"},
-    {id: 4, option: "4-Wheel Drive (4WD)"},
+    { id: 1, option: "Front Wheel Drive (FWD)" },
+    { id: 2, option: "Rear Wheel Drive (RWD)" },
+    { id: 3, option: "All Wheel Drive (AWD)" },
+    { id: 4, option: "4-Wheel Drive (4WD)" },
   ]);
   const [carTransmissions, setCarTransmissions] = useState([
-    {id: "A", title: "Automatic"},
-    {id: "M", title: "Manual"},
+    { id: "A", title: "Automatic" },
+    { id: "M", title: "Manual" },
   ]);
   const [carFeaturesInput, setCarFeaturesInput] = useState([]);
   const [carFeatures, setCarFeatures] = useState([]);
   const editorRef = useRef();
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const {CKEditor, ClassicEditor} = editorRef.current || {};
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
   const [images, setImages] = useState([]);
   const [fileLimitExceeded, setFileLimitExceeded] = useState(false);
   const [carPrice, setCarPrice] = useState({
@@ -145,7 +139,7 @@ export default function CarUpload() {
   const [redirect, setRedirect] = useState(false);
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -181,7 +175,7 @@ export default function CarUpload() {
   // };
 
   if (redirect) {
-    router.push("/msf/listings");
+    router.push("/sellNow");
   }
 
   const updateFiles = (incomingFiles) => {
@@ -227,118 +221,118 @@ export default function CarUpload() {
 
   const schema = isUsed
     ? {
-      car_chassis_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .label("Chassis"),
-      car_engine_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Engine No"),
-      car_registration_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Registration No"),
-      car_type: Joi.number().required().label("Type"),
-      car_maker: Joi.number().required().label("Maker"),
-      car_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Asking Price"),
-      car_mileage: Joi.number()
-        .min(-1)
-        .max(999999)
-        .allow("")
-        .label("Mileage"),
-      car_seat: Joi.number()
-        .positive()
-        .integer()
-        .min(1)
-        .max(45)
-        .allow("")
-        .label("Seat"),
-      car_engine_cc: Joi.number()
-        .precision(2)
-        .min(660)
-        .max(9999)
-        .allow("")
-        .label("Engine Capacity"),
-      car_body_type: Joi.number().required().label("Body Type"),
-      car_fuel_type: Joi.number().required().label("Fuel Type"),
-      car_reg_year: isRegYear
-        ? Joi.required().label("Registration Year")
-        : Joi.allow().label("Registration Year"),
-      selling_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Selling Price"),
-    }
+        car_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .label("Chassis"),
+        car_engine_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Engine No"),
+        car_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        car_type: Joi.number().required().label("Type"),
+        car_maker: Joi.number().required().label("Maker"),
+        car_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Asking Price"),
+        car_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        car_seat: Joi.number()
+          .positive()
+          .integer()
+          .min(1)
+          .max(45)
+          .allow("")
+          .label("Seat"),
+        car_engine_cc: Joi.number()
+          .precision(2)
+          .min(660)
+          .max(9999)
+          .allow("")
+          .label("Engine Capacity"),
+        car_body_type: Joi.number().required().label("Body Type"),
+        car_fuel_type: Joi.number().required().label("Fuel Type"),
+        car_reg_year: isRegYear
+          ? Joi.required().label("Registration Year")
+          : Joi.allow().label("Registration Year"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Selling Price"),
+      }
     : {
-      car_chassis_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .required()
-        .label("Chassis"),
-      car_engine_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Engine No"),
-      car_registration_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Registration No"),
-      car_type: Joi.number().required().label("Type"),
-      car_maker: Joi.number().required().label("Maker"),
-      car_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Asking Price"),
-      car_mileage: Joi.number()
-        .min(-1)
-        .max(999999)
-        .allow("")
-        .label("Mileage"),
-      car_seat: Joi.number()
-        .positive()
-        .integer()
-        .min(1)
-        .max(45)
-        .allow("")
-        .label("Seat"),
-      car_engine_cc: Joi.number()
-        .precision(2)
-        .min(660)
-        .max(9999)
-        .allow("")
-        .label("Engine Capacity"),
-      car_body_type: Joi.number().required().label("Body Type"),
-      car_fuel_type: Joi.number().required().label("Fuel Type"),
-      car_reg_year: isRegYear
-        ? Joi.required().label("Registration Year")
-        : Joi.allow().label("Registration Year"),
-      selling_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Selling Price"),
-    };
+        car_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .required()
+          .label("Chassis"),
+        car_engine_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Engine No"),
+        car_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        car_type: Joi.number().required().label("Type"),
+        car_maker: Joi.number().required().label("Maker"),
+        car_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Asking Price"),
+        car_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        car_seat: Joi.number()
+          .positive()
+          .integer()
+          .min(1)
+          .max(45)
+          .allow("")
+          .label("Seat"),
+        car_engine_cc: Joi.number()
+          .precision(2)
+          .min(660)
+          .max(9999)
+          .allow("")
+          .label("Engine Capacity"),
+        car_body_type: Joi.number().required().label("Body Type"),
+        car_fuel_type: Joi.number().required().label("Fuel Type"),
+        car_reg_year: isRegYear
+          ? Joi.required().label("Registration Year")
+          : Joi.allow().label("Registration Year"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Selling Price"),
+      };
 
   useEffect(() => {
     if (
@@ -365,29 +359,29 @@ export default function CarUpload() {
   }, [carPrice.selling_price, carPrice.asking_price]);
 
   const propertyValidate = (name, value) => {
-    const obj = {[name]: value};
-    const singleSchema = {[name]: schema[name]};
-    const {error} = Joi.validate(obj, singleSchema);
+    const obj = { [name]: value };
+    const singleSchema = { [name]: schema[name] };
+    const { error } = Joi.validate(obj, singleSchema);
 
     return error ? error.details[0].message : null;
   };
 
   const propertyValidationHelper = (name, value) => {
-    const errors = {...inputErrors};
+    const errors = { ...inputErrors };
     const errorMessage = propertyValidate(name, value);
     if (errorMessage) errors[name] = errorMessage;
     else delete errors[name];
     setError(errors);
   };
 
-  const onCarPriceChange = ({target: input}) => {
-    const {name, value} = input;
+  const onCarPriceChange = ({ target: input }) => {
+    const { name, value } = input;
     if (name === "selling_price") {
       propertyValidationHelper("selling_price", value);
     } else if (name === "asking_price") {
       propertyValidationHelper("asking_price", value);
     }
-    setCarPrice({...carPrice, [name]: value});
+    setCarPrice({ ...carPrice, [name]: value });
   };
 
   const [carDescription, setCarDescription] = useState("");
@@ -412,7 +406,7 @@ export default function CarUpload() {
   const getYears = () => {
     const arr = [];
     for (let i = new Date().getFullYear(); i >= 1971; i--) {
-      arr.push({id: i, year: i});
+      arr.push({ id: i, year: i });
     }
     return arr;
   };
@@ -449,8 +443,7 @@ export default function CarUpload() {
           setCarModelYears(getYears());
         } else {
         }
-      } catch (err) {
-      }
+      } catch (err) {}
     })();
     propertyValidationHelper("car_maker", e.target.value);
   };
@@ -507,7 +500,7 @@ export default function CarUpload() {
     setCarTransmission(e.target.value);
   };
   const onCarFeaturesInputChange = (e) => {
-    const {name} = e.target;
+    const { name } = e.target;
     const index = carFeatures.indexOf(parseInt(name));
     if (index !== -1) {
       const newBox = [...carFeatures];
@@ -517,8 +510,8 @@ export default function CarUpload() {
       setCarFeatures([...carFeatures, parseInt(name)]);
     }
   };
-  const onCarVideoLinkChange = ({target: input}) => {
-    setCarVideoLink({...carVideoLink, [input.name]: input.value});
+  const onCarVideoLinkChange = ({ target: input }) => {
+    setCarVideoLink({ ...carVideoLink, [input.name]: input.value });
   };
 
   const [open, setOpen] = useState(false);
@@ -535,32 +528,32 @@ export default function CarUpload() {
   const validate = () => {
     const inputs = isUsed
       ? {
-        // carEngineNumber: carEngineNumber,
-        // carChassisNumber: carChassisNumber,
-        car_type: carType,
-        car_maker: carMaker,
-        car_model: carModel,
-        asking_price: carPrice.asking_price,
-        car_fuel_type: carFuelType,
-        car_body_type: carBodyType,
-        selling_price: carPrice.selling_price,
-        car_reg_year: carRegYear,
-        car_engine_cc: carEngineCC,
-      }
+          // carEngineNumber: carEngineNumber,
+          // carChassisNumber: carChassisNumber,
+          car_type: carType,
+          car_maker: carMaker,
+          car_model: carModel,
+          asking_price: carPrice.asking_price,
+          car_fuel_type: carFuelType,
+          car_body_type: carBodyType,
+          selling_price: carPrice.selling_price,
+          car_reg_year: carRegYear,
+          car_engine_cc: carEngineCC,
+        }
       : {
-        // carEngineNumber: carEngineNumber,
-        car_chassis_number: carChassisNumber,
-        car_type: carType,
-        car_maker: carMaker,
-        car_model: carModel,
-        asking_price: carPrice.asking_price,
-        car_fuel_type: carFuelType,
-        car_body_type: carBodyType,
-        selling_price: carPrice.selling_price,
-        car_reg_year: carRegYear,
-        car_engine_cc: carEngineCC,
-      };
-    const {error} = Joi.validate(inputs, schema, {abortEarly: false});
+          // carEngineNumber: carEngineNumber,
+          car_chassis_number: carChassisNumber,
+          car_type: carType,
+          car_maker: carMaker,
+          car_model: carModel,
+          asking_price: carPrice.asking_price,
+          car_fuel_type: carFuelType,
+          car_body_type: carBodyType,
+          selling_price: carPrice.selling_price,
+          car_reg_year: carRegYear,
+          car_engine_cc: carEngineCC,
+        };
+    const { error } = Joi.validate(inputs, schema, { abortEarly: false });
     if (!error) return null;
 
     const errors = {}; // TODO what is the point to set error to empty and iterate later?
@@ -758,7 +751,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{minHeight: "542px", maxHeight: "542px"}}
+              style={{ minHeight: "542px", maxHeight: "450px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -804,34 +797,12 @@ export default function CarUpload() {
       <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
         <GridContainer>
           <h2 className={classes.paperTitle}>Choose your car model</h2>
-
-          {!isUsed && (
-            <GridItem item xs={12}>
-              <FormControl className="w-full">
-                <TextField
-                  value={carChassisNumber}
-                  label="Enter Chassis Number "
-                  name={"car_chassis_number"}
-                  autoComplete="off"
-                  fullWidth
-                  onChange={(e) => searchItems(e.target.value)}
-                  variant="outlined"
-                  placeholder="Enter Chassis Number"
-                />
-                {inputErrors.car_chassis_number && (
-                  <div className={classes.errorDiv}>
-                    {inputErrors.car_chassis_number}
-                  </div>
-                )}
-              </FormControl>
-            </GridItem>
-          )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
               {filteredResults == 0 ? (
                 <>
                   <InputLabel id="demo-simple-select-label">
-                    Car Type *
+                    Car Type
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -849,11 +820,6 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
-                  {inputErrors.car_maker && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_maker}
-                    </div>
-                  )}
                 </>
               ) : (
                 <>
@@ -918,7 +884,7 @@ export default function CarUpload() {
             <FormControl className="w-full">
               {filteredResults == 0 ? (
                 <>
-                  <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Maker</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -992,7 +958,7 @@ export default function CarUpload() {
             <FormControl className="w-full">
               {filteredResults == 0 ? (
                 <>
-                  <InputLabel id="demo-simple-select-label">Model *</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Model</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -1009,11 +975,6 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
-                  {inputErrors.car_model && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_model}
-                    </div>
-                  )}
                 </>
               ) : (
                 <>
@@ -1066,9 +1027,7 @@ export default function CarUpload() {
               <>
                 <TextField
                   // value={filteredResults[0]?.package_type.map((p) => p)}
-                  label="Grade/Package"
                   name={"car_grade"}
-                  label="Enter Grade/Package"
                   fullWidth
                   onChange={onCarGradeChange}
                   placeholder={"Enter Grade/Package"}
@@ -1197,47 +1156,43 @@ export default function CarUpload() {
               </FormControl>
             </GridItem>
           )}
-
           {!isUsed && (
             <GridItem item xs={12}>
-              {filteredResults == 0 ? (
-                <>
-                  <TextField
-                    value={carEngineNumber}
-                    label="Engine Number"
-                    // value={filteredResults[0]?.engines_number}
-                    name={"car_engine_number"}
-                    autoComplete="off"
-                    fullWidth
-                    onChange={onCarEngineNumberChange}
-                    placeholder={"Enter Engine Number"}
-                    variant="outlined"
-                  />
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Engine Number
-                  </label>
-                  <input
-                    type="text"
-                    id="engine_number"
-                    defaultValue={filteredResults[0]?.engines_number}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter Engine Number"
-                    required
-                  />
-                </>
-              )}
+              <FormControl className="w-full">
+                <TextField
+                  value={carChassisNumber}
+                  name={"car_chassis_number"}
+                  autoComplete="off"
+                  fullWidth
+                  onChange={(e) => searchItems(e.target.value)}
+                  placeholder={"Enter Chassis Number *"}
+                  variant="outlined"
+                />
+                {inputErrors.car_chassis_number && (
+                  <div className={classes.errorDiv}>
+                    {inputErrors.car_chassis_number}
+                  </div>
+                )}
+              </FormControl>
+            </GridItem>
+          )}
+          {!isUsed && (
+            <GridItem item xs={12}>
+              <TextField
+                // value={carEngineNumber}
+                value={filteredResults[0]?.engines_number}
+                name={"car_engine_number"}
+                autoComplete="off"
+                fullWidth
+                onChange={onCarEngineNumberChange}
+                placeholder={"Enter Engine Number"}
+                variant="outlined"
+              />
             </GridItem>
           )}
           {isUsed && (
             <GridItem item xs={12}>
               <TextField
-                label="Registration Number"
                 value={carRegNumber}
                 name={"car_registration_number"}
                 autoComplete="off"
@@ -1258,7 +1213,7 @@ export default function CarUpload() {
               {filteredResults == 0 ? (
                 <>
                   <InputLabel id="demo-simple-select-label">
-                    Car Body *
+                    <Car /> Car Body
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -1275,26 +1230,14 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
-                  {inputErrors.car_body_type && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_body_type}
-                    </div>
-                  )}
                 </>
               ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-0"
-                    for="username"
-                  >
-                    Car Body*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1309,44 +1252,24 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarBodyTypeChange}
-                  >
-                    <option>{filteredResults[0]?.body_name}</option>
-                  </select>
-                </>
+                  onChange={onCarBodyTypeChange}
+                >
+                  <option>{filteredResults[0]?.body_name}</option>
+                </select>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                label="Engine CC"
-                value={carEngineCC}
-                name={"car_engine_cc"}
-                autoComplete="off"
-                fullWidth
-                onChange={onCarEngineCCChange}
-                placeholder={"Enter Engine CC"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Engine Number
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.engines_number}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              // value={carEngineCC}
+              value={filteredResults[0]?.engines_number}
+              name={"car_engine_cc"}
+              autoComplete="off"
+              fullWidth
+              onChange={onCarEngineCCChange}
+              placeholder={"Enter Engine CC"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
@@ -1371,19 +1294,12 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-0"
-                    for="username"
-                  >
-                    Car Body*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1398,75 +1314,36 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarDriveChange}
-                  >
-                    <option>{filteredResults[0]?.drive}</option>
-                  </select>
-                </>
+                  onChange={onCarDriveChange}
+                >
+                  <option>{filteredResults[0]?.drive}</option>
+                </select>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                value={carMileage}
-                name={"car_mileage"}
-                autoComplete="off"
-                label="Mileage"
-                fullWidth
-                onChange={onCarMileageChange}
-                placeholder={"Enter Mileage"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Mileage
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.mileage}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              // value={carMileage}
+              value={filteredResults[0]?.mileage}
+              name={"car_mileage"}
+              autoComplete="off"
+              fullWidth
+              onChange={onCarMileageChange}
+              placeholder={"Enter Mileage"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                value={carSeat}
-                name={"car_seat"}
-                autoComplete="off"
-                label="Seats"
-                fullWidth
-                onChange={onCarSeatChange}
-                placeholder={"Enter No of Seats"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Mileage
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.no_of_seat}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              // value={carSeat}
+              value={filteredResults[0]?.no_of_seat}
+              name={"car_seat"}
+              autoComplete="off"
+              fullWidth
+              onChange={onCarSeatChange}
+              placeholder={"Enter No of Seats"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
@@ -1494,19 +1371,12 @@ export default function CarUpload() {
                   </Select>
                 </>
               ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Transmission
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1521,11 +1391,10 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarTransmissionChange}
-                  >
-                    <option>{filteredResults[0]?.transmission_type}</option>
-                  </select>
-                </>
+                  onChange={onCarTransmissionChange}
+                >
+                  <option>{filteredResults[0]?.transmission_type}</option>
+                </select>
               )}
             </FormControl>
           </GridItem>
@@ -1534,7 +1403,7 @@ export default function CarUpload() {
               {filteredResults == 0 ? (
                 <>
                   <InputLabel id="demo-simple-select-label">
-                    Fuel Type *
+                    Fuel Type
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -1552,26 +1421,14 @@ export default function CarUpload() {
                       );
                     })}
                   </Select>
-                  {inputErrors.car_fuel_type && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_fuel_type}
-                    </div>
-                  )}
                 </>
               ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Transmission
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
+                <select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Car Model Years"
+                  name="car_model_year"
+                  className="form-select appearance-none
                   block
                   w-full
                   px-3
@@ -1586,11 +1443,10 @@ export default function CarUpload() {
                   ease-in-out
                   m-0
                   focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarFuelTypeChange}
-                  >
-                    <option>{filteredResults[0]?.car_fuel_type}</option>
-                  </select>
-                </>
+                  onChange={onCarFuelTypeChange}
+                >
+                  <option>{filteredResults[0]?.car_fuel_type}</option>
+                </select>
               )}
             </FormControl>
           </GridItem>
@@ -1676,7 +1532,6 @@ export default function CarUpload() {
           </p>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              label="Asking Price *"
               value={carPrice.asking_price}
               name={"asking_price"}
               autoComplete="off"
@@ -1689,7 +1544,7 @@ export default function CarUpload() {
               <div
                 style={{
                   position: "absolute",
-                  color: "#f06424",
+                  color: "#ff2d2d",
                   paddingTop: "2px",
                   fontSize: "12px",
                 }}
@@ -1701,10 +1556,6 @@ export default function CarUpload() {
 
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              label="Selling Price *"
-              InputLabelProps={{
-                className: "focus:text-bhalogari",
-              }}
               value={carPrice.selling_price}
               name={"selling_price"}
               autoComplete="off"
@@ -1717,7 +1568,7 @@ export default function CarUpload() {
               <div
                 style={{
                   position: "absolute",
-                  color: "#f06424",
+                  color: "#ff2d2d",
                   paddingTop: "2px",
                   fontSize: "12px",
                 }}
@@ -1729,7 +1580,6 @@ export default function CarUpload() {
 
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              label="Video Link"
               value={carVideoLink.video1}
               name={videoName[0]}
               autoComplete="off"
@@ -1741,13 +1591,10 @@ export default function CarUpload() {
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={8}>
-            <InputLabel>
-              Car Description
-            </InputLabel>
             {editorLoaded ? (
               <CKEditor
                 editor={ClassicEditor}
-                // data={carDescription}
+                data={carDescription}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
                   // console.log("Editor is ready to use!", editor);
@@ -1769,7 +1616,7 @@ export default function CarUpload() {
                   }}
                   unmountOnExit
                 >
-                  <CircularProgress className={"text-bhalogari"}/>
+                  <CircularProgress />
                 </Fade>
               </div>
             )}
@@ -1777,8 +1624,8 @@ export default function CarUpload() {
               variant="contained"
               color="inherit"
               // disabled={loading}
-              className={classes.button + " mt-6 bg-bhalogari text-white hover:text-bhalogari"}
-              startIcon={<AirportShuttleIcon/>}
+              className={classes.button}
+              // startIcon={<AirportShuttleIcon />}
               onClick={onSubmit}
             >
               submit listing
