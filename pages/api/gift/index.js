@@ -27,7 +27,8 @@ export default async function handler(req, res) {
           updated_at: new Date(),
           package_id_id: 6,
           payment_method_id: 1,
-          user_id_id: 20
+          user_id_id: 20,
+          trx_id: "123123123123123"
         }
       });
     } catch (e) {

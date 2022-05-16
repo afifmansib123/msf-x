@@ -1240,6 +1240,7 @@ model MerchantStorefront_paymenthistory {
   package_id_id              BigInt?
   payment_method_id          BigInt?
   user_id_id                 BigInt?
+  trx_id                     String?                     @db.VarChar(255)
   MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_f41ce17e_fk_MerchantS")
   PaymentsApp_paymentmethod  PaymentsApp_paymentmethod?  @relation(fields: [payment_method_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_payment_method_id_a71cdcdf_fk_PaymentsA")
   UsersApp_customuser        UsersApp_customuser?        @relation(fields: [user_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_user_id_id_6723fe7e_fk_UsersApp_")

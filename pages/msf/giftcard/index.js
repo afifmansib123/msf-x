@@ -16,12 +16,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {getGiftPackage} from '../../api/gift/packages'
+import axios from "axios";
 
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
     const router = useRouter();
+    const {data: session, status} = useSession();
     const {error, message} = router.query;
     const {packages} = props;
+    console.log("token id", session);
 
     React.useEffect(() => {
         if (error) {
@@ -33,6 +36,30 @@ function merchantGiftCard(props) {
         }
     }, [])
 
+    const buyPackage = (subPackage) => async (e) => {
+        const dataParams = {
+            total_amount: subPackage.price, // the amount goes to SSL checkout page
+            user_id: session.token.id,
+            package_id: subPackage.id,
+            cus_name: session.token.name,
+            cus_city: "",
+            cus_country: "Bangladesh",
+            shipping_method: "NO",
+            multi_card_name: "",
+            num_of_item: 1,
+            product_name: `BG Subscription Package - ${subPackage.package_name}`,
+            product_category: "Service",
+            product_profile: "General",
+        };
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/add-payment-history/`,
+            dataParams
+        );
+        // window.location = response.data.GatewayPageURL;
+        router.push(response.data.GatewayPageURL);
+    }
+
+
     const handleClose = () => {
         setOpenDialog(false)
         router.push({
@@ -40,10 +67,13 @@ function merchantGiftCard(props) {
         })
     }
 
-    const onBuyClicked = (package_id = 1) => {
-        router.push({
-            pathname: `/msf/giftcard/payment/${package_id}`
-        })
+    const onBuyClicked = (package_item) => {
+        console.log(package_item)
+        // router.push({
+        //     pathname: `/msf/giftcard/payment/${package_id}`
+        // })
+        buyPackage(package_item);
+
     }
 
     const onCurrentPackageClick = (user_id) => {
@@ -95,9 +125,7 @@ function merchantGiftCard(props) {
                 </CardFooter>
             </Card>
             <div className="text-center">
-                <CustomButton onClick={() => {
-                    onBuyClicked()
-                }} color={"primary"} size="lg" round style={{
+                <CustomButton onClick={buyPackage(v)} color={"primary"} size="lg" round style={{
                     fontWeight: "bold",
                     background: "linear-gradient(60deg, #f06424, #fb8c00)",
                     paddingLeft: "100px",
