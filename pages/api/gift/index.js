@@ -7,15 +7,18 @@ export default async function handler(req, res) {
   const { query } = req;
 
   if (query.status === "success") {
-    console.log("test")
+    const user_id = parseInt(query.user_id);
+    const package_id = parseInt(query.package_id);
+    const trx_id = query.trx_id;
+    const total_amount = parseInt(query.total_amount);
     // add record to DB
     try {
       await prisma.MerchantStorefront_merchantpackage.create({
         data: {
           created_at: new Date(),
           updated_at: new Date(),
-          user_id_id: 20,
-          package_id_id:6
+          user_id_id: user_id,
+          package_id_id: package_id
         }
       });
 
@@ -25,24 +28,26 @@ export default async function handler(req, res) {
           remark: null,
           timestamp: new Date(),
           updated_at: new Date(),
-          package_id_id: 6,
-          payment_method_id: 1,
-          user_id_id: 20,
-          trx_id: "123123123123123"
+          package_id_id: package_id,
+          payment_method_id: 3,
+          user_id_id: user_id,
+          trx_id: trx_id,
+          amount: total_amount
         }
       });
     } catch (e) {
-      res.redirect(302, `/msf/giftcard?error=Failed&&message=${e}`);
+      console.error(e)
+      return res.redirect(302, `/msf/giftcard?error=Failed&message=err`);
     }
     // and redirect to msf/giftcard
 
-    res.redirect(302, '/msf/giftcard');
+    return res.redirect(302, '/msf/giftcard');
 
   } else {
 
     // Redirect to msf/giftcard but shows error
 
-    res.redirect(302, '/msf/giftcard?error=Failed&&message=testing');
+    return res.redirect(302, '/msf/giftcard?error=Failed&message=testing');
 
   }
 

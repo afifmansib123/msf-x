@@ -34,29 +34,29 @@ function merchantGiftCard(props) {
         } else {
             setOpenDialog(false)
         }
-    }, [])
-
+    }, []);
+    // cus_city: "",
+    //     cus_country: "Bangladesh",
+    //     shipping_method: "NO",
+    //     multi_card_name: "",
+    //     num_of_item: 1,
+    //     product_name: `BG Subscription Package - ${subPackage.package_name}`,
+    //     product_category: "Service",
+    //     product_profile: "General",
     const buyPackage = (subPackage) => async (e) => {
+        console.log("package", subPackage.id)
         const dataParams = {
             total_amount: subPackage.price, // the amount goes to SSL checkout page
             user_id: session.token.id,
             package_id: subPackage.id,
             cus_name: session.token.name,
-            cus_city: "",
-            cus_country: "Bangladesh",
-            shipping_method: "NO",
-            multi_card_name: "",
-            num_of_item: 1,
-            product_name: `BG Subscription Package - ${subPackage.package_name}`,
-            product_category: "Service",
-            product_profile: "General",
         };
+
         const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/add-payment-history/`,
+            `/api/payment/payonline`,
             dataParams
         );
-        // window.location = response.data.GatewayPageURL;
-        router.push(response.data.GatewayPageURL);
+        await router.push(response.data);
     }
 
 
@@ -65,15 +65,6 @@ function merchantGiftCard(props) {
         router.push({
             pathname: '/msf/giftcard'
         })
-    }
-
-    const onBuyClicked = (package_item) => {
-        console.log(package_item)
-        // router.push({
-        //     pathname: `/msf/giftcard/payment/${package_id}`
-        // })
-        buyPackage(package_item);
-
     }
 
     const onCurrentPackageClick = (user_id) => {
@@ -208,4 +199,6 @@ export async function getServerSideProps(context) {
 }
 
 merchantGiftCard.layout = MSF;
+merchantGiftCard.auth = true;
+
 export default merchantGiftCard;

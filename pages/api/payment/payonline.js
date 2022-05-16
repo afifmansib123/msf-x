@@ -28,7 +28,7 @@ const is_live = false; //true for live, false for sandbox
 
 export default async function handler(req, res) {
   if (req.method === "POST" || true) {
-    const { body } = res;
+    const { body } = req;
     // 1. Extract data
     // 2. pass to SSLC
     // 3. Create a record in payment history
@@ -60,21 +60,33 @@ export default async function handler(req, res) {
     // post_body['product_category'] = product_category
     // post_body['product_profile'] = product_profile
     // post_body['vat'] = vat
+    const trn_id = uuid();
+    const total_amount = parseInt(body.total_amount);
+    const user_id = parseInt(body.user_id);
+    const package_id = parseInt(body.package_id);
+    const cus_name = "test_name"
+    const cus_email = "customer@example.com"
+
+    const success_url = `http://localhost:3000/api/gift?status=success&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}`;
+    const fail_url = `http://localhost:3000/api/gift?status=fail&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}`;
+    const cancel_url = `http://localhost:3000/api/gift?status=cancel&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}`;
+
+    console.log(total_amount)
 
     const data = {
-      total_amount: 100,
+      total_amount: total_amount,
       currency: "BDT",
-      tran_id: "REF123", // use unique tran_id for each api call
-      success_url: "http://localhost:3000/admin/giftcard/payment/success",
-      fail_url: "http://localhost:3000/admin/giftcard/payment/fail",
-      cancel_url: "http://localhost:3000/admin/giftcard/payment/cancel",
+      tran_id: trn_id, // use unique tran_id for each api call
+      success_url: success_url,
+      fail_url: fail_url,
+      cancel_url: cancel_url,
       ipn_url: "http://localhost:3000/admin/giftcard/payment/ipn",
       shipping_method: "Courier",
       product_name: "Computer.",
       product_category: "Electronic",
       product_profile: "general",
-      cus_name: "Customer Name",
-      cus_email: "customer@example.com",
+      cus_name: cus_name,
+      cus_email: cus_email ,
       cus_add1: "Dhaka",
       cus_add2: "Dhaka",
       cus_city: "Dhaka",
@@ -103,11 +115,13 @@ export default async function handler(req, res) {
     // Redirect the user to payment gateway
     console.log("apiResponse",apiResponse)
     let {GatewayPageURL} = apiResponse;
-    res.redirect(GatewayPageURL);
-    console.log("Redirecting to: ", GatewayPageURL);
-
+    if (!GatewayPageURL) {
+      return res.status(200).send("http://localhost:3000/api/gift?status=fail")
+    }
+    return res.status(200).send(GatewayPageURL);
+    // console.log("Redirecting to: ", GatewayPageURL);
     // res.status(200).json({ trx: uuid(), ...req.body });
-    return;
+    // return;
   }
   /*
    const prisma = new PrismaClient();
@@ -129,5 +143,5 @@ export default async function handler(req, res) {
    console.log(cars)
    */
 
-  res.status(200).json("Hello");
+  // res.status(200).json("Hello");
 }
