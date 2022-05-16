@@ -450,5 +450,44 @@
     "fuel": ["Hybrid"],
     "drive": ["2WD"],
     "year": [2013, 2021]
+  },
+  {
+    "cn": "NZE164",
+    "maker": "Toyota",
+    "model": "Fielder",
+    "body": ["Wagon"],
+    "seat": [5],
+    "transmission": ["automatic", "manual"],
+    "grade": ["X"],
+    "engine": [1500],
+    "fuel": ["Octane"],
+    "drive": ["4WD"],
+    "year": [2012, 2020]
+  },
+  {
+    "cn": "NZE161",
+    "maker": "Toyota",
+    "model": "Fielder",
+    "body": ["Wagon"],
+    "seat": [5],
+    "transmission": ["automatic", "manual"],
+    "grade": ["G EDITION"],
+    "engine": [1500],
+    "fuel": ["Octane"],
+    "drive": ["4WD"],
+    "year": [2012, 2018]
+  },
+  {
+    "cn": "NZE1",
+    "maker": "Toyota",
+    "model": "Fielder",
+    "body": ["Wagon"],
+    "seat": [5],
+    "transmission": ["automatic", "manual"],
+    "grade": ["G EDITION"],
+    "engine": [1500],
+    "fuel": ["Octane"],
+    "drive": ["4WD"],
+    "year": [2012, 2018]
   }
 ]
