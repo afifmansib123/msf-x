@@ -1,7 +1,9 @@
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
-// @mui/icons-material
 import AddAlert from "@mui/icons-material/AddAlert";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+// @mui/icons-material
+import { InputBase } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 // core components
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -848,7 +850,7 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <>
+              {/* <>
                 <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -857,9 +859,6 @@ export default function CarUpload() {
                   name="car_maker"
                   // onChange={onCarMakerChange}
                 >
-                  <MenuItem disabled value="">
-                    <em>{makerName}</em>
-                  </MenuItem>
                   {carMakers.map((l, index) => {
                     return (
                       <MenuItem
@@ -874,7 +873,19 @@ export default function CarUpload() {
                     );
                   })}
                 </Select>
-              </>
+              </> */}
+
+              <Autocomplete
+                id="custom-input-demo"
+                options={carMakers}
+                autoComplete
+                inputValue={makerName}
+                getOptionLabel={(option) => option.maker_name}
+                renderInput={(params) => {
+                  const { InputLabelProps, InputProps, ...rest } = params;
+                  return <InputBase {...params.InputProps} {...rest} />;
+                }}
+              />
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
