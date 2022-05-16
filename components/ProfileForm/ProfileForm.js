@@ -101,7 +101,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
       const { register, handleSubmit } = useForm();
       const { data: session, status } = useSession();
       const [img, setImg] = useState();
-      const [userimg, setUserimg] = useState(proImage);
+      const [userimg, setUserimg] = useState(data.image ? data.image : proImage);
       const [errorText, setErrorText] = useState("");
       let okay = false;
 
@@ -173,7 +173,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                                                       <Image
                                                             unoptimized
                                                             layout='fill'
-                                                            src={data.image ? data.image : userimg}
+                                                            src={userimg}
                                                             alt="Profile Image"
                                                             className={classes.image}
                                                       />

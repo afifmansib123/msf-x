@@ -68,7 +68,7 @@ function Profile(props) {
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [editFlag]);
 
   //Need to send the Profile Image and A callback function of handleEdit
 

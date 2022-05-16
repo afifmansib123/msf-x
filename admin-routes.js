@@ -42,14 +42,14 @@ const dashboardRoutes = [
 
     layout: "/admin",
   },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: Notifications,
+  // {
+  //   path: "/notifications",
+  //   name: "Notifications",
+  //   rtlName: "إخطارات",
+  //   icon: Notifications,
 
-    layout: "/admin",
-  },
+  //   layout: "/admin",
+  // },
   {
     path: "/listings",
     name: "Listings",
