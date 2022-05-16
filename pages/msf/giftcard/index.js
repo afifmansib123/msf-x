@@ -20,7 +20,7 @@ import {getGiftPackage} from '../../api/gift/packages'
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
     const router = useRouter();
-    const {error} = router.query;
+    const {error, message} = router.query;
     const {packages} = props;
 
     React.useEffect(() => {
@@ -40,9 +40,9 @@ function merchantGiftCard(props) {
         })
     }
 
-    const onBuyClicked = (package_type = 1) => {
+    const onBuyClicked = (package_id = 1) => {
         router.push({
-            pathname: `/msf/giftcard/payment/${package_type}`
+            pathname: `/msf/giftcard/payment/${package_id}`
         })
     }
 
@@ -152,12 +152,11 @@ function merchantGiftCard(props) {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {"Use Google's location service?"}
+                        {"Something went wrong, Cannot buy the package"}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Let Google help apps determine location. This means sending anonymous
-                            location data to Google, even when no apps are running.
+                           {message}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
