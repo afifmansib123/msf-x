@@ -31,8 +31,18 @@ const useStyles = makeStyles((theme) => ({
             h1: {
                   fontFamily: "30px",
             },
+            "@media(max-width: 919px)": {
+                  marginTop: "80px",
+            },
+            "@media(max-width: 820px)": {
+                  marginTop: "100px",
+                  width: "100%",
+
+            },
             "@media(max-width: 520px)": {
-                  marginTop:"100px"
+                  marginTop: "130px",
+                  width: "100%",
+
             },
       },
       box: {
@@ -49,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
             justifyContent: "center",
             alignItems: "center",
             marginTop: "15px",
-            "@media(max-width: 520px)": {
+            "@media(max-width: 600px)": {
                   gridTemplateColumns: "1fr",
             },
       },
@@ -67,6 +77,11 @@ const useStyles = makeStyles((theme) => ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            "@media(max-width: 919px)": {
+                  marginRight: "0px",
+                  marginTop: "0px",
+                  marginLeft: "120px",
+            },
             "@media(max-width: 767px)": {
                   marginRight: "-82px",
                   marginTop: "20px",
@@ -75,8 +90,8 @@ const useStyles = makeStyles((theme) => ({
                   marginRight: "0px",
                   marginTop: "0px",
                   // position: "absolute",
-                  top: "30px",
-                  marginLeft: "0px",
+                  top: "50px",
+                  marginLeft: "30px",
                   // cursor: "pointer",
                   border: "5px solid #fff",
                   borderRadius: "50%",
@@ -87,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-            },
+            }
       },
       image: {
             minWidth: "180px",
@@ -165,7 +180,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
             <div className={classes.rootBox}>
                   <div className={classes.cardBox}>
                         <div>
-                              <Typography component="h1">Create your account</Typography>
+                              <Typography component="h1">Edit Your Account Details</Typography>
                               <div className={classes.box}>
                                     <form onSubmit={handleSubmit(onSubmit)} className="">
                                           <div className={classes.profileImage}>
@@ -174,6 +189,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                                                             unoptimized
                                                             layout='fill'
                                                             src={userimg}
+                                                            style={{ cursor: 'pointer' }}
                                                             alt="Profile Image"
                                                             className={classes.image}
                                                       />
