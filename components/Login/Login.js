@@ -1,9 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import topImage from "../../assets/Header/bhalogari.0bdbffc9.png";
-import sideImage from "../../assets/Header/ss.0bdbffc9.png";
-
 function Login() {
   return (
     <div className="flex justify-right">
