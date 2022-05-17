@@ -8,6 +8,8 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import ReadMore from "../../components/ReadMore/ReadMore";
+import Snackbar from "components/Snackbar/Snackbar.js";
+
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -18,6 +20,9 @@ import Avatar from "@mui/material/Avatar";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import axios from "axios";
 import {useSession} from "next-auth/react";
+import {useRouter} from "next/router";
+import AddAlert from "@mui/icons-material/AddAlert";
+
 
 function Subscriptions() {
 
@@ -25,13 +30,27 @@ function Subscriptions() {
   const [packages, setPackages] = useState([]);
   const [details, setDetails] = useState([]);
   const {data: session, status} = useSession();
+  const [snackMsg, setSnackMsg] = useState("");
+  const [open, setOpen] = useState(false);
+  const handleClose = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   const handleChange = (panel) => (event, isExpanded) => {
     event.preventDefault();
     setExpanded(isExpanded ? panel : false);
   }
 
+  const router = useRouter()
+
   useEffect(() => {
+    if(router.query.status){
+      setOpen(true);
+      setSnackMsg("Your Payment is - " + router.query.status);
+    }
     (async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/packages/`);
@@ -166,6 +185,16 @@ function Subscriptions() {
           )
         })
       }
+      <Snackbar
+        place="br"
+        color="bhalogari"
+        icon={AddAlert}
+        message={snackMsg}
+        open={open}
+        onclose={handleClose}
+        closeNotification={() => setOpen(false)}
+        close
+      />
     </GridContainer>
   )
 }
