@@ -1,5 +1,6 @@
 import React, { useState, forwardRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Login from "../components/Login/Login";
 // import Image from "next/image";  // TODO Does not support PNG
 // import TopBar from "../components/TopBar/TopBar";
