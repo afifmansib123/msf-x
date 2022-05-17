@@ -2,7 +2,7 @@ import React from "react";
 import {useRouter} from "next/router";
 import MSF from "layouts/MSF.js";
 import {useSession} from "next-auth/react";
-import {Button, CardContent, Container, Divider} from "@mui/material";
+import {Button, CardContent, Container, Divider, useTheme} from "@mui/material";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Card from "../../../components/Card/Card";
@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {getGiftPackage} from '../../api/gift/packages'
-import axios from "axios";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
@@ -25,7 +25,8 @@ function merchantGiftCard(props) {
     const {data: session, status} = useSession();
     const {res_status, message, title} = router.query;
     const {packages} = props;
-    console.log("token id", session);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     React.useEffect(() => {
         // if (res_status==="fail") {
@@ -181,7 +182,8 @@ function merchantGiftCard(props) {
                     onClose={handleClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
-                >
+                    fullScreen={fullScreen}
+                    fullWidth>
                     <DialogTitle id="alert-dialog-title">
                         {title}
                     </DialogTitle>
