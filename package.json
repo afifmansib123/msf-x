@@ -89,6 +89,7 @@
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.171",
     "babel-loader": "^8.2.5",
+    "eslint": "^8.15.0",
     "postcss-loader": "^6.2.1"
   }
 }
