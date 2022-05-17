@@ -37,18 +37,20 @@ export default async function handler(req, res) {
       });
     } catch (e) {
       console.error(e)
-      return res.redirect(302, `/msf/giftcard?error=Failed&message=err`);
+      return res.redirect(302, `/msf/giftcard?res_status=fail&message=${e.message}.&title=Something went wrong, Cannot buy the package`);
     }
     // and redirect to msf/giftcard
 
-    return res.redirect(302, '/msf/giftcard');
+    return res.redirect(302, '/msf/giftcard?res_status=success&message=payment success, your have purchase the gift voucher.&title=Package Payment Succeed');
 
-  } else {
+  } else if (query.status === "fail") {
 
     // Redirect to msf/giftcard but shows error
 
-    return res.redirect(302, '/msf/giftcard?error=Failed&message=testing');
+    return res.redirect(302, '/msf/giftcard?res_status=fail&message=payment fail, please contract admin.&title=Something went wrong, Cannot buy the package');
 
+  } else {
+    return res.redirect(302, '/msf/giftcard?res_status=cancel&message=payment have already cancel.&title=Package payment canceled');
   }
 
 }

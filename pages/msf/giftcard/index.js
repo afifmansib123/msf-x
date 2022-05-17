@@ -20,19 +20,21 @@ import axios from "axios";
 
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
+    const [paymentDialog, setPaymentDialog] = React.useState(false);
     const router = useRouter();
     const {data: session, status} = useSession();
-    const {error, message} = router.query;
+    const {res_status, message, title} = router.query;
     const {packages} = props;
     console.log("token id", session);
 
     React.useEffect(() => {
-        if (error) {
+        // if (res_status==="fail") {
+        //     setOpenDialog(true)
+        // } else {
+        //     setOpenDialog(false)
+        // }
+        if (res_status) {
             setOpenDialog(true)
-            console.log("err case")
-            console.log("hello world")
-        } else {
-            setOpenDialog(false)
         }
     }, []);
     // cus_city: "",
@@ -130,7 +132,6 @@ function merchantGiftCard(props) {
 
     return (
         <>
-
                 <div className="text-right">
                     <CustomButton onClick={() => {
                         onCurrentPackageClick(12)
@@ -172,7 +173,7 @@ function merchantGiftCard(props) {
                     aria-describedby="alert-dialog-description"
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {"Something went wrong, Cannot buy the package"}
+                        {title}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
