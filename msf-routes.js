@@ -34,12 +34,12 @@ const dashboardRoutes = [
     icon: Dashboard,
     layout: "/msf",
   },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: Notifications,
-    layout: "/msf",
-  },
+  // {
+  //   path: "/notifications",
+  //   name: "Notifications",
+  //   icon: Notifications,
+  //   layout: "/msf",
+  // },
   // {
   //   path: "/listings",
   //   name: "Listings",

@@ -16,6 +16,7 @@ import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 import Dashboard from "@mui/icons-material/Dashboard";
 import LogoutIcon from '@mui/icons-material/Logout';
 import styles from "assets/jss/nextjs-material-dashboard/components/sidebarStyle.js";
+import { signOut } from "next-auth/react"
 
 export default function Sidebar(props) {
   // used for checking current route
@@ -27,6 +28,11 @@ export default function Sidebar(props) {
   function activeRoute(routeName) {
     return router.route.indexOf(routeName) > -1 ? true : false;
   }
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/' })
+  }
+
   const { color, logo, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
@@ -117,9 +123,8 @@ export default function Sidebar(props) {
           <div className={classes.sidebarWrapper}>
             {links}
 
-            <Link href="/signOut" key={"signOut"}>
               <a className={classes.settings +" "+ classes.item}>
-              <ListItem button className={classes.itemLink + " white"}>
+              <ListItem button className={classes.itemLink + " white"} onClick={()=>handleSignOut()}>
                   <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
                   <ListItemText
                     primary={"Sign Out"}
@@ -128,7 +133,7 @@ export default function Sidebar(props) {
                   />
                 </ListItem>
               </a>
-            </Link>
+
           </div>          
           {image !== undefined ? (
             <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
@@ -152,9 +157,9 @@ export default function Sidebar(props) {
           <div className={classes.sidebarWrapper}>
             {links}
 
-            <Link href="/signOut" key={"signOut"}>
+
               <a className={classes.settings +" "+ classes.item}>
-              <ListItem button className={classes.itemLink + " white"}>
+              <ListItem button className={classes.itemLink + " white"} onClick={()=>handleSignOut()}>
                   <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
                   <ListItemText
                     primary={"Sign Out"}
@@ -163,7 +168,7 @@ export default function Sidebar(props) {
                   />
                 </ListItem>
               </a>
-            </Link>
+
           </div>
           {image !== undefined ? (
             <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
