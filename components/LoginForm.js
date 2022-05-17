@@ -1,13 +1,14 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import topImage from "../assets/Header/bhalogari.0bdbffc9.png";
 
 function LoginForm(props) {
-  const { title, onSignIn, onSignUp, signUp } = props;
+  const { title, subTitle, onSignIn, onSignUp, signUp } = props;
   const {
     register,
     handleSubmit,
@@ -59,48 +60,66 @@ function LoginForm(props) {
       </Box> */}
 
       {/* my code start */}
-      <section class="">
-          <div class="flex items-center justify-center min-h-screen bg-grey-200" style={{borderRadius:"10px"}}>
-          <div class="px-8 py-6 mt-4 text-left bg-white shadow-lg" style={{borderRadius:"10px"}}>
-            <div class="flex items-center flex-shrink-0 text-white ml-28">
-              <Image width={90} height={90} src={topImage}></Image>
-            </div>
-                <h3 class="text-2xl font-bold text-center" style ={{color:"#000000", marginBottom:"15px", marginTop:"20px"}}>Merchant Storefront</h3>
-                  <h2 style ={{color: "#FC6A03", alignItems:"center",marginTop:"15px"}}>{title}</h2>
-              <form action="">
-                <div class="mt-4">
-                    <div>
-                        <label class="block" for="email">Username</label>
-                                <input type="text" placeholder="Email" 
-                                    class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
-                                    autoComplete="name"
-                                    required
-                                    {...register("username")}
-                                    />
-                                <span style={{fontSize: "12px", color:"#000000"}}>e.g: 01777664033 </span><br></br>
-                                <span class="text-xs tracking-wide text-red-600" style={{fontSize: "11px" }}> * Username is required to login </span>
-                                {/* <span class="text-xs tracking-wide text-red-600">Username field is required </span> */}
-                    </div>
 
-                    <div class="mt-4">
-                        <label class="block">Password</label>
-                                <input type="password" placeholder="Password" 
-                                    class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
-                                    autoComplete="name"
-                                    required
-                                    {...register("password", {required:true})}/>
-                    </div>
+      <div class="flex items-start md:items-center justify-center min-h-screen bg-grey-200">
+        <div class="h-full m-4 px-6 py-20 text-left bg-white shadow-lg rounded-xl">
+          <div class="flex items-center flex-shrink-0 text-white ml-28">
+            <Image width={90} height={90} src={topImage}></Image>
+          </div>
+          <h3 class="text-2xl font-bold text-center text-black mb-[15px] mt-[20px]">{title}</h3>
+          {subTitle && <h2 className="text-center text-[#FC6A03] mt-[15px]">{subTitle}</h2>}
+          <form action="">
+            <div class="mt-4">
+              <div>
+                <label class="block" for="email">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  placeholder="Email"
+                  class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
+                  autoComplete="name"
+                  required
+                  {...register("username")}
+                />
+                <span style={{ fontSize: "12px", color: "#000000" }}>e.g: 01777664033 </span>
+                <br></br>
+                <span class="text-xs tracking-wide text-red-600" style={{ fontSize: "11px" }}>
+                  {" "}
+                  * Username is required to login{" "}
+                </span>
+                {/* <span class="text-xs tracking-wide text-red-600">Username field is required </span> */}
+              </div>
 
-                    <div className="flex items-center justify-center">
-                        <button className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900" style ={{backgroundColor: "#ED7117",marginTop:"30px", height:"50px"}} onClick={handleSubmit(onSubmit)}>Login</button>
-                        {/* <a href="#" class="text-sm text-blue-600 hover:underline" >Forgot password?</a> */}
-                    </div>
-                  </div>
-              </form>
+              <div class="mt-4">
+                <label class="block">Password</label>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
+                  autoComplete="name"
+                  required
+                  {...register("password", { required: true })}
+                />
+              </div>
+
+              <div className="flex items-center justify-center">
+                <button
+                  className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"
+                  style={{ backgroundColor: "#ED7117", marginTop: "30px", height: "50px" }}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Login
+                </button>
+                {/* TODO <a href="#" class="text-sm text-blue-600 hover:underline" >Forgot password?</a> */}
+              </div>
             </div>
+            <div className="flex items-center justify-center pt-4">
+              <Link href="/">Back to Home</Link>
+            </div>
+          </form>
         </div>
-
-      </section>
+      </div>
     </div>
     // my code ends
   );
@@ -126,7 +145,8 @@ LoginForm.defaultProps = {
   },
 };
 
-        {/* <div class="px-4 py-5 mx-auto border-2 border-orange-600 rounded-xl w-1/3">
+{
+  /* <div class="px-4 py-5 mx-auto border-2 border-orange-600 rounded-xl w-1/3">
           <div class="max-w-lg mx-auto">
             <div class="text-center mb-8">
               <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Merchant Storefront</h2>
@@ -170,4 +190,5 @@ LoginForm.defaultProps = {
               </button>
             </form>
           </div>
-        </div> */}
+        </div> */
+}

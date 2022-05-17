@@ -6,7 +6,6 @@ import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider
 import LoginForm from "/components/LoginForm";
 
 function Index(props) {
-  // const { landingPage } = props;
   // const { data: session } = useSession();
   // const [error, setError] = useState("");
   const router = useRouter();
@@ -33,25 +32,23 @@ function Index(props) {
     });
   };
 
-  // TODO Show default MSF page
-
   return (
-    <div className="m-10">
+    <div className="flex flex-col border-2 border-black">
       {error && (
         <div>
           <h1>Error</h1>
           <p>{error}</p>
         </div>
       )}
-      <h1 className="text-2xl text-green">Merchant Storefront</h1>
-      <div className="grid grid-cols-1">
-        <LoginForm title="Member Signin" onSignIn={handleSignIn} />
-      </div>
-      <Link href="/">Back to Store</Link>
-       </div>
-      )
-     }
-
+      {/* <h1 className="text-2xl text-green">Merchant Storefront</h1> */}
+      <LoginForm
+        title="Merchant Storefront"
+        // subTitle="Sign In"
+        onSignIn={handleSignIn}
+      />
+    </div>
+  );
+}
 
 export async function getStaticProps(context) {
   // console.log("LANDING_PAGE", process.env.LANDING_PAGE);
