@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import topImage from "../../assets/Header/bhalogari.0bdbffc9.png";
+
 const TopBar = () => {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (

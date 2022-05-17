@@ -11,8 +11,8 @@ import { PrismaClient } from "@prisma/client";
 
 export default NextAuth({
   pages: {
-    signIn: "/msf",
-    // signIn: "/",
+    // signIn: "/msf",
+    signIn: "/",
     // signOut: '/auth/signout',
     // error: "/auth/error", // Error code passed in query string as ?error=
     error: "/", // Error code passed in query string as ?error=

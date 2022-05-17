@@ -114,6 +114,7 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
+          <div className={classes.sidebarWrapper}>{links}</div>
           {image !== undefined ? (
             <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
           ) : null}

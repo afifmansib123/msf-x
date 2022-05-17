@@ -80,13 +80,14 @@ const dashboardRoutes = [
   //   layout: "/msf",
   // },
 
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: Unarchive,
+  // {
+  //   path: "/settings",
+  //   name: "Settings",
+  //   icon: Unarchive,
 
-    layout: "/msf",
-  },
+  //   layout: "/msf",
+  // },
+  
   {
     path: "/profile",
     name: "User Profile",
