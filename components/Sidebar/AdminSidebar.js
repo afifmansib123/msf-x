@@ -4,7 +4,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import Drawer from "@mui/material/Drawer";
 import Hidden from "@mui/material/Hidden";
 import List from "@mui/material/List";
@@ -13,7 +13,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Icon from "@mui/material/Icon";
 // core components
 import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
-
+import Dashboard from "@mui/icons-material/Dashboard";
+import LogoutIcon from '@mui/icons-material/Logout';
 import styles from "assets/jss/nextjs-material-dashboard/components/sidebarStyle.js";
 
 export default function Sidebar(props) {
@@ -43,9 +44,7 @@ export default function Sidebar(props) {
           });
         }
         const whiteFontClasses = classNames({
-          [" " + classes.whiteFont]:
-            activeRoute(prop.layout + prop.path) ||
-            prop.path === "/upgrade-to-pro",
+          [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path) || prop.path === "/upgrade-to-pro",
         });
         return (
           <Link href={prop.layout + prop.path} key={key}>
@@ -115,10 +114,7 @@ export default function Sidebar(props) {
         >
           {brand}
           {image !== undefined ? (
-            <div
-              className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
-            />
+            <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
           ) : null}
         </Drawer>
       </Hidden>
@@ -134,12 +130,24 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
-          <div className={classes.sidebarWrapper}>{links}</div>
+          <div className={classes.sidebarWrapper}>
+            {links}
+
+            <Link href="/signOut" key={"signOut"}>
+              <a className={classes.settings +" "+ classes.item}>
+              <ListItem button className={classes.itemLink + " white"}>
+                  <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
+                  <ListItemText
+                    primary={"Sign Out"}
+                    className={classNames(classes.itemText, classes.whiteFont)}
+                    disableTypography={true}
+                  />
+                </ListItem>
+              </a>
+            </Link>
+          </div>
           {image !== undefined ? (
-            <div
-              className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
-            />
+            <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
           ) : null}
         </Drawer>
       </Hidden>
@@ -150,14 +158,7 @@ export default function Sidebar(props) {
 Sidebar.propTypes = {
   rtlActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
-  bgColor: PropTypes.oneOf([
-    "white",
-    "purple",
-    "blue",
-    "green",
-    "orange",
-    "red",
-  ]),
+  bgColor: PropTypes.oneOf(["white", "purple", "blue", "green", "orange", "red"]),
   logo: PropTypes.string,
   image: PropTypes.string,
   logoText: PropTypes.string,
@@ -165,6 +166,6 @@ Sidebar.propTypes = {
   open: PropTypes.bool,
 };
 
-Sidebar.defaultProps  = {
+Sidebar.defaultProps = {
   rtlActive: false,
-}
+};

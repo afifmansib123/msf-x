@@ -110,18 +110,20 @@ const dashboardRoutes = [
 
   //   layout: "/rtl",
   // },
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: Unarchive,
-    layout: "/admin",
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: Person,
-    layout: "/admin",
-  },
+
+  // {
+  //   path: "/settings",
+  //   name: "Settings",
+  //   icon: Unarchive,
+  //   layout: "/admin",
+  // },
+  
+  // {
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   icon: Person,
+  //   layout: "/admin",
+  // },
 
 ];
 
