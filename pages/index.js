@@ -2,8 +2,9 @@ import React, { useState, forwardRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Login from "../components/Login/Login";
-import TopBar from "../components/TopBar/TopBar";
-import sideImage from "../assets/Header/ss.0bdbffc9.png";
+// import Image from "next/image";  // TODO Does not support PNG
+// import TopBar from "../components/TopBar/TopBar";
+// import sideImage from "../assets/Header/ss.0bdbffc9.png";
 import { useRouter } from "next/router";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";

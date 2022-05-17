@@ -1,52 +1,53 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import topImage from "../../assets/Header/bhalogari.0bdbffc9.png";
-import sideImage from "../../assets/Header/ss.0bdbffc9.png";
+// next/image Does not support raster image (png)
+// import Image from "next/image";
+// import topImage from "/assets/Header/bhalogari.0bdbffc9.png";
+// import sideImage from "/assets/Header/ss.0bdbffc9.png";
 function Login() {
   return (
-    <div className="flex justify-right">
-      <Image src={sideImage}></Image>
-      <div className="flex items-right justify-right">
-        <ol>
-          <div
-            className="box-content  p-8 border-3 ... "
-            style={{ backgroundColor: "#FFFFFF", height: "650px", width: "500px" }}
-          >
-            <div class="flex items-center flex-shrink-0 text-white ml-52">
-              <Image width={"100%"} height={"100%"} src={topImage}></Image>
-            </div>
-
-            <h3 className="text-3xl font-bold text-center mt-[40px] text-bhalogari">BHALOGARI MERCHANT STOREFRONT</h3>
-            <p className="m-5 text-center">Sign in to continue to Bhalogari</p>
-
-            <div className="flex items-center justify-center">
-              <ul>
-                <Link href="/msf">
-                  <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 border border-orange-700 rounded">
-                    Merchant Storefront{" "}
-                  </button>
-                </Link>
-
-                <br></br>
-
-                <Link href="/admin">
-                  <button
-                    className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-8 border border-orange-700 rounded"
-                    style={{ marginTop: "10px" }}
-                  >
-                    {" "}
-                    BG Admin Panel{" "}
-                  </button>
-                </Link>
-              </ul>
-            </div>
-            <p style={{ marginTop: "80px", textAlign: "center", fontSize: "14px" }}>
-              © 2022 <Link href="https://bhalogari.com">Bhalogari</Link>
-            </p>
+    <div className="flex justify-center item-center">
+      {/* <Image src={sideImage}></Image> */}
+      <div className="flex items-right justify-right md:w-1/3">
+        <div
+          className="box-content  p-8 border-3 ... "
+          style={{ backgroundColor: "#FFFFFF", height: "650px", width: "500px" }}
+        >
+          <div class="flex items-center justify-center ">
+            {/* <Image width={"100%"} height={"100%"} src={topImage}></Image> */}
+            <img src="/assets/img/bhalogari.png" />
           </div>
-        </ol>
+
+          <h3 className="text-3xl font-bold text-center mt-[40px] text-bhalogari">BHALOGARI MERCHANT STOREFRONT</h3>
+          <p className="m-5 text-center">Sign in to continue to Bhalogari</p>
+
+          <div className="flex items-center justify-center">
+            <ul>
+              <Link href="/msf">
+                <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 border border-orange-700 rounded">
+                  Merchant Storefront{" "}
+                </button>
+              </Link>
+
+              <br></br>
+
+              <Link href="/admin">
+                <button
+                  className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-8 border border-orange-700 rounded"
+                  style={{ marginTop: "10px" }}
+                >
+                  {" "}
+                  BG Admin Panel{" "}
+                </button>
+              </Link>
+            </ul>
+          </div>
+          <p style={{ marginTop: "80px", textAlign: "center", fontSize: "14px" }}>
+            © 2022 <Link href="https://bhalogari.com">Bhalogari</Link>
+          </p>
+        </div>
       </div>
+      <div className="hidden md:block z-10 w-full bg-[url('/assets/img/ss.png')] bg-border-2 border-black"></div>
     </div>
   );
 }
