@@ -18,10 +18,10 @@ export default function Index(props) {
   };
 
   return (
-    <div className="m-10">
-      <h1 className="text-2xl text-green">BG Admin Panel</h1>
+    <div className="m-10" >
+      <h1 className="text-2xl text-green" style={{fontFamily:"sans-serif", fontSize:"30px", marginBottom:"20px", marginTop:"20px"}}>BG Admin Panel</h1>
       <div className="grid grid-cols-1">
-        <LoginForm title="Sign In" signUp={false} onSignIn={handleSignIn} />
+       <LoginForm title="Sign In" signUp={false} onSignIn={handleSignIn} />
       </div>
     </div>
   );

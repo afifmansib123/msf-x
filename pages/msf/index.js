@@ -48,9 +48,10 @@ function Index(props) {
         <LoginForm title="Member Signin" onSignIn={handleSignIn} />
       </div>
       <Link href="/">Back to Store</Link>
-    </div>
-  );
-}
+       </div>
+      )
+     }
+
 
 export async function getStaticProps(context) {
   // console.log("LANDING_PAGE", process.env.LANDING_PAGE);

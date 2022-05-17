@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Login from "../components/Login/Login";
 import TopBar from "../components/TopBar/TopBar";
+import sideImage from "../assets/Header/ss.0bdbffc9.png";
 
 function Index(props) {
   return (
     <div className="">
-      <TopBar></TopBar>
-      {/* <h1 className="font-bold text-3xl">Bhalogari Merchant Storefront</h1>
-      Sell Your Cars Like a Pro!
-      <ul>
-        <li>
-          <Link href="/msf">Merchant Storefront</Link>
-        </li>
-        <li>
-          <Link href="/admin">BG Admin Panel</Link>
-        </li>
-      </ul> */}
+         {/* <Image  className="float-right ..."  src={sideImage}></Image> */}
+        {/* <TopBar></TopBar> */}
       <Login />
     </div>
   );
