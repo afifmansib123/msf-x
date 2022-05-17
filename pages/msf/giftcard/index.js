@@ -37,29 +37,39 @@ function merchantGiftCard(props) {
             setOpenDialog(true)
         }
     }, []);
-    // cus_city: "",
-    //     cus_country: "Bangladesh",
-    //     shipping_method: "NO",
-    //     multi_card_name: "",
-    //     num_of_item: 1,
-    //     product_name: `BG Subscription Package - ${subPackage.package_name}`,
-    //     product_category: "Service",
-    //     product_profile: "General",
-    const buyPackage = (subPackage) => async (e) => {
-        console.log("package", subPackage.id)
-        const dataParams = {
-            total_amount: subPackage.price, // the amount goes to SSL checkout page
-            user_id: session.token.id,
-            package_id: subPackage.id,
-            cus_name: session.token.name,
-        };
 
-        const response = await axios.post(
-            `/api/payment/payonline`,
-            dataParams
-        );
+    // const buyPackage = (subPackage) => async (e) => {
+    //     console.log("package", subPackage.id)
+    //     const dataParams = {
+    //         total_amount: subPackage.price, // the amount goes to SSL checkout page
+    //         user_id: session.token.id,
+    //         package_id: subPackage.id,
+    //         cus_name: session.token.name,
+    //     };
+    //
+    //     const response = await axios.post(
+    //         `/api/payment/payonline`,
+    //         dataParams
+    //     );
+    //     // await router.push(response.data);
+    //     await router.replace(response.data);
+    // }
+    const buyPackage = (subPackage) => async (e) => {
+        // console.log("package", subPackage.id)
+        // const dataParams = {
+        //     total_amount: subPackage.price, // the amount goes to SSL checkout page
+        //     user_id: session.token.id,
+        //     package_id: subPackage.id,
+        //     cus_name: session.token.name,
+        // };
+        //
+        // const response = await axios.post(
+        //     `/api/payment/payonline`,
+        //     dataParams
+        // );
         // await router.push(response.data);
-        await router.replace(response.data);
+        await router.push({pathname: '/msf/giftcard/paymethod',
+                query: {total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id,cus_name: session.token.name }});
     }
 
 
