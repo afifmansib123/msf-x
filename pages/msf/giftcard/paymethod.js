@@ -9,6 +9,8 @@ import CardBody from "../../../components/Card/CardBody";
 import CardFooter from "../../../components/Card/CardFooter";
 import CustomButton from '../../../components/CustomButtons/Button'
 import {bhalogariCardHeader} from "../../../assets/jss/nextjs-material-dashboard";
+import prisma from "../../../PrismaConnect";
+
 import axios from "axios";
 
 function Paymethod(props) {
@@ -28,11 +30,11 @@ function Paymethod(props) {
         return choicesarr.map((v, index) => {
             return (<GridItem xs={12} sm={12} md={12} key={index}>
                 {selectPay===index && <div onClick={() => {onClickHandle(index)}} className={"border-bhalogari border-2 p-10 rounded text-3xl"}>
-                    {v}
+                    { v.payment_method || v}
                 </div>}
                 {
                     selectPay!==index &&  <div onClick={() => {onClickHandle(index)}} className={"border-gray-100 hover:border-bhalogari border-2 p-10 rounded text-lg"}>
-                        {v}
+                        { v.payment_method || v}
                     </div>
                 }
 
@@ -90,7 +92,7 @@ function Paymethod(props) {
 
 export async function getServerSideProps(context) {
     let paymethods = await prisma.PaymentsApp_paymentmethod.findMany();
-    paymethods =  JSON.parse(JSON.stringify(response, (key, value) => (typeof value === "bigint" ? parseInt(value) : value)));
+    paymethods =  JSON.parse(JSON.stringify(paymethods, (key, value) => (typeof value === "bigint" ? parseInt(value) : value)));
     return {
         props: {
             choices: paymethods
