@@ -30,11 +30,11 @@ function Paymethod(props) {
     const choiceBtn = () => {
         return choicesarr.map((v, index) => {
             return (<GridItem xs={12} sm={12} md={12} key={index}>
-                {selectPay===index && <div onClick={() => {onClickHandle(index, v.id)}} className={"border-bhalogari border-2 p-10 rounded text-3xl"}>
+                {selectPay===index && <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-bhalogari border-2 p-10 rounded text-3xl mx-40"}>
                     { v.payment_method || v}
                 </div>}
                 {
-                    selectPay!==index &&  <div onClick={() => {onClickHandle(index, v.id)}} className={"border-gray-100 hover:border-bhalogari border-2 p-10 rounded text-lg"}>
+                    selectPay!==index &&  <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-gray-100 hover:border-bhalogari border-2 p-10 rounded text-lg mx-60"}>
                         { v.payment_method || v}
                     </div>
                 }
@@ -70,7 +70,7 @@ function Paymethod(props) {
             <div className={"container mx-auto flex"}>
                 <Card className={"self-center justify-center items-center mx-20"}>
                     <CardHeader color={"bhalogari"}><h1 className={"font-semibold text-center text-2xl p-4 px-[10rem]"}>Choose Payment Method</h1></CardHeader>
-                    <CardBody className={"w-fit"}>
+                    <CardBody className={"w-full"}>
                         <GridContainer>
                             {choiceBtn()}
                             <GridItem xs={12} sm={12} md={12}>
