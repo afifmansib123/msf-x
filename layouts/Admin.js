@@ -18,7 +18,7 @@ import styles from "assets/jss/nextjs-material-dashboard/layouts/adminStyle.js";
 
 // import bgImage from "assets/img/sidebar-2.jpg";
 // import logo from "assets/img/bhalogari.png";
-const bgImage = "/assets/img/sidebar-2.jpg";
+const bgImage = "/assets/img/sidebar-4.jpg";
 const logo = "/assets/img/bhalogari.png";
 
 let ps;
@@ -35,7 +35,7 @@ function Admin({ children, ...rest }) {
   const mainPanel = React.createRef();
   // states and functions
   const [image, setImage] = React.useState(bgImage);
-  const [color, setColor] = React.useState("orange");
+  const [color, setColor] = React.useState("blue");
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleImageClick = (image) => {
@@ -84,7 +84,7 @@ function Admin({ children, ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"Bhalogari"}
+        logoText={"BG Admin"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}

@@ -14,7 +14,11 @@ const withPWA = require("next-pwa");
 //     return config;
 //   },
 // });
-
+module.exports = {
+  images: {
+    domains: ['https://bhalogari-static.s3.amazonaws.com'],
+  },
+}
 const settings = {
   reactStrictMode: true,
   webpack(config, options) {

@@ -101,7 +101,7 @@ const dashboardStyle = {
   },
   errorDiv: {
     marginTop: "5px",
-    color: "#ff2d2d",
+    color: "#f06424",
     position: "absolute",
     bottom: "-20px",
   },

@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import Image from 'next/image';
+import Image from 'next/image';
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
             h1: {
                   fontFamily: "30px",
             },
+            "@media(max-width: 520px)": {
+                  marginTop:"100px"
+            },
       },
       box: {
             display: "flex",
@@ -46,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
             justifyContent: "center",
             alignItems: "center",
             marginTop: "15px",
+            "@media(max-width: 520px)": {
+                  gridTemplateColumns: "1fr",
+            },
       },
       profileImage: {
             position: "absolute",
@@ -65,6 +71,23 @@ const useStyles = makeStyles((theme) => ({
                   marginRight: "-82px",
                   marginTop: "20px",
             },
+            "@media(max-width: 520px)": {
+                  marginRight: "0px",
+                  marginTop: "0px",
+                  // position: "absolute",
+                  top: "30px",
+                  marginLeft: "0px",
+                  // cursor: "pointer",
+                  border: "5px solid #fff",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  width: "164px",
+                  height: "164px",
+                  background: "#fff",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+            },
       },
       image: {
             minWidth: "180px",
@@ -78,7 +101,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
       const { register, handleSubmit } = useForm();
       const { data: session, status } = useSession();
       const [img, setImg] = useState();
-      const [userimg, setUserimg] = useState(proImage);
+      const [userimg, setUserimg] = useState(data.image ? data.image : proImage);
       const [errorText, setErrorText] = useState("");
       let okay = false;
 
@@ -102,9 +125,10 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                   okay = false;
             }
 
-            // console.log("I am being triggered", okay);
             if (okay == true) {
-                  formData.append("image", img);
+                  if (img !== undefined) {
+                        formData.append("image", img);
+                  }
                   formData.append("first_name", userData.first_name);
                   formData.append("last_name", userData.last_name);
                   formData.append("email", userData.email);
@@ -143,12 +167,13 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                         <div>
                               <Typography component="h1">Create your account</Typography>
                               <div className={classes.box}>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                    <form onSubmit={handleSubmit(onSubmit)} className="">
                                           <div className={classes.profileImage}>
                                                 <label for="file-input">
-                                                      <img
+                                                      <Image
+                                                            unoptimized
                                                             layout='fill'
-                                                            src={data.image ? data.image : userimg}
+                                                            src={userimg}
                                                             alt="Profile Image"
                                                             className={classes.image}
                                                       />

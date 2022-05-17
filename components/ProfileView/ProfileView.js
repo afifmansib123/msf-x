@@ -1,17 +1,15 @@
 import React from "react";
-// import Image from "next/image";
+import Image from "next/image";
 import ProfileImg from "../../assets/img/profile/profile-default.svg";
 
 const ProfileView = ({ data }) => {
-      console.log(data);
       return (
             <div className="flex justify-center">
                   <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-gray-100 w-5/6">
                         <div className="flex justify-center">
-                              <div className="-mt-24">
-                                    {/* <Image src={data?.image_url == null ? ProfileImg : data.image_url} alt={ProfileImg}/> */}
-                                    <img
-                                          //   loader={myLoader}
+                              <div className="mt-5">
+                                    <Image
+                                          unoptimized
                                           src={data.image ? data.image : ProfileImg}
                                           alt="Profile Image"
                                           width={125}
@@ -20,31 +18,29 @@ const ProfileView = ({ data }) => {
                               </div>
                         </div>
 
-                        <div className="flex justify-between px-14">
-                              <div>
-                                    <h2 className="font-sans text-xl from-neutral-500 font-semibold p-0 m-0 mb-4">
-                                          Profile Type:{" "}
-                                          <span className="font-sans text-xl font-semibold pb-3.5 px-0 pt-0 break-words p-0 m-0 mb-6">
-                                                {" "}
+                        <div className="flex sm:justify-between sm:px-14">
+                              <div className="md:flex">
+                                    <h2 className="my-5 font-sans text-xl from-neutral-500 font-semibold p-0 m-0 mb-4">
+                                          Profile Type:
+                                    </h2>
+                                    <div className="flex items-center ml-2">
+                                          <span className="bg-orange-600 font-sans font-bold text-white py-3 px-5 rounded-full transition-all">
                                                 {data.individual_user ? "Individual" : "Business"}
                                           </span>
-                                    </h2>
+                                    </div>
                               </div>
 
-                              <div>
-                                    <h2 className="font-sans text-xl from-neutral-500 font-semibold p-0 m-0 mb-4">
+                              <div className="md:flex">
+                                    <h2 className="my-5 font-sans text-xl from-neutral-500 font-semibold p-0 m-0 mb-4">
                                           Subscription:
-                                          {/* <span className="font-sans text-xl bg-orange-600  py-2  px-3 max-w-fit  rounded-full  font-semibold  break-words">
-              {" "}
-              Gold
-            </span> */}
-                                          {" "}
-                                          <span className="bg-orange-600 font-sans font-bold text-white py-3 px-5 rounded-full transition-all">Gold</span>
                                     </h2>
+                                    <div className="flex items-center ml-2">
+                                          <span className="bg-orange-600 font-sans font-bold text-white py-3 px-5 rounded-full transition-all">Gold</span>
+                                    </div>
                               </div>
                         </div>
 
-                        <div className="grid grid-cols-2 justify-items-center">
+                        <div className="grid md:grid-cols-2 justify-items-center xs:grid-cols-1">
                               {data.first_name && (
                                     <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
                                           <div>
@@ -165,7 +161,6 @@ const ProfileView = ({ data }) => {
 
                         </div>
                   </div>
-                  <div></div>
             </div>
       );
 };
