@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import makeStyles from '@mui/styles/makeStyles';
 import InputLabel from "@mui/material/InputLabel";
 import TextField from '@mui/material/TextField';
-import UploadService from "./FileUploadService";
+// import UploadService from "./FileUploadService";
 
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -18,6 +18,29 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import { signOut } from "next-auth/react";
 
+import axios from "axios";
+
+const http =  axios.create({
+  baseURL: "http://localhost:3000",
+  headers: {
+    "Content-type": "application/json"
+  }
+});
+
+const upload = (file, onUploadProgress) => {
+  let formData = new FormData();
+  formData.append("file", file);
+  return http.post("/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    onUploadProgress,
+  });
+};
+
+const getFiles = () => {
+  return http.get("/files");
+};
 
 const avatar = "/assets/img/faces/marc.jpg";
 
@@ -205,6 +228,11 @@ function New() {
     </div>
   );
 }
+
+
+
+
+
 
 New.layout = Admin;
 New.auth = true;
