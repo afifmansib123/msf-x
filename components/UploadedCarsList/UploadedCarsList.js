@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import Milage from "/assets/carListPageIcons/milage.svg";
-import Fuel from "/assets/carListPageIcons/fuel.svg";
-import Calendar from "/assets/carListPageIcons/calendar.svg";
-import Used from "/assets/carListPageIcons/transmission.svg";
-import taka from "/assets/carListPageIcons/taka.fb378b29.svg";
+import Milage from "/assets/CarListPageIcons/milage.svg";
+import Fuel from "/assets/CarListPageIcons/fuel.svg";
+import Calendar from "/assets/CarListPageIcons/calendar.svg";
+import Used from "/assets/CarListPageIcons/transmission.svg";
+import taka from "/assets/CarListPageIcons/taka.fb378b29.svg";
 import Image from "next/image";
 
 const UploadedCarsList = ({ data }) => {
