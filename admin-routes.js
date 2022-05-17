@@ -24,6 +24,11 @@ import LocationOn from "@mui/icons-material/LocationOn";
 import Notifications from "@mui/icons-material/Notifications";
 import Unarchive from "@mui/icons-material/Unarchive";
 import Language from "@mui/icons-material/Language";
+import ApprovalIcon from '@mui/icons-material/Approval';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import CardMembershipIcon from '@mui/icons-material/CardMembership';
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 const dashboardRoutes = [
   {
@@ -38,7 +43,7 @@ const dashboardRoutes = [
     path: "/approval",
     name: "Approval",
     rtlName: "",
-    icon: Dashboard,
+    icon: ApprovalIcon,
 
     layout: "/admin",
   },
@@ -53,28 +58,28 @@ const dashboardRoutes = [
   {
     path: "/listings",
     name: "Listings",
-    icon: "content_paste",
+    icon: FormatListBulletedIcon,
     layout: "/admin",
   },    
   {
     path: "/merchants",
     name: "Merchants",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
+    rtlName: "",
+    icon: StorefrontIcon,
 
     layout: "/admin",
   },
   {
     path: "/subscriptions",
     name: "Subscriptions",
-    icon: "content_paste",
+    icon: CardMembershipIcon,
     layout: "/admin",
   },  
 
   {
     path: "/package",
     name: "Package",
-    icon: "content_paste",
+    icon: InventoryIcon,
     layout: "/admin",
   },  
   // {
@@ -117,7 +122,7 @@ const dashboardRoutes = [
   //   icon: Unarchive,
   //   layout: "/admin",
   // },
-  
+
   // {
   //   path: "/user-profile",
   //   name: "User Profile",

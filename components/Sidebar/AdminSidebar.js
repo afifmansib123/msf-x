@@ -97,6 +97,7 @@ export default function Sidebar(props) {
   );
   return (
     <div>
+      {/* Draw in mobile */}
       <Hidden mdUp implementation="css">
         <Drawer
           variant="temporary"
@@ -113,11 +114,29 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
+          <div className={classes.sidebarWrapper}>
+            {links}
+
+            <Link href="/signOut" key={"signOut"}>
+              <a className={classes.settings +" "+ classes.item}>
+              <ListItem button className={classes.itemLink + " white"}>
+                  <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
+                  <ListItemText
+                    primary={"Sign Out"}
+                    className={classNames(classes.itemText, classes.whiteFont)}
+                    disableTypography={true}
+                  />
+                </ListItem>
+              </a>
+            </Link>
+          </div>          
           {image !== undefined ? (
             <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
           ) : null}
+          
         </Drawer>
       </Hidden>
+
       <Hidden mdDown implementation="css">
         <Drawer
           anchor={props.rtlActive ? "right" : "left"}
