@@ -4,8 +4,8 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
-import Image from "next/image";
-import topImage from "../assets/Header/bhalogari.0bdbffc9.png";
+// import Image from "next/image";
+// import topImage from "../assets/Header/bhalogari.0bdbffc9.png";
 
 function LoginForm(props) {
   const { title, subTitle, onSignIn, onSignUp, signUp } = props;
@@ -64,7 +64,8 @@ function LoginForm(props) {
       <div class="flex items-start md:items-center justify-center min-h-screen bg-grey-200">
         <div class="h-full m-4 px-6 py-20 text-left bg-white shadow-lg rounded-xl">
           <div class="flex items-center flex-shrink-0 text-white ml-28">
-            <Image width={90} height={90} src={topImage}></Image>
+            {/* <Image width={90} height={90} src={topImage}></Image> */}
+            <img src="/assets/img/bhalogari.png" />
           </div>
           <h3 class="text-2xl font-bold text-center text-black mb-[15px] mt-[20px]">{title}</h3>
           {subTitle && <h2 className="text-center text-[#FC6A03] mt-[15px]">{subTitle}</h2>}

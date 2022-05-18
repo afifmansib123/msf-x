@@ -17,6 +17,7 @@ const withPWA = require("next-pwa");
 module.exports = {
   images: {
     domains: ['https://bhalogari-static.s3.amazonaws.com'],
+    disableStaticImages: true // work around, can't deploy on Vercel (next11?)
   },
 }
 const settings = {

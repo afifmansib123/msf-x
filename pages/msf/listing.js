@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useState, useEffect} from "react";
 import {useRouter} from "next/router";
 import makeStyles from "@mui/styles/makeStyles";
@@ -8,6 +9,9 @@ import styles from "assets/jss/nextjs-material-dashboard/views/iconsStyle.js";
 import {useSession} from "next-auth/react";
 import axios from "axios";
 import UploadedCarsList from "../../components/UploadedCarsList/UploadedCarsList";
+
+import prisma from "/PrismaConnect";
+// import { PrismaClient } from "@prisma/client";
 
 export default function listing() {
   const useStyles = makeStyles(styles);
@@ -40,7 +44,47 @@ export default function listing() {
       </div>
     </div>
   );
+};
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const { token } = session;
+  const { id: user_id } = token;
+  var cars = await prisma.carsApp_car.findMany({
+    where: {
+      created_by_id: user_id,
+    },
+    include: {
+      CarsApp_carmanufacturer: true,
+      CarsApp_carmodel: true,
+      CarsApp_cartype: true,
+      CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel:true,
+      CarsApp_carimage:true
+    },
+  });
+
+  cars = JSON.parse(JSON.stringify(cars, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+
+  console.log(cars[0]);
+  // console.log("session", session);
+  console.log("user_id", user_id);
+  return { props: { data: cars } };
 }
 
+/*
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const session = await getSession();
+  console.log("session",session);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/41/?format=json`
+  );
+  const data = await res.json();
+  console.table(data);
+  // Pass data to the page via props
+  return { props: { data } };
+>>>>>>> uat
+}
+*/
 listing.layout = MSF;
 listing.auth = true;
