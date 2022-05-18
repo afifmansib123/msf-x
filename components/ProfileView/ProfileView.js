@@ -5,7 +5,7 @@ import ProfileImg from "../../assets/img/profile/profile-default.svg";
 const ProfileView = ({ data }) => {
       return (
             <div className="flex justify-center">
-                  <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-gray-100 w-5/6">
+                  <div className="rounded-xl shadow-md py-2 px-6 box-border bg-gray-100 w-full md:w-5/6">
                         <div className="flex justify-center">
                               <div className="mt-5 border-4 border-white rounded-full flex items-center">
                                     <Image className="rounded-full pt-2"
@@ -18,8 +18,8 @@ const ProfileView = ({ data }) => {
                               </div>
                         </div>
 
-                        <div className="flex sm:justify-between sm:px-14">
-                              <div className="md:flex">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:px-14">
+                              <div className="flex">
                                     <h2 className="my-5 font-sans text-xl from-neutral-500 font-semibold p-0 m-0 mb-4">
                                           Profile Type:
                                     </h2>
@@ -30,7 +30,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               </div>
 
-                              <div className="md:flex">
+                              <div className="flex">
                                     <h2 className="my-5 font-sans text-xl from-neutral-500 font-semibold p-0 m-0 mb-4">
                                           Subscription:
                                     </h2>
@@ -42,7 +42,7 @@ const ProfileView = ({ data }) => {
 
                         <div className="grid md:grid-cols-2 justify-items-center xs:grid-cols-1">
                               {data.first_name && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0 mb-4">Account Name</h2>
                                           </div>
@@ -52,7 +52,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.tin_number !== null && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0  mb-4">TIN Number</h2>
                                           </div>
@@ -62,7 +62,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.contact_number && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0  mb-4">Contact</h2>
                                           </div>
@@ -72,7 +72,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.bida_number !== null && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0  mb-4">BIN</h2>
                                           </div>
@@ -82,7 +82,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.address && (
-                                    <div className="addressCopy rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="addressCopy rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0  mb-4">Address</h2>
                                           </div>
@@ -92,7 +92,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.nid_number && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0  mb-4">NID</h2>
                                           </div>
@@ -102,7 +102,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {(data.date_of_birth || data.gender) && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           {data.date_of_birth && (
                                                 <div className="flex justify-between">
                                                       <div>
@@ -139,7 +139,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.email && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0 mb-4">Email</h2>
                                           </div>
@@ -149,7 +149,7 @@ const ProfileView = ({ data }) => {
                                     </div>
                               )}
                               {data.post_code && (
-                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-5/6">
+                                    <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-white w-full sm:w-5/6">
                                           <div>
                                                 <h2 className="font-sans text-sm p-0 m-0 mb-4">Zip Code</h2>
                                           </div>
