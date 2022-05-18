@@ -1,7 +1,6 @@
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import AddAlert from "@mui/icons-material/AddAlert";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-// @mui/icons-material
 import { InputBase } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 // core components
@@ -886,6 +885,25 @@ export default function CarUpload() {
                   return <InputBase {...params.InputProps} {...rest} />;
                 }}
               />
+              {/* <select
+                {...carMakers}
+                className="form-control"
+                value={JSON.stringify({ name: makerName[0]?.maker })}
+              >
+                {Object.keys(carMakers).map((key) => {
+                  return (
+                    <option
+                      value={JSON.stringify({
+                        id: key.maker_id,
+                        name: makerName[0]?.maker,
+                      })}
+                      key={key.maker_id}
+                    >
+                      {key.maker_name}
+                    </option>
+                  );
+                })}
+              </select> */}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
