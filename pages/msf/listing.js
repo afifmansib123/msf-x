@@ -1,54 +1,46 @@
-import React from "react";
-import { getSession } from "next-auth/react";
-
+import React, {useState, useEffect} from "react";
+import {useRouter} from "next/router";
+import makeStyles from "@mui/styles/makeStyles";
 // layout for this page
 import MSF from "layouts/MSF.js";
-// import { useEffect, useState } from "react";
-import makeStyles from "@mui/styles/makeStyles";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import styles from "assets/jss/nextjs-material-dashboard/views/iconsStyle.js";
+// import { useSession } from "next-auth/client";
+import {useSession} from "next-auth/react";
+import axios from "axios";
 import UploadedCarsList from "../../components/UploadedCarsList/UploadedCarsList";
 
-const listing = ({ data }) => {
+export default function listing() {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-  // const [item, setItem] = useState([]);
+  const [items, setItems] = useState([]);
 
-  // const { data: session, status } = useSession();
-  // console.log("Session Status", status);
+  const {data: session, status} = useSession()
+  console.log("Session Status", status);
+  // console.log(session.user);
+  const id = session.token.id;
+  React.useEffect(async () => {
+    try {
+      const {data} = await axios.get(
+        `${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/${id}/`
+      );
+      console.log(data);
+      setItems(data.results)
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
-  // fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/${id}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setItems(data);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // }, [searchKey]);
   return (
     <div>
-      <div className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt lg:space-x-1 gap-5 ">
-        {data.results.map((data) => (
+      <div
+        className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt lg:space-x-1 gap-5 ">
+        {items.map((data) => (
           <UploadedCarsList key={data.car_id} data={data}></UploadedCarsList>
         ))}
       </div>
     </div>
   );
-};
-
-export async function getServerSideProps() {
-  // Fetch data from external API
-  const session = await getSession();
-  console.log(session);
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/41/?format=json`
-  );
-  const data = await res.json();
-  console.table(data);
-  // Pass data to the page via props
-  return { props: { data } };
 }
 
 listing.layout = MSF;
-
-export default listing;
+listing.auth = true;
