@@ -20,11 +20,8 @@ function DetailCarLog(props) {
   const selectedCar = props.car;
   const router = useRouter();
   const { data: session, status } = useSession();
-  console.log("useSession", session);
   const { token } = session;
   const { id } = token;
-
-  console.log("User ID", id);
 
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {

@@ -74,7 +74,7 @@ const dashboardRoutes = [
     name: "Subscriptions",
     icon: CardMembershipIcon,
     layout: "/admin",
-  },  
+  },
 
   {
     path: "/package",
