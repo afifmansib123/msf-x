@@ -143,7 +143,7 @@ function merchantGiftCard(props) {
 
     return (
         <>
-                <div className="text-right">
+                <div className="text-center md:text-right">
                     <CustomButton onClick={() => {
                         onCurrentPackageClick(12)
                     }} color={"primary"} style={{
@@ -155,6 +155,8 @@ function merchantGiftCard(props) {
                         </h1>
                     </CustomButton>
                 </div>
+
+                <br/>
 
                 <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>

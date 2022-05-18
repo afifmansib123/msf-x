@@ -27,7 +27,7 @@ const is_live = false; //true for live, false for sandbox
 // export ISSANDBOX=TRUE
 
 export default async function handler(req, res) {
-  if (req.method === "POST" || true) {
+  if (req.method === "POST") {
     const { body } = req;
     // 1. Extract data
     // 2. pass to SSLC
@@ -66,12 +66,11 @@ export default async function handler(req, res) {
     const package_id = parseInt(body.package_id);
     const cus_name = "test_name"
     const cus_email = "customer@example.com"
+    const pay_method = parseInt(body.pay_method) || 3;
 
-    const success_url = `http://localhost:3000/api/gift?status=success&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}`;
-    const fail_url = `http://localhost:3000/api/gift?status=fail&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}`;
-    const cancel_url = `http://localhost:3000/api/gift?status=cancel&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}`;
-
-    console.log(total_amount)
+    const success_url = `http://localhost:3000/api/gift?status=success&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const fail_url = `http://localhost:3000/api/gift?status=fail&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const cancel_url = `http://localhost:3000/api/gift?status=cancel&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
 
     const data = {
       total_amount: total_amount,

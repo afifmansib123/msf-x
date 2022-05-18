@@ -1367,7 +1367,7 @@ model MerchantStorefront_storeowner {
 }
 
 model MerchantStorefront_promotion {
-  id                  BigInt               @id @default(dbgenerated("nextval('\"MerchantStorefront_promotion_id_seq\"'::regclass)"))
+  id                  BigInt               @id @default(autoincrement())
   headline            String               @db.VarChar(500)
   description         String?
   image_url           String?              @db.VarChar(255)

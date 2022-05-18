@@ -10,6 +10,7 @@ import {bhalogariCardHeader} from "../../../assets/jss/nextjs-material-dashboard
 import prisma from "../../../PrismaConnect";
 import axios from "axios";
 import { useRouter } from "next/router";
+import {Container} from "@mui/material";
 
 function Paymethod(props) {
     const [selectPay, setSelectPay] = React.useState(0);
@@ -30,11 +31,11 @@ function Paymethod(props) {
     const choiceBtn = () => {
         return choicesarr.map((v, index) => {
             return (<GridItem xs={12} sm={12} md={12} key={index}>
-                {selectPay===index && <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-bhalogari border-2 p-10 rounded text-3xl mx-40"}>
+                {selectPay===index && <div onClick={() => {onClickHandle(index, v.id)}} className={"text-bhalogari text-center font-extrabold border-bhalogari shadow-bhalogari shadow-md border-2 md:p-5 md:rounded-xl md:text-3xl "}>
                     { v.payment_method || v}
                 </div>}
                 {
-                    selectPay!==index &&  <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-gray-100 hover:border-bhalogari border-2 p-10 rounded text-lg mx-60"}>
+                    selectPay!==index &&  <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-gray-100 hover:border-bhalogari border-[1px] md:p-5 md:rounded-xl  md:text-3xl "}>
                         { v.payment_method || v}
                     </div>
                 }
@@ -45,7 +46,9 @@ function Paymethod(props) {
 
     const buyPackage = async () => {
         if (payid === 3) {
-            await buyPackageOnline()
+            await buyPackageOnline();
+        } else {
+            await buyOther();
         }
     }
 
@@ -55,6 +58,7 @@ function Paymethod(props) {
             user_id: user_id,
             package_id: package_id,
             cus_name: cus_name,
+            pay_method: 3
         };
 
         const response = await axios.post(
@@ -65,11 +69,25 @@ function Paymethod(props) {
         await router.replace(response.data);
     }
 
+    const buyOther = async (e) => {
+        const dataParams = {
+            total_amount: total_amount, // the amount goes to SSL checkout page
+            user_id: user_id,
+            package_id: package_id,
+            cus_name: cus_name,
+            pay_method: payid
+        };
+        const response = await axios.post(
+            `/api/payment/others`,
+            dataParams
+        );
+        await router.replace(response.data);
+    }
+
     return (
-        <>
             <div className={"container mx-auto flex"}>
-                <Card className={"self-center justify-center items-center mx-20"}>
-                    <CardHeader color={"bhalogari"}><h1 className={"font-semibold text-center text-2xl p-4 px-[10rem]"}>Choose Payment Method</h1></CardHeader>
+                <Card className={"self-center justify-center items-center md:mx-40"}>
+                    <CardHeader color={"bhalogari"}><h1 className={"font-semibold text-center md:text-2xl md:p-4 md:px-[10rem]"}>Choose Payment Method</h1></CardHeader>
                     <CardBody className={"w-full"}>
                         <GridContainer>
                             {choiceBtn()}
@@ -87,7 +105,6 @@ function Paymethod(props) {
                     </CardBody>
                 </Card>
             </div>
-        </>
     )
 }
 
