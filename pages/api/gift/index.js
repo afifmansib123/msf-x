@@ -12,6 +12,9 @@ export default async function handler(req, res) {
     const trx_id = query.trx_id;
     const total_amount = parseInt(query.total_amount);
     const pay_id = parseInt(query.pay_method);
+
+    let serial_number = trx_id.toString() + package_id.toString() + user_id.toString();
+    serial_number = crypto.createHash('md5').update(serial_number).digest('hex');
     // add record to DB
     try {
       await prisma.MerchantStorefront_merchantpackage.create({
@@ -19,7 +22,8 @@ export default async function handler(req, res) {
           created_at: new Date(),
           updated_at: new Date(),
           user_id_id: user_id,
-          package_id_id: package_id
+          package_id_id: package_id,
+          serial_no: serial_number
         }
       }).catch(e => {throw Error(e)});
 
@@ -38,7 +42,7 @@ export default async function handler(req, res) {
       }).catch(e => {
         throw Error(e)
       });
-      await createPerkHistory(package_id, user_id);
+      await createPerkHistory(package_id, user_id, serial_number);
     } catch (e) {
       console.error(e)
       return res.redirect(302, `/msf/giftcard?res_status=fail&message=${encodeURIComponent(e.message)}.&title=Something went wrong, Cannot buy the package`);
@@ -59,7 +63,7 @@ export default async function handler(req, res) {
 
 }
 
-async function createPerkHistory(package_id, merchant_id) {
+async function createPerkHistory(package_id, merchant_id, serial_number) {
   let perks = await prisma.MerchantStorefront_perks.findMany({
     where: {
       package_id_id: package_id
@@ -70,8 +74,6 @@ async function createPerkHistory(package_id, merchant_id) {
   console.log(perks)
 
   const perk_history = perks.map(perk => {
-    let serial_number = perk.id.toString() + package_id.toString() + merchant_id.toString();
-    serial_number = crypto.createHash('md5').update(serial_number).digest('hex');
     const amount_used = 0 ;
     const amount_remain = 10;
     const unit = perk.unit;
@@ -83,7 +85,6 @@ async function createPerkHistory(package_id, merchant_id) {
     const recorded_by = merchant_id;
 
     return {
-      serial_number: serial_number,
       amount_used: amount_used,
       amount_remain: amount_remain,
       unit: unit,
@@ -97,7 +98,7 @@ async function createPerkHistory(package_id, merchant_id) {
   for (const perk_data of perk_history) {
       await prisma.MerchantStorefront_merchantperkhistory.create({
         data: {
-          serial : perk_data.serial_number || null,
+          serial : serial_number || null,
           amount_used: perk_data.amount_used || 0,
           amount_remain: perk_data.amount_remain || 10,
           unit: perk_data.unit.toString() || null,

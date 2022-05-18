@@ -1289,6 +1289,7 @@ model MerchantStorefront_merchantpackage {
   updated_at                 DateTime                    @db.Timestamptz(6)
   user_id_id                 BigInt?
   package_id_id              BigInt?
+  serial_no                  String?                     @db.VarChar(255)
   MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_package_id_id_8188a42e_fk_MerchantS")
   UsersApp_customuser        UsersApp_customuser?        @relation(fields: [user_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_user_id_id_9d9e970a_fk_UsersApp_")
 
