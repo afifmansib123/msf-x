@@ -7,13 +7,13 @@ const ProfileView = ({ data }) => {
             <div className="flex justify-center">
                   <div className="rounded-xl shadow-md mx-0 my-2.5 py-8 px-10 box-border bg-gray-100 w-5/6">
                         <div className="flex justify-center">
-                              <div className="mt-5">
-                                    <Image
+                              <div className="mt-5 border-4 border-white rounded-full flex items-center">
+                                    <Image className="rounded-full pt-2"
                                           unoptimized
                                           src={data.image ? data.image : ProfileImg}
                                           alt="Profile Image"
-                                          width={125}
-                                          height={125}
+                                          width={135}
+                                          height={135}
                                     />
                               </div>
                         </div>
