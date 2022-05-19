@@ -24,76 +24,73 @@ export default async function handler(req, res) {
     const { body: data } = req;
     const prisma = new PrismaClient();
     if (req.method === "POST") {
-     // const { body: data } = req;
-    var newPerk = await prisma.MerchantStorefront_perks.create({
-      data: {
-        // id: BigInt(data.id),
-        perks: data.perks,
-        // price: data.price, // Not used at the moment
-        amount: data.amount,
-        description: data.description,
-        created_at: new Date(),
-        updated_at: new Date(),
-        
-      },
-    });
+      // const { body: data } = req;
+      var newPerk = await prisma.MerchantStorefront_perks.create({
+        data: {
+          // id: BigInt(data.id),
+          perks: data.perks,
+          // price: data.price, // Not used at the moment
+          amount: data.amount,
+          description: data.description,
+          unit: data.unit,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      });
 
-    // Handle BigInt issue (Some fields in PostgreSQL is BigInt, but JS does know BigInt)
-    newPerk = JSON.parse(
-      JSON.stringify(newPerk, (key, value) =>
-        typeof value === "bigint" ? value.toString() : value
-      )
-    );
-    console.log("newPerk", newPerk);
-    res.status(200).json(newPerk);
-    
-   // console.log("newPerk", newPerk);
+      // Handle BigInt issue (Some fields in PostgreSQL is BigInt, but JS does know BigInt)
+      newPerk = JSON.parse(
+        JSON.stringify(newPerk, (key, value) =>
+          typeof value === "bigint" ? value.toString() : value
+        )
+      );
+      console.log("newPerk", newPerk);
+      res.status(200).json(newPerk);
 
-//    res.status(200).json(newPerk);
-    
+      // console.log("newPerk", newPerk);
 
-      } else if (req.method === "DELETE") {
-        const { body: data } = req;
-        // console.log("Im from front", data.id)
-        var deletedPerk = await prisma.MerchantStorefront_perks.delete({
-          where: {
-            id: BigInt(data.id),
-          },
-        });
-  
-        deletedPerk = JSON.parse(
-          JSON.stringify(deletedPerk, (key, value) =>
-            typeof value === "bigint" ? value.toString() : value
-          )
-        );
+      //    res.status(200).json(newPerk);
+    } else if (req.method === "DELETE") {
+      const { body: data } = req;
+      // console.log("Im from front", data.id)
+      var deletedPerk = await prisma.MerchantStorefront_perks.delete({
+        where: {
+          id: BigInt(data.id),
+        },
+      });
 
-        res.status(200).json(deletedPerk);
-      }
-      else if (req.method === "PUT") {
-        const { body: data } = req;
-        // console.log("Im from front", data.id)
-        var updatedPerk = await prisma.MerchantStorefront_perks.update({
-          where: {
-            id: BigInt(data.id),
-          },
-          data: {
-            // id: BigInt(data.id),
-            perks: data.perks,
-            price: data.price,
-            amount: data.amount,
-            description: data.description,
-            // created_at: new Date(),
-            updated_at: new Date(),
-          },
-        });
-  
-        updatedPerk = JSON.parse(
-          JSON.stringify(updatedPerk, (key, value) =>
-            typeof value === "bigint" ? value.toString() : value
-          )
-        );
-        res.status(200).json(updatedPerk);
-      }
+      deletedPerk = JSON.parse(
+        JSON.stringify(deletedPerk, (key, value) =>
+          typeof value === "bigint" ? value.toString() : value
+        )
+      );
+
+      res.status(200).json(deletedPerk);
+    } else if (req.method === "PUT") {
+      const { body: data } = req;
+      // console.log("Im from front", data.id)
+      var updatedPerk = await prisma.MerchantStorefront_perks.update({
+        where: {
+          id: BigInt(data.id),
+        },
+        data: {
+          // id: BigInt(data.id),
+          perks: data.perks,
+          price: data.price,
+          amount: data.amount,
+          description: data.description,
+          // created_at: new Date(),
+          updated_at: new Date(),
+        },
+      });
+
+      updatedPerk = JSON.parse(
+        JSON.stringify(updatedPerk, (key, value) =>
+          typeof value === "bigint" ? value.toString() : value
+        )
+      );
+      res.status(200).json(updatedPerk);
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
