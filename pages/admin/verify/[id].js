@@ -19,7 +19,6 @@ import { PrismaClient } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import IconButton from '@mui/material/IconButton';
 import Image from 'next/image'
-import test_card from '../../../components/VerifyTable/test_card.jpg';
 import { prisma } from "@prisma/client";
 
 function GiftCardDetail(props) {
