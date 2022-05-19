@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["groupBy"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -972,82 +971,88 @@ model StatisticsApp_makerstats {
 }
 
 model UsersApp_customuser {
-  id                                   BigInt                                 @id @default(autoincrement())
-  username                             String?                                @db.VarChar(20)
-  email                                String?                                @db.VarChar(254)
-  contact_number                       String                                 @unique @db.VarChar(20)
-  individual_user                      Boolean?
-  business_user                        Boolean?
-  is_staff                             Boolean?
-  is_active                            Boolean?
-  is_superuser                         Boolean?
-  first_name                           String?                                @db.VarChar(20)
-  last_name                            String?                                @db.VarChar(20)
-  date_joined                          DateTime                               @db.Timestamptz(6)
-  last_login                           DateTime                               @db.Timestamptz(6)
-  password                             String?                                @db.VarChar(255)
-  is_login                             Boolean?
-  is_paid                              Boolean?
-  is_nid_verified                      Boolean?
-  is_tin_verified                      Boolean?
-  tin_number                           String?                                @db.VarChar(30)
-  nid_number                           String?                                @db.VarChar(30)
-  passport_number                      String?                                @db.VarChar(30)
-  driving_license                      String?                                @db.VarChar(30)
-  date_of_birth                        DateTime?                              @db.Date
-  gender                               String?                                @db.VarChar(1)
-  address                              String?
-  image                                String?                                @db.VarChar(100)
-  image_url                            String?
-  bida_number                          String?                                @db.VarChar(20)
-  bida_serial                          String?                                @db.VarChar(50)
-  is_bida_verified                     Boolean?
-  country                              String?                                @db.VarChar(2)
-  post_code                            String?                                @db.VarChar(10)
-  business_type_id                     BigInt?
-  occupation_id                        BigInt?
-  user_district_id                     BigInt?
-  user_district_area_id                BigInt?
-  user_password                        String?                                @db.VarChar(255)
-  BusinessesApp_businesstype           BusinessesApp_businesstype?            @relation(fields: [business_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_business_type_id_18488fd5_fk_Businesse")
-  UsersApp_occupation                  UsersApp_occupation?                   @relation(fields: [occupation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_occupation_id_1dcfcb39_fk_UsersApp_")
-  LocationsApp_districtarea            LocationsApp_districtarea?             @relation(fields: [user_district_area_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_user_district_area_i_342eab71_fk_Locations")
-  LocationsApp_district                LocationsApp_district?                 @relation(fields: [user_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_user_district_id_28140f4e_fk_Locations")
-  AuctionsApp_auctioncustomer          AuctionsApp_auctioncustomer[]
-  BikesApp_bike                        BikesApp_bike[]
-  BikesApp_bikeapprovallog             BikesApp_bikeapprovallog[]
-  BikesApp_bikeimage                   BikesApp_bikeimage[]
-  CarsApp_car                          CarsApp_car[]
-  CarsApp_carapprovallog               CarsApp_carapprovallog[]
-  CarsApp_carbacklight                 CarsApp_carbacklight[]
-  CarsApp_carbodytype                  CarsApp_carbodytype[]
-  CarsApp_carbrake                     CarsApp_carbrake[]
-  CarsApp_carcolor                     CarsApp_carcolor[]
-  CarsApp_carengine                    CarsApp_carengine[]
-  CarsApp_carfeatures                  CarsApp_carfeatures[]
-  CarsApp_carfuel                      CarsApp_carfuel[]
-  CarsApp_carheadlight                 CarsApp_carheadlight[]
-  CarsApp_carimage                     CarsApp_carimage[]
-  CarsApp_carinteriorlight             CarsApp_carinteriorlight[]
-  CarsApp_carlocation                  CarsApp_carlocation[]
-  CarsApp_carmanufacturer              CarsApp_carmanufacturer[]
-  CarsApp_carmodel                     CarsApp_carmodel[]
-  CarsApp_carrating                    CarsApp_carrating[]
-  CarsApp_carseats                     CarsApp_carseats[]
-  CarsApp_carsuspension                CarsApp_carsuspension[]
-  CarsApp_cartype                      CarsApp_cartype[]
-  CarsApp_carwheel                     CarsApp_carwheel[]
-  CarsApp_notifyuser                   CarsApp_notifyuser[]
-  CarsApp_searchphrases                CarsApp_searchphrases[]
-  FeedbacksApp_customerfeedback        FeedbacksApp_customerfeedback[]
-  MerchantStorefront_package           MerchantStorefront_package[]
-  MerchantStorefront_packagedetails    MerchantStorefront_packagedetails[]
-  MerchantStorefront_paymenthistory    MerchantStorefront_paymenthistory[]
-  ServicesApp_customeraddress          ServicesApp_customeraddress[]
-  ServicesApp_service                  ServicesApp_service[]
-  UsersApp_customuser_groups           UsersApp_customuser_groups[]
-  UsersApp_customuser_user_permissions UsersApp_customuser_user_permissions[]
-  django_admin_log                     django_admin_log[]
+  id                                     BigInt                                   @id @default(autoincrement())
+  username                               String?                                  @db.VarChar(20)
+  email                                  String?                                  @db.VarChar(254)
+  contact_number                         String                                   @unique @db.VarChar(20)
+  individual_user                        Boolean?
+  business_user                          Boolean?
+  is_staff                               Boolean?
+  is_active                              Boolean?
+  is_superuser                           Boolean?
+  first_name                             String?                                  @db.VarChar(20)
+  last_name                              String?                                  @db.VarChar(20)
+  date_joined                            DateTime                                 @db.Timestamptz(6)
+  last_login                             DateTime                                 @db.Timestamptz(6)
+  password                               String?                                  @db.VarChar(255)
+  is_login                               Boolean?
+  is_paid                                Boolean?
+  is_nid_verified                        Boolean?
+  is_tin_verified                        Boolean?
+  tin_number                             String?                                  @db.VarChar(30)
+  nid_number                             String?                                  @db.VarChar(30)
+  passport_number                        String?                                  @db.VarChar(30)
+  driving_license                        String?                                  @db.VarChar(30)
+  date_of_birth                          DateTime?                                @db.Date
+  gender                                 String?                                  @db.VarChar(1)
+  address                                String?
+  image                                  String?                                  @db.VarChar(100)
+  image_url                              String?
+  bida_number                            String?                                  @db.VarChar(20)
+  bida_serial                            String?                                  @db.VarChar(50)
+  is_bida_verified                       Boolean?
+  country                                String?                                  @db.VarChar(2)
+  post_code                              String?                                  @db.VarChar(10)
+  business_type_id                       BigInt?
+  occupation_id                          BigInt?
+  user_district_id                       BigInt?
+  user_district_area_id                  BigInt?
+  user_password                          String?                                  @db.VarChar(255)
+  BusinessesApp_businesstype             BusinessesApp_businesstype?              @relation(fields: [business_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_business_type_id_18488fd5_fk_Businesse")
+  UsersApp_occupation                    UsersApp_occupation?                     @relation(fields: [occupation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_occupation_id_1dcfcb39_fk_UsersApp_")
+  LocationsApp_districtarea              LocationsApp_districtarea?               @relation(fields: [user_district_area_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_user_district_area_i_342eab71_fk_Locations")
+  LocationsApp_district                  LocationsApp_district?                   @relation(fields: [user_district_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UsersApp_customuser_user_district_id_28140f4e_fk_Locations")
+  AuctionsApp_auctioncustomer            AuctionsApp_auctioncustomer[]
+  BikesApp_bike                          BikesApp_bike[]
+  BikesApp_bikeapprovallog               BikesApp_bikeapprovallog[]
+  BikesApp_bikeimage                     BikesApp_bikeimage[]
+  CarsApp_car                            CarsApp_car[]
+  CarsApp_carapprovallog                 CarsApp_carapprovallog[]
+  CarsApp_carbacklight                   CarsApp_carbacklight[]
+  CarsApp_carbodytype                    CarsApp_carbodytype[]
+  CarsApp_carbrake                       CarsApp_carbrake[]
+  CarsApp_carcolor                       CarsApp_carcolor[]
+  CarsApp_carengine                      CarsApp_carengine[]
+  CarsApp_carfeatures                    CarsApp_carfeatures[]
+  CarsApp_carfuel                        CarsApp_carfuel[]
+  CarsApp_carheadlight                   CarsApp_carheadlight[]
+  CarsApp_carimage                       CarsApp_carimage[]
+  CarsApp_carinteriorlight               CarsApp_carinteriorlight[]
+  CarsApp_carlocation                    CarsApp_carlocation[]
+  CarsApp_carmanufacturer                CarsApp_carmanufacturer[]
+  CarsApp_carmodel                       CarsApp_carmodel[]
+  CarsApp_carrating                      CarsApp_carrating[]
+  CarsApp_carseats                       CarsApp_carseats[]
+  CarsApp_carsuspension                  CarsApp_carsuspension[]
+  CarsApp_cartype                        CarsApp_cartype[]
+  CarsApp_carwheel                       CarsApp_carwheel[]
+  CarsApp_notifyuser                     CarsApp_notifyuser[]
+  CarsApp_searchphrases                  CarsApp_searchphrases[]
+  FeedbacksApp_customerfeedback          FeedbacksApp_customerfeedback[]
+  MerchantStorefront_merchantpackage     MerchantStorefront_merchantpackage[]
+  MerchantStorefront_merchantperkhistory MerchantStorefront_merchantperkhistory[]
+  MerchantStorefront_merchantpromotion   MerchantStorefront_merchantpromotion[]
+  MerchantStorefront_package             MerchantStorefront_package[]
+  MerchantStorefront_paymenthistory      MerchantStorefront_paymenthistory[]
+  MerchantStorefront_perk_history        MerchantStorefront_perk_history[]
+  MerchantStorefront_perks               MerchantStorefront_perks[]
+  MerchantStorefront_promotion           MerchantStorefront_promotion[]
+  MerchantStorefront_storeowner          MerchantStorefront_storeowner[]
+  ServicesApp_customeraddress            ServicesApp_customeraddress[]
+  ServicesApp_service                    ServicesApp_service[]
+  UsersApp_customuser_groups             UsersApp_customuser_groups[]
+  UsersApp_customuser_user_permissions   UsersApp_customuser_user_permissions[]
+  django_admin_log                       django_admin_log[]
 
   @@index([business_type_id], map: "UsersApp_customuser_business_type_id_18488fd5")
   @@index([contact_number], map: "UsersApp_customuser_contact_number_db3996f7_like")
@@ -1210,35 +1215,22 @@ model drf_api_logs {
 }
 
 model MerchantStorefront_package {
-  id                                BigInt                              @id @default(autoincrement())
-  package_name                      String                              @db.VarChar(255)
-  description                       String?
-  created_at                        DateTime                            @db.Timestamptz(6)
-  updated_at                        DateTime                            @db.Timestamptz(6)
-  created_by_id                     BigInt?
-  price                             String?                             @db.VarChar(25)
-  UsersApp_customuser               UsersApp_customuser?                @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_1a5f9d64_fk_UsersApp_")
-  MerchantStorefront_packagedetails MerchantStorefront_packagedetails[]
-  MerchantStorefront_paymenthistory MerchantStorefront_paymenthistory[]
+  id                                 BigInt                               @id @default(autoincrement())
+  package_name                       String                               @db.VarChar(255)
+  description                        String?
+  created_at                         DateTime                             @db.Timestamptz(6)
+  updated_at                         DateTime                             @db.Timestamptz(6)
+  created_by_id                      BigInt?
+  amount                             String?                              @db.VarChar(20)
+  package_type                       String?                              @db.VarChar(255)
+  unit                               String?                              @db.VarChar(255)
+  price                              BigInt?
+  UsersApp_customuser                UsersApp_customuser?                 @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_1a5f9d64_fk_UsersApp_")
+  MerchantStorefront_merchantpackage MerchantStorefront_merchantpackage[]
+  MerchantStorefront_paymenthistory  MerchantStorefront_paymenthistory[]
+  MerchantStorefront_perks           MerchantStorefront_perks[]
 
   @@index([created_by_id], map: "MerchantStorefront_package_created_by_id_1a5f9d64")
-}
-
-model MerchantStorefront_packagedetails {
-  id                         BigInt                      @id @default(autoincrement())
-  package_name               String?                     @db.VarChar(255)
-  description                String?
-  created_at                 DateTime                    @db.Timestamptz(6)
-  updated_at                 DateTime                    @db.Timestamptz(6)
-  created_by_id              BigInt?
-  package_id_id              BigInt?
-  amount                     String?                     @db.VarChar(20)
-  price                      String?                     @db.VarChar(25)
-  UsersApp_customuser        UsersApp_customuser?        @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_0d503119_fk_UsersApp_")
-  MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_bdfbe02a_fk_MerchantS")
-
-  @@index([created_by_id], map: "MerchantStorefront_packagedetails_created_by_id_0d503119")
-  @@index([package_id_id], map: "MerchantStorefront_packagedetails_package_id_id_bdfbe02a")
 }
 
 model MerchantStorefront_paymenthistory {
@@ -1250,6 +1242,8 @@ model MerchantStorefront_paymenthistory {
   package_id_id              BigInt?
   payment_method_id          BigInt?
   user_id_id                 BigInt?
+  trx_id                     String?                     @db.VarChar(255)
+  amount                     Int?
   MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_f41ce17e_fk_MerchantS")
   PaymentsApp_paymentmethod  PaymentsApp_paymentmethod?  @relation(fields: [payment_method_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_payment_method_id_a71cdcdf_fk_PaymentsA")
   UsersApp_customuser        UsersApp_customuser?        @relation(fields: [user_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_user_id_id_6723fe7e_fk_UsersApp_")
@@ -1287,4 +1281,131 @@ model CarsApp_carapprovallog {
 
   @@index([approved_by_id], map: "CarsApp_carapprovallog_approved_by_id_18d93341")
   @@index([car_id_id], map: "CarsApp_carapprovallog_car_id_id_b1288272")
+}
+
+model MerchantStorefront_merchantpackage {
+  id                         BigInt                      @id @default(autoincrement())
+  created_at                 DateTime                    @db.Timestamptz(6)
+  updated_at                 DateTime                    @db.Timestamptz(6)
+  user_id_id                 BigInt?
+  package_id_id              BigInt?
+  serial_no                  String?                     @db.VarChar(255)
+  MerchantStorefront_package MerchantStorefront_package? @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_package_id_id_8188a42e_fk_MerchantS")
+  UsersApp_customuser        UsersApp_customuser?        @relation(fields: [user_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_user_id_id_9d9e970a_fk_UsersApp_")
+
+  @@index([package_id_id], map: "MerchantStorefront_merchantpackage_package_id_id_8188a42e")
+  @@index([user_id_id], map: "MerchantStorefront_merchantpackage_user_id_id_9d9e970a")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model MerchantStorefront_perk_history {
+  id                       BigInt                   @id @default(dbgenerated("nextval('\"MerchantStorefront_perk_history_id_seq\"'::regclass)"))
+  serial_number            String?                  @db.VarChar(255)
+  status                   String?                  @db.VarChar(50)
+  car_id                   BigInt?
+  amount_used              Int?
+  amount_remain            Int?
+  unit                     String?                  @db.VarChar(50)
+  created_at               DateTime                 @default(now()) @db.Timestamptz(6)
+  expired_at               DateTime?                @db.Timestamp(6)
+  recorded_by              BigInt?
+  perk_id                  BigInt
+  MerchantStorefront_perks MerchantStorefront_perks @relation(fields: [perk_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perk_fk")
+  UsersApp_customuser      UsersApp_customuser?     @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_by_fk")
+}
+
+model MerchantStorefront_perks {
+  id                                     BigInt                                   @id @default(autoincrement())
+  perks                                  String?                                  @db.VarChar(255)
+  price                                  String?                                  @db.VarChar(25)
+  amount                                 String?                                  @db.VarChar(20)
+  unit                                   String?                                  @db.VarChar(255)
+  package_type                           String?                                  @db.VarChar(255)
+  description                            String?
+  created_at                             DateTime                                 @db.Timestamptz(6)
+  updated_at                             DateTime                                 @db.Timestamptz(6)
+  created_by_id                          BigInt?
+  package_id_id                          BigInt?
+  UsersApp_customuser                    UsersApp_customuser?                     @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_08d113e2_fk_UsersApp_")
+  MerchantStorefront_package             MerchantStorefront_package?              @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_443b1ae0_fk_MerchantS")
+  MerchantStorefront_merchantperkhistory MerchantStorefront_merchantperkhistory[]
+  MerchantStorefront_perk_history        MerchantStorefront_perk_history[]
+
+  @@index([created_by_id], map: "MerchantStorefront_perks_created_by_id_08d113e2")
+  @@index([package_id_id], map: "MerchantStorefront_perks_package_id_id_443b1ae0")
+}
+
+model MerchantStorefront_store {
+  id                            BigInt                          @id @default(autoincrement())
+  name                          String?                         @db.VarChar(255)
+  logo                          String?                         @db.VarChar(100)
+  logo_url                      String?
+  backdrop                      String?                         @db.VarChar(100)
+  backdrop_url                  String?
+  description                   String?
+  aboutus                       String?
+  address                       String?                         @db.VarChar(255)
+  phone                         String?                         @db.VarChar(14)
+  created_at                    DateTime                        @db.Timestamptz(6)
+  updated_at                    DateTime                        @db.Timestamptz(6)
+  MerchantStorefront_storeowner MerchantStorefront_storeowner[]
+}
+
+model MerchantStorefront_storeowner {
+  id                       BigInt                    @id @default(autoincrement())
+  role                     String?                   @db.VarChar(255)
+  created_at               DateTime                  @db.Timestamptz(6)
+  updated_at               DateTime                  @db.Timestamptz(6)
+  store_id_id              BigInt?
+  user_id_id               BigInt?
+  MerchantStorefront_store MerchantStorefront_store? @relation(fields: [store_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_s_store_id_id_18405241_fk_MerchantS")
+  UsersApp_customuser      UsersApp_customuser?      @relation(fields: [user_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_s_user_id_id_b9023137_fk_UsersApp_")
+
+  @@index([store_id_id], map: "MerchantStorefront_storeowner_store_id_id_18405241")
+  @@index([user_id_id], map: "MerchantStorefront_storeowner_user_id_id_b9023137")
+}
+
+model MerchantStorefront_promotion {
+  id                  BigInt               @id @default(autoincrement())
+  headline            String               @db.VarChar(500)
+  description         String?
+  image_url           String?              @db.VarChar(255)
+  created_by_id       BigInt?
+  created_at          DateTime?            @default(now()) @db.Timestamptz(6)
+  start_at            DateTime             @db.Timestamptz(6)
+  end_at              DateTime?            @db.Timestamptz(6)
+  UsersApp_customuser UsersApp_customuser? @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "created_by_fk")
+}
+
+model MerchantStorefront_merchantperkhistory {
+  id                       BigInt                   @id @default(autoincrement())
+  serial                   String?                  @db.VarChar(255)
+  status                   String?                  @db.VarChar(50)
+  car_id                   BigInt?
+  amount_used              Int?
+  amount_remain            Int?
+  unit                     String?                  @db.VarChar(50)
+  created_at               DateTime                 @db.Timestamptz(6)
+  expired_at               DateTime                 @db.Timestamptz(6)
+  perk_id_id               BigInt
+  recorded_by_id           BigInt?
+  MerchantStorefront_perks MerchantStorefront_perks @relation(fields: [perk_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_perk_id_id_a6a6c82f_fk_MerchantS")
+  UsersApp_customuser      UsersApp_customuser?     @relation(fields: [recorded_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_recorded_by_id_660c6bca_fk_UsersApp_")
+
+  @@index([perk_id_id], map: "MerchantStorefront_merchantperkhistory_perk_id_id_a6a6c82f")
+  @@index([recorded_by_id], map: "MerchantStorefront_merchantperkhistory_recorded_by_id_660c6bca")
+}
+
+model MerchantStorefront_merchantpromotion {
+  id                  BigInt               @id @default(autoincrement())
+  headline            String?
+  description         String?
+  image_url           String?
+  created_at          DateTime             @db.Timestamptz(6)
+  start_at            DateTime             @db.Timestamptz(6)
+  end_at              DateTime             @db.Timestamptz(6)
+  created_by_id       BigInt?
+  UsersApp_customuser UsersApp_customuser? @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_m_created_by_id_6ec61e0c_fk_UsersApp_")
+
+  @@index([created_by_id], map: "MerchantStorefront_merchantpromotion_created_by_id_6ec61e0c")
 }

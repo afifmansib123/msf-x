@@ -1,23 +1,31 @@
-import React from "react";
-import makeStyles from '@mui/styles/makeStyles';
+import React, { useState } from "react";
+import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "@mui/material/Button";
+import { data } from "autoprefixer";
+// import {updatePromo} from "../../api/promotion"
+import { PrismaClient } from "@prisma/client";
 
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
       color: "rgba(255,255,255,.62)",
       margin: "0",
-      fontSize: "14px",
+      fontSize: "13px",
       marginTop: "0",
       marginBottom: "0",
     },
@@ -40,20 +48,45 @@ const styles = {
       lineHeight: "1",
     },
   },
+  tablecell: {
+    fontSize: '10px',
+  }
+  
 };
 
-function Index() {
+function Index(props) {
+  const { promotions } = props;
+  const [promotionList, setPromotionList] = useState(promotions);
+
   const useStyles = makeStyles(styles);
   const classes = useStyles();
 
-  const Data = [
-    ["001", "Mid Month", "Oud-Turnhout", "Jeffrey", "14 May", "16 May", "20 May", "img", <Button variant="outlined"> Edit </Button>, <Button variant="outlined"> Delete </Button>],
-    ["002", "6.6", "Oud-Turnhout", "Jeffrey", "10 May", "6 June", "7 June", "img", <Button variant="outlined"> Edit </Button>, <Button variant="outlined"> Delete </Button>],
-    ["003", "7.7", "Oud-Turnhout", "Jeffrey", "14 May", "16 May", "1 May", "img", <Button variant="outlined"> Edit </Button>, <Button variant="outlined"> Delete </Button>],
-    ["004", "Christmas", "Oud-Turnhout", "Jeffrey", "14 May", "16 May", "20 May", "img", <Button variant="outlined"> Edit </Button>, <Button variant="outlined"> Delete </Button>],
-  ]
+  async function handleDelete(id) {
+    console.log("deleteddID", id);
+    if (confirm("Are you sure to delete this promotion?")) {
+      const response = await fetch("/api/promotion/" + id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  
+      if (response.status !== 200) {
+        alert("Something went wrong!");
+        console.error("error", response);
+        return
+      }
+
+      // Also delete from the state to maintain consistency with frontend UI and database
+      const newPromotionList = promotionList.filter(p => p.id !== id)
+      setPromotionList(newPromotionList)
+    }
+  }
+
+  function timeFormat(time) {
+    let newTime = new Date(time).toLocaleString('en-GB', { timeZone: 'UTC'})
+    return newTime
+  }
 
   return (
     <GridContainer>
@@ -61,16 +94,58 @@ function Index() {
         <Card>
           <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>Promotions</h4>
-
           </CardHeader>
           <CardBody>
-            <Button variant="outlined" href="/admin/promotion/new"> Add </Button>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["ID", "Headline", "Description", "Created by", "Created at", "Start at", "End at", "img", "Edit", "Delete"]}
-              tableData={Data}
-            />
+            <Button variant="outlined" href="/admin/promotion/new">
+              Add
+            </Button>
 
+
+            <Table className="text-sm table-fixed">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">ID</TableCell>
+                  <TableCell align="center">Headline</TableCell>
+                  <TableCell align="center">Description</TableCell>
+                  <TableCell align="center">Created by</TableCell>
+                  <TableCell align="center">Created at</TableCell>
+                  <TableCell align="center">Start at</TableCell>
+                  <TableCell align="center">End at</TableCell>
+                  <TableCell align="center">Image Url</TableCell>
+                  <TableCell align="center">Edit</TableCell>
+                  <TableCell align="center">Delete</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {promotionList.map((m, i) => {
+                  return (
+                    <TableRow key={i} text-xs>
+                      <TableCell align="center">{m.id}</TableCell>
+                      <TableCell align="center">{m.headline}</TableCell>
+                      <TableCell align="center">{m.description}</TableCell>
+                      <TableCell align="center">{m.created_by_id}</TableCell>
+                      <TableCell align="center">{timeFormat(m.created_at)}</TableCell>
+                      <TableCell align="center">{timeFormat(m.start_at)}</TableCell>
+                      <TableCell align="center">{timeFormat(m.end_at)}</TableCell>
+                      <TableCell align="center">{m.image_url}</TableCell>
+                      <TableCell align="center">
+                        <Button variant="outlined" href={"/admin/promotion/" + m.id}>
+                          {" "}
+                          Edit{" "}
+                        </Button>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button variant="outlined" onClick={() => handleDelete(m.id)}>
+                          {" "}
+                          Delete{" "}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </CardBody>
         </Card>
       </GridItem>
@@ -79,5 +154,26 @@ function Index() {
 }
 
 Index.layout = Admin;
+
+export async function getServerSideProps() {
+  const prisma = new PrismaClient();
+  var allPromotions = await prisma.MerchantStorefront_promotion.findMany({
+    orderBy: {
+      start_at: "desc"
+    }
+  });
+
+  allPromotions = JSON.parse(
+    JSON.stringify(allPromotions, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  );
+
+  console.log("promotions: ", allPromotions[0]);
+
+  return {
+    props: {
+      promotions: allPromotions,
+    },
+  };
+}
 
 export default Index;

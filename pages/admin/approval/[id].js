@@ -20,11 +20,8 @@ function DetailCarLog(props) {
   const selectedCar = props.car;
   const router = useRouter();
   const { data: session, status } = useSession();
-  console.log("useSession", session);
   const { token } = session;
   const { id } = token;
-
-  console.log("User ID", id);
 
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {
@@ -83,12 +80,12 @@ function DetailCarLog(props) {
             <ul style={{ overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0 }}>
               {selectedCar != null
                 ? selectedCar.carImage.map((value) => {
-                    return (
-                      <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
-                        <img src={value} width={350} height={350} />
-                      </li>
-                    );
-                  })
+                  return (
+                    <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
+                      <img src={value} width={350} height={350} />
+                    </li>
+                  );
+                })
                 : ""}
             </ul>
           </GridItem>
@@ -195,6 +192,9 @@ function DetailCarLog(props) {
             </Card>
           </GridItem>
 
+
+          
+
           <GridItem xs={12} sm={12} md={12}>
             <Card plain profile>
               <CardHeader color="info">
@@ -290,7 +290,7 @@ async function handleApprove(review_string, approval_id, car_id) {
     }),
   });
 
-  if(response.status !== 200) {
+  if (response.status !== 200) {
     throw new Error();
   }
 }
@@ -309,7 +309,7 @@ async function handleReject(review_string, approval_id, car_id) {
     }),
   });
 
-  if(response.status !== 200) {
+  if (response.status !== 200) {
     throw new Error();
   }
 }
@@ -322,6 +322,8 @@ async function getHistory(id) {
   }).catch((err) => {
     throw new Error(err);
   });
+
+  
 
   const parsedData = JSON.parse(
     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))

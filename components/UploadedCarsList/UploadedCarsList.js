@@ -6,6 +6,7 @@ import Calendar from "/assets/CarListPageIcons/calendar.svg";
 import Used from "/assets/CarListPageIcons/transmission.svg";
 import taka from "/assets/CarListPageIcons/taka.fb378b29.svg";
 import Image from "next/image";
+import {useRouter} from 'next/router'
 
 const UploadedCarsList = ({ data }) => {
   const {
@@ -22,7 +23,15 @@ const UploadedCarsList = ({ data }) => {
     CarsApp_cartype: car_type,
     registration_year,
   } = data;
-  console.log("images", images.length);
+
+  const router = useRouter()
+  const handleEdit = () => {
+    router.push({
+      pathname: '/msf/edit-list/[cid]',
+      query: { cid: car_id },
+    }, )
+  }
+
   return (
     <div>
       <div className="w-full mb-2  bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -76,6 +85,7 @@ const UploadedCarsList = ({ data }) => {
           <button
             type="submit"
             class="w-full bg-orange-500 text-white py-3.5 px-5 my-2 mx-0 border-none rounded cursor-pointer"
+            onClick={() => handleEdit()}
           >
             Edit
           </button>

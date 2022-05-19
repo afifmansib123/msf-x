@@ -40,7 +40,7 @@ function PackageManagementPage(props) {
     // Cannot connect to the database from here. It has to call through an API
     try {
       console.log("yo data", data);
-      const apiURL = `${process.env.NEXT_PUBLIC_API}perk/perk`;
+      const apiURL = `${process.env.NEXT_PUBLIC_API}package/package`;
       console.log("API URL", apiURL);
 
       const ret = await axios.post(apiURL, data);
@@ -63,30 +63,40 @@ function PackageManagementPage(props) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <CardHeader className="text-4xl font-semibold text-center">
-            Add New Feature
+            Add New Package
           </CardHeader>
-          <div className="grid grid-cols-1 pl-4 pr-4 gap-4">
+          <div className="grid grid-cols-1 pl-10 pr-10 gap-4">
             <TextField
               id="outlined-basic"
-              label="Feature Name"
+              label="Package Name"
               variant="outlined"
-              {...register("perks")}
+              {...register("name")}
             />
-
             <TextField
               id="outlined-basic"
-              label="Feature Description"
+              label="Description"
               variant="outlined"
               {...register("description")}
             />
 
             <TextField
               id="outlined-basic"
+              label="Package Type"
+              variant="outlined"
+              {...register("type")}
+            />
+            <TextField
+              id="outlined-basic"
+              label="Price"
+              variant="outlined"
+              {...register("price")}
+            />
+            <TextField
+              id="outlined-basic"
               label="Amount"
               variant="outlined"
               {...register("amount")}
             />
-
             <TextField
               id="outlined-basic"
               label="Unit (ex: times, posts"
@@ -95,7 +105,7 @@ function PackageManagementPage(props) {
             />
 
             <Button type="submit" sx={{ ml: 40 }} autoFocus color="warning">
-              Add Feature
+              Add Package
             </Button>
           </div>
         </Card>
