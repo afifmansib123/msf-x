@@ -72,7 +72,7 @@ function LoginForm(props) {
           <form action="">
             <div class="mt-4">
               <div>
-                <label class="block" for="email">
+                <label className="block" htmlFor="email">
                   Username
                 </label>
                 <input

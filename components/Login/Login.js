@@ -13,7 +13,7 @@ function Login() {
           className="box-content  p-8 border-3 ... "
           style={{ backgroundColor: "#FFFFFF", height: "650px", width: "500px" }}
         >
-          <div class="flex items-center justify-center ">
+          <div className="flex items-center justify-center ">
             {/* <Image width={"100%"} height={"100%"} src={topImage}></Image> */}
             <img src="/assets/img/bhalogari.png" />
           </div>
