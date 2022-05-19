@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, {useState, useEffect} from "react";
 import {useRouter} from "next/router";
 import makeStyles from "@mui/styles/makeStyles";
@@ -36,9 +35,8 @@ export default function listing() {
 
   return (
     <div>
-      <div
-        className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt lg:space-x-1 gap-5 ">
-        {items.map((data) => (
+      <div className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt lg:space-x-1 gap-5 ">
+        {data.map((data) => (
           <UploadedCarsList key={data.car_id} data={data}></UploadedCarsList>
         ))}
       </div>
