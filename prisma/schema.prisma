@@ -1044,7 +1044,7 @@ model UsersApp_customuser {
   MerchantStorefront_merchantpromotion   MerchantStorefront_merchantpromotion[]
   MerchantStorefront_package             MerchantStorefront_package[]
   MerchantStorefront_paymenthistory      MerchantStorefront_paymenthistory[]
-  MerchantStorefront_perk_history        MerchantStorefront_perk_history[]        @ignore
+  MerchantStorefront_perk_history        MerchantStorefront_perk_history[]
   MerchantStorefront_perks               MerchantStorefront_perks[]
   MerchantStorefront_promotion           MerchantStorefront_promotion[]
   MerchantStorefront_storeowner          MerchantStorefront_storeowner[]
@@ -1299,7 +1299,7 @@ model MerchantStorefront_merchantpackage {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model MerchantStorefront_perk_history {
-  id                       BigInt                   @default(dbgenerated("nextval('\"MerchantStorefront_perk_history_id_seq\"'::regclass)"))
+  id                       BigInt                   @id @default(dbgenerated("nextval('\"MerchantStorefront_perk_history_id_seq\"'::regclass)"))
   serial_number            String?                  @db.VarChar(255)
   status                   String?                  @db.VarChar(50)
   car_id                   BigInt?
@@ -1312,8 +1312,6 @@ model MerchantStorefront_perk_history {
   perk_id                  BigInt
   MerchantStorefront_perks MerchantStorefront_perks @relation(fields: [perk_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "perk_fk")
   UsersApp_customuser      UsersApp_customuser?     @relation(fields: [recorded_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_by_fk")
-
-  @@ignore
 }
 
 model MerchantStorefront_perks {
@@ -1331,7 +1329,7 @@ model MerchantStorefront_perks {
   UsersApp_customuser                    UsersApp_customuser?                     @relation(fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_created_by_id_08d113e2_fk_UsersApp_")
   MerchantStorefront_package             MerchantStorefront_package?              @relation(fields: [package_id_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "MerchantStorefront_p_package_id_id_443b1ae0_fk_MerchantS")
   MerchantStorefront_merchantperkhistory MerchantStorefront_merchantperkhistory[]
-  MerchantStorefront_perk_history        MerchantStorefront_perk_history[]        @ignore
+  MerchantStorefront_perk_history        MerchantStorefront_perk_history[]
 
   @@index([created_by_id], map: "MerchantStorefront_perks_created_by_id_08d113e2")
   @@index([package_id_id], map: "MerchantStorefront_perks_package_id_id_443b1ae0")
