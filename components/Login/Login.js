@@ -6,12 +6,12 @@ import Link from "next/link";
 // import sideImage from "/assets/Header/ss.0bdbffc9.png";
 function Login() {
   return (
-    <div className="flex justify-center item-center">
+    <div className="flex justify-center item-center" style={{height:"100vh"}}>
       {/* <Image src={sideImage}></Image> */}
       <div className="flex items-right justify-right md:w-1/3">
         <div
           className="box-content  p-8 border-3 ... "
-          style={{ backgroundColor: "#FFFFFF", height: "650px", width: "500px" }}
+          style={{ backgroundColor: "#FFFFFF"}}
         >
           <div className="flex items-center justify-center ">
             {/* <Image width={"100%"} height={"100%"} src={topImage}></Image> */}
@@ -47,7 +47,7 @@ function Login() {
           </p>
         </div>
       </div>
-      <div className="hidden md:block z-10 w-full bg-[url('/assets/img/ss.png')] bg-border-2 border-black"></div>
+      <div className="hidden md:block z-10 w-full bg-[url('/assets/img/ss.png')] bg-border-2 border-black" style={{backgroundRepeat:"no-repeat", backgroundSize:"cover"}}></div>
     </div>
   );
 }
