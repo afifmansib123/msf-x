@@ -80,12 +80,12 @@ function DetailCarLog(props) {
             <ul style={{ overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0 }}>
               {selectedCar != null
                 ? selectedCar.carImage.map((value) => {
-                    return (
-                      <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
-                        <img src={value} width={350} height={350} />
-                      </li>
-                    );
-                  })
+                  return (
+                    <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
+                      <img src={value} width={350} height={350} />
+                    </li>
+                  );
+                })
                 : ""}
             </ul>
           </GridItem>
@@ -290,7 +290,7 @@ async function handleApprove(review_string, approval_id, car_id) {
     }),
   });
 
-  if(response.status !== 200) {
+  if (response.status !== 200) {
     throw new Error();
   }
 }
@@ -309,7 +309,7 @@ async function handleReject(review_string, approval_id, car_id) {
     }),
   });
 
-  if(response.status !== 200) {
+  if (response.status !== 200) {
     throw new Error();
   }
 }

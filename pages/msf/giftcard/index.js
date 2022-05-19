@@ -1,8 +1,8 @@
 import React from "react";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import MSF from "layouts/MSF.js";
-import {useSession} from "next-auth/react";
-import {Button, CardContent, Container, Divider, useTheme} from "@mui/material";
+import { useSession } from "next-auth/react";
+import { Button, CardContent, Container, Divider, useTheme } from "@mui/material";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
 import Card from "../../../components/Card/Card";
@@ -15,16 +15,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {getGiftPackage} from '../../api/gift/packages'
+import { getGiftPackage } from '../../api/gift/packages'
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
     const [paymentDialog, setPaymentDialog] = React.useState(false);
     const router = useRouter();
-    const {data: session, status} = useSession();
-    const {res_status, message, title} = router.query;
-    const {packages} = props;
+    const { data: session, status } = useSession();
+    const { res_status, message, title } = router.query;
+    const { packages } = props;
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -69,8 +69,10 @@ function merchantGiftCard(props) {
         //     dataParams
         // );
         // await router.push(response.data);
-        await router.push({pathname: '/msf/giftcard/paymethod',
-                query: {total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id,cus_name: session.token.name }});
+        await router.push({
+            pathname: '/msf/giftcard/paymethod',
+            query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name }
+        });
     }
 
 
@@ -98,14 +100,14 @@ function merchantGiftCard(props) {
                 <CardBody className="overflow-y-auto">
                     <CardContent className="text-center">
                         {
-                            v.packageDetail.map((i,index) => {
+                            v.packageDetail.map((i, index) => {
                                 return (
                                     <>
-                                        <br/>
+                                        <br />
                                         <div>{i.perks}</div>
-                                        <br/>
+                                        <br />
                                         {
-                                            (v.packageDetail.length - 1) !== index && <Divider/>
+                                            (v.packageDetail.length - 1) !== index && <Divider />
                                         }
 
                                     </>
@@ -143,40 +145,40 @@ function merchantGiftCard(props) {
 
     return (
         <>
-                <div className="text-center md:text-right">
-                    <CustomButton onClick={() => {
-                        onCurrentPackageClick(12)
-                    }} color={"primary"} style={{
-                        fontWeight: "semibold",
-                        background: "linear-gradient(60deg, #f06424, #fb8c00)"
-                    }}>
+            <div className="text-center md:text-right">
+                <CustomButton onClick={() => {
+                    onCurrentPackageClick(session.token.id)
+                }} color={"primary"} style={{
+                    fontWeight: "semibold",
+                    background: "linear-gradient(60deg, #f06424, #fb8c00)"
+                }}>
+                    <h1>
+                        Your Current Package
+                    </h1>
+                </CustomButton>
+            </div>
+
+            <br />
+
+            <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                    <h1 className={"text-center text-bold text-5xl font-bold text-bhalogari"}>GiftCard Package</h1>
+                    <Card profile plain>
+                        {/* TODO change this description to be more meaningful */}
                         <h1>
-                            Your Current Package
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent quis dapibus augue, id
+                            faucibus justo. In sed ornare sem. In eleifend ante sed nulla consequat, eu rutrum massa
+                            blandit. Nulla vitae neque sed metus gravida condimentum vel quis lacus. Cras eu est
+                            fringilla, venenatis nisl a, congue dui. Nam at enim facilisis, ultricies dolor a,
+                            cursus nulla. Integer bibendum volutpat ultrices. Suspendisse sit amet ex purus. Duis id
+                            nibh viverra enim dapibus tincidunt. Integer erat ipsum, gravida vitae euismod sit amet,
+                            tincidunt non lorem. Aliquam leo lorem, suscipit nec pharetra nec, vulputate nec purus.
+                            Nulla ac felis vitae leo luctus euismod eget non ligula.
                         </h1>
-                    </CustomButton>
-                </div>
-
-                <br/>
-
-                <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}>
-                        <h1 className={"text-center text-bold text-5xl font-bold text-bhalogari"}>GiftCard Package</h1>
-                        <Card profile plain>
-                            {/* TODO change this description to be more meaningful */}
-                            <h1>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent quis dapibus augue, id
-                                faucibus justo. In sed ornare sem. In eleifend ante sed nulla consequat, eu rutrum massa
-                                blandit. Nulla vitae neque sed metus gravida condimentum vel quis lacus. Cras eu est
-                                fringilla, venenatis nisl a, congue dui. Nam at enim facilisis, ultricies dolor a,
-                                cursus nulla. Integer bibendum volutpat ultrices. Suspendisse sit amet ex purus. Duis id
-                                nibh viverra enim dapibus tincidunt. Integer erat ipsum, gravida vitae euismod sit amet,
-                                tincidunt non lorem. Aliquam leo lorem, suscipit nec pharetra nec, vulputate nec purus.
-                                Nulla ac felis vitae leo luctus euismod eget non ligula.
-                            </h1>
-                        </Card>
-                    </GridItem>
-                    {packageCard}
-                </GridContainer>
+                    </Card>
+                </GridItem>
+                {packageCard}
+            </GridContainer>
 
             <div>
                 <Dialog
@@ -191,7 +193,7 @@ function merchantGiftCard(props) {
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                           {message}
+                            {message}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
