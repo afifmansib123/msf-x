@@ -68,6 +68,7 @@ function Dashboard() {
               </div>
             </CardFooter>
           </Card>
+
         </GridItem>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
@@ -103,6 +104,7 @@ function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
+
         <GridItem xs={12} sm={6} md={3}>
           <Card>
             <CardHeader color="info" stats icon>
@@ -121,6 +123,7 @@ function Dashboard() {
           </Card>
         </GridItem>
       </GridContainer>
+
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart>
@@ -195,6 +198,7 @@ function Dashboard() {
           </Card>
         </GridItem>
       </GridContainer>
+      
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <CustomTabs
@@ -265,5 +269,5 @@ function Dashboard() {
 }
 
 Dashboard.layout = Admin;
-Dashboard.auth = true
+//Dashboard.auth = true
 export default Dashboard;

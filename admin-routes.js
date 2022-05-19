@@ -69,12 +69,20 @@ const dashboardRoutes = [
 
     layout: "/admin",
   },
+
   {
     path: "/subscriptions",
     name: "Subscriptions",
     icon: CardMembershipIcon,
     layout: "/admin",
   },
+
+  {
+    path: "/verify",
+    name: "Manage Gift Card",
+    icon: "content_paste",
+    layout: "/admin",
+  },  
 
   {
     path: "/package",

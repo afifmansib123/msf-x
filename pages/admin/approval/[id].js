@@ -192,6 +192,9 @@ function DetailCarLog(props) {
             </Card>
           </GridItem>
 
+
+          
+
           <GridItem xs={12} sm={12} md={12}>
             <Card plain profile>
               <CardHeader color="info">
@@ -319,6 +322,8 @@ async function getHistory(id) {
   }).catch((err) => {
     throw new Error(err);
   });
+
+  
 
   const parsedData = JSON.parse(
     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
