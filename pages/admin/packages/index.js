@@ -1,5 +1,5 @@
 /**
- * @author Paranan
+ * @author Paranan Vitpornnitipacha
  * @author Mushi
  */
 import React, { useEffect } from "react";
@@ -45,11 +45,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { orange } from "@mui/material/colors";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 // import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 //font
 import "@fontsource/roboto/300.css";
@@ -108,13 +108,12 @@ function PackageManagement(props) {
   const handleClose = () => {
     setOpen(false);
     setOpenEdit(false);
-    router.push("/admin/subscriptions/package");
+    router.push("/admin/packages");
   };
   const handleChange = (event, newValue) => {
     console.debug("handleChange[newValue]", newValue);
     setValue(newValue);
   };
- 
 
   const handleRemove = async (data) => {
     // const deleteUser = await prisma.user.delete({where: {id: id}})
@@ -195,7 +194,7 @@ function PackageManagement(props) {
           setPackageList(newPackage);
           // location.reload();
           alert("Your data has been successfully deleted");
-          router.push("/admin/subscriptions/package");
+          router.push("/admin/packages");
         } else {
           // there's an error
           alert("Error! A problem has been occured while deleting your data");
@@ -205,7 +204,7 @@ function PackageManagement(props) {
         console.error("Error", err);
       }
     }
-  }
+  };
 
   const updatePackage = async (packagedata) => {
     try {
@@ -214,13 +213,12 @@ function PackageManagement(props) {
       console.log("API URL", apiURL, packagedata);
       const ret = await axios.put(apiURL, packagedata);
       console.log("ret ja", ret);
-      router.push("/admin/subscriptions/package");
+      router.push("/admin/packages");
       if (ret.status == 200) {
         // router.push("/admin/subscriptions/package")
         alert(
           "Your new package has been successfully updated into the database"
         );
-        
       } else {
         // there's an error
         alert("Error! A problem has been occured while updating your data");
@@ -243,22 +241,30 @@ function PackageManagement(props) {
     const showFeature = perkList.map((value, index) => {
       console.log(index);
       return [
-        value.id,
+        packageList.map((p, i) => {
+          if (value.package_id_id === p.id) {
+            return p.package_name;
+          }
+        }),
+
+        packageList.map((p, i) => {
+          if (value.package_id_id === p.id) {
+            return p.package_type;
+          }
+        }),
+
         value.perks,
         value.description,
         value.amount,
         value.unit,
         <>
-          
           <IconButton
             aria-label="edit"
             key={index}
             onClick={() => handleForm(value)}
           >
-          
             <EditIcon />
           </IconButton>
-         
           <IconButton aria-label="clear" onClick={() => handleRemove(value)}>
             <ClearIcon />
           </IconButton>
@@ -274,32 +280,37 @@ function PackageManagement(props) {
         Package Management
       </CardHeader>
       <div className="w-full md:w-auto ">
-        <Link href="/admin/subscriptions/form/packageForm">
+        <Link href="/admin/packages/form/packageForm">
           <Button startIcon={<AddIcon />} color="warning">
             New Package
           </Button>
         </Link>
         <Card>
-          
-         {packages.map((p, i) => {
-                return <>
-                       <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography> <h6
-                      style={{
-                        color: "#DC7633",
-                        fontWeight: 700,
-                        fontSize: 14,
-                      }}
-                    >
-                      {p.package_name} ({p.package_type} Pkg.)
-                    </h6> </Typography></AccordionSummary><AccordionDetails>
+          {packages.map((p, i) => {
+            return (
+              <>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
                     <Typography>
-                    {/* <h6
+                      {" "}
+                      <h6
+                        style={{
+                          color: "#DC7633",
+                          fontWeight: 700,
+                          fontSize: 14,
+                        }}
+                      >
+                        [{p.package_type} Pkg.] {p.package_name}
+                      </h6>{" "}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      {/* <h6
                       style={{
                         color: "#DC7633",
                         fontWeight: 700,
@@ -308,38 +319,38 @@ function PackageManagement(props) {
                     >
                       {p.package_name} ({p.package_type} Pkg.)
                     </h6> */}
-                    <div class="float-right">
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => handleClickOpen(p)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="clear"
-                        onClick={() => handleRemovePackage(p)}
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    </div>
+                      <div class="float-right">
+                        <IconButton
+                          aria-label="edit"
+                          onClick={() => handleClickOpen(p)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          aria-label="clear"
+                          onClick={() => handleRemovePackage(p)}
+                        >
+                          <ClearIcon />
+                        </IconButton>
+                      </div>
                     </Typography>
                     <Typography
-                    variant="subtitle1"
-                    display="block"
-                    gutterBottom
-                    color="#626567"
-                    sx={{ mt: -1, mb: 3 }}
-                  >
-                    {p.description}
-                  </Typography>
-                  <h1>
-                    <sup class="text-xl font-medium">৳ </sup>
-                    <span class="text-4xl font-black text-gray-900">
-                      {p.price}
-                    </span>
-                  </h1>
+                      variant="subtitle1"
+                      display="block"
+                      gutterBottom
+                      color="#626567"
+                      sx={{ mt: -1, mb: 3 }}
+                    >
+                      {p.description}
+                    </Typography>
+                    <h1>
+                      <sup class="text-xl font-medium">৳ </sup>
+                      <span class="text-4xl font-black text-gray-900">
+                        {p.price}
+                      </span>
+                    </h1>
 
-                  <Stack direction="row" alignItems="center" gap={24}>
+                    {/* <Stack direction="row" alignItems="center" gap={24}>
                     <Typography
                       variant="caption"
                       display="block"
@@ -362,70 +373,63 @@ function PackageManagement(props) {
                       <br />
                       <p class="text-lg text-black">{p.unit}</p>
                     </Typography>
-                  </Stack>
+                  </Stack> */}
 
-                  <Typography
-                    variant="body1"
-                    gutterBottom
-                    style={{ color: "Black", fontWeight: 700, fontSize: 18 }}
-                    sx={{ mb: 0 }}
-                  >
-                    Key Features:
-                  </Typography>
-                  <TableContainer component={Paper} class="table-layout">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell align="left">Features</TableCell>
-                        <TableCell align="left">Description</TableCell>
-                        <TableCell align="left">Amount</TableCell>
-                        <TableCell align="left">Unit</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {perks.map((value, index) => {
-                        if (value.package_id_id === p.id) {
-                          return (
-                            <>
-                              <TableRow
-                                sx={{
-                                  "&:last-child td, &:last-child th": {
-                                    border: 0,
-                                  },
-                                }}
-                              >
-                                <TableCell align="left">
-                                  <CheckCircleIcon
-                                    sx={{ color: orange[800] }}
-                                  />
-                                </TableCell>
-                                <TableCell align="left">
-                                  {value.perks}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {value.description}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {value.amount}
-                                </TableCell>
-                                <TableCell align="left">{value.unit}</TableCell>
-                              </TableRow>
-                            </>
-                          );
-                        }
-                      })}
-                    </TableBody>
-                  </TableContainer>
-           
-            
+                    <Typography
+                      variant="body1"
+                      gutterBottom
+                      style={{ color: "Black", fontWeight: 700, fontSize: 18 }}
+                      sx={{ mb: 0, mt: 4 }}
+                    >
+                      Key Features:
+                    </Typography>
+                    <TableContainer component={Paper} class="table-layout">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="left">Features</TableCell>
+                          <TableCell align="left">Description</TableCell>
+                          <TableCell align="left">Amount</TableCell>
+                          <TableCell align="left">Unit</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {perks.map((value, index) => {
+                          if (value.package_id_id === p.id) {
+                            return (
+                              <>
+                                <TableRow
+                                  sx={{
+                                    "&:last-child td, &:last-child th": {
+                                      border: 0,
+                                    },
+                                  }}
+                                >
+                                  <TableCell align="left">
+                                    {value.perks}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {value.description}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {value.amount}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {value.unit}
+                                  </TableCell>
+                                </TableRow>
+                              </>
+                            );
+                          }
+                        })}
+                      </TableBody>
+                    </TableContainer>
                   </AccordionDetails>
-                  </Accordion></>
-                
-             
-              
-                // <Tab label={p.package_name} {...a11yProps(p.id)} />;
-              })}
-             
+                </Accordion>
+              </>
+            );
+
+            // <Tab label={p.package_name} {...a11yProps(p.id)} />;
+          })}
         </Card>
       </div>
       <GridContainer>
@@ -433,12 +437,12 @@ function PackageManagement(props) {
           <Card>
             <CardHeader color="warning">
               <h4 style={{ color: "white", fontWeight: 500, fontSize: 18 }}>
-                Pakage's Key Features
+                All Features
               </h4>
             </CardHeader>
             <CardBody>
               <div>
-                <Link href="/admin/subscriptions/form/form">
+                <Link href="/admin/packages/form/form">
                   <Button startIcon={<AddIcon />} color="warning">
                     New Feature
                   </Button>
@@ -611,7 +615,8 @@ function PackageManagement(props) {
               <Table
                 tableHeaderColor="warning"
                 tableHead={[
-                  "ID",
+                  "Package Name",
+                  "Package Type",
                   "Feature",
                   "Description",
                   "Amount",
