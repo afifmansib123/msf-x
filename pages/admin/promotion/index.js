@@ -49,12 +49,11 @@ const styles = {
     },
   },
   tablecell: {
-    fontSize: '10px',
-  }
-  
+    fontSize: "10px",
+  },
 };
 
-function Index(props) {
+function PromotionPage(props) {
   const { promotions } = props;
   const [promotionList, setPromotionList] = useState(promotions);
 
@@ -74,32 +73,32 @@ function Index(props) {
       if (response.status !== 200) {
         alert("Something went wrong!");
         console.error("error", response);
-        return
+        return;
       }
 
       // Also delete from the state to maintain consistency with frontend UI and database
-      const newPromotionList = promotionList.filter(p => p.id !== id)
-      setPromotionList(newPromotionList)
+      const newPromotionList = promotionList.filter((p) => p.id !== id);
+      setPromotionList(newPromotionList);
     }
   }
 
   function timeFormat(time) {
-    let newTime = new Date(time).toLocaleString('en-GB', { timeZone: 'UTC'})
-    return newTime
+    let newTime = new Date(time).toLocaleString("en-GB", { timeZone: "UTC" });
+    return newTime;
   }
 
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
+        <h2 className="text-2xl font-bold">Promotion</h2>
         <Card>
-          <CardHeader color="primary">
+          {/* <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>Promotions</h4>
-          </CardHeader>
+          </CardHeader> */}
           <CardBody>
             <Button variant="outlined" href="/admin/promotion/new">
               Add
             </Button>
-
 
             <Table className="text-sm table-fixed">
               <TableHead>
@@ -128,7 +127,9 @@ function Index(props) {
                       <TableCell align="center">{timeFormat(m.created_at)}</TableCell>
                       <TableCell align="center">{timeFormat(m.start_at)}</TableCell>
                       <TableCell align="center">{timeFormat(m.end_at)}</TableCell>
-                      <TableCell align="center">{m.image_url}</TableCell>
+                      <TableCell align="center">
+                        <img src={m.image_url} />
+                      </TableCell>
                       <TableCell align="center">
                         <Button variant="outlined" href={"/admin/promotion/" + m.id}>
                           {" "}
@@ -153,14 +154,14 @@ function Index(props) {
   );
 }
 
-Index.layout = Admin;
+PromotionPage.layout = Admin;
 
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
   var allPromotions = await prisma.MerchantStorefront_promotion.findMany({
     orderBy: {
-      start_at: "desc"
-    }
+      start_at: "desc",
+    },
   });
 
   allPromotions = JSON.parse(
@@ -176,4 +177,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default Index;
+export default PromotionPage;
