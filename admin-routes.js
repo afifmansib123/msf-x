@@ -56,8 +56,8 @@ const dashboardRoutes = [
   },
 
   {
-    path: "/subscriptions",
-    name: "Subscriptions",
+    path: "/packages",
+    name: "Packages / Subscriptions",
     icon: CardMembershipIcon,
     layout: "/admin",
   },
@@ -76,12 +76,6 @@ const dashboardRoutes = [
     layout: "/admin",
   },  
 
-  {
-    path: "/package",
-    name: "Package",
-    icon: InventoryIcon,
-    layout: "/admin",
-  },  
   // {
   //   path: "/typography",
   //   name: "Typography",
