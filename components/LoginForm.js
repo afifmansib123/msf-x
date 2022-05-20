@@ -83,7 +83,6 @@ function LoginForm(props) {
                   required
                   {...register("username")}
                 />
-
                 <span className="text-xs tracking-wide text-red-600" style={{ fontSize: "11px" }}>
                   {" "}
                   * Username is required to login{" "}
