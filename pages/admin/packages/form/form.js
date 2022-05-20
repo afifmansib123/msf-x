@@ -47,7 +47,7 @@ function PackageManagementPage(props) {
       console.log("ret ja", ret);
       if (ret.status == 200) {
         alert("Your new feature has been successfully added into the database");
-        router.push("/admin/subscriptions/package");
+        router.push("/admin/packages");
       } else {
         // there's an error
         alert("Error! A problem has been occured while adding your data");

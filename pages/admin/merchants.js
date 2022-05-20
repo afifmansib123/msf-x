@@ -14,10 +14,14 @@ import { PrismaClient } from "@prisma/client";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+// import StyledTableCell from "@mui/material/StyledTableCell";
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { styled } from '@mui/material/styles';
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from '@mui/material/Button';
 
 const styles = {
   cardCategoryWhite: {
@@ -53,44 +57,89 @@ function MerchantPage(props) {
   const { merchants } = props;
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-  return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
-        <Table>
-          <TableHead>
-            <TableRow>
-            <TableCell>Class</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Phone Number</TableCell>
-              <TableCell align="center">Paid</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {merchants.map((m, i) => {
-              return (
-                <TableRow>
-                  <TableCell>
-                      {m.first_name} {m.last_name}
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#ff6600",
+      color: "#ffff",
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
 
-                  </TableCell>
-                  <TableCell>
+    },
+  }));
+
+  return (
+
+
+    <>
+      <h1 className="text-4xl font-semibold text-center mb-4">
+        Merchants
+      </h1>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead >
+                <TableRow>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Phone Number</StyledTableCell>
+                  <StyledTableCell>Subscription</StyledTableCell>
+                  <StyledTableCell>Last Login</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </TableRow>
+              </TableHead>
+
+              {merchants.map((m, i) => {
+                return (
+                  <TableBody>
+                    {/* <StyledTableCell>
                     <a href={`/admin/merchants/${m.id}`}>
                       {m.first_name} {m.last_name}
                     </a>
-                  </TableCell>
-                  <TableCell>{m.contact_number}</TableCell>
-                  {/* <TableCell align="center">
+                  </StyledTableCell>
+                  <StyledTableCell>{m.contact_number}</StyledTableCell> */}
+                    {/* <StyledTableCell align="center">
                     <img className="w-[120px]" src={m.image_url} />
-                  </TableCell> */}
-                  <TableCell align="center">{m.is_paid ? "Paid": "Not yet"}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </GridItem>
+                  </StyledTableCell> */}
 
-    </GridContainer>
+                    {m.MerchantStorefront_package.map(v => {
+
+                      return (<>
+                        <TableRow   >
+                          <StyledTableCell>
+                            <a href={`/admin/merchants/${m.id}`}>
+                              {m.first_name} {m.last_name}
+                            </a>
+                          </StyledTableCell>
+                          <StyledTableCell>{m.contact_number}</StyledTableCell>
+
+                          <StyledTableCell>{v.package_name} </StyledTableCell>
+                          <StyledTableCell> {m.last_login}
+                          </StyledTableCell>
+                          <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
+                            Details
+                          </Button></StyledTableCell>
+                        </TableRow>
+
+                      </>
+
+                      )
+                    })}
+
+
+
+                  </TableBody>
+                );
+              })}
+
+            </Table>
+          </TableContainer>
+        </GridItem>
+
+      </GridContainer>
+    </>
   );
 }
 
@@ -99,8 +148,17 @@ MerchantPage.layout = Admin;
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
   var allMerchants = await prisma.UsersApp_customuser.findMany({
-    where: {
-      business_user: true,
+    // where: {
+    //   business_user:{
+    //    equals: true,
+    //   } ,
+    //   individual_user:{
+    //     equals: true,
+    //    } 
+    // },
+    include: {
+      MerchantStorefront_package: true,
+
     },
     // include: {
     //     CarsApp_carmanufacturer: true,

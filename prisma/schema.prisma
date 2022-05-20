@@ -1346,8 +1346,9 @@ model MerchantStorefront_store {
   aboutus                       String?
   address                       String?                         @db.VarChar(255)
   phone                         String?                         @db.VarChar(14)
-  created_at                    DateTime                        @db.Timestamptz(6)
-  updated_at                    DateTime                        @db.Timestamptz(6)
+  created_at                    DateTime                        @default(now()) @db.Timestamptz(6)
+  updated_at                    DateTime                        @default(now()) @db.Timestamptz(6)
+  owner_user_id                 BigInt?
   MerchantStorefront_storeowner MerchantStorefront_storeowner[]
 }
 

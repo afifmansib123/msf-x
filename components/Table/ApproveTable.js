@@ -56,39 +56,38 @@ function CarApproveLog(props) {
 
   const CarCard = ({ data, status }) => {
     if (data === null || !data || data.length === 0) {
-      return <h2 className="text-black">No Data</h2>
+      return <h2 className="text-black">No Data</h2>;
     } else {
       return (
-          <div className="grid grid-cols-1">
-            <div className="flex flex-row">
-              <img src={data.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
-              <div className="">
-                <h1 className="font-medium text-lg my-2">{data.carName}</h1>
-                <div className="mt-10">
-                  <span className="font-medium mr-4">Requested Name:</span>
-                  <span>{data.Merchant_Name}</span>
-                </div>
-                <div>
-                  <span className="font-medium mr-4">Request Date:</span>
-                  <span>{data.create_at}</span>
-                </div>
-                <Button
-                    variant="outlined"
-                    onClick={() => {
-                      onClickedHistoryBtn(data.carId);
-                    }}
-                >
-                  History
-                </Button>
-                <CusButton disabled round color="warning" size="sm">
-                  {status}
-                </CusButton>
+        <div className="grid grid-cols-1">
+          <div className="flex flex-row">
+            <img src={data.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
+            <div className="">
+              <h1 className="font-medium text-lg my-2">{data.carName}</h1>
+              <div className="mt-10">
+                <span className="font-medium mr-4">Requested Name:</span>
+                <span>{data.Merchant_Name}</span>
               </div>
+              <div>
+                <span className="font-medium mr-4">Request Date:</span>
+                <span>{data.create_at}</span>
+              </div>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  onClickedHistoryBtn(data.carId);
+                }}
+              >
+                History
+              </Button>
+              <CusButton disabled round color="warning" size="sm">
+                {status}
+              </CusButton>
             </div>
           </div>
+        </div>
       );
     }
-
   };
   const pendingActivityLogCard = () => {
     return props.pendingTab.map((v) => {
@@ -111,22 +110,26 @@ function CarApproveLog(props) {
 
   return (
     <>
+      <h2 className="text-2xl font-bold">Waiting for Review ({showedData.length})</h2>
+      <span>
+        Merchants have submitted the cars to be approved. Once these are approved, they will be shown on the public
+      </span>
       <Card>
-        <CardHeader color={props.tableHeaderColor}>
-          <h4 className={classes.cardTitleWhite} style={{ fontWeight: "bolder" }}>
-            Waiting for Review ({showedData.length})
-          </h4>
+        {/* <CardHeader color={props.tableHeaderColor}>
           <p className={classes.cardCategoryWhite}>
-            Merchants have submitted the cars to be approved. Once these are approved, they will be shown on the public
             listing.
           </p>
-        </CardHeader>
+        </CardHeader> */}
         <CardBody>
-          {showedData.length > 0 && <Table tableHeaderColor={props.tableHeaderColor} tableHead={props.tableHead} tableData={showedData} />}
-          {showedData.length === 0 && <div className=" h-[200px]">
-            <div className=" absolute right-1/2 bottom-1/2 text-4xl text-gray-200 font-semibold">No Data</div>
-          </div>}
-
+          <div className="grid gap-4 grid-cols-2 w-1/2">{showedData}</div>
+          {/* {showedData.length > 0 && (
+            <Table tableHeaderColor={props.tableHeaderColor} tableHead={props.tableHead} tableData={showedData} />
+          )} */}
+          {showedData.length === 0 && (
+            <div className=" h-[200px]">
+              <div className=" absolute right-1/2 bottom-1/2 text-4xl text-gray-200 font-semibold">No Data</div>
+            </div>
+          )}
         </CardBody>
       </Card>
 
