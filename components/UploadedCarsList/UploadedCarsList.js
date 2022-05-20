@@ -6,7 +6,8 @@ import Calendar from "/assets/CarListPageIcons/calendar.svg";
 import Used from "/assets/CarListPageIcons/transmission.svg";
 import taka from "/assets/CarListPageIcons/taka.fb378b29.svg";
 import Image from "next/image";
-import {useRouter} from 'next/router'
+import {useRouter} from 'next/router';
+import carimage from '../../assets/img/listing/picture.svg';
 
 const UploadedCarsList = ({ data }) => {
   const {
@@ -38,7 +39,7 @@ const UploadedCarsList = ({ data }) => {
         {images.length > 0 ? (
           <img className="rounded-t-lg h-36 w-full object-cover" src={images[0].image_url} alt="Landscape picture" />
         ) : (
-          <span className="h-36 grid text-center content-center text-white font-bold">-- No Image --</span>
+          <img className="rounded-t-lg h-36 mx-auto object-cover" src={carimage.src} alt="Landscape picture" />
         )}
         <div className="px-5 py-5">
           <h6 className="mb-1 text-sm tracking-tight text-gray-600 dark:text-white font-sans ">
