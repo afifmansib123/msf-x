@@ -17,6 +17,10 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "@mui/material/Button";
 import { data } from "autoprefixer";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import ClearIcon from "@mui/icons-material/Clear";
+import AddIcon from "@mui/icons-material/Add";
 // import {updatePromo} from "../../api/promotion"
 import { PrismaClient } from "@prisma/client";
 
@@ -83,27 +87,24 @@ function PromotionPage(props) {
   }
 
   function timeFormat(time) {
-    let newTime = new Date(time).toLocaleString("en-GB", { timeZone: "UTC" });
+    let newTime = (new Date(time).toLocaleString("en-GB", { timeZone: "UTC" })).replace(",", " ");
     return newTime;
   }
 
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <h2 className="text-2xl font-bold">Promotion</h2>
-        <Card>
-          {/* <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Promotions</h4>
-          </CardHeader> */}
-          <CardBody>
-            <Button variant="outlined" href="/admin/promotion/new">
-              Add
-            </Button>
+        <CardHeader className="text-4xl font-semibold text-center ">Promotion</CardHeader>
 
+        <Button startIcon={<AddIcon />} variant="outlined" href="/admin/promotion/new">
+          New Promotion
+        </Button>
+        <Card>
+          <CardBody>
             <Table className="text-sm table-fixed">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">ID</TableCell>
+                  {/* <TableCell align="center">ID</TableCell> */}
                   <TableCell align="center">Headline</TableCell>
                   <TableCell align="center">Description</TableCell>
                   <TableCell align="center">Created by</TableCell>
@@ -115,12 +116,11 @@ function PromotionPage(props) {
                   <TableCell align="center">Delete</TableCell>
                 </TableRow>
               </TableHead>
-
               <TableBody>
                 {promotionList.map((m, i) => {
                   return (
                     <TableRow key={i} text-xs>
-                      <TableCell align="center">{m.id}</TableCell>
+                      {/* <TableCell align="center">{m.id}</TableCell> */}
                       <TableCell align="center">{m.headline}</TableCell>
                       <TableCell align="center">{m.description}</TableCell>
                       <TableCell align="center">{m.created_by_id}</TableCell>
@@ -131,16 +131,19 @@ function PromotionPage(props) {
                         <img src={m.image_url} />
                       </TableCell>
                       <TableCell align="center">
-                        <Button variant="outlined" href={"/admin/promotion/" + m.id}>
-                          {" "}
-                          Edit{" "}
-                        </Button>
+                        <IconButton
+                          aria-label="edit"
+                          key={i}
+                          href={"/admin/promotion/" + m.id}
+                        >
+                          <EditIcon />
+                        </IconButton>
                       </TableCell>
-                      <TableCell align="center">
-                        <Button variant="outlined" onClick={() => handleDelete(m.id)}>
-                          {" "}
-                          Delete{" "}
-                        </Button>
+
+                      <TableCell align="center" >
+                        <IconButton aria-label="clear" onClick={() => handleDelete(m.id)}>
+                          <ClearIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );
