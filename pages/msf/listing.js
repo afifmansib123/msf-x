@@ -19,13 +19,13 @@ export default function ListingPage(props) {
   const [items, setItems] = useState([]);
 
   const { data: session, status } = useSession();
-  console.log("Session Status", status);
+  // console.log("Session Status", status);
   // console.log(session.user);
   const id = session.token.id;
   React.useEffect(async () => {
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/${id}/`);
-      console.log(data);
+      // console.log(data);
       setItems(data.results);
     } catch (err) {
       console.error(err);
@@ -62,9 +62,9 @@ export async function getServerSideProps(context) {
 
   cars = JSON.parse(JSON.stringify(cars, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
 
-  console.log(cars[0]);
+  // console.log(cars[0]);
   // console.log("session", session);
-  console.log("user_id", user_id);
+  // console.log("user_id", user_id);
   return { props: { cars: cars } };
 }
 
