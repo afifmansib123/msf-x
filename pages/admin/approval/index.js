@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components
-import CarTable from "../../../components/Table/ApproveTable";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import prisma from "../../../PrismaConnect";
+import CarTable from "/components/Table/ApproveTable";
+import styles from "/assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import prisma from "/PrismaConnect";
 import { getPending } from "../../api/approve-log";
 
-function Index(props) {
+function ApprovalIndexPage(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const router = useRouter();
@@ -437,7 +437,7 @@ async function getPendingApprove() {
   return d;
 }
 
-Index.layout = Admin;
+ApprovalIndexPage.layout = Admin;
 //Index.auth = true;
 
-export default Index;
+export default ApprovalIndexPage;

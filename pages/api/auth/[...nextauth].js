@@ -135,7 +135,7 @@ export default NextAuth({
   callbacks: {
     async jwt(args) {
       const { token, user } = args;
-      console.log("callbacks.jwt", args);
+      // console.log("callbacks.jwt", args);
       if (user) {
         token.id = user.user_id;
       }
@@ -146,7 +146,7 @@ export default NextAuth({
       const { session, token } = args;
       // Send properties to the client, like an access_token from a provider.
       // session.accessToken = token.accessToken;
-      console.log("callbacks.session", args);
+      // console.log("callbacks.session", args);
 
       const prisma = new PrismaClient();
       var userSessionRecord = await prisma.user_session.findUnique({
@@ -156,7 +156,7 @@ export default NextAuth({
         },
       });
 
-      console.log("session.userSessionRecord", userSessionRecord);
+      // console.log("session.userSessionRecord", userSessionRecord);
 
       session.token = token;
       // session.hello = "use this token to look up id";

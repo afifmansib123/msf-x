@@ -229,7 +229,7 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
                                                       label="Your Mobile Number"
                                                       defaultValue={data.contact_number}
                                                       helpertext={data.contact_number}
-                                                      error={errorText}
+                                                      error={errorText.length > 0}
                                                       {...register("contact_number")}
                                                 />
                                                 <TextField

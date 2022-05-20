@@ -17,6 +17,10 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "@mui/material/Button";
 import { data } from "autoprefixer";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
+import ClearIcon from "@mui/icons-material/Clear";
+import AddIcon from "@mui/icons-material/Add";
 // import {updatePromo} from "../../api/promotion"
 import { PrismaClient } from "@prisma/client";
 
@@ -49,12 +53,11 @@ const styles = {
     },
   },
   tablecell: {
-    fontSize: '10px',
-  }
-  
+    fontSize: "10px",
+  },
 };
 
-function Index(props) {
+function PromotionPage(props) {
   const { promotions } = props;
   const [promotionList, setPromotionList] = useState(promotions);
 
@@ -74,37 +77,34 @@ function Index(props) {
       if (response.status !== 200) {
         alert("Something went wrong!");
         console.error("error", response);
-        return
+        return;
       }
 
       // Also delete from the state to maintain consistency with frontend UI and database
-      const newPromotionList = promotionList.filter(p => p.id !== id)
-      setPromotionList(newPromotionList)
+      const newPromotionList = promotionList.filter((p) => p.id !== id);
+      setPromotionList(newPromotionList);
     }
   }
 
   function timeFormat(time) {
-    let newTime = new Date(time).toLocaleString('en-GB', { timeZone: 'UTC'})
-    return newTime
+    let newTime = (new Date(time).toLocaleString("en-GB", { timeZone: "UTC" })).replace(",", " ");
+    return newTime;
   }
 
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
+        <CardHeader className="text-4xl font-semibold text-center ">Promotion</CardHeader>
+
+        <Button startIcon={<AddIcon />} variant="outlined" href="/admin/promotion/new">
+          New Promotion
+        </Button>
         <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Promotions</h4>
-          </CardHeader>
           <CardBody>
-            <Button variant="outlined" href="/admin/promotion/new">
-              Add
-            </Button>
-
-
             <Table className="text-sm table-fixed">
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">ID</TableCell>
+                  {/* <TableCell align="center">ID</TableCell> */}
                   <TableCell align="center">Headline</TableCell>
                   <TableCell align="center">Description</TableCell>
                   <TableCell align="center">Created by</TableCell>
@@ -116,30 +116,34 @@ function Index(props) {
                   <TableCell align="center">Delete</TableCell>
                 </TableRow>
               </TableHead>
-
               <TableBody>
                 {promotionList.map((m, i) => {
                   return (
                     <TableRow key={i} text-xs>
-                      <TableCell align="center">{m.id}</TableCell>
+                      {/* <TableCell align="center">{m.id}</TableCell> */}
                       <TableCell align="center">{m.headline}</TableCell>
                       <TableCell align="center">{m.description}</TableCell>
                       <TableCell align="center">{m.created_by_id}</TableCell>
                       <TableCell align="center">{timeFormat(m.created_at)}</TableCell>
                       <TableCell align="center">{timeFormat(m.start_at)}</TableCell>
                       <TableCell align="center">{timeFormat(m.end_at)}</TableCell>
-                      <TableCell align="center">{m.image_url}</TableCell>
                       <TableCell align="center">
-                        <Button variant="outlined" href={"/admin/promotion/" + m.id}>
-                          {" "}
-                          Edit{" "}
-                        </Button>
+                        <img src={m.image_url} />
                       </TableCell>
                       <TableCell align="center">
-                        <Button variant="outlined" onClick={() => handleDelete(m.id)}>
-                          {" "}
-                          Delete{" "}
-                        </Button>
+                        <IconButton
+                          aria-label="edit"
+                          key={i}
+                          href={"/admin/promotion/" + m.id}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
+
+                      <TableCell align="center" >
+                        <IconButton aria-label="clear" onClick={() => handleDelete(m.id)}>
+                          <ClearIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   );
@@ -153,14 +157,14 @@ function Index(props) {
   );
 }
 
-Index.layout = Admin;
+PromotionPage.layout = Admin;
 
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
   var allPromotions = await prisma.MerchantStorefront_promotion.findMany({
     orderBy: {
-      start_at: "desc"
-    }
+      start_at: "desc",
+    },
   });
 
   allPromotions = JSON.parse(
@@ -176,4 +180,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default Index;
+export default PromotionPage;

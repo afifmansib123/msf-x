@@ -55,24 +55,21 @@ function MerchantPage(props) {
   const classes = useStyles();
   return (
     <GridContainer>
+      <h2 className="text-2xl font-bold">Merchant</h2>
       <GridItem xs={12} sm={12} md={12}>
         <Table>
           <TableHead>
             <TableRow>
-            <TableCell>Class</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Phone Number</TableCell>
-              <TableCell align="center">Paid</TableCell>
+              <TableCell>Subscription</TableCell>
+            <TableCell>Last Login</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {merchants.map((m, i) => {
               return (
                 <TableRow>
-                  <TableCell>
-                      {m.first_name} {m.last_name}
-
-                  </TableCell>
                   <TableCell>
                     <a href={`/admin/merchants/${m.id}`}>
                       {m.first_name} {m.last_name}
@@ -82,7 +79,11 @@ function MerchantPage(props) {
                   {/* <TableCell align="center">
                     <img className="w-[120px]" src={m.image_url} />
                   </TableCell> */}
-                  <TableCell align="center">{m.is_paid ? "Paid": "Not yet"}</TableCell>
+                  <TableCell>SUBSCRIPTION CLASS</TableCell>
+                  <TableCell>
+                      {m.last_login}
+                  </TableCell>
+
                 </TableRow>
               );
             })}

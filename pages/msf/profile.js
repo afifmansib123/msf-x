@@ -42,11 +42,11 @@ function Profile(props) {
   const [data, setData] = useState({});
   const [editFlag, setEditFlag] = useState(false);
   const { data: session, status } = useSession();
-  console.log("useSession", session);
+  // console.log("useSession", session);
   const { token } = session;
   const { id } = token;
 
-  console.log("User ID", id);
+  // console.log("User ID", id);
 
   // Switch functionality between Profile and Edit Profile
   const handleEdit = (e) => {
@@ -57,13 +57,13 @@ function Profile(props) {
   React.useEffect(async () => {
     try {
       const apiURL = `${process.env.NEXT_PUBLIC_BG_API}user/profile/?user_id=${id}`;
-      console.debug("apiURL", apiURL);
+      // console.debug("apiURL", apiURL);
       const { data } = await axios.get(apiURL);
       // const res = await response.json();
-      console.debug("res", data);
+      // console.debug("res", data);
       setData(data);
       setDate(data.date_of_birth);
-      setAlignment(data.individual_user);
+      // setAlignment(data.individual_user);
       // date=res.date_of_birth;
     } catch (err) {
       console.error(err);
