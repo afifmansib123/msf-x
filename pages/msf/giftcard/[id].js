@@ -29,30 +29,30 @@ function CurrentGiftCard(props) {
     const { error, message } = router.query;
     const { packages } = props;
     const { merchantPac } = props;
-    console.log("token id", session);
+    // console.log("token id", session);
 
-    console.log("packagesType", props.packagesType)
-    console.log("allPackage", props.allPackage)
-    console.log("myPerk", props.perks)
-    console.log("merchantPac", merchantPac)
+    // console.log("packagesType", props.packagesType)
+    // console.log("allPackage", props.allPackage)
+    // console.log("myPerk", props.perks)
+    // console.log("merchantPac", merchantPac)
 
 
     const [errorDialog, setOpenDialog] = React.useState(false);
 
-    React.useEffect(() => {
-        if (error) {
-            setOpenDialog(true)
-            console.log("err case")
-            console.log("hello world")
-        } else {
-            setOpenDialog(false)
-        }
-    }, [])
+    // React.useEffect(() => {
+    //     if (error) {
+    //         setOpenDialog(true)
+    //         console.log("err case")
+    //         console.log("hello world")
+    //     } else {
+    //         setOpenDialog(false)
+    //     }
+    // }, [])
 
 
-    const onBuyClicked = () => {
-        console.log("test clicked")
-    }
+    // const onBuyClicked = () => {
+    //     console.log("test clicked")
+    // }
 
 
     const [isLoading, setIsLoading] = useState(false)
@@ -81,7 +81,7 @@ function CurrentGiftCard(props) {
         const renderPerkItems = props.perks.filter(function (el) {
             return (el.serial == serial_num)
         })
-        console.log("renderPerk", renderPerkItems)
+        // console.log("renderPerk", renderPerkItems)
 
         return renderPerkItems;
     }
@@ -89,10 +89,10 @@ function CurrentGiftCard(props) {
 
 
     const renderPackageItems = getPackage().map((item, i) => {
-        console.log("item", item)
+        // console.log("item", item)
         return (
             item.map((subItem, y) => {
-                console.log("subItem", subItem)
+                // console.log("subItem", subItem)
                 return (
                     <GridItem xs={12} sm={12} md={4}>
                         <Card>
@@ -264,7 +264,7 @@ export async function getServerSideProps(context) {
 
     //     });
 
-    console.log(myPackageTypes);
+    // console.log(myPackageTypes);
 
     //see what packageType that they buy.
     myPackageTypes = JSON.parse(
