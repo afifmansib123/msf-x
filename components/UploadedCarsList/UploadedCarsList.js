@@ -14,7 +14,7 @@ const UploadedCarsList = ({ data }) => {
     CarsApp_carmanufacturer: car_manufacturer,
     CarsApp_carimage: images,
     CarsApp_carmodel: model_name,
-    car_id,
+    id: car_id,
     fixed_price,
     car_year,
     mileage,
