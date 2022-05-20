@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* * NextJS Material Dashboard v1.1.0 based on Material Dashboard React v1.9.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/nextjs-material-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/nextjs-material-dashboard/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 // @mui/icons-material
 import Dashboard from "@mui/icons-material/Dashboard";
 import Person from "@mui/icons-material/Person";
@@ -23,6 +6,7 @@ import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import Unarchive from "@mui/icons-material/Unarchive";
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import Car from "@mui/icons-material/DirectionsCar";
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 const dashboardRoutes = [
   {
@@ -95,9 +79,14 @@ const dashboardRoutes = [
     path: "/profile",
     name: "User Profile",
     icon: Person,
-
     layout: "/msf",
   },
+  {
+    path: "/store",
+    name: "Store",
+    icon: StorefrontIcon,
+    layout: "/msf",
+  },  
 ];
 
 export default dashboardRoutes;

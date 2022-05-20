@@ -63,7 +63,7 @@ function LoginForm(props) {
 
       <div className="flex items-start md:items-center justify-center min-h-screen bg-grey-200">
         <div className="h-full m-4 px-6 py-20 text-left bg-white shadow-lg rounded-xl">
-          <div className="flex items-center flex-shrink-0 text-white ml-28">
+          <div className="flex items-center justify-center flex-shrink-0 text-white">
             {/* <Image width={90} height={90} src={topImage}></Image> */}
             <img src="/assets/img/bhalogari.png" />
           </div>
@@ -72,19 +72,18 @@ function LoginForm(props) {
           <form action="">
             <div className="mt-4">
               <div>
-                <label className="block" htmlFor="email">
-                  Username
+                <label className="block" htmlFor="username">
+                  Phone Number
                 </label>
                 <input
                   type="text"
-                  placeholder="Email"
+                  placeholder="eg: 01777664033 "
                   className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
                   autoComplete="name"
                   required
                   {...register("username")}
                 />
-                <span style={{ fontSize: "12px", color: "#000000" }}>e.g: 01777664033 </span>
-                <br></br>
+
                 <span className="text-xs tracking-wide text-red-600" style={{ fontSize: "11px" }}>
                   {" "}
                   * Username is required to login{" "}

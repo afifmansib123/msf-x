@@ -1,10 +1,11 @@
 import React, { useState, Component, CSSProperties } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
 import { useRouter } from "next/router";
 
 // layout for this page
 import MSF from "layouts/MSF.js";
+
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 // import styles from "assets/jss/nextjs-material-dashboard/views/iconsStyle.js";
 
 import { getSession, useSession, signOut } from "next-auth/react";
@@ -29,23 +30,23 @@ import { Button } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import makeStyles from "@mui/styles/makeStyles";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { PrismaClient } from "@prisma/client";
 
-import { format } from 'date-fns'
+import { format } from "date-fns";
 
 const styles = {
   pics: {
-    height: '20%',
+    height: "20%",
   },
   arrows: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 2,
-    top: 'calc(50% - 15px)',
+    top: "calc(50% - 15px)",
     width: 30,
     height: 30,
-    cursor: 'pointer',
+    cursor: "pointer",
   },
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -63,11 +64,9 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
+};
 
-}
-
-
-function Storefront(props) {
+function StoreDashboardPage(props) {
   const { promotions, user, packages } = props;
   console.log("MSF[user]", user);
   const useStyles = makeStyles(styles);
@@ -97,48 +96,53 @@ function Storefront(props) {
     alert("See session info in Dev Console");
   };
 
-
-
-
-
   return (
     <GridContainer>
       <h1 className="text-2xl font-bold pl-4">Welcome {user.name}</h1>
       <GridItem xs={12} sm={12} md={12}>
-
-        <div style={{ height: '55vh', width: '80%', margin: 'auto', backgroundColor: 'grey' }}>
-          <Carousel infiniteLoop={true} autoPlay={true} showThumbs={false} showStatus={false}
+        <div style={{ height: "55vh", width: "80%", margin: "auto", backgroundColor: "grey" }}>
+          <Carousel
+            infiniteLoop={true}
+            autoPlay={true}
+            showThumbs={false}
+            showStatus={false}
             renderArrowPrev={(onClickHandler, hasPrev, label) =>
               hasPrev && (
-                <IconButton className={classes.arrows} aria-label="arrowBackIosNew" onClick={onClickHandler} style={{ left: 15 }}>
+                <IconButton
+                  className={classes.arrows}
+                  aria-label="arrowBackIosNew"
+                  onClick={onClickHandler}
+                  style={{ left: 15 }}
+                >
                   <ArrowBackIosNewIcon />
                 </IconButton>
               )
             }
             renderArrowNext={(onClickHandler, hasNext, label) =>
               hasNext && (
-                <IconButton className={classes.arrows} aria-label="arrowForwardIos" onClick={onClickHandler} style={{ right: 15 }}>
+                <IconButton
+                  className={classes.arrows}
+                  aria-label="arrowForwardIos"
+                  onClick={onClickHandler}
+                  style={{ right: 15 }}
+                >
                   <ArrowForwardIosIcon />
                 </IconButton>
               )
             }
-
           >
             {promotions.map((m, i) => {
               return (
-                <div style={{ height: '55vh', width: '100%', margin: 'auto' }} className={classes.pics}>
-                  <img style={{ height: '100%', width: '100%' }} src={m.image_url} />
-
+                <div style={{ height: "55vh", width: "100%", margin: "auto" }} className={classes.pics}>
+                  <img style={{ height: "100%", width: "100%" }} src={m.image_url} />
                 </div>
               );
             })}
           </Carousel>
-
         </div>
 
-
         <Card>
-          <CardHeader color="warning" >
+          <CardHeader color="warning">
             <h1 className="text-xl font-bold">Packages</h1>
           </CardHeader>
           <CardBody>
@@ -146,7 +150,8 @@ function Storefront(props) {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
+                    <TableCell>Subscription/Package</TableCell>
+                    <TableCell>Type</TableCell>
                     <TableCell>Bought On</TableCell>
                     <TableCell>Status</TableCell>
                     {/* <TableCell align="right">Carbs&nbsp;(g)</TableCell>
@@ -156,9 +161,8 @@ function Storefront(props) {
                 <TableBody>
                   {packages.map((row) => (
                     <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                      <TableCell component="th" scope="row">
-                        {row.package_name}
-                      </TableCell>
+                      <TableCell>{row.package_name}</TableCell>
+                      <TableCell>{row.package_type}</TableCell>
                       <TableCell>{row.created_at ? format(new Date(row.created_at), "dd MMM yyyy") : "-"}</TableCell>
                       <TableCell>{row.status}</TableCell>
                       {/* <TableCell align="right">{row.carbs}</TableCell>
@@ -170,8 +174,6 @@ function Storefront(props) {
             </TableContainer>
           </CardBody>
         </Card>
-
-
       </GridItem>
     </GridContainer>
   );
@@ -220,6 +222,6 @@ export async function getServerSideProps(context) {
   };
 }
 
-Storefront.layout = MSF;
-Storefront.auth = true;
-export default Storefront;
+StoreDashboardPage.layout = MSF;
+StoreDashboardPage.auth = true;
+export default StoreDashboardPage;
