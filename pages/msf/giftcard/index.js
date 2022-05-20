@@ -17,6 +17,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getGiftPackage } from '../../api/gift/packages'
 import useMediaQuery from '@mui/material/useMediaQuery';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { orange } from "@mui/material/colors";
 
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
@@ -98,38 +100,44 @@ function merchantGiftCard(props) {
                 </CardHeader>
 
                 <CardBody className="overflow-y-auto">
-                    <CardContent className="text-center">
+                <CardContent className="text-center ml-30">
+                    <div >
+                        <span className="font-bold text-3xl text-bhalogari">
+                            TK. {v.price}
+                        </span><br></br>
+                        {' '}{' '}{' '}{' '}
+                        <span className="font-bold text-2xl text-bhalogari">
+                            Annual
+                        </span>
+                    </div>
+                    </CardContent>
+                   
+                    <CardContent className="text-left ">
                         {
                             v.packageDetail.map((i, index) => {
                                 return (
                                     <>
-                                        <br />
-                                        <div>{i.perks}</div>
-                                        <br />
-                                        {
-                                            (v.packageDetail.length - 1) !== index && <Divider />
-                                        }
+                                        
+                                        
+                                        <div className="flex py-2">  <CheckCircleIcon
+                                    sx={{ color: orange[800] }}
+                                  />
+                                      <div className="right px-4">{i.perks}</div> </div>
+                                     
+                                      
 
                                     </>
 
                                 )
                             })
                         }
+                        
                     </CardContent>
+                   
 
                 </CardBody>
 
-                <CardFooter>
-                    <div>
-                        <span className="font-bold text-3xl text-bhalogari">
-                            TK. {v.price}
-                        </span>
-                        {' '}{' '}{' '}{' '}
-                        <span className="font-semibold text-2xl text-red-600">
-                            /Annal
-                        </span>
-                    </div>
-                </CardFooter>
+             
             </Card>
             <div className="text-center">
                 <CustomButton onClick={buyPackage(v)} color={"primary"} size="lg" round style={{
