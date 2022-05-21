@@ -1,8 +1,6 @@
-import * as React from "react";
-import { useRouter } from "next/router";
-
+import React from "react";
 import Link from "next/link";
-
+import makeStyles from "@mui/styles/makeStyles";
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components
@@ -13,7 +11,6 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { PrismaClient } from "@prisma/client";
-import axios from "axios";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -25,10 +22,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from '@mui/material/Button';
-import Typography from "@mui/material/Typography";
-import makeStyles from "@mui/styles/makeStyles";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 
 const styles = {
   cardCategoryWhite: {
@@ -61,19 +54,9 @@ const styles = {
 };
 
 function MerchantPage(props) {
+  const { merchants, packages } = props;
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-  const [page, setPage] = React.useState(1);
-  const [merchants, setMerchants] = React.useState([]);
-  const router = useRouter();
-
-  const handleChange = (e, value) => {
-    setPage(value);
-  };
-  const totalCount = props.merchantCount || 0;
-  const totalPage = Math.ceil(totalCount/10) - 1;
-
-
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "#ff6600",
@@ -87,58 +70,13 @@ function MerchantPage(props) {
     },
   }));
 
-  React.useEffect(() => {
-    const merchantlist = axios.get(`/api/merchants?page=${page}`).then((v) => {
-      let {merchants} = v.data;
-      console.log(merchants)
-      merchants = merchants || [];
-      
-      let result = merchants.map((m, index) => {
-        return (
-          <TableBody key={index}>
-            <TableRow   >
-              <StyledTableCell>
-                {
-                  m.first_name !== null ?
-                    <a href={`/admin/merchants/${m.id}`}>
-                      {m.first_name} {m.last_name}
-                    </a> : <div>
-                      Not Specify
-                    </div>
-                }
-              </StyledTableCell>
-
-              <StyledTableCell>{m.contact_number}</StyledTableCell>
-
-              {
-                m.MerchantStorefront_package.length != 0 ?
-                  <StyledTableCell> {m.MerchantStorefront_package[0].package_name} </StyledTableCell>
-                  : <StyledTableCell>Non-subscribe</StyledTableCell>
-              }
-              <StyledTableCell> {m.last_login}
-              </StyledTableCell>
-              <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
-                Details
-              </Button></StyledTableCell>
-            </TableRow>
-          </TableBody>
-        )
-      })
-      setMerchants(result)
-    })
-
-  }, [page]);
-
-
   return (
 
 
     <>
-      {/* <Button onClick={() => { console.log(merchants) }}>test</Button> */}
       <h1 className="text-4xl font-semibold text-center mb-4">
         Merchants
       </h1>
-
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <TableContainer component={Paper}>
@@ -152,139 +90,71 @@ function MerchantPage(props) {
                   <StyledTableCell></StyledTableCell>
                 </TableRow>
               </TableHead>
-              {/* {merchants.map((m, i) => {
+
+
               {merchants.map((m, i) => {
                 return (
                   <TableBody>
-                    <TableRow   >
-                      <StyledTableCell>
-                        {
-                          m.first_name !== null ?
-                            <a href={`/admin/merchants/${m.id}`}>
-                              {m.first_name} {m.last_name}
-                            </a> : <div>
-                              Not Specify
-                            </div>
-                        }
-                      </StyledTableCell>
 
-                      <StyledTableCell>{m.contact_number}</StyledTableCell>
-
-                      {
-                        m.MerchantStorefront_package.length != 0 ?
-                          <StyledTableCell> {m.MerchantStorefront_package[0].package_name} </StyledTableCell>
-                          : <StyledTableCell>Non-subscribe</StyledTableCell>
-                      }
-
-
-                      <StyledTableCell> {m.last_login}
-                      </StyledTableCell>
-                      <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
-                        Details
-                      </Button></StyledTableCell>
-                    </TableRow>
-
-                   {console.log("Original", m)}
-                   {console.log("Package",packages)}
-                  {m.MerchantStorefront_paymenthistory.map ( k=> {
-                    return ( <TableRow   >
-                    {packages.map(v => {
-                      console.log("Package",v)
                     
-                        
-                      if (m.id === k.user_id_id && k.package_id_id === v.id ){
-                        return (
-                          <>
-                         
-                            <StyledTableCell>
-                              <a href={`/admin/merchants/${m.id}`}>
-                                {m.first_name} {m.last_name}
-                              </a>
-                            </StyledTableCell>
-                            <StyledTableCell>{m.contact_number}</StyledTableCell>
-  
-                            <StyledTableCell>{v.package_name} </StyledTableCell>
-                            <StyledTableCell> {m.last_login}
-                            </StyledTableCell>
-                            <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
-                              Details
-                            </Button></StyledTableCell>
-                        
-  
-                        </>
-  
-                        )
+                    {m.MerchantStorefront_paymenthistory.map(k => {
+                      return (<TableRow   >
+                        {packages.map(v => {
+                          console.log("Package", v)
+
+
+                          if (m.id === k.user_id_id && k.package_id_id === v.id) {
+                            return (
+                              <>
+
+                                <StyledTableCell>
+                                  <a href={`/admin/merchants/${m.id}`}>
+                                    {m.first_name} {m.last_name}
+                                  </a>
+                                </StyledTableCell>
+                                <StyledTableCell>{m.contact_number}</StyledTableCell>
+
+                                <StyledTableCell>{v.package_name} </StyledTableCell>
+                                <StyledTableCell> {m.last_login}
+                                </StyledTableCell>
+                                <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
+                                  Details
+                                </Button></StyledTableCell>
+
+
+                              </>
+
+                            )
                           }
 
-                          
-                      })}
-                     
-                   
-                     </TableRow>)
+
+                        })}
+
+
+                      </TableRow>)
                     })}
-               
-                    
-                     
-                   
-                
-              
+
+
 
                   </TableBody>
                 );
               })}
 
-            </Table>
-          </TableContainer>
-        </GridItem>
 
 
 
-                    {m.MerchantStorefront_package.map(v => {
 
-                      return (<>
-                        <TableRow   >
-                          <StyledTableCell>
-                            <a href={`/admin/merchants/${m.id}`}>
-                              {m.first_name} {m.last_name}
-                            </a>
-                          </StyledTableCell>
-                          <StyledTableCell>{m.contact_number}</StyledTableCell>
-
-                          <StyledTableCell>{v.package_name} </StyledTableCell>
-                          <StyledTableCell> {m.last_login}
-                          </StyledTableCell>
-                          <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
-                            Details
-                          </Button></StyledTableCell>
-                        </TableRow>
-
-                      </>
-
-                      )
-                    })}
-                  </TableBody>
-                );
-              })} */}
-              {merchants}
 
             </Table>
           </TableContainer>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={12}>
-          <div className={"text-center"}>
-            <Stack spacing={2} className={"items-center"}>
-              <Typography>Page: {page}</Typography>
-              <Pagination count={totalPage} page={page} onChange={handleChange} showFirstButton showLastButton size="large" />
-            </Stack>
-          </div>
         </GridItem>
       </GridContainer>
-
     </>
   );
 }
 
 
+MerchantPage.layout = Admin;
 
 export async function getServerSideProps() {
   const prisma = new PrismaClient();
@@ -297,17 +167,10 @@ export async function getServerSideProps() {
     //     equals: true,
     //    } 
     // },
+
     include: {
-
-    
-      MerchantStorefront_package: true,
-     
-
-    },
-    include:{
       MerchantStorefront_paymenthistory: true,
 
-      MerchantStorefront_package: true,
     },
 
     // include: {
@@ -323,7 +186,7 @@ export async function getServerSideProps() {
     JSON.stringify(allMerchants, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
 
- packages = JSON.parse(
+  packages = JSON.parse(
     JSON.stringify(packages, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
 
@@ -338,8 +201,8 @@ export async function getServerSideProps() {
   //   car2["view_count"] =
   //   return car2;
   // });
-  // console.log("Transformed", allMerchants[0]);
-  let merchantCount = await prisma.UsersApp_customuser.count();
+  console.log("Transformed", allMerchants[0]);
+
   return {
     props: {
       merchants: allMerchants,
@@ -347,8 +210,5 @@ export async function getServerSideProps() {
     },
   };
 }
-
-MerchantPage.layout = Admin;
-MerchantPage.auth = true
 
 export default MerchantPage;
