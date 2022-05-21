@@ -24,11 +24,8 @@ import { useRouter } from "next/router";
 import AddAlert from "@mui/icons-material/AddAlert";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { orange } from "@mui/material/colors";
-import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react"
 
-
-function Subscriptions(props) {
+function Subscriptions() {
   const [expanded, setExpanded] = useState(false);
   const [packages, setPackages] = useState([]);
   const [details, setDetails] = useState([]);
@@ -48,10 +45,6 @@ function Subscriptions(props) {
   };
 
   const router = useRouter();
-
-  // console.log("test", props.packagesType)
-
-
 
   useEffect(() => {
     if (router.query.status) {
@@ -85,38 +78,27 @@ function Subscriptions(props) {
   // console.log("package Informations =>", details);
 
   const buyPackage = (subPackage) => async (e) => {
-    console.log(subPackage.id);
-    // props.packagesType
-    const isSubcription = props.packagesType.filter(function (el) {
-      return (el.package_id_id == subPackage.id)
-    })
+    // console.log(subPackage);
 
-    // console.log("result", renderPerkItems)
-    if (isSubcription == []) {
-      const dataParams = {
-        total_amount: subPackage.price, // the amount goes to SSL checkout page
-        user_id: session.token.id,
-        package_id: subPackage.id,
-        cus_name: session.token.name,
-        cus_city: "",
-        cus_country: "Bangladesh",
-        shipping_method: "NO",
-        multi_card_name: "",
-        num_of_item: 1,
-        product_name: `BG Subscription Package - ${subPackage.package_name}`,
-        product_category: "Service",
-        product_profile: "General",
-      };
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/add-payment-history/`,
-        dataParams
-      );
-      window.location = response.data.GatewayPageURL;
-
-    } else {
-      alert("You already have this subcription")
-    }
+    const dataParams = {
+      total_amount: subPackage.price, // the amount goes to SSL checkout page
+      user_id: session.token.id,
+      package_id: subPackage.id,
+      cus_name: session.token.name,
+      cus_city: "",
+      cus_country: "Bangladesh",
+      shipping_method: "NO",
+      multi_card_name: "",
+      num_of_item: 1,
+      product_name: `BG Subscription Package - ${subPackage.package_name}`,
+      product_category: "Service",
+      product_profile: "General",
+    };
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/add-payment-history/`,
+      dataParams
+    );
+    window.location = response.data.GatewayPageURL;
   };
 
   return (
@@ -132,6 +114,7 @@ function Subscriptions(props) {
                   {item.description}({item.package_name})
                 </h1>
               </CardHeader>
+
               <CardBody className="overflow-y-auto">
                 <CardContent className={"m-30"}>
                   <div className="mb-35 text-center font-bold text-[#f06424]">
@@ -185,32 +168,6 @@ function Subscriptions(props) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const prisma = new PrismaClient();
-  // const id = context.params.id
-  // const { data: session, status } = useSession();
-  const session = await getSession(context)
-
-  var myPackageTypes = await prisma.MerchantStorefront_paymenthistory.groupBy({
-    by: ['package_id_id'],
-    where: {
-      user_id_id: session.token.id,
-
-    }
-  })
-
-  //see what packageType that they buy.
-  myPackageTypes = JSON.parse(
-    JSON.stringify(myPackageTypes, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-  );
-
-  return {
-    props: {
-      packagesType: myPackageTypes.sort((a, b) => a.package_id_id - b.package_id_id),
-    },
-  }
-}
-
 Subscriptions.layout = MSF;
-export default Subscriptions;
 
+export default Subscriptions;
