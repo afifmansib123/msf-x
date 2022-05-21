@@ -54,7 +54,7 @@ const styles = {
 };
 
 function MerchantPage(props) {
-  const { merchants } = props;
+  const { merchants,packages } = props;
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -91,6 +91,7 @@ function MerchantPage(props) {
                 </TableRow>
               </TableHead>
 
+
               {merchants.map((m, i) => {
                 return (
                   <TableBody>
@@ -103,6 +104,61 @@ function MerchantPage(props) {
                     {/* <StyledTableCell align="center">
                     <img className="w-[120px]" src={m.image_url} />
                   </StyledTableCell> */}
+
+                   {console.log("Original", m)}
+                   {console.log("Package",packages)}
+                  {m.MerchantStorefront_paymenthistory.map ( k=> {
+                    return ( <TableRow   >
+                    {packages.map(v => {
+                      console.log("Package",v)
+                    
+                        
+                      if (m.id === k.user_id_id && k.package_id_id === v.id ){
+                        return (
+                          <>
+                         
+                            <StyledTableCell>
+                              <a href={`/admin/merchants/${m.id}`}>
+                                {m.first_name} {m.last_name}
+                              </a>
+                            </StyledTableCell>
+                            <StyledTableCell>{m.contact_number}</StyledTableCell>
+  
+                            <StyledTableCell>{v.package_name} </StyledTableCell>
+                            <StyledTableCell> {m.last_login}
+                            </StyledTableCell>
+                            <StyledTableCell> <Button color="warning" variant="outlined" href={`/admin/merchants/${m.id}`}>
+                              Details
+                            </Button></StyledTableCell>
+                        
+  
+                        </>
+  
+                        )
+                          }
+
+                          
+                      })}
+                     
+                   
+                     </TableRow>)
+                    })}
+               
+                    
+                     
+                   
+                
+              
+
+                  </TableBody>
+                );
+              })}
+
+            </Table>
+          </TableContainer>
+        </GridItem>
+
+
 
                     {m.MerchantStorefront_package.map(v => {
 
@@ -157,17 +213,35 @@ export async function getServerSideProps() {
     //    } 
     // },
     include: {
+
+    
       MerchantStorefront_package: true,
+     
 
     },
+    include:{
+      MerchantStorefront_paymenthistory: true,
+
+      MerchantStorefront_package: true,
+
+
+    },
+
     // include: {
     //     CarsApp_carmanufacturer: true,
     //     CarsApp_carmodel: true,
     //   },
   });
+  var packages = await prisma.MerchantStorefront_package.findMany({
+
+  })
 
   allMerchants = JSON.parse(
     JSON.stringify(allMerchants, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  );
+
+ packages = JSON.parse(
+    JSON.stringify(packages, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
 
   console.log("Original", allMerchants[0]);
@@ -186,6 +260,7 @@ export async function getServerSideProps() {
   return {
     props: {
       merchants: allMerchants,
+      packages: packages,
     },
   };
 }
