@@ -104,20 +104,42 @@ function DetailCarLog(props) {
           </GridItem>
 
           <GridItem xs={12} sm={12} md={12}>
-            <Card profile>
+            <Card>
               <CardHeader color="info">
                 <h2 className="font-medium text-center">Car's Model</h2>
               </CardHeader>
 
               <CardContent>
                 <CardBody>
-                  <div>condition: {selectedCar.carOverview.condition || "-"}</div>
-                  <div>Maker: {selectedCar.carMaker || "-"}</div>
-                  <div>Model: {selectedCar.modelData.model_name || "-"}</div>
-                  <div>Car Grade/Package: {selectedCar.carOverview.grade || "-"}</div>
-                  <div>Model year: {selectedCar.modelData.release_year || "-"}</div>
-                  <div>Chassis Number: {selectedCar.carOverview.chassis_no || "-"}</div>
-                  <div>Engine Number: {selectedCar.carOverview.engine_no || "-"}</div>
+                  <GridContainer>
+                    <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
+                      condition: {selectedCar.carOverview.condition || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Maker: {selectedCar.carMaker || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Model: {selectedCar.modelData.model_name || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
+                      Car Grade/Package: {selectedCar.carOverview.grade || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Model year: {selectedCar.modelData.release_year || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Chassis Number: {selectedCar.carOverview.chassis_no || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Engine Number: {selectedCar.carOverview.engine_no || "-"}
+                    </GridItem>
+                  </GridContainer>
                 </CardBody>
               </CardContent>
             </Card>
@@ -187,14 +209,11 @@ function DetailCarLog(props) {
                 <h2 className="font-medium">Car's Features</h2>
               </CardHeader>
               <CardBody>
-                <GridContainer>{showFeatureCard()}</GridContainer>
+                {showFeatureCard().length > 0 && <GridContainer>{showFeatureCard()}</GridContainer>}
+                {showFeatureCard().length === 0 && <div><div className={"text-center text-3xl"}>No data</div></div>}
               </CardBody>
             </Card>
           </GridItem>
-
-
-          
-
           <GridItem xs={12} sm={12} md={12}>
             <Card plain profile>
               <CardHeader color="info">
@@ -323,7 +342,7 @@ async function getHistory(id) {
     throw new Error(err);
   });
 
-  
+
 
   const parsedData = JSON.parse(
     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))

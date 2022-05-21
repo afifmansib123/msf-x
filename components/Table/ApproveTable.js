@@ -115,16 +115,8 @@ function CarApproveLog(props) {
         Merchants have submitted the cars to be approved. Once these are approved, they will be shown on the public
       </span>
       <Card>
-        {/* <CardHeader color={props.tableHeaderColor}>
-          <p className={classes.cardCategoryWhite}>
-            listing.
-          </p>
-        </CardHeader> */}
         <CardBody>
           <div className="grid gap-4 grid-cols-2 w-1/2">{showedData}</div>
-          {/* {showedData.length > 0 && (
-            <Table tableHeaderColor={props.tableHeaderColor} tableHead={props.tableHead} tableData={showedData} />
-          )} */}
           {showedData.length === 0 && (
             <div className=" h-[200px]">
               <div className=" absolute right-1/2 bottom-1/2 text-4xl text-gray-200 font-semibold">No Data</div>
