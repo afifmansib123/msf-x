@@ -107,7 +107,7 @@ function LoginPage(props) {
 
   const handleSignIn = (data) => {
     const { username, password } = data;
-    console.log("handleSignIn", data);
+    // console.log("handleSignIn", data);
 
   };
 
