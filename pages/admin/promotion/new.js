@@ -3,6 +3,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import { useS3Upload } from "next-s3-upload";
 
 import proImage from "/assets/img/profile/add-picture.svg";
 import Image from "next/image";
@@ -46,6 +47,7 @@ const styles = {
 };
 
 function NewPage() {
+  let { uploadToS3 } = useS3Upload();
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const { data: session } = useSession();
@@ -80,14 +82,16 @@ function NewPage() {
 
 
   async function addNewPromotion(data) {
+
+    const token = session.accessToken;
+
     const body = new FormData();
-    body.append("file", image);
+    body.append("file", url);
     body.append("headline", data.headline);
     body.append("description", data.description);
     body.append("created_by_id", session.token.id);
     body.append("start_at", data.start_at);
     body.append("end_at", data.end_at);
-    const token = session.accessToken;
 
     try {
       // const response = await axios.post(`/api/promotion/upload`, formData, {
@@ -104,9 +108,6 @@ function NewPage() {
       alert("Something went wrong. Please contact IT.");
       console.log(error);
     };
-
-
-
 
   }
 
