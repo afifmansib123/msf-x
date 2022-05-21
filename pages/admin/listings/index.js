@@ -52,7 +52,6 @@ function TableList(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const [page, setPage] = React.useState(1);
-  const [curSor, setCurSor] = React.useState(null);
   const [cars, setCars] = React.useState([]);
   const router = useRouter();
 
@@ -60,7 +59,7 @@ function TableList(props) {
     setPage(value);
   };
   const totalCount = props.totalCar || 0;
-  const totalPage = Math.ceil(totalCount/20);
+  const totalPage = Math.ceil(totalCount/20) - 1;
 
   const onDetailClick = async (car_id)  => {
     console.log(car_id)
@@ -68,10 +67,8 @@ function TableList(props) {
   };
 
   React.useEffect(()  => {
-    const carlist = axios.get(`/api/cars?page=${page}&cursor=${curSor}`).then((v) => {
-      console.log(v.data)
-      let {cars, cursor} = v.data;
-      setCurSor(cursor)
+    const carlist = axios.get(`/api/cars?page=${page}`).then((v) => {
+      let {cars} = v.data;
       cars = cars || [];
       let result = cars.map((item, index)=> {
         return (

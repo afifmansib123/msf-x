@@ -6,10 +6,9 @@ import prisma from "../../../PrismaConnect";
 
 export default async function handler(req, res) {
   const prisma = new PrismaClient();
-  const {page, cursor} = req.query;
-  console.log(cursor)
+  const {page} = req.query;
   try {
-    const data = await getCarList(parseInt(page), cursor);
+    const data = await getCarList(parseInt(page));
     return res.status(200).json(data);
   } catch(e) {
     console.error(e)
@@ -18,10 +17,8 @@ export default async function handler(req, res) {
 
 }
 
-async function getCarList(page, cursor) {
+async function getCarList(page) {
   let cars;
-  let lastPostInResults;
-  let myCursor;
 
   if (page === 1){
     cars = await prisma.CarsApp_car.findMany({
@@ -58,11 +55,8 @@ async function getCarList(page, cursor) {
     });
   } else {
     cars = await prisma.CarsApp_car.findMany({
+      skip: (page * 20),
       take:20,
-      skip: 1,
-      cursor: {
-        id: parseInt(cursor),
-      },
       orderBy: {
         id: 'asc'
       },
@@ -95,7 +89,6 @@ async function getCarList(page, cursor) {
       JSON.stringify(cars, (key, value) => (typeof value === "bigint" ? parseInt(value) : value))
   ) || [];
 
-  console.log("53")
   cars = cars.map(async v => {
     const img = await prisma.CarsApp_carimage.findMany({
       where: {
@@ -115,14 +108,12 @@ async function getCarList(page, cursor) {
       img: img
     }
   });
-  console.log("74")
 
   cars = Promise.all(cars.map((item) => item));
   cars = await cars;
-  lastPostInResults = cars[19];
-  myCursor = lastPostInResults.car.id;
+  console.log(cars);
+
   return {
     cars: cars,
-    cursor: myCursor
   }
 }
