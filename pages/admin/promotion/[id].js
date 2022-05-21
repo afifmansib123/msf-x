@@ -4,6 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useS3Upload } from "next-s3-upload";
 
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -47,17 +48,18 @@ const styles = {
 
 
 function EditPage(props) {
+  let { uploadToS3 } = useS3Upload();
   const useStyles = makeStyles(styles);
   const classes = useStyles();
 
   const router = useRouter();
   const promo_id = parseInt(router.query.id);
 
-  const [image, setImage] = useState(props.promotions.image_url.replace("public",""));
+  const [image, setImage] = useState(props.promotions.image_url.replace("public", ""));
   const [createObjectURL, setCreateObjectURL] = useState(null);
 
 
-  const [imageUrl, setImageUrl] = useState(props.promotions.image_url.replace("public",""));
+  const [imageUrl, setImageUrl] = useState(props.promotions.image_url.replace("public", ""));
   const [selectedImage, setSelectedImage] = useState(null);
   const [update, setUpdate] = useState(false);
 
@@ -84,14 +86,33 @@ function EditPage(props) {
       setImageUrl(URL.createObjectURL(selectedImage));
     }
 
-    console.log(props.promotions.image_url.replace("public",""))
+    console.log(props.promotions.image_url.replace("public", ""))
 
   }, [selectedImage]);
 
+  const body = new FormData();
+
   async function updatePromo(data) {
-    const body = new FormData();
+    console.log("file", image);
+    if (update) {
+      let { url } = await uploadToS3(image, {
+        endpoint: {
+          request: {
+            body: {
+              path: `promotion/banner`, // Path without leading and trailing slashes
+            },
+          },
+        },
+      });
+      body.append("file", url);
+    }
+    else {
+      console.log("this is the same image")
+      body.append("file", imageUrl);
+    }
+
+    // console.log("S3 url", url);
     body.append("update", update);
-    body.append("file", image);
     body.append("headline", data.headline);
     body.append("description", data.description);
     body.append("created_by_id", session.token.id);

@@ -163,7 +163,7 @@ export default NextAuth({
       session.accessToken = userSessionRecord.access_token;
       session.refreshToken = userSessionRecord.refresh_token;
       // session.accessToken = token;
-      console.log("\tcallback", { session, token });
+      // console.debug("\tcallback", { session, token });
       return session;
     },
   },

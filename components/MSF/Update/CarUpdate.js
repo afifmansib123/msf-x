@@ -624,11 +624,11 @@ export default function CarUpdate() {
       price_to: carPrice.asking_price !== "" ? carPrice.asking_price : 0.0,
       affiliated_price: carPrice.selling_price,
       price_from: carPrice.selling_price,
-      call_for_price: "no",
+      // call_for_price: "no",
       transmission_type: carTransmission !== "" ? carTransmission : "N/A",
       car_manufacturer: carMaker,
       model_name: carModel,
-      interior_color: carInteriorColor !== "" ? carInteriorColor : 21,
+      interior_color_new: carInteriorColor !== "" ? carInteriorColor : 21,
       exterior_color: carExteriorColor !== "" ? carExteriorColor : 54,
       car_body_type: carBodyType,
       engine_capacity: carEngineCC !== "" ? carEngineCC : 0.0,
@@ -639,7 +639,7 @@ export default function CarUpdate() {
       drive: carDrive !== "" ? carDrive : "N/A",
       seating_capacity: carSeat !== undefined ? carSeat : 0,
       description: carDescription !== "" ? carDescription : "-",
-      car_features: carFeatures,
+      car_features: checkBoxInput,
       car_year: carModelYear,
       engine_no: carEngineNumber !== "" ? carEngineNumber : "-",
       chassis_no: carChassisNumber,
@@ -653,6 +653,7 @@ export default function CarUpdate() {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}cars/delete-images/`, delImages);
       // console.log(response);
     }
+    // return;
 
     // if (images.length === 0) {
     //   setSnackMsg("Please! Provide Image.");
@@ -668,13 +669,9 @@ export default function CarUpdate() {
     const response = await axios.patch(
       `${process.env.NEXT_PUBLIC_BG_API}cars/user-car-update/${cid}/`,
       carObject,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data;  boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
-        },
-      }
-    );
+    )
     console.log(response);
+    // return;
     if (response.status === 200) {
       const id = response.data.car_id;
       localStorage.setItem("car_id", id);
@@ -886,16 +883,22 @@ export default function CarUpdate() {
     return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((val, index) => val === b[index]);
   }
 
-  const deleteCarImage = (index) => {
-    console.log(index);
-    let array = [...newCarImages]; // make a separate copy of the array
-    if (index !== -1) {
-      array.splice(index, 1);
-      setNewCarImages(array);
+  const deleteCarImage = (id) => {
+    let first = lastID - imagesCount;
+    let index = [];
+    for(let i=0; i < imagesCount; i++){
+      index.push(++first);
     }
-    setSyntheticFiles(syntheticFiles.filter((x) => x.id !== index));
+    let array = [...newCarImages]; // make a separate copy of the array
+    // if (index !== -1) {
+      array.splice(index.indexOf(id), 1);
+    // }
+    setNewCarImages(array);
+    setSyntheticFiles(syntheticFiles.filter((x) => x.id !== id));
   };
 
+  const [lastID, setLastID] = useState(0);
+  const [imagesCount, setImagesCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -924,9 +927,10 @@ export default function CarUpdate() {
         );
         setCarChassisNumber(json.result.chassis_no === "-" ? "" : json.result.chassis_no);
         setCarEngineNumber(json.result.engine_no === "-" ? "" : json.result.engine_no);
+        setCarRegNumber(json.result.registration_no === "-" ? "" : json.result.registration_no);
         setCarBodyType(json.result.car_body_type.body_id);
         setCarEngineCC(json.result.engine_capacity);
-        setCarDrive(json.result.drive === "-" || json.result.drive == null ? "" : json.result.drive);
+        setCarDrive(json.result.drive === "-" || json.result.drive === "N/A" || json.result.drive == null ? "" : json.result.drive);
         setCarMileage(
           json.result.mileage === "-" || json.result.mileage == null ? "" : json.result.mileage
         );
@@ -936,7 +940,7 @@ export default function CarUpdate() {
             : json.result.seating_capacity
         );
         setCarTransmission(
-          json.result.transmission_type === "-" || json.result.transmission_type == null
+          json.result.transmission_type === "-" || json.result.transmission_type === "N/A" || json.result.transmission_type == null
             ? ""
             : json.result.transmission_type
         );
@@ -962,6 +966,7 @@ export default function CarUpdate() {
         setCarImages(json.result.images);
         setNewCarImages(json.result.images);
         let images = json.result.images;
+        let last_id = 0;
         if (images.length > 0) {
           for (let i = 0; i < images.length; i++) {
             const fileFromWebUrl = createSyntheticFile(
@@ -981,8 +986,11 @@ export default function CarUpdate() {
             //add the image URL
             validateFileFromWebUrl.imageUrl = images[i];
             setSyntheticFiles((prev) => [...prev, validateFileFromWebUrl]);
+            last_id = validateFileFromWebUrl.id;
           }
         }
+        setLastID(last_id);
+        setImagesCount(images.length);
 
         setCarDescription(json.result.description);
         setCarVideoLink({...carVideoLink, ["video1"]: json.result.car_video_link});
@@ -1510,9 +1518,9 @@ export default function CarUpdate() {
               {...f}
               key={f.id}
               onDelete={deleteCarImage}
-              info
-              preview
-              resultOnTooltip
+              // info
+              // preview
+              // resultOnTooltip
             />
           ))}
         </FileItemContainer>
@@ -1589,7 +1597,7 @@ export default function CarUpdate() {
             {filteredResults == 0 ? (
               <TextField
                 label="Engine CC"
-                value={carEngineCC || ""}
+                value={carEngineCC || ''}
                 name={"car_engine_cc"}
                 autoComplete="off"
                 fullWidth

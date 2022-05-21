@@ -46,88 +46,38 @@ export default async function handler(req, res) {
             const form = new formidable.IncomingForm();
             form.parse(req, async function (err, fields, files) {
 
-                console.log("fields", fields)
-                console.log("files", files)
-                console.log("update", fields.update)
-
-                if (fields.update == "true") {
-
-                    console.log("in update")
-
-                    await saveFile(files.file);
-                    promo = {
-                        headline: fields.headline,
-                        description: fields.description,
-                        image_url: `/banner/${files.file.newFilename}.jpg`,
-                        created_by_id: parseInt(fields.created_by_id),
-                        // created_at: new Date(),  default to database
-                        start_at: new Date(fields.start_at),
-                        end_at: new Date(fields.end_at),
-                        // UsersApp_customuser: fields.created_by_id, // Redundant, not sure we should use it.
-                    }
-
-                    try {
-                        //   console.log("promo", promo);
-                        var newPromo = await prisma.MerchantStorefront_promotion.update({
-                            where: {
-                                id: int_id,
-                            },
-                            data: promo,
-                        });
-
-                        newPromo = JSON.parse(
-                            JSON.stringify(newPromo, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-                        );
-
-                        //   console.log("newPromo", newPromo);
-                        res.status(200).json(newPromo);
-                    } catch (err) {
-                        console.error(err);
-                        res.status(500).json(err);
-                    }
-                } else {
-
-                    console.log("not update")
-
-                    promo = {
-                        headline: fields.headline,
-                        description: fields.description,
-                        image_url: fields.file,
-                        created_by_id: parseInt(fields.created_by_id),
-                        // created_at: new Date(),  default to database
-                        start_at: new Date(fields.start_at),
-                        end_at: new Date(fields.end_at),
-                        // UsersApp_customuser: fields.created_by_id, // Redundant, not sure we should use it.
-                    }
-
-                    try {
-                        //   console.log("promo", promo);
-                        var newPromo = await prisma.MerchantStorefront_promotion.update({
-                            where: {
-                                id: int_id,
-                            },
-                            data: promo,
-                        });
-
-                        newPromo = JSON.parse(
-                            JSON.stringify(newPromo, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-                        );
-
-                        //   console.log("newPromo", newPromo);
-                        res.status(200).json(newPromo);
-                    } catch (err) {
-                        console.error(err);
-                        res.status(500).json(err);
-                    }
+                promo = {
+                    headline: fields.headline,
+                    description: fields.description,
+                    image_url: fields.file,
+                    created_by_id: parseInt(fields.created_by_id),
+                    // created_at: new Date(),  default to database
+                    start_at: new Date(fields.start_at),
+                    end_at: new Date(fields.end_at),
+                    // UsersApp_customuser: fields.created_by_id, // Redundant, not sure we should use it.
                 }
 
+                try {
+                    //   console.log("promo", promo);
+                    var newPromo = await prisma.MerchantStorefront_promotion.update({
+                        where: {
+                            id: int_id,
+                        },
+                        data: promo,
+                    });
 
+                    newPromo = JSON.parse(
+                        JSON.stringify(newPromo, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+                    );
+
+                    //   console.log("newPromo", newPromo);
+                    res.status(200).json(newPromo);
+                } catch (err) {
+                    console.error(err);
+                    res.status(500).json(err);
+                }
             });
-            const saveFile = async (file) => {
-                const data = fs.readFileSync(file.filepath);
-                fs.writeFileSync(`public/banner/${file.newFilename}.jpg`, data);
-                await fs.unlinkSync(file.filepath);
-            }
+
         }
     } catch (err) {
         console.error(err);
