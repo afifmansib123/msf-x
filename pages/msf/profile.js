@@ -7,6 +7,8 @@ import makeStyles from "@mui/styles/makeStyles";
 import ProfileView from "../../components/ProfileView/ProfileView";
 import ProfileForm from "../../components/ProfileForm/ProfileForm";
 import axios from "axios";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 //Edit Profile styles
 const useStyles = makeStyles((theme) => ({
@@ -78,19 +80,20 @@ function Profile(props) {
         <ProfileForm data={data} date={date} userID={id} handleEdit={handleEdit} />
       ) : (
         <>
-          <ProfileView data={data} />
-          <div className="container">
-            <div className="flex justify-center sm:justify-end sm:mx-20 p-5">
+        <div className="container">
+            <div className="grid justify-items-end">
               <button
-                className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-5 px-10 rounded-full transition-all"
+                className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-2 px-5 rounded-full transition-all"
                 onClick={() => {
                   handleEdit(true);
                 }}
               >
                 Edit Profile
               </button>
-            </div>
+              </div>
           </div>
+          <ProfileView data={data} />
+          
         </>
       )}
     </>
