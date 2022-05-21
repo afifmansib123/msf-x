@@ -111,16 +111,22 @@ export default function StorePage(props) {
       <form onSubmit={handleSubmit(onSubmitUpdate)}>
         <div className="grid grid-cols-2">
           <h1 className="text-2xl font-bold">Store Management: {store.name}</h1>
-          <div>
+          <div className="justify-self-end">
             {readOnly && (
-              <Button className="bg-bhalogari text-white" onClick={() => handleEditMode()}>
+              <Button className="bg-bhalogari hover:bg-orange-400 text-white" onClick={() => handleEditMode()}>
                 Edit
               </Button>
             )}
             {!readOnly && (
-              <Button className="bg-[#557755] text-white" type="submit" variant="contained" color="success">
-                Save
-              </Button>
+              <>
+                <Button className="mr-4  text-black " onClick={() => setReadOnly(true)} variant="outlined">
+                  Cancel
+                </Button>
+
+                <Button className="bg-[#557755] text-white" type="submit" variant="contained" color="success">
+                  Save
+                </Button>
+              </>
             )}
           </div>
         </div>
