@@ -63,6 +63,7 @@ function DetailCarLog(props) {
         await router.push(`/admin/approval/`);
       }
     } catch (e) {
+      console.error(e)
       alert("Something went wrong");
     }
   };
