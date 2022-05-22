@@ -1,17 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useSession} from "next-auth/react";
-import {useRouter} from "next/router";
-import axios from "axios";
-
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 // @mui/icons-material
 import AddAlert from "@mui/icons-material/AddAlert";
-import Car from "@mui/icons-material/DirectionsCar";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-
-// react plugin for creating charts
-import makeStyles from "@mui/styles/makeStyles";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-
 // core components
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -23,14 +13,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import GridItem from "components/Grid/GridItem.js";
+// react plugin for creating charts
+import makeStyles from "@mui/styles/makeStyles";
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import axios from "axios";
 import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
 import Snackbar from "components/Snackbar/Snackbar.js";
-
 // plugins
 import Joi from "joi-browser";
-import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
@@ -116,25 +110,25 @@ export default function CarUpload() {
     // setCarBodyType(parseInt(filteredData[0]?.body_name));
     setFilteredResults(filteredData);
   };
-  console.log(filteredResults);
+
   useEffect(() => {
     setJsonData(fakeData);
   }, []);
   const [carDrives] = useState([
-    {id: 1, option: "Front Wheel Drive (FWD)"},
-    {id: 2, option: "Rear Wheel Drive (RWD)"},
-    {id: 3, option: "All Wheel Drive (AWD)"},
-    {id: 4, option: "4-Wheel Drive (4WD)"},
+    { id: 1, option: "Front Wheel Drive (FWD)" },
+    { id: 2, option: "Rear Wheel Drive (RWD)" },
+    { id: 3, option: "All Wheel Drive (AWD)" },
+    { id: 4, option: "4-Wheel Drive (4WD)" },
   ]);
   const [carTransmissions, setCarTransmissions] = useState([
-    {id: "A", title: "Automatic"},
-    {id: "M", title: "Manual"},
+    { id: "A", title: "Automatic" },
+    { id: "M", title: "Manual" },
   ]);
   const [carFeaturesInput, setCarFeaturesInput] = useState([]);
   const [carFeatures, setCarFeatures] = useState([]);
   const editorRef = useRef();
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const {CKEditor, ClassicEditor} = editorRef.current || {};
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
   const [images, setImages] = useState([]);
   const [fileLimitExceeded, setFileLimitExceeded] = useState(false);
   const [carPrice, setCarPrice] = useState({
@@ -145,7 +139,7 @@ export default function CarUpload() {
   const [redirect, setRedirect] = useState(false);
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -227,118 +221,118 @@ export default function CarUpload() {
 
   const schema = isUsed
     ? {
-      car_chassis_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .label("Chassis"),
-      car_engine_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Engine No"),
-      car_registration_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Registration No"),
-      car_type: Joi.number().required().label("Type"),
-      car_maker: Joi.number().required().label("Maker"),
-      car_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Asking Price"),
-      car_mileage: Joi.number()
-        .min(-1)
-        .max(999999)
-        .allow("")
-        .label("Mileage"),
-      car_seat: Joi.number()
-        .positive()
-        .integer()
-        .min(1)
-        .max(45)
-        .allow("")
-        .label("Seat"),
-      car_engine_cc: Joi.number()
-        .precision(2)
-        .min(660)
-        .max(9999)
-        .allow("")
-        .label("Engine Capacity"),
-      car_body_type: Joi.number().required().label("Body Type"),
-      car_fuel_type: Joi.number().required().label("Fuel Type"),
-      car_reg_year: isRegYear
-        ? Joi.required().label("Registration Year")
-        : Joi.allow().label("Registration Year"),
-      selling_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Selling Price"),
-    }
+        car_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .label("Chassis"),
+        car_engine_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Engine No"),
+        car_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        car_type: Joi.number().required().label("Type"),
+        car_maker: Joi.number().required().label("Maker"),
+        car_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Asking Price"),
+        car_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        car_seat: Joi.number()
+          .positive()
+          .integer()
+          .min(1)
+          .max(45)
+          .allow("")
+          .label("Seat"),
+        car_engine_cc: Joi.number()
+          .precision(2)
+          .min(660)
+          .max(9999)
+          .allow("")
+          .label("Engine Capacity"),
+        car_body_type: Joi.number().required().label("Body Type"),
+        car_fuel_type: Joi.number().required().label("Fuel Type"),
+        car_reg_year: isRegYear
+          ? Joi.required().label("Registration Year")
+          : Joi.allow().label("Registration Year"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Selling Price"),
+      }
     : {
-      car_chassis_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .required()
-        .label("Chassis"),
-      car_engine_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Engine No"),
-      car_registration_number: Joi.string()
-        .max(20)
-        .regex(/^[a-zA-Z-0-9]+$/)
-        .allow("")
-        .label("Registration No"),
-      car_type: Joi.number().required().label("Type"),
-      car_maker: Joi.number().required().label("Maker"),
-      car_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Asking Price"),
-      car_mileage: Joi.number()
-        .min(-1)
-        .max(999999)
-        .allow("")
-        .label("Mileage"),
-      car_seat: Joi.number()
-        .positive()
-        .integer()
-        .min(1)
-        .max(45)
-        .allow("")
-        .label("Seat"),
-      car_engine_cc: Joi.number()
-        .precision(2)
-        .min(660)
-        .max(9999)
-        .allow("")
-        .label("Engine Capacity"),
-      car_body_type: Joi.number().required().label("Body Type"),
-      car_fuel_type: Joi.number().required().label("Fuel Type"),
-      car_reg_year: isRegYear
-        ? Joi.required().label("Registration Year")
-        : Joi.allow().label("Registration Year"),
-      selling_price: Joi.number()
-        .positive()
-        .integer()
-        .min(100000)
-        .max(500000000)
-        .required()
-        .label("Selling Price"),
-    };
+        car_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .required()
+          .label("Chassis"),
+        car_engine_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Engine No"),
+        car_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        car_type: Joi.number().required().label("Type"),
+        car_maker: Joi.number().required().label("Maker"),
+        car_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Asking Price"),
+        car_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        car_seat: Joi.number()
+          .positive()
+          .integer()
+          .min(1)
+          .max(45)
+          .allow("")
+          .label("Seat"),
+        car_engine_cc: Joi.number()
+          .precision(2)
+          .min(660)
+          .max(9999)
+          .allow("")
+          .label("Engine Capacity"),
+        car_body_type: Joi.number().required().label("Body Type"),
+        car_fuel_type: Joi.number().required().label("Fuel Type"),
+        car_reg_year: isRegYear
+          ? Joi.required().label("Registration Year")
+          : Joi.allow().label("Registration Year"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(100000)
+          .max(500000000)
+          .required()
+          .label("Selling Price"),
+      };
 
   useEffect(() => {
     if (
@@ -365,29 +359,29 @@ export default function CarUpload() {
   }, [carPrice.selling_price, carPrice.asking_price]);
 
   const propertyValidate = (name, value) => {
-    const obj = {[name]: value};
-    const singleSchema = {[name]: schema[name]};
-    const {error} = Joi.validate(obj, singleSchema);
+    const obj = { [name]: value };
+    const singleSchema = { [name]: schema[name] };
+    const { error } = Joi.validate(obj, singleSchema);
 
     return error ? error.details[0].message : null;
   };
 
   const propertyValidationHelper = (name, value) => {
-    const errors = {...inputErrors};
+    const errors = { ...inputErrors };
     const errorMessage = propertyValidate(name, value);
     if (errorMessage) errors[name] = errorMessage;
     else delete errors[name];
     setError(errors);
   };
 
-  const onCarPriceChange = ({target: input}) => {
-    const {name, value} = input;
+  const onCarPriceChange = ({ target: input }) => {
+    const { name, value } = input;
     if (name === "selling_price") {
       propertyValidationHelper("selling_price", value);
     } else if (name === "asking_price") {
       propertyValidationHelper("asking_price", value);
     }
-    setCarPrice({...carPrice, [name]: value});
+    setCarPrice({ ...carPrice, [name]: value });
   };
 
   const [carDescription, setCarDescription] = useState("");
@@ -412,7 +406,7 @@ export default function CarUpload() {
   const getYears = () => {
     const arr = [];
     for (let i = new Date().getFullYear(); i >= 1971; i--) {
-      arr.push({id: i, year: i});
+      arr.push({ id: i, year: i });
     }
     return arr;
   };
@@ -449,8 +443,7 @@ export default function CarUpload() {
           setCarModelYears(getYears());
         } else {
         }
-      } catch (err) {
-      }
+      } catch (err) {}
     })();
     propertyValidationHelper("car_maker", e.target.value);
   };
@@ -507,7 +500,7 @@ export default function CarUpload() {
     setCarTransmission(e.target.value);
   };
   const onCarFeaturesInputChange = (e) => {
-    const {name} = e.target;
+    const { name } = e.target;
     const index = carFeatures.indexOf(parseInt(name));
     if (index !== -1) {
       const newBox = [...carFeatures];
@@ -517,8 +510,8 @@ export default function CarUpload() {
       setCarFeatures([...carFeatures, parseInt(name)]);
     }
   };
-  const onCarVideoLinkChange = ({target: input}) => {
-    setCarVideoLink({...carVideoLink, [input.name]: input.value});
+  const onCarVideoLinkChange = ({ target: input }) => {
+    setCarVideoLink({ ...carVideoLink, [input.name]: input.value });
   };
 
   const [open, setOpen] = useState(false);
@@ -535,32 +528,32 @@ export default function CarUpload() {
   const validate = () => {
     const inputs = isUsed
       ? {
-        // carEngineNumber: carEngineNumber,
-        // carChassisNumber: carChassisNumber,
-        car_type: carType,
-        car_maker: carMaker,
-        car_model: carModel,
-        asking_price: carPrice.asking_price,
-        car_fuel_type: carFuelType,
-        car_body_type: carBodyType,
-        selling_price: carPrice.selling_price,
-        car_reg_year: carRegYear,
-        car_engine_cc: carEngineCC,
-      }
+          // carEngineNumber: carEngineNumber,
+          // carChassisNumber: carChassisNumber,
+          car_type: carType,
+          car_maker: carMaker,
+          car_model: carModel,
+          asking_price: carPrice.asking_price,
+          car_fuel_type: carFuelType,
+          car_body_type: carBodyType,
+          selling_price: carPrice.selling_price,
+          car_reg_year: carRegYear,
+          car_engine_cc: carEngineCC,
+        }
       : {
-        // carEngineNumber: carEngineNumber,
-        car_chassis_number: carChassisNumber,
-        car_type: carType,
-        car_maker: carMaker,
-        car_model: carModel,
-        asking_price: carPrice.asking_price,
-        car_fuel_type: carFuelType,
-        car_body_type: carBodyType,
-        selling_price: carPrice.selling_price,
-        car_reg_year: carRegYear,
-        car_engine_cc: carEngineCC,
-      };
-    const {error} = Joi.validate(inputs, schema, {abortEarly: false});
+          // carEngineNumber: carEngineNumber,
+          car_chassis_number: carChassisNumber,
+          car_type: carType,
+          car_maker: carMaker,
+          car_model: carModel,
+          asking_price: carPrice.asking_price,
+          car_fuel_type: carFuelType,
+          car_body_type: carBodyType,
+          selling_price: carPrice.selling_price,
+          car_reg_year: carRegYear,
+          car_engine_cc: carEngineCC,
+        };
+    const { error } = Joi.validate(inputs, schema, { abortEarly: false });
     if (!error) return null;
 
     const errors = {}; // TODO what is the point to set error to empty and iterate later?
@@ -628,12 +621,12 @@ export default function CarUpload() {
       setOpen(true);
     } else {
       setLoading(true);
-      console.log(carObject);
+
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BG_API}cars/upload/`,
         carObject
       );
-      console.log(response);
+
       if (response.status === 201) {
         const id = response.data.car_id;
         localStorage.setItem("car_id", id);
@@ -645,7 +638,7 @@ export default function CarUpload() {
             formData.append("image", images[item]);
           }
         });
-        console.log(images);
+
         const response1 = await fetch(
           `${process.env.NEXT_PUBLIC_BG_API}cars/image-upload/`,
           {
@@ -653,7 +646,7 @@ export default function CarUpload() {
             body: formData,
           }
         );
-        console.log(response1);
+
         if (response1.status === 201) {
           setSnackMsg("");
           setOpen(true);
@@ -717,7 +710,6 @@ export default function CarUpload() {
         );
         const json4 = await response4.json();
 
-        console.log(json);
         setCarBodyTypes(json);
         setCarInteriorColors(json1);
         setCarFuelEconomys(json2);
@@ -758,7 +750,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{minHeight: "542px", maxHeight: "542px"}}
+              style={{ minHeight: "542px", maxHeight: "542px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -828,347 +820,107 @@ export default function CarUpload() {
           )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Car Type *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carType}
-                    label="Car Types"
-                    name="car_type"
-                    onChange={onCarTypeChange}
-                  >
-                    {carTypes.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.type_id}>
-                          {l.type_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_maker && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_maker}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Condition*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarTypeChange}
-                    defaultValue={filteredResults[0]?.car_type?.map(
-                      (car_type) => car_type
-                    )}
-                  >
-                    <option disabled selected>
-                      Select Condition
-                    </option>
-                    {filteredResults[0]?.car_type?.map((car_type) => (
-                      <>
-                        <option selected>{car_type}</option>
-                      </>
-                    ))}
-                  </select>
-
-                  {/* <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={filteredResults[0]?.car_type}
-                    label="Car Types"
-                    name="car_type"
-                    onChange={onCarTypeChange}
-                  >
-                    <MenuItem value={filteredResults[0]?.car_type}>
-                      {filteredResults[0]?.car_type}
+              <InputLabel id="demo-simple-select-label">Car Type *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carType}
+                label="Car Types"
+                name="car_type"
+                onChange={onCarTypeChange}
+              >
+                {carTypes.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.type_id}>
+                      {l.type_name}
                     </MenuItem>
-                  </Select> */}
-                </>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_maker && (
+                <div className={classes.errorDiv}>{inputErrors.car_maker}</div>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carMaker}
-                    label="Car Makers"
-                    name="car_maker"
-                    // onChange={onCarMakerChange}
-                  >
-                    {carMakers.map((l, index) => {
-                      return (
-                        <MenuItem
-                          key={index}
-                          value={l.maker_id}
-                          onClick={(event) =>
-                            onCarMakerChange(event, l.maker_id, l.maker_name)
-                          }
-                        >
-                          {l.maker_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Maker*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    defaultValue={filteredResults[0]?.maker_name?.map(
-                      (maker_name) => maker_name
-                    )}
-                    onChange={onCarModelYearChange}
-                  >
-                    <option disabled selected>
-                      Select Maker Name
-                    </option>
-                    {filteredResults[0]?.maker_name?.map((maker_name) => (
-                      <>
-                        <option selected>{maker_name}</option>
-                      </>
-                    ))}
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carMaker}
+                label="Car Makers"
+                name="car_maker"
+                // onChange={onCarMakerChange}
+              >
+                {carMakers.map((l, index) => {
+                  return (
+                    <MenuItem
+                      key={index}
+                      value={l.maker_id}
+                      onClick={(event) =>
+                        onCarMakerChange(event, l.maker_id, l.maker_name)
+                      }
+                    >
+                      {l.maker_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">Model *</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carModel}
-                    label="Car Models"
-                    name="car_model"
-                    onChange={onCarModelChange}
-                  >
-                    {carModels.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.model_id}>
-                          {l.model_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_model && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_model}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Model*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    defaultValue={filteredResults[0]?.model_name?.map(
-                      (model_name) => model_name
-                    )}
-                    onChange={onCarModelYearChange}
-                  >
-                    <option disabled selected>
-                      Select Model Name
-                    </option>
-                    {filteredResults[0]?.model_name?.map((model_name) => (
-                      <>
-                        <option selected>{model_name}</option>
-                      </>
-                    ))}
-                  </select>
-                </>
+              <InputLabel id="demo-simple-select-label">Model *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carModel}
+                label="Car Models"
+                name="car_model"
+                onChange={onCarModelChange}
+              >
+                {carModels.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.model_id}>
+                      {l.model_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_model && (
+                <div className={classes.errorDiv}>{inputErrors.car_model}</div>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
-            {filteredResults == 0 ? (
-              <>
-                <TextField
-                  // value={filteredResults[0]?.package_type.map((p) => p)}
-                  label="Grade/Package"
-                  name={"car_grade"}
-                  label="Enter Grade/Package"
-                  fullWidth
-                  onChange={onCarGradeChange}
-                  placeholder={"Enter Grade/Package"}
-                />
-              </>
-            ) : (
-              <>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-0"
-                  for="username"
-                >
-                  Grade/Package*
-                </label>
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarGradeChange}
-                >
-                  {filteredResults[0]?.package_type?.map((p) => (
-                    <option>{p} </option>
-                  ))}
-                </select>
-              </>
-            )}
+            <TextField
+              label="Grade/Package"
+              name={"car_grade"}
+              fullWidth
+              onChange={onCarGradeChange}
+              placeholder={"Enter Grade/Package"}
+            />
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Model Year
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carModelYear}
-                    label="Car Model Years"
-                    name="car_model_year"
-                    onChange={onCarModelYearChange}
-                  >
-                    {carModelYears.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.id}>
-                          {l.year}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Model Year*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarModelYearChange}
-                  >
-                    <option>{filteredResults[0]?.car_year}</option>
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label">Model Year</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carModelYear}
+                label="Car Model Years"
+                name="car_model_year"
+                onChange={onCarModelYearChange}
+              >
+                {carModelYears.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.year}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           {isRegYear && (
@@ -1200,38 +952,17 @@ export default function CarUpload() {
 
           {!isUsed && (
             <GridItem item xs={12}>
-              {filteredResults == 0 ? (
-                <>
-                  <TextField
-                    value={carEngineNumber}
-                    label="Engine Number"
-                    // value={filteredResults[0]?.engines_number}
-                    name={"car_engine_number"}
-                    autoComplete="off"
-                    fullWidth
-                    onChange={onCarEngineNumberChange}
-                    placeholder={"Enter Engine Number"}
-                    variant="outlined"
-                  />
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Engine Number
-                  </label>
-                  <input
-                    type="text"
-                    id="engine_number"
-                    defaultValue={filteredResults[0]?.engines_number}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter Engine Number"
-                    required
-                  />
-                </>
-              )}
+              <TextField
+                value={carEngineNumber}
+                label="Engine Number"
+                // value={filteredResults[0]?.engines_number}
+                name={"car_engine_number"}
+                autoComplete="off"
+                fullWidth
+                onChange={onCarEngineNumberChange}
+                placeholder={"Enter Engine Number"}
+                variant="outlined"
+              />
             </GridItem>
           )}
           {isUsed && (
@@ -1255,342 +986,133 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Choose Details</h2>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Car Body *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Body Types"
-                    name="car_body_type"
-                    onChange={onCarBodyTypeChange}
-                  >
-                    {carBodyTypes.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.id}>
-                          {l.body_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_body_type && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_body_type}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-0"
-                    for="username"
-                  >
-                    Car Body*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarBodyTypeChange}
-                  >
-                    <option>{filteredResults[0]?.body_name}</option>
-                  </select>
-                </>
+              <InputLabel id="demo-simple-select-label">Car Body *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Car Body Types"
+                name="car_body_type"
+                onChange={onCarBodyTypeChange}
+              >
+                {carBodyTypes.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.body_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_body_type && (
+                <div className={classes.errorDiv}>
+                  {inputErrors.car_body_type}
+                </div>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                label="Engine CC"
-                value={carEngineCC}
-                name={"car_engine_cc"}
-                autoComplete="off"
-                fullWidth
-                onChange={onCarEngineCCChange}
-                placeholder={"Enter Engine CC"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Engine Number
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.engines_number}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              label="Engine CC"
+              value={carEngineCC}
+              name={"car_engine_cc"}
+              autoComplete="off"
+              fullWidth
+              onChange={onCarEngineCCChange}
+              placeholder={"Enter Engine CC"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label"> Drive</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carDrive}
-                    label="Car Drive"
-                    name="car_drive"
-                    onChange={onCarDriveChange}
-                  >
-                    {carDrives.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.option}>
-                          {l.option}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-0"
-                    for="username"
-                  >
-                    Car Body*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarDriveChange}
-                  >
-                    <option>{filteredResults[0]?.drive}</option>
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label"> Drive</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carDrive}
+                label="Car Drive"
+                name="car_drive"
+                onChange={onCarDriveChange}
+              >
+                {carDrives.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.option}>
+                      {l.option}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                value={carMileage}
-                name={"car_mileage"}
-                autoComplete="off"
-                label="Mileage"
-                fullWidth
-                onChange={onCarMileageChange}
-                placeholder={"Enter Mileage"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Mileage
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.mileage}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              value={carMileage}
+              name={"car_mileage"}
+              autoComplete="off"
+              label="Mileage"
+              fullWidth
+              onChange={onCarMileageChange}
+              placeholder={"Enter Mileage"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                value={carSeat}
-                name={"car_seat"}
-                autoComplete="off"
-                label="Seats"
-                fullWidth
-                onChange={onCarSeatChange}
-                placeholder={"Enter No of Seats"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Mileage
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.no_of_seat}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              value={carSeat}
+              name={"car_seat"}
+              autoComplete="off"
+              label="Seats"
+              fullWidth
+              onChange={onCarSeatChange}
+              placeholder={"Enter No of Seats"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    {" "}
-                    Transmission
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carTransmission}
-                    label="Car Transmission"
-                    name="car_transmission"
-                    onChange={onCarTransmissionChange}
-                  >
-                    {carTransmissions.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.id}>
-                          {l.title}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Transmission
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarTransmissionChange}
-                  >
-                    <option>{filteredResults[0]?.transmission_type}</option>
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label">
+                {" "}
+                Transmission
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carTransmission}
+                label="Car Transmission"
+                name="car_transmission"
+                onChange={onCarTransmissionChange}
+              >
+                {carTransmissions.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.title}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Fuel Type *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carFuelType}
-                    label="Car Fuel Type"
-                    name="car_fuel_type"
-                    onChange={onCarFuelTypeChange}
-                  >
-                    {carFuelTypes.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.fuel_id}>
-                          {l.fuel_type}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_fuel_type && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_fuel_type}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Transmission
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarFuelTypeChange}
-                  >
-                    <option>{filteredResults[0]?.car_fuel_type}</option>
-                  </select>
-                </>
+              <InputLabel id="demo-simple-select-label">Fuel Type *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carFuelType}
+                label="Car Fuel Type"
+                name="car_fuel_type"
+                onChange={onCarFuelTypeChange}
+              >
+                {carFuelTypes.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.fuel_id}>
+                      {l.fuel_type}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_fuel_type && (
+                <div className={classes.errorDiv}>
+                  {inputErrors.car_fuel_type}
+                </div>
               )}
             </FormControl>
           </GridItem>
@@ -1647,9 +1169,9 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Select Your Car Features</h2>
 
           {carFeaturesInput.map((item, index) => (
-            <GridItem item xs={12} sm={12} md={4}>
+            <GridItem key={index} item xs={12} sm={12} md={4}>
               <FormControl className="w-full">
-                <div key={index}>
+                <div>
                   <span>
                     <FormControlLabel
                       control={
@@ -1741,9 +1263,7 @@ export default function CarUpload() {
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={8}>
-            <InputLabel>
-              Car Description
-            </InputLabel>
+            <InputLabel>Car Description</InputLabel>
             {editorLoaded ? (
               <CKEditor
                 editor={ClassicEditor}
@@ -1769,7 +1289,7 @@ export default function CarUpload() {
                   }}
                   unmountOnExit
                 >
-                  <CircularProgress className={"text-bhalogari"}/>
+                  <CircularProgress className={"text-bhalogari"} />
                 </Fade>
               </div>
             )}
@@ -1777,8 +1297,11 @@ export default function CarUpload() {
               variant="contained"
               color="inherit"
               // disabled={loading}
-              className={classes.button + " mt-6 bg-bhalogari text-white hover:text-bhalogari"}
-              startIcon={<AirportShuttleIcon/>}
+              className={
+                classes.button +
+                " mt-6 bg-bhalogari text-white hover:text-bhalogari"
+              }
+              startIcon={<AirportShuttleIcon />}
               onClick={onSubmit}
             >
               submit listing

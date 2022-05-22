@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 
 
 // react plugin for creating charts
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 // @mui/icons-material
 import Car from "@mui/icons-material/DirectionsCar";
@@ -24,46 +24,44 @@ import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js
 
 //components
 import CarUpload from "components/MSF/Upload/CarUpload.js";
-import BasicInfo from "components/MSF/Upload/BasicInfo.js";
-import Details from "components/MSF/Upload/Details.js";
-import Features from "components/MSF/Upload/Features.js";
-import ImageUpload from "components/MSF/Upload/ImageUpload.js";
-import Price from "components/MSF/Upload/Price.js";
+import BikeUpload from "components/MSF/Upload/BikeUpload.js";
 
 
 function Upload() {
 
-    const useStyles = makeStyles(styles);
-    const classes = useStyles();
+  const useStyles = makeStyles(styles);
+  const classes = useStyles();
 
-    return (
-        <GridContainer>
-            <GridItem xs={12} sm={12} md={12}>
-                <CustomTabs
-                    title="Upload Car / Bike:"
-                    headerColor="bhalogari"
-                    tabs={[
-                        {
-                            tabName: "Car",
-                            tabIcon: Car,
-                            tabContent: (
-                              <>
-                                <CarUpload/>
-                              </>
-                            ),
-                        },
-                        {
-                            tabName: "Bike",
-                            tabIcon: Bike,
-                            tabContent: (
-                                <div></div>
-                            ),
-                        },
-                    ]}
-                />
-            </GridItem>
-        </GridContainer>
-    );
+  return (
+    <GridContainer>
+      <GridItem xs={12} sm={12} md={12}>
+        <CustomTabs
+          title="Upload Car / Bike:"
+          headerColor="bhalogari"
+          tabs={[
+            {
+              tabName: "Car",
+              tabIcon: Car,
+              tabContent: (
+                <>
+                  <CarUpload/>
+                </>
+              ),
+            },
+            {
+              tabName: "Bike",
+              tabIcon: Bike,
+              tabContent: (
+                <>
+                  <BikeUpload/>
+                </>
+              ),
+            },
+          ]}
+        />
+      </GridItem>
+    </GridContainer>
+  );
 }
 
 Upload.layout = MSF;

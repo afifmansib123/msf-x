@@ -107,7 +107,7 @@ function Subscriptions() {
     <GridContainer>
       {packages.map((item, index) => {
         return (
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem key={index} xs={12} sm={12} md={4}>
             <Card>
               <CardHeader color={"bhalogari"} className={"m-3"}>
                 <h1 className="text-center text-xl font-semibold">
@@ -130,12 +130,10 @@ function Subscriptions() {
                   {details.map((pitem, index) => {
                     if (item.id === pitem.package_id) {
                       return (
-                        <div className="flex py-1.5">
+                        <div key={index} className="flex py-1.5">
                           {" "}
                           <CheckCircleIcon sx={{ color: orange[800] }} />
-                          <div key={index} className="right px-4 ">
-                            {pitem.perks}
-                          </div>
+                          <div className="right px-4 ">{pitem.perks}</div>
                         </div>
                       );
                     }
