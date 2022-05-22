@@ -1,4 +1,5 @@
-import React from "react";
+import * as React from "react";
+import axios from "axios";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 import makeStyles from "@mui/styles/makeStyles";
@@ -24,15 +25,12 @@ import Admin from "layouts/Admin.js";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
-import Tasks from "components/Tasks/Tasks.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
-import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+
+
 
 import { bugs, website, server } from "variables/general.js";
 
@@ -46,22 +44,6 @@ function Dashboard(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
 
-  const dailySalesChart = {
-    data: {
-      labels: ["M", "T", "W", "T", "F", "S", "S"],
-      series: [[12, 17, 7, 17, 23, 18, 38]],
-    },
-    options: {
-      low: 0,
-      high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-      chartPadding: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-      },
-    },
-  };
 
   return (
     <div>
@@ -97,7 +79,9 @@ function Dashboard(props) {
               <p className={classes.cardCategory}>Total Cars</p>
               <h3 className={classes.cardTitle}>{props.totalCar}</h3>
             </CardHeader>
-            <CardFooter stats></CardFooter>
+            <CardFooter stats>
+
+            </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={6} md={3}>
@@ -113,7 +97,9 @@ function Dashboard(props) {
               <p className={classes.cardCategory}>Total Merchants</p>
               <h3 className={classes.cardTitle}>{props.totalMerchant}</h3>
             </CardHeader>
-            <CardFooter stats></CardFooter>
+            <CardFooter stats>
+
+            </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={6} md={3}>
@@ -125,19 +111,23 @@ function Dashboard(props) {
               <p className={classes.cardCategory}>Total Sales</p>
               <h3 className={classes.cardTitle}>৳ {props.totalPayment}</h3>
             </CardHeader>
-            <CardFooter stats></CardFooter>
+            <CardFooter stats>
+
+            </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={6} md={3}>
-          <Card>
+          <Card onClick={() => { location.href = '/admin/messages' }}>
             <CardHeader color="primary" stats icon>
               <CardIcon color="primary">
                 <CallIcon />
               </CardIcon>
               <p className={classes.cardCategory}>Contact Admin</p>
-              <h3 className={classes.cardTitle}></h3>
+              <h3 className={classes.cardTitle}>{props.totalMessage}</h3>
             </CardHeader>
-            <CardFooter stats></CardFooter>
+            <CardFooter stats>
+
+            </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
@@ -313,6 +303,9 @@ export async function getServerSideProps(context) {
       amount: true,
     },
   });
+  let messageCount = await prisma.MerchantStorefront_messagetoadmin.count();
+
+
   return {
     props: {
       carApproval: carApproval,
