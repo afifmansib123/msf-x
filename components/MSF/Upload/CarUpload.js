@@ -820,347 +820,107 @@ export default function CarUpload() {
           )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Car Type *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carType}
-                    label="Car Types"
-                    name="car_type"
-                    onChange={onCarTypeChange}
-                  >
-                    {carTypes.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.type_id}>
-                          {l.type_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_maker && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_maker}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Condition*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarTypeChange}
-                    defaultValue={filteredResults[0]?.car_type?.map(
-                      (car_type) => car_type
-                    )}
-                  >
-                    <option disabled selected>
-                      Select Condition
-                    </option>
-                    {filteredResults[0]?.car_type?.map((car_type) => (
-                      <>
-                        <option selected>{car_type}</option>
-                      </>
-                    ))}
-                  </select>
-
-                  {/* <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={filteredResults[0]?.car_type}
-                    label="Car Types"
-                    name="car_type"
-                    onChange={onCarTypeChange}
-                  >
-                    <MenuItem value={filteredResults[0]?.car_type}>
-                      {filteredResults[0]?.car_type}
+              <InputLabel id="demo-simple-select-label">Car Type *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carType}
+                label="Car Types"
+                name="car_type"
+                onChange={onCarTypeChange}
+              >
+                {carTypes.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.type_id}>
+                      {l.type_name}
                     </MenuItem>
-                  </Select> */}
-                </>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_maker && (
+                <div className={classes.errorDiv}>{inputErrors.car_maker}</div>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carMaker}
-                    label="Car Makers"
-                    name="car_maker"
-                    // onChange={onCarMakerChange}
-                  >
-                    {carMakers.map((l, index) => {
-                      return (
-                        <MenuItem
-                          key={index}
-                          value={l.maker_id}
-                          onClick={(event) =>
-                            onCarMakerChange(event, l.maker_id, l.maker_name)
-                          }
-                        >
-                          {l.maker_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Maker*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    defaultValue={filteredResults[0]?.maker_name?.map(
-                      (maker_name) => maker_name
-                    )}
-                    onChange={onCarModelYearChange}
-                  >
-                    <option disabled selected>
-                      Select Maker Name
-                    </option>
-                    {filteredResults[0]?.maker_name?.map((maker_name) => (
-                      <>
-                        <option selected>{maker_name}</option>
-                      </>
-                    ))}
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carMaker}
+                label="Car Makers"
+                name="car_maker"
+                // onChange={onCarMakerChange}
+              >
+                {carMakers.map((l, index) => {
+                  return (
+                    <MenuItem
+                      key={index}
+                      value={l.maker_id}
+                      onClick={(event) =>
+                        onCarMakerChange(event, l.maker_id, l.maker_name)
+                      }
+                    >
+                      {l.maker_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">Model *</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carModel}
-                    label="Car Models"
-                    name="car_model"
-                    onChange={onCarModelChange}
-                  >
-                    {carModels.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.model_id}>
-                          {l.model_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_model && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_model}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Model*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    defaultValue={filteredResults[0]?.model_name?.map(
-                      (model_name) => model_name
-                    )}
-                    onChange={onCarModelYearChange}
-                  >
-                    <option disabled selected>
-                      Select Model Name
-                    </option>
-                    {filteredResults[0]?.model_name?.map((model_name) => (
-                      <>
-                        <option selected>{model_name}</option>
-                      </>
-                    ))}
-                  </select>
-                </>
+              <InputLabel id="demo-simple-select-label">Model *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carModel}
+                label="Car Models"
+                name="car_model"
+                onChange={onCarModelChange}
+              >
+                {carModels.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.model_id}>
+                      {l.model_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_model && (
+                <div className={classes.errorDiv}>{inputErrors.car_model}</div>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
-            {filteredResults == 0 ? (
-              <>
-                <TextField
-                  // value={filteredResults[0]?.package_type.map((p) => p)}
-                  label="Grade/Package"
-                  name={"car_grade"}
-                  label="Enter Grade/Package"
-                  fullWidth
-                  onChange={onCarGradeChange}
-                  placeholder={"Enter Grade/Package"}
-                />
-              </>
-            ) : (
-              <>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-0"
-                  for="username"
-                >
-                  Grade/Package*
-                </label>
-                <select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Model Years"
-                  name="car_model_year"
-                  className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  onChange={onCarGradeChange}
-                >
-                  {filteredResults[0]?.package_type?.map((p) => (
-                    <option>{p} </option>
-                  ))}
-                </select>
-              </>
-            )}
+            <TextField
+              label="Grade/Package"
+              name={"car_grade"}
+              fullWidth
+              onChange={onCarGradeChange}
+              placeholder={"Enter Grade/Package"}
+            />
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Model Year
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carModelYear}
-                    label="Car Model Years"
-                    name="car_model_year"
-                    onChange={onCarModelYearChange}
-                  >
-                    {carModelYears.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.id}>
-                          {l.year}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold"
-                    for="username"
-                  >
-                    Model Year*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarModelYearChange}
-                  >
-                    <option>{filteredResults[0]?.car_year}</option>
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label">Model Year</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carModelYear}
+                label="Car Model Years"
+                name="car_model_year"
+                onChange={onCarModelYearChange}
+              >
+                {carModelYears.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.year}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           {isRegYear && (
@@ -1192,38 +952,17 @@ export default function CarUpload() {
 
           {!isUsed && (
             <GridItem item xs={12}>
-              {filteredResults == 0 ? (
-                <>
-                  <TextField
-                    value={carEngineNumber}
-                    label="Engine Number"
-                    // value={filteredResults[0]?.engines_number}
-                    name={"car_engine_number"}
-                    autoComplete="off"
-                    fullWidth
-                    onChange={onCarEngineNumberChange}
-                    placeholder={"Enter Engine Number"}
-                    variant="outlined"
-                  />
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Engine Number
-                  </label>
-                  <input
-                    type="text"
-                    id="engine_number"
-                    defaultValue={filteredResults[0]?.engines_number}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Enter Engine Number"
-                    required
-                  />
-                </>
-              )}
+              <TextField
+                value={carEngineNumber}
+                label="Engine Number"
+                // value={filteredResults[0]?.engines_number}
+                name={"car_engine_number"}
+                autoComplete="off"
+                fullWidth
+                onChange={onCarEngineNumberChange}
+                placeholder={"Enter Engine Number"}
+                variant="outlined"
+              />
             </GridItem>
           )}
           {isUsed && (
@@ -1247,342 +986,133 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Choose Details</h2>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Car Body *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Body Types"
-                    name="car_body_type"
-                    onChange={onCarBodyTypeChange}
-                  >
-                    {carBodyTypes.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.id}>
-                          {l.body_name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_body_type && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_body_type}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-0"
-                    for="username"
-                  >
-                    Car Body*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarBodyTypeChange}
-                  >
-                    <option>{filteredResults[0]?.body_name}</option>
-                  </select>
-                </>
+              <InputLabel id="demo-simple-select-label">Car Body *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Car Body Types"
+                name="car_body_type"
+                onChange={onCarBodyTypeChange}
+              >
+                {carBodyTypes.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.body_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_body_type && (
+                <div className={classes.errorDiv}>
+                  {inputErrors.car_body_type}
+                </div>
               )}
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                label="Engine CC"
-                value={carEngineCC}
-                name={"car_engine_cc"}
-                autoComplete="off"
-                fullWidth
-                onChange={onCarEngineCCChange}
-                placeholder={"Enter Engine CC"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Engine Number
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.engines_number}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              label="Engine CC"
+              value={carEngineCC}
+              name={"car_engine_cc"}
+              autoComplete="off"
+              fullWidth
+              onChange={onCarEngineCCChange}
+              placeholder={"Enter Engine CC"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label"> Drive</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carDrive}
-                    label="Car Drive"
-                    name="car_drive"
-                    onChange={onCarDriveChange}
-                  >
-                    {carDrives.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.option}>
-                          {l.option}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-0"
-                    for="username"
-                  >
-                    Car Body*
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarDriveChange}
-                  >
-                    <option>{filteredResults[0]?.drive}</option>
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label"> Drive</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carDrive}
+                label="Car Drive"
+                name="car_drive"
+                onChange={onCarDriveChange}
+              >
+                {carDrives.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.option}>
+                      {l.option}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                value={carMileage}
-                name={"car_mileage"}
-                autoComplete="off"
-                label="Mileage"
-                fullWidth
-                onChange={onCarMileageChange}
-                placeholder={"Enter Mileage"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Mileage
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.mileage}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              value={carMileage}
+              name={"car_mileage"}
+              autoComplete="off"
+              label="Mileage"
+              fullWidth
+              onChange={onCarMileageChange}
+              placeholder={"Enter Mileage"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
-            {filteredResults == 0 ? (
-              <TextField
-                value={carSeat}
-                name={"car_seat"}
-                autoComplete="off"
-                label="Seats"
-                fullWidth
-                onChange={onCarSeatChange}
-                placeholder={"Enter No of Seats"}
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <label
-                  for="email"
-                  className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Mileage
-                </label>
-                <input
-                  type="text"
-                  id="engine_number"
-                  defaultValue={filteredResults[0]?.no_of_seat}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter Engine Number"
-                  required
-                />
-              </>
-            )}
+            <TextField
+              value={carSeat}
+              name={"car_seat"}
+              autoComplete="off"
+              label="Seats"
+              fullWidth
+              onChange={onCarSeatChange}
+              placeholder={"Enter No of Seats"}
+              variant="outlined"
+            />
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    {" "}
-                    Transmission
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carTransmission}
-                    label="Car Transmission"
-                    name="car_transmission"
-                    onChange={onCarTransmissionChange}
-                  >
-                    {carTransmissions.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.id}>
-                          {l.title}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Transmission
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarTransmissionChange}
-                  >
-                    <option>{filteredResults[0]?.transmission_type}</option>
-                  </select>
-                </>
-              )}
+              <InputLabel id="demo-simple-select-label">
+                {" "}
+                Transmission
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carTransmission}
+                label="Car Transmission"
+                name="car_transmission"
+                onChange={onCarTransmissionChange}
+              >
+                {carTransmissions.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.title}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              {filteredResults == 0 ? (
-                <>
-                  <InputLabel id="demo-simple-select-label">
-                    Fuel Type *
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={carFuelType}
-                    label="Car Fuel Type"
-                    name="car_fuel_type"
-                    onChange={onCarFuelTypeChange}
-                  >
-                    {carFuelTypes.map((l, index) => {
-                      return (
-                        <MenuItem key={index} value={l.fuel_id}>
-                          {l.fuel_type}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {inputErrors.car_fuel_type && (
-                    <div className={classes.errorDiv}>
-                      {inputErrors.car_fuel_type}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <label
-                    for="email"
-                    className="block  mb-1 ml-1 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Transmission
-                  </label>
-                  <select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Car Model Years"
-                    name="car_model_year"
-                    className="form-select appearance-none
-                  block
-                  w-full
-                  px-3
-                  py-4
-                  text-base
-                  font-normal
-                  text-gray-700
-                  bg-white bg-clip-padding bg-no-repeat
-                  border border-solid border-gray-300
-                  rounded
-                  transition
-                  ease-in-out
-                  m-0
-                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    onChange={onCarFuelTypeChange}
-                  >
-                    <option>{filteredResults[0]?.car_fuel_type}</option>
-                  </select>
-                </>
+              <InputLabel id="demo-simple-select-label">Fuel Type *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carFuelType}
+                label="Car Fuel Type"
+                name="car_fuel_type"
+                onChange={onCarFuelTypeChange}
+              >
+                {carFuelTypes.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.fuel_id}>
+                      {l.fuel_type}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              {inputErrors.car_fuel_type && (
+                <div className={classes.errorDiv}>
+                  {inputErrors.car_fuel_type}
+                </div>
               )}
             </FormControl>
           </GridItem>
@@ -1639,9 +1169,9 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Select Your Car Features</h2>
 
           {carFeaturesInput.map((item, index) => (
-            <GridItem item xs={12} sm={12} md={4}>
+            <GridItem key={index} item xs={12} sm={12} md={4}>
               <FormControl className="w-full">
-                <div key={index}>
+                <div>
                   <span>
                     <FormControlLabel
                       control={
