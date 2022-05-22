@@ -68,7 +68,7 @@ const styles = {
 
 function StoreDashboardPage(props) {
   const { promotions, user, packages } = props;
-  console.log("MSF[user]", user);
+ // console.log("MSF[user]", user);
   const useStyles = makeStyles(styles);
   const classes = useStyles();
 
