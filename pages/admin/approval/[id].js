@@ -80,12 +80,12 @@ function DetailCarLog(props) {
             <ul style={{ overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0 }}>
               {selectedCar != null
                 ? selectedCar.carImage.map((value) => {
-                  return (
-                    <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
-                      <img src={value} width={350} height={350} />
-                    </li>
-                  );
-                })
+                    return (
+                      <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
+                        <img src={value} width={350} height={350} />
+                      </li>
+                    );
+                  })
                 : ""}
             </ul>
           </GridItem>
@@ -112,7 +112,7 @@ function DetailCarLog(props) {
               <CardContent>
                 <CardBody>
                   <GridContainer>
-                    <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
+                    <GridItem xs={3} sm={3} md={3} style={{ textAlign: "start" }}>
                       condition: {selectedCar.carOverview.condition || "-"}
                     </GridItem>
 
@@ -124,7 +124,7 @@ function DetailCarLog(props) {
                       Model: {selectedCar.modelData.model_name || "-"}
                     </GridItem>
 
-                    <GridItem xs={3} sm={3} md={3} style={{textAlign: "start"}}>
+                    <GridItem xs={3} sm={3} md={3} style={{ textAlign: "start" }}>
                       Car Grade/Package: {selectedCar.carOverview.grade || "-"}
                     </GridItem>
 
@@ -210,7 +210,11 @@ function DetailCarLog(props) {
               </CardHeader>
               <CardBody>
                 {showFeatureCard().length > 0 && <GridContainer>{showFeatureCard()}</GridContainer>}
-                {showFeatureCard().length === 0 && <div><div className={"text-center text-3xl"}>No data</div></div>}
+                {showFeatureCard().length === 0 && (
+                  <div>
+                    <div className={"text-center text-3xl"}>No data</div>
+                  </div>
+                )}
               </CardBody>
             </Card>
           </GridItem>
@@ -305,7 +309,7 @@ async function handleApprove(review_string, approval_id, car_id) {
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
-      status: "A"
+      status: "A",
     }),
   });
 
@@ -324,7 +328,7 @@ async function handleReject(review_string, approval_id, car_id) {
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
-      status: "R"
+      status: "R",
     }),
   });
 
@@ -341,8 +345,6 @@ async function getHistory(id) {
   }).catch((err) => {
     throw new Error(err);
   });
-
-
 
   const parsedData = JSON.parse(
     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
@@ -437,6 +439,7 @@ async function getDetail(car_id) {
       throw new Error(err);
     });
 
+  // console.debug("parsedData", parsedData);
   const jsonData = {
     id: parsedData.id,
     carModel: parsedData.CarsApp_car.CarsApp_carmodel.model_name,
@@ -458,7 +461,9 @@ async function getDetail(car_id) {
       sell_option: parsedData.CarsApp_car.sell_option,
       body: parsedData.CarsApp_car.CarsApp_carbodytype.body_name,
       status: parsedData.CarsApp_car.car_status,
-      interior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor.car_color,
+      interior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor
+        ? parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor.car_color
+        : "-",
       exterior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor.car_color,
       chassis_no: parsedData.CarsApp_car.chassis_no,
       engine_no: parsedData.CarsApp_car.engine_no,
