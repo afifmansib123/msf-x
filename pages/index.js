@@ -19,6 +19,7 @@ function SiteIndexPage(props) {
   const [open, setOpen] = useState(error);
   const errorDict = {
     SessionRequired: "Please sign in",
+    UserNotAllowed: "User not allowed",
   };
 
   return (
@@ -31,7 +32,7 @@ function SiteIndexPage(props) {
           onClose={() => setOpen(false)}
         >
           <Alert onClose={() => setOpen(false)} severity="error" sx={{ width: "100%" }}>
-            {errorDict[error]}
+            {errorDict[error] ? errorDict[error] : "Incorrect User/Password"}
           </Alert>
         </Snackbar>
       )}
