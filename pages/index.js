@@ -1,13 +1,11 @@
-import React, { useState, forwardRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import Login from "../components/Login/Login";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 // import Image from "next/image";  // TODO Does not support PNG
 // import TopBar from "../components/TopBar/TopBar";
 // import sideImage from "../assets/Header/ss.0bdbffc9.png";
 import { useRouter } from "next/router";
-import MuiAlert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
+import React, { forwardRef, useState } from "react";
+import Login from "../components/Login/Login";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -30,7 +28,11 @@ function SiteIndexPage(props) {
           autoHideDuration={6000}
           onClose={() => setOpen(false)}
         >
-          <Alert onClose={() => setOpen(false)} severity="error" sx={{ width: "100%" }}>
+          <Alert
+            onClose={() => setOpen(false)}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
             {errorDict[error]}
           </Alert>
         </Snackbar>
