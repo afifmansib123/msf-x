@@ -13,6 +13,7 @@ export default async function handler(req, res) {
       throw new Error("No body");
     }
   } catch (e) {
+    console.error(e)
     res.status(400).json({
       error: e,
       result: null,
@@ -49,6 +50,9 @@ export async function getPending(page=1) {
       },
       where: {
         status: "P",
+        car_id_id: {
+          not: null
+        }
       },
     });
 
@@ -57,6 +61,8 @@ export async function getPending(page=1) {
     const id = data.map((v) => {
       return parseInt(v.car_id_id);
     });
+
+    console.log("id pending", id)
 
     detail = await prisma.CarsApp_car.findMany({
       take: 20,
@@ -106,6 +112,9 @@ export async function getPending(page=1) {
       },
       where: {
         status: "P",
+        car_id_id: {
+          not: null
+        }
       },
     });
 
@@ -162,9 +171,9 @@ export async function getPending(page=1) {
   const endResultData =
     pDetail !== undefined
       ? pDetail.map(async (value) => {
-          const first_name = value.UsersApp_customuser.first_name;
-          const last_name = value.UsersApp_customuser.last_name;
-          const carID = value.id;
+          const first_name = value?.UsersApp_customuser?.first_name;
+          const last_name = value?.UsersApp_customuser?.last_name;
+          const carID = value?.id;
           const img = await prisma.CarsApp_carimage.findMany({
             where: {
               car_id: Number(carID),
@@ -184,14 +193,14 @@ export async function getPending(page=1) {
             });
 
           return {
-            carModel: value.CarsApp_carmodel.model_name,
+            carModel: value?.CarsApp_carmodel?.model_name,
             carImage: img,
-            carMaker: value.CarsApp_carmanufacturer.maker_name,
+            carMaker: value?.CarsApp_carmanufacturer?.maker_name,
             merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
-            modelData: value.CarsApp_carmodel,
-            manufacturerData: value.CarsApp_carmanufacturer,
-            carId: parseInt(value.id),
-            carName: value.car_name,
+            modelData: value?.CarsApp_carmodel,
+            manufacturerData: value?.CarsApp_carmanufacturer,
+            carId: parseInt(value?.id),
+            carName: value?.car_name,
           };
         })
       : [];

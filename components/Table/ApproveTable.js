@@ -28,22 +28,22 @@ function CarApproveLog(props) {
 
   var showedData = props.tableData.map((value, index) => {
     return [
-      <img src={value.Preview_Image[0]} className="w-[200px] md:w-[300px]" />,
+      <img src={value?.Preview_Image[0]} className="w-[200px] md:w-[300px]" />,
       <div className="grid grid-cols-2">
         <div className="col mr-4 font-medium">Car Name</div>
-        <div className="col-md-8">{value.carName}</div>
+        <div className="col-md-8">{value?.carName || "-"}</div>
 
         <div className="col-3 mr-4 font-medium">Merchant Name</div>
-        <div className="col-md-8">{value.Merchant_Name}</div>
+        <div className="col-md-8">{value?.Merchant_Name || "-"}</div>
 
         <span className="mr-4 font-medium">Car Maker</span>
-        <span>{value.Car_Maker}</span>
+        <span>{value?.Car_Maker || "-"}</span>
 
         <span className="mr-4 font-medium">Car Country</span>
-        <span>{value.manufacturerData.maker_country}</span>
+        <span>{value?.manufacturerData?.maker_country || "-"}</span>
 
         <span className="mr-4 font-medium">Car Model</span>
-        <span>{value.Car_Model}</span>
+        <span>{value?.Car_Model || "-"}</span>
         <div className="col-span-2">
           <CusButton round color="danger" onClick={() => handleClickOpen(value)}>
             Review
@@ -60,16 +60,16 @@ function CarApproveLog(props) {
       return (
         <div className="grid grid-cols-1">
           <div className="flex flex-row">
-            <img src={data.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
+            <img src={data?.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
             <div className="">
-              <h1 className="font-medium text-lg my-2">{data.carName}</h1>
+              <h1 className="font-medium text-lg my-2">{data?.carName || "-"}</h1>
               <div className="mt-10">
                 <span className="font-medium mr-4">Requested Name:</span>
-                <span>{data.Merchant_Name}</span>
+                <span>{data?.Merchant_Name || "-"}</span>
               </div>
               <div>
                 <span className="font-medium mr-4">Request Date:</span>
-                <span>{data.create_at}</span>
+                <span>{data?.create_at || "-"}</span>
               </div>
               <Button
                 variant="outlined"

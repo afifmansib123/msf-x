@@ -419,56 +419,57 @@ async function getDetail(car_id) {
     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
 
-  const first_name = parsedData.CarsApp_car.UsersApp_customuser.first_name;
-  const last_name = parsedData.CarsApp_car.UsersApp_customuser.last_name;
-  const carID = parsedData.CarsApp_car.id;
-  const img = await prisma.CarsApp_carimage.findMany({
-    where: {
-      car_id: Number(carID),
-    },
-    select: {
-      image_url: true,
-    },
-  })
-    .then((imgResponse) => {
-      const img = imgResponse.map((v) => {
-        return v.image_url;
-      });
-      return img;
-    })
-    .catch((err) => {
-      throw new Error(err);
-    });
+  const first_name = parsedData?.CarsApp_car?.UsersApp_customuser?.first_name;
+  const last_name = parsedData?.CarsApp_car?.UsersApp_customuser?.last_name;
+  const carID = parsedData?.CarsApp_car?.id;
+  let img = [];
+  if (carID) {
+    img = await prisma.CarsApp_carimage.findMany({
+      where: {
+        car_id: Number(carID),
+      },
+      select: {
+        image_url: true,
+      },
+    }).then((imgResponse) => {
+          const img = imgResponse.map((v) => {
+            return v.image_url;
+          });
+          return img;
+        }).catch((err) => {
+          throw new Error(err);
+        });
+  }
 
   // console.debug("parsedData", parsedData);
   const jsonData = {
-    id: parsedData.id,
-    carModel: parsedData.CarsApp_car.CarsApp_carmodel.model_name,
+    id: parsedData?.id || "-",
+    carModel: parsedData?.CarsApp_car?.CarsApp_carmodel?.model_name || "-",
     carImage: img,
-    carMaker: parsedData.CarsApp_car.CarsApp_carmanufacturer.maker_name,
+    carMaker: parsedData?.CarsApp_car?.CarsApp_carmanufacturer?.maker_name || "-",
     merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
-    modelData: parsedData.CarsApp_car.CarsApp_carmodel,
-    manufacturerData: parsedData.CarsApp_car.CarsApp_carmanufacturer,
+    modelData: parsedData?.CarsApp_car?.CarsApp_carmodel || "-",
+    manufacturerData: parsedData?.CarsApp_car?.CarsApp_carmanufacturer || "-",
     carOverview: {
-      carName: parsedData.CarsApp_car.car_name,
-      seatingCapacity: parsedData.CarsApp_car.seating_capacity,
-      engineCapacity: parsedData.CarsApp_car.engine_capacity,
-      drive: parsedData.CarsApp_car.drive,
-      mileage: parsedData.CarsApp_car.mileage,
-      transmission_type: parsedData.CarsApp_car.transmission_type,
-      description: parsedData.CarsApp_car.description,
-      fuelType: parsedData.CarsApp_car.CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel.fuel_type,
-      condition: parsedData.CarsApp_car.CarsApp_cartype.car_type,
-      sell_option: parsedData.CarsApp_car.sell_option,
-      body: parsedData.CarsApp_car.CarsApp_carbodytype.body_name,
-      status: parsedData.CarsApp_car.car_status,
-      interior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor
-        ? parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor.car_color
+      carName: parsedData?.CarsApp_car?.car_name || "-",
+      seatingCapacity: parsedData?.CarsApp_car?.seating_capacity || "-",
+      engineCapacity: parsedData?.CarsApp_car?.engine_capacity || "-",
+      drive: parsedData?.CarsApp_car?.drive || "-",
+      mileage: parsedData?.CarsApp_car?.mileage || "-",
+      transmission_type: parsedData?.CarsApp_car?.transmission_type || "-",
+      description: parsedData?.CarsApp_car?.description || "-",
+      fuelType: parsedData?.CarsApp_car?.CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel?.fuel_type || "-",
+      condition: parsedData?.CarsApp_car?.CarsApp_cartype?.car_type || "-",
+      sell_option: parsedData?.CarsApp_car?.sell_option || "-",
+      body: parsedData?.CarsApp_car?.CarsApp_carbodytype?.body_name || "-",
+      status: parsedData?.CarsApp_car?.car_status || "-",
+      interior_color: parsedData?.CarsApp_car?.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor
+        ? parsedData.CarsApp_car?.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor?.car_color
         : "-",
-      exterior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor.car_color,
-      chassis_no: parsedData.CarsApp_car.chassis_no,
-      engine_no: parsedData.CarsApp_car.engine_no,
-      grade: parsedData.CarsApp_car.grade,
+      exterior_color: parsedData?.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor?.car_color || "-",
+      chassis_no: parsedData?.CarsApp_car?.chassis_no || "-",
+      engine_no: parsedData?.CarsApp_car?.engine_no || "-",
+      grade: parsedData?.CarsApp_car?.grade || "-",
     },
   };
 
