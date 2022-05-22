@@ -8,7 +8,7 @@ import CusButton from "components/CustomButtons/Button";
 import CardFooter from "components/Card/CardFooter.js";
 import PropTypes from "prop-types";
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import { Button } from "@mui/material";
+import {Button, Pagination, Stack, Typography} from "@mui/material";
 import CustomTabs from "../CustomTabs/CustomTabs";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -18,7 +18,6 @@ import CardAvatar from "../Card/CardAvatar";
 function CarApproveLog(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-
   const handleClickOpen = (carRecord) => {
     props.callback(carRecord.carId);
   };
@@ -116,12 +115,24 @@ function CarApproveLog(props) {
       </span>
       <Card>
         <CardBody>
+          <div className={"text-center mb-4"}>
+            <Stack spacing={2} className={"items-center"}>
+              <Typography>Page: {props.page}</Typography>
+              <Pagination count={props.totalPage} page={props.page} onChange={props.handleChange} howFirstButton showLastButton size="large"/>
+            </Stack>
+          </div>
           <div className="grid gap-4 grid-cols-2 w-1/2">{showedData}</div>
           {showedData.length === 0 && (
             <div className=" h-[200px]">
               <div className=" absolute right-1/2 bottom-1/2 text-4xl text-gray-200 font-semibold">No Data</div>
             </div>
           )}
+            <div className={"text-center"}>
+              <Stack spacing={2} className={"items-center"}>
+                <Typography>Page: {props.page}</Typography>
+                <Pagination count={props.totalPage} page={props.page} onChange={props.handleChange} howFirstButton showLastButton size="large"/>
+              </Stack>
+            </div>
         </CardBody>
       </Card>
 
@@ -165,6 +176,8 @@ CarApproveLog.propTypes = {
   rejectedTab: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
   approvedTab: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
   historyBtnClicked: PropTypes.func,
+  handleChange:  PropTypes.func,
+  totalPage: PropTypes.number
 };
 
 export default CarApproveLog;

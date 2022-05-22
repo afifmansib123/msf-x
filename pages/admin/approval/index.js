@@ -13,6 +13,11 @@ function ApprovalIndexPage(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const router = useRouter();
+  const [page, setPage] = React.useState(1);
+  const [curSor, setCurSor] = React.useState(null);
+  const totalCount = props.totalCarlog || 0;
+  let totalPage = Math.ceil(totalCount/10);
+  totalPage = totalPage < 1 ? 1: (totalPage - 1);
 
   const callback = (car_id) => {
     router.push({ pathname: `/admin/approval/${car_id}`});
@@ -30,17 +35,26 @@ function ApprovalIndexPage(props) {
       approvedTab={props.approvedTabData}
       rejectedTab={props.rejectedTabData}
       historyBtnClicked={onHistoryClicked}
+      totalPage={totalPage}
+      page={page}
+      handleChange={(e, value) => {
+        setPage(value);
+        router.push(`/admin/approval?page=${page}`);
+      }}
     />
   );
 }
 
 export async function getServerSideProps(context) {
+  let carlogCount = await prisma.CarsApp_car.count();
   var tableResponse;
   var pendingTabResponse;
   var approvedTabResponse;
   var rejectTabResponse;
+  const {page} = context.query || 1
+
   try {
-    tableResponse = await getPending();
+    tableResponse = await getPending(page);
     pendingTabResponse = await getPendingApprove();
     approvedTabResponse = await getApproveApproval();
     rejectTabResponse = await getRejectedApproval();
@@ -51,6 +65,7 @@ export async function getServerSideProps(context) {
         pendingTabData: [],
         approvedTabData: [],
         rejectedTabData: [],
+        totalCarlog: carlogCount
       },
     };
   }
@@ -438,6 +453,6 @@ async function getPendingApprove() {
 }
 
 ApprovalIndexPage.layout = Admin;
-//Index.auth = true;
+ApprovalIndexPage.auth = true;
 
 export default ApprovalIndexPage;
