@@ -26,7 +26,7 @@ let ps;
 function Admin({ children, ...rest }) {
   // used for checking current route
   const { data: session } = useSession();
-  console.log("Admin Session", session);
+  // console.log("Admin Session", session);
   const router = useRouter();
   // styles
   const useStyles = makeStyles(styles);
