@@ -29,13 +29,13 @@ function HistoryLog(props) {
                             </CardHeader>
                             <CardBody>
                                 <div className="font-semibold">ApprovedBy</div>
-                                <div>{`${data.UsersApp_customuser.first_name} ${data.UsersApp_customuser.last_name}` || "-"}</div>
+                                <div>{`${data?.UsersApp_customuser?.first_name} ${data?.UsersApp_customuser?.last_name}` || "-"}</div>
                                 <br/>
                                 <div className="font-semibold">Approved when</div>
-                                <div>{data.updated_at || "-"}</div>
+                                <div>{data?.updated_at || "-"}</div>
                                 <br/>
                                 <div className="font-semibold">Reason</div>
-                                <div>{data.review || "-"}</div>
+                                <div>{data?.review || "-"}</div>
                             </CardBody>
                         </Card>
                         <br/>
@@ -55,13 +55,13 @@ function HistoryLog(props) {
                             </CardHeader>
                             <CardBody>
                                 <div className="font-semibold">RejectedBy</div>
-                                <div>{`${data.UsersApp_customuser.first_name} ${data.UsersApp_customuser.last_name}` || "-"}</div>
+                                <div>{`${data?.UsersApp_customuser?.first_name} ${data?.UsersApp_customuser?.last_name}` || "-"}</div>
                                 <br/>
                                 <div className="font-semibold">Rejected when</div>
-                                <div>{data.updated_at || "-"}</div>
+                                <div>{data?.updated_at || "-"}</div>
                                 <br/>
                                 <div className="font-semibold">Reason</div>
-                                <div>{data.review || "-"}</div>
+                                <div>{data?.review || "-"}</div>
                             </CardBody>
                         </Card>
                         <br/>
