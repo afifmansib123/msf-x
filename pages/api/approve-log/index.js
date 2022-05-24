@@ -105,7 +105,7 @@ export async function getPending(page=1) {
   } else {
     data = await prisma.CarsApp_carapprovallog.groupBy({
       take: 20,
-      skip: (page * 20),
+      skip: ((page - 1) * 20),
       by: ["car_id_id", "status", "created_at"],
       orderBy: {
         created_at: "desc",
@@ -126,7 +126,7 @@ export async function getPending(page=1) {
 
     detail = await prisma.CarsApp_car.findMany({
       take: 20,
-      skip: (page * 20),
+      skip: ((page - 1) * 20),
       orderBy: {
         id: 'asc'
       },

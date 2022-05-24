@@ -16,7 +16,7 @@ function ApprovalIndexPage(props) {
   const [page, setPage] = React.useState(1);
   const totalCount = props.totalCarlog || 0;
   let totalPage = Math.ceil(totalCount/10);
-  totalPage = totalPage < 1 ? 1: (totalPage - 1);
+  totalPage = totalPage < 1 ? 1: (totalPage);
 
   React.useEffect(() => {
     setPage(1)

@@ -28,7 +28,7 @@ function CarApproveLog(props) {
 
   var showedData = props.tableData.map((value, index) => {
     return [
-      <img src={value?.Preview_Image[0]} className="w-[200px] md:w-[300px]" />,
+      <img src={value?.Preview_Image[0] ?? "/assets/img/car_placeholder.png"} className="w-[200px] md:w-[300px]" />,
       <div className="grid grid-cols-2">
         <div className="col mr-4 font-medium">Car Name</div>
         <div className="col-md-8">{value?.carName || "-"}</div>
@@ -60,7 +60,7 @@ function CarApproveLog(props) {
       return (
         <div className="grid grid-cols-1">
           <div className="flex flex-row">
-            <img src={data?.Preview_Image[0]} className="w-[120px] md:w-[240px] mb-2 mr-2" />
+            <img src={data?.Preview_Image[0] ?? "/assets/img/car_placeholder.png"} className="w-[120px] md:w-[240px] mb-2 mr-2" />
             <div className="">
               <h1 className="font-medium text-lg my-2">{data?.carName || "-"}</h1>
               <div className="mt-10">
