@@ -39,7 +39,7 @@ async function getCarList(page, status, searchTitle, searchState) {
     });
   } else {
     cars = await prisma.CarsApp_carapprovallog.findMany({
-      skip: (page * 20),
+      skip: ((page - 1) * 20),
       take:20,
       where: filtering(status),
       orderBy: {

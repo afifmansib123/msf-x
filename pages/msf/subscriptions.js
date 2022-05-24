@@ -24,9 +24,10 @@ import { useRouter } from "next/router";
 import AddAlert from "@mui/icons-material/AddAlert";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { orange } from "@mui/material/colors";
+import { getSession } from "next-auth/react"
+import prisma from "../../PrismaConnect";
 
-function Subscriptions() {
-  const [expanded, setExpanded] = useState(false);
+function Subscriptions(props) {
   const [packages, setPackages] = useState([]);
   const [details, setDetails] = useState([]);
   const { data: session, status } = useSession();
@@ -47,9 +48,10 @@ function Subscriptions() {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.status) {
+    if (router.query.res_status) {
       setOpen(true);
-      setSnackMsg("Your Payment is - " + router.query.status);
+      setSnackMsg(router.query.message);
+      router.replace(`/msf/subscriptions`);
     }
     (async () => {
       try {
@@ -73,37 +75,48 @@ function Subscriptions() {
     })();
   }, []);
 
-  // console.log("Packages =>", packages);
 
-  // console.log("package Informations =>", details);
+  const threeSubcription = [[], [], []]; // There are 3 subscription that user can buy
+
+  var is_expired = new Date();
+  is_expired.setDate(is_expired.getDate() - 30);
+
+
+  //Note Problem ad per post ไม่มีวันหมดอายุ แล้วผมจะต้องดูตรงไหนว่ามันถูกใช้ไปแล้วหรือยังไม่ได้ใช้ เพราะตอนนี้ผมนับจำนวน subsciption ที่มีจาก paymenthistory
+
+  // add subcription to varible y if it not expired
+  for (var j = 0; j < threeSubcription.length; j++) {
+    for (var i = 0; i < props.currentSub.length; i++) {
+      if (props.currentSub[i].package_id_id == j + 1) {
+        if (j + 1 == 1) {
+          threeSubcription[j].push(props.currentSub[i]);
+        }
+        else {
+          if (props.currentSub[i].timestamp > is_expired.toISOString()) {
+
+            threeSubcription[j].push(props.currentSub[i]);
+          }
+        }
+      }
+    }
+    if (j != 0 && threeSubcription[j].length > 0) {
+      threeSubcription[j] = threeSubcription[j].reverse()[0];
+    }
+  }
 
   const buyPackage = (subPackage) => async (e) => {
-    // console.log(subPackage);
+    if (threeSubcription[subPackage.id - 1].length == 0 || subPackage.id == 1) { // allow only package id 1 to buy more than one subscribtion
+      await router.push({
+        pathname: '/msf/paymethod',
+        query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name, package_type: "subscription"}
+      });
 
-    const dataParams = {
-      total_amount: subPackage.price, // the amount goes to SSL checkout page
-      user_id: session.token.id,
-      package_id: subPackage.id,
-      cus_name: session.token.name,
-      cus_city: "",
-      cus_country: "Bangladesh",
-      shipping_method: "NO",
-      multi_card_name: "",
-      num_of_item: 1,
-      product_name: `BG Subscription Package - ${subPackage.package_name}`,
-      product_category: "Service",
-      product_profile: "General",
-    };
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BG_API}merchant-storefront/add-payment-history/`,
-      dataParams
-    );
-    window.location = response.data.GatewayPageURL;
+    } else {
+      alert(`You already have this subcription.`);
+    }
   };
 
   return (
-    // <div>
-    // </div>
     <GridContainer>
       {packages.map((item, index) => {
         return (
@@ -114,7 +127,6 @@ function Subscriptions() {
                   {item.description}({item.package_name})
                 </h1>
               </CardHeader>
-
               <CardBody className="overflow-y-auto">
                 <CardContent className={"m-30"}>
                   <div className="mb-35 text-center font-bold text-[#f06424]">
@@ -166,6 +178,46 @@ function Subscriptions() {
   );
 }
 
+export async function getServerSideProps(context) {
+  var myPackageTypes = [];
+  var currentSubscribtion = [];
+
+  const session = await getSession(context)
+  if (session) {
+    myPackageTypes = await prisma.MerchantStorefront_paymenthistory.groupBy({
+      by: ['package_id_id'],
+      where: {
+        user_id_id: session.token.id,
+      }
+    })
+
+
+    currentSubscribtion = await prisma.MerchantStorefront_paymenthistory.findMany({
+      where: {
+        user_id_id: session.token.id,
+      }
+    })
+
+    //see what packageType that they buy.
+    myPackageTypes = JSON.parse(
+      JSON.stringify(myPackageTypes, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+    );
+
+    currentSubscribtion = JSON.parse(
+      JSON.stringify(currentSubscribtion, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+    );
+  }
+
+  return {
+    props: {
+      packagesType: myPackageTypes.sort((a, b) => a.package_id_id - b.package_id_id),
+      currentSub: currentSubscribtion
+    },
+  }
+}
+
 Subscriptions.layout = MSF;
+Subscriptions.auth = true;
 
 export default Subscriptions;
+

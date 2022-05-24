@@ -3,10 +3,10 @@ import prisma from "../../../PrismaConnect";
 
 export default async function handler(req, res) {
   const prisma = new PrismaClient();
+  const { page, filter1, filter2 } = req.query;
 
   if (req.method === "POST") {
 
-    console.log("data11", req.body)
     const { body: data } = req;
     let newMessage = await prisma.MerchantStorefront_messagetoadmin.create({
       data: {
@@ -23,11 +23,10 @@ export default async function handler(req, res) {
       data: newMessage,
     });
 
-  } else if (req.method === "GET") {
-
-    const { page } = req.query;
+  }
+  else if (req.method === "GET") {
     try {
-      const data = await getMessageList(parseInt(page));
+      const data = await getMessageList(parseInt(page), filter1, filter2);
       console.log(data)
 
       return res.status(200).json(data);
@@ -36,39 +35,110 @@ export default async function handler(req, res) {
       return res.status(200).json([]);
     }
   }
-
 }
-async function getMessageList(page) {
+
+async function getMessageList(page, filter1, filter2) {
   let messages;
+  console.log(filter1, filter2)
 
   if (page === 1) {
-    messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
-      take: 5,
-      orderBy: {
-        id: 'asc'
-      },
+    if (filter1 == 'true' && filter2 == 'true') {
+      console.log("option1")
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+    else if (filter1 == 'true') {
+      console.log("option2")
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        where: {
+          status: 'waiting'
+        },
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+    else if (filter2 == 'true') {
+      console.log("option3")
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        where: {
+          status: 'solved'
+        },
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+    else {
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
 
-    });
-  } else {
-    messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
-      skip: (page * 5),
-      take: 5,
-      orderBy: {
-        id: 'asc'
-      },
+    }
+  }
 
-    });
+
+  else {
+    if (filter1 & filter2) {
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        skip: ((page - 1) * 6),
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+    else if (filter1) {
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        where: {
+          status: 'waiting'
+        },
+        skip: ((page - 1) * 6),
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+    else if (filter2) {
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        where: {
+          status: 'solved'
+        },
+        skip: ((page - 1) * 6),
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+    else {
+      messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        skip: ((page - 1) * 6),
+        take: 6,
+        orderBy: {
+          id: 'asc'
+        },
+      });
+    }
+
   }
 
   messages = JSON.parse(
     JSON.stringify(messages, (key, value) => (typeof value === "bigint" ? parseInt(value) : value))
   ) || [];
 
-
-
   messages = Promise.all(messages.map((item) => item));
   messages = await messages;
-  console.log(messages);
 
   return {
     messages: messages,

@@ -97,8 +97,6 @@ function TableList(props) {
     const {Approved, Rejected, Pending} = state;
     const {Storename,  MerchantName} = searchState;
 
-    // const totalCount = props.totalCar || 0;
-    // const totalPage = Math.ceil(totalCount / 20) - 1;
     const [totalPage, setTotalPage] = React.useState(1);
 
     const onDetailClick = async (car_id) => {
@@ -110,7 +108,6 @@ function TableList(props) {
 
     const loadPageTitle = async () => {
         const carCount = await axios.get(`/api/cars/pageNumber?status=${JSON.stringify(state)}&searchTitle=${searchTitle}&searchState=${JSON.stringify(searchState)}`)
-        console.log("data count", carCount.data.data)
         setTotalPage(Math.ceil((carCount.data.data) / 20));
         setPage(1);
     }
@@ -127,7 +124,7 @@ function TableList(props) {
             return (
                 <div key={index}>
                     <div className={"md:flex my-10"}>
-                        <div className={"md:flex-row"}><img src={item.img[0]} width={250}/></div>
+                        <div className={"md:flex-row"}><img src={item?.img[0] ?? "/assets/img/car_placeholder.png"} width={250}/></div>
                         <div className={"md:flex-row md:ml-10 mt-8"}>
                             <div>
                                 <div className={"md:grid md:grid-cols"}>
@@ -253,21 +250,6 @@ function TableList(props) {
         </>
     );
 }
-
-// export async function getServerSideProps(context) {
-//     const {status} = context.query;
-//     console.log(status)
-//     let carCount = await prisma.CarsApp_carapprovallog.count({
-//         where: {
-//
-//         }
-//     });
-//     return {
-//         props: {
-//             totalCar: carCount
-//         }
-//     }
-// }
 
 TableList.layout = Admin;
 TableList.auth = true

@@ -14,6 +14,14 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import GridContainer from "components/Grid/GridContainer.js";
+import CardIcon from "components/Card/CardIcon.js";
+import CardFooter from "components/Card/CardFooter.js";
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CarCrashIcon from '@mui/icons-material/CarCrash';
+
+import Button from "@mui/material/Button";
+
 // import Cryptr from "cryptr";
 import GridItem from "components/Grid/GridItem.js";
 import { format } from "date-fns";
@@ -54,11 +62,14 @@ const styles = {
     textDecoration: "none",
   },
 };
+import styles2 from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 function StoreDashboardPage(props) {
-  const { promotions, user, packages } = props;
- // console.log("MSF[user]", user);
+  const { promotions, user, packages, acceptedCar, rejectedCar, pendingCar } = props;
+  // console.log("MSF[user]", user);
   const useStyles = makeStyles(styles);
   const classes = useStyles();
+  const useStyles2 = makeStyles(styles2);
+  const classes2 = useStyles2();
   // const { data: session, status } = useSession();
   // const cryptr = new Cryptr(process.env.NEXT_PUBLIC_BG_API_SECRET_KEY);
   const router = useRouter();
@@ -77,9 +88,84 @@ function StoreDashboardPage(props) {
     console.log("Sessoin Info", session);
     alert("See session info in Dev Console");
   };
+
+  function test() {
+    console.log(allCars)
+    // console.log(acceptedCar, rejectedCar, pendingCar);
+  }
+
   return (
     <GridContainer>
-      <h1 className="text-2xl font-bold pl-4">Welcome {user.name}</h1>
+      <GridItem xs={12} sm={12} md={12}>
+        <h1 className="text-2xl font-bold pl-4">Welcome {user.name}</h1>
+      </GridItem>
+
+      {/* <Button onClick={() => { test() }}>Test</Button> */}
+
+
+      <GridItem xs={12} sm={6} md={3}>
+        <Card
+          onClick={() => {
+            location.href = "/msf/listing";
+          }}
+        >
+          <CardHeader color="warning" stats icon>
+            <CardIcon color="warning">
+              <CarCrashIcon />
+            </CardIcon>
+            <p className={classes2.cardCategory}>Peding Vehicles</p>
+            <h3 className={classes2.cardTitle}>{pendingCar}</h3>
+          </CardHeader>
+          <CardFooter stats>
+
+          </CardFooter>
+        </Card>
+      </GridItem>
+
+
+      <GridItem xs={12} sm={6} md={3}>
+        <Card
+          onClick={() => {
+            location.href = "/msf/listing";
+          }}
+        >
+          <CardHeader color="info" stats icon>
+            <CardIcon color="info">
+              <CheckCircleIcon />
+            </CardIcon>
+            <p className={classes2.cardCategory}>Accept Vehicles</p>
+            <h3 className={classes2.cardTitle}>{acceptedCar}</h3>
+          </CardHeader>
+          <CardFooter stats>
+
+          </CardFooter>
+        </Card>
+      </GridItem>
+
+
+      <GridItem xs={12} sm={6} md={3}>
+        <Card
+          onClick={() => {
+            location.href = "/msf/listing";
+          }}
+        >
+          <CardHeader color="dark" stats icon>
+            <CardIcon color="danger">
+              <CancelIcon />
+            </CardIcon>
+            <p className={classes2.cardCategory}>Rejected Vehicles</p>
+            <h3 className={classes2.cardTitle}>{rejectedCar}</h3>
+          </CardHeader>
+          <CardFooter stats>
+
+          </CardFooter>
+        </Card>
+      </GridItem>
+
+
+
+
+
       <GridItem xs={12} sm={12} md={12}>
         <div
           style={{
@@ -208,6 +294,57 @@ export async function getServerSideProps(context) {
     )
   );
   // console.log("promotions: ", allPromotions[0]);
+
+  var acceptedCar = await prisma.CarsApp_car.findMany({
+    where: {
+      created_by_id: session.token.id,
+      CarsApp_carapprovallog: {
+        some: {
+          status: 'A'
+        }
+      }
+    },
+    include: {
+      CarsApp_carapprovallog: true,
+    },
+    
+  })
+  acceptedCar = (JSON.parse(JSON.stringify(acceptedCar, (key, value) => typeof value === "bigint" ? value.toString() : value))).length
+
+  var rejectedCar = await prisma.CarsApp_car.findMany({
+    where: {
+      created_by_id: session.token.id,
+      CarsApp_carapprovallog: {
+        some: {
+          status: 'R'
+        }
+      }
+    },
+    include: {
+      CarsApp_carapprovallog: true,
+    },
+    
+  })
+  rejectedCar = (JSON.parse(JSON.stringify(rejectedCar, (key, value) => typeof value === "bigint" ? value.toString() : value))).length
+
+  var pendingCar = await prisma.CarsApp_car.findMany({
+    where: {
+      created_by_id: session.token.id,
+      CarsApp_carapprovallog: {
+        some: {
+          status: 'P'
+        }
+      }
+    },
+    include: {
+      CarsApp_carapprovallog: true,
+    },
+    
+  })
+  pendingCar = (JSON.parse(JSON.stringify(pendingCar, (key, value) => typeof value === "bigint" ? value.toString() : value))).length
+
+
+
   return {
     props: {
       promotions: allPromotions,
@@ -215,6 +352,11 @@ export async function getServerSideProps(context) {
       // session: session,
       user: session.user,
       packages: userPackages,
+      
+      acceptedCar: acceptedCar,
+      rejectedCar: rejectedCar,
+      pendingCar: pendingCar
+
     },
   };
 }

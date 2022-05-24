@@ -8,6 +8,7 @@ import Card from "../../../../components/Card/Card";
 import Icon from "@mui/material/Icon";
 import {Container} from "@mui/material";
 import CardIcon from "../../../../components/Card/CardIcon";
+import prisma from "PrismaConnect";
 
 
 function HistoryLog(props) {
@@ -29,13 +30,13 @@ function HistoryLog(props) {
                             </CardHeader>
                             <CardBody>
                                 <div className="font-semibold">ApprovedBy</div>
-                                <div>{`${data?.UsersApp_customuser?.first_name} ${data?.UsersApp_customuser?.last_name}` || "-"}</div>
+                                <div>{`${data?.UsersApp_customuser?.first_name ?? "UNKNOWN"} ${data?.UsersApp_customuser?.last_name ?? "NAME"}`}</div>
                                 <br/>
                                 <div className="font-semibold">Approved when</div>
-                                <div>{data?.updated_at || "-"}</div>
+                                <div>{data?.updated_at ?? "-"}</div>
                                 <br/>
                                 <div className="font-semibold">Reason</div>
-                                <div>{data?.review || "-"}</div>
+                                <div>{data?.review ?? "-"}</div>
                             </CardBody>
                         </Card>
                         <br/>
@@ -55,13 +56,13 @@ function HistoryLog(props) {
                             </CardHeader>
                             <CardBody>
                                 <div className="font-semibold">RejectedBy</div>
-                                <div>{`${data?.UsersApp_customuser?.first_name} ${data?.UsersApp_customuser?.last_name}` || "-"}</div>
+                                <div>{`${data?.UsersApp_customuser?.first_name ?? "UNKNOWN"} ${data?.UsersApp_customuser?.last_name ?? "NAME"}`}</div>
                                 <br/>
                                 <div className="font-semibold">Rejected when</div>
-                                <div>{data?.updated_at || "-"}</div>
+                                <div>{data?.updated_at ?? "-"}</div>
                                 <br/>
                                 <div className="font-semibold">Reason</div>
-                                <div>{data?.review || "-"}</div>
+                                <div>{data?.review ?? "-"}</div>
                             </CardBody>
                         </Card>
                         <br/>
@@ -110,41 +111,47 @@ export async function getServerSideProps(context) {
 }
 
 async function getHistory(id) {
-    const data = await prisma.CarsApp_carapprovallog.findMany({
-        orderBy: {
-            updated_at: 'desc'
-        },
-        where: {
-            car_id_id: id,
-        },
-        include: {
-            UsersApp_customuser: true
-        }
-    }).catch((err) => {
-        throw new Error(err);
-    });
+    if (id) {
+        const data = await prisma.CarsApp_carapprovallog.findMany({
+            orderBy: {
+                updated_at: 'desc'
+            },
+            where: {
+                car_id_id: id,
+            },
+            include: {
+                UsersApp_customuser: true
+            }
+        }).catch((err) => {
+            throw new Error(err);
+        });
 
-    const parsedData = JSON.parse(
-        JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-    );
+        const parsedData = JSON.parse(
+            JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+        );
 
-    return parsedData;
+        return parsedData;
+    }
+    return null
 }
 
 async function getMerchantName(car_id) {
-    const data = await prisma.CarsApp_car.findUnique({
-        where: {
-            id:car_id
-        },
-        include: {
-            UsersApp_customuser: true
-        }
-    });
-    const parsedData = JSON.parse(
-        JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
-    );
+    if (car_id) {
+        const data = await prisma.CarsApp_car.findUnique({
+            where: {
+                id:car_id
+            },
+            include: {
+                UsersApp_customuser: true
+            }
+        });
+        const parsedData = JSON.parse(
+            JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+        );
 
-    return `${parsedData.UsersApp_customuser.first_name} ${parsedData.UsersApp_customuser.last_name}` || "-";
+        return `${parsedData?.UsersApp_customuser?.first_name ?? "UNKNOWN"} ${parsedData?.UsersApp_customuser?.last_name  ?? "NAME"}`;
+    }
+  return null
 }
 
 HistoryLog.layout = Admin;

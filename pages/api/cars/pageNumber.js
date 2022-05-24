@@ -37,8 +37,6 @@ export default async function handler(req, res) {
         where: filtering
     });
 
-    // console.log("car count", carCount)
-
     return res.status(200).json({data: carCount});
 
 }
