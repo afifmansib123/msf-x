@@ -30,14 +30,22 @@ import Snackbar from "components/Snackbar/Snackbar.js";
 
 // plugins
 import Joi from "joi-browser";
-import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
+import {
+  createSyntheticFile,
+  Dropzone,
+  FileItem,
+  FileItemContainer,
+  FullScreenPreview,
+  makeSynthticFileValidate
+} from "@dropzone-ui/react";
 
 
-export default function BikeUpload() {
+export default function BikeUpdate() {
   const [bikeType, setBikeType] = useState();
   const [bikeTypes, setBikeTypes] = useState([]);
   const [bikeMaker, setBikeMaker] = useState();
   const [bikeMakers, setBikeMakers] = useState([]);
+  const [bikeMakerName, setBikeMakerName] = useState();
   const [bikeModel, setBikeModel] = useState();
   const [bikeModels, setBikeModels] = useState([]);
   const [bikeGrade, setBikeGrade] = useState();
@@ -73,15 +81,21 @@ export default function BikeUpload() {
   const {CKEditor, ClassicEditor} = editorRef.current || {};
   const [images, setImages] = useState([]);
   const [fileLimitExceeded, setFileLimitExceeded] = useState(false);
-  const [bikePrice, setbikePrice] = useState({
+  const [bikePrice, setBikePrice] = useState({
     asking_price: undefined,
     selling_price: undefined,
     custom_price: "Call for Price",
   });
+  const [bikeOldPrice, setBikeOldPrice] = useState({
+    asking_price: undefined,
+    selling_price: undefined,
+  });
+
   const [redirect, setRedirect] = useState(false);
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
   const {data: session, status} = useSession();
+  const [checkBoxInput, setCheckBoxInput] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -210,7 +224,7 @@ export default function BikeUpload() {
     } else if (name === "asking_price") {
       propertyValidationHelper("asking_price", value);
     }
-    setbikePrice({...bikePrice, [name]: value});
+    setBikePrice({...bikePrice, [name]: value});
   };
 
   const [bikeDescription, setBikeDescription] = useState("");
@@ -222,10 +236,12 @@ export default function BikeUpload() {
     setBikeDescription(element.textContent || element.innerText);
   };
 
-  const [bikeVideoLink, setbikeVideoLink] = useState({
+  const [bikeVideoLink, setBikeVideoLink] = useState({
     video1: "",
     video2: "",
   });
+  const [bikeImages, setBikeImages] = React.useState([]);
+  const [newBikeImages, setNewBikeImages] = React.useState([]);
 
   const videoName = ["video1", "video2"];
 
@@ -305,7 +321,6 @@ export default function BikeUpload() {
   };
   const onBikeFrontBrakeChange = (e) => {
     setBikeFrontBrake(e.target.value);
-    propertyValidationHelper("bike_front_brake", e.target.value);
   };
   const onBikeRearBrakeChange = (e) => {
     setBikeRearBrake(e.target.value);
@@ -330,18 +345,32 @@ export default function BikeUpload() {
   };
   const onBikeFeaturesInputChange = (e) => {
     const {name} = e.target;
-    const index = bikeFeatures.indexOf(parseInt(name));
+    const index = checkBoxInput.indexOf(parseInt(name));
     if (index !== -1) {
-      const newBox = [...bikeFeatures];
+      const newBox = [...checkBoxInput];
       newBox.splice(index, 1);
-      setbikeFeatures(newBox);
+      setCheckBoxInput(newBox);
     } else {
-      setbikeFeatures([...bikeFeatures, parseInt(name)]);
+      setCheckBoxInput([...checkBoxInput, parseInt(name)]);
     }
   };
   const onBikeVideoLinkChange = ({target: input}) => {
-    setbikeVideoLink({...bikeVideoLink, [input.name]: input.value});
+    setBikeVideoLink({...bikeVideoLink, [input.name]: input.value});
   };
+
+  function checkChecked(id) {
+    let check = false;
+    if (checkBoxInput.length > 0) {
+      for (let i = 0; i < checkBoxInput.length; i++) {
+        if (checkBoxInput[i] === id) {
+          check = true;
+        }
+      }
+    } else {
+      check = false;
+    }
+    return check;
+  }
 
   const [open, setOpen] = useState(false);
   const [snackMsg, setSnackMsg] = useState("");
@@ -394,7 +423,7 @@ export default function BikeUpload() {
     const errors = validate();
     setError(errors || {});
     if (errors) {
-      // console.log(isUsed);
+      console.log(errors);
       setSnackMsg(
         "Please fill out the mandatory fields before submitting your listing!"
       );
@@ -425,7 +454,7 @@ export default function BikeUpload() {
       bike_type: bikeType,
       front_suspension: bikeFrontSuspension,
       description: bikeDescription !== "" ? bikeDescription : "-",
-      bike_features: bikeFeatures,
+      bike_features: checkBoxInput,
       bike_year: bikeModelYear,
       engine_no: bikeColor !== "" ? bikeColor : "-",
       chassis_no: bikeChassisNumber,
@@ -434,34 +463,40 @@ export default function BikeUpload() {
       grade: bikeGrade,
     };
 
-    if (images.length === 0) {
-      setSnackMsg("Please! Provide Image.");
-      setOpen(true);
-    } else if (fileLimitExceeded) {
-      setSnackMsg(
-        "Maximum Image limit exceeded. Please keep 15 images at most"
-      );
-      setOpen(true);
-    } else {
-      setLoading(true);
-      console.log(bikeObject);
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BG_API}bikes/bike-upload/`,
-        bikeObject
-      );
-      console.log(response);
-      if (response.status === 201) {
-        const id = response.data.bike_id;
-        localStorage.setItem("bike_id", id);
-        let formData = new FormData();
-        formData.append("bike_id", id);
-        formData.append("created_by", user_id);
-        Object.keys(images).forEach((item) => {
-          if (images[item] !== null) {
-            formData.append("image", images[item]);
-          }
-        });
-        console.log(images);
+    if (!arrayEquals(bikeImages, newBikeImages)) {
+      const delImages = bikeImages.filter((val) => !newBikeImages.includes(val));
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}bikes/delete-images/`, delImages);
+      // console.log(response);
+    }
+
+    // if (images.length === 0) {
+    //   setSnackMsg("Please! Provide Image.");
+    //   setOpen(true);
+    // } else if (fileLimitExceeded) {
+    //   setSnackMsg(
+    //     "Maximum Image limit exceeded. Please keep 15 images at most"
+    //   );
+    //   setOpen(true);
+    // } else {
+    setLoading(true);
+    console.log(bikeObject);
+    const response = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BG_API}bikes/bike-update/${bid}/`,
+      bikeObject
+    );
+    console.log(response);
+    if (response.status === 200) {
+      const id = response.data.bike_id;
+      localStorage.setItem("bike_id", id);
+      let formData = new FormData();
+      formData.append("bike_id", id);
+      formData.append("created_by", user_id);
+      Object.keys(images).forEach((item) => {
+        if (images[item] !== null) {
+          formData.append("image", images[item]);
+        }
+      });
+      if (images.length > 0) {
         const response1 = await fetch(
           `${process.env.NEXT_PUBLIC_BG_API}bikes/image-upload/`,
           {
@@ -469,7 +504,7 @@ export default function BikeUpload() {
             body: formData,
           }
         );
-        console.log(response1);
+        // console.log(response1);
         if (response1.status === 201) {
           setSnackMsg("");
           setOpen(true);
@@ -482,11 +517,23 @@ export default function BikeUpload() {
           setOpen(true);
         }
       } else {
-        setLoading(false);
-        setSnackMsg("Please fill all the required fields");
+        setSnackMsg("Successfully Uploaded");
         setOpen(true);
+        setLoading(false);
+        setRedirect(true);
       }
+    } else if (fileLimitExceeded) {
+      setLoading(false);
+      setSnackMsg(
+        "Maximum Image limit exceeded. Please keep 15 images at most"
+      );
+      setOpen(true);
+    } else {
+      setLoading(false);
+      setSnackMsg("Please fill all the required fields");
+      setOpen(true);
     }
+    // }
   };
 
   useEffect(() => {
@@ -576,6 +623,161 @@ export default function BikeUpload() {
     setEditorLoaded(true);
   }, []);
 
+  useEffect(() => {
+    if (bikeMaker !== "") {
+      setBikeModels([]);
+      setLoading(true);
+      (async () => {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}bikes/bike-model-list/?maker_name=${bikeMakerName}`);
+          const json = await response.json();
+          if (response.status === 200) {
+            setBikeModels(json.result);
+            let filteredYear = json.result.filter((item) => item.release_year !== "-");
+
+            setBikeModelYears(getYears());
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setSnackMsg("Search Alert: Model not available for this brand!");
+            setOpen(true);
+          }
+        } catch (err) {
+          setLoading(false);
+          setSnackMsg("Something went wrong!");
+        }
+      })();
+
+    }
+  }, [bikeMaker, bikeMakerName]);
+
+  const {bid} = router.query
+
+  let val = [];
+  val["New"] = 1;
+  val["Used"] = 2;
+
+  let features = [];
+
+  const [syntheticFiles, setSyntheticFiles] = useState([]);
+
+  function arrayEquals(a, b) {
+    return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((val, index) => val === b[index]);
+  }
+
+  const deleteBikeImage = (id) => {
+    let first = lastID - imagesCount;
+    let index = [];
+    for (let i = 0; i < imagesCount; i++) {
+      index.push(++first);
+    }
+    let array = [...newBikeImages]; // make a separate copy of the array
+    // if (index !== -1) {
+    array.splice(index.indexOf(id), 1);
+    // }
+    setNewBikeImages(array);
+    setSyntheticFiles(syntheticFiles.filter((x) => x.id !== id));
+  };
+
+  const [lastID, setLastID] = useState(0);
+  const [imagesCount, setImagesCount] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}bikes/details/${bid}/`);
+      const json = await response.json();
+      console.log(json.res[0]);
+      // .then((res) => {
+      if (response.status === 200) {
+        // // setBike(json.res[0]);
+        setLoading(true);
+        setBikeType(val[json.res[0].bike_type.type_name]);
+        if (val[json.res[0].bike_type.type_name] === 2) {
+          setIsUsed(true);
+        }
+        setBikeMaker(json.res[0].bike_manufacturer.maker_id);
+        setBikeMakerName(json.res[0].bike_manufacturer.maker_name);
+        setBikeModel(json.res[0].model_name.model_id);
+        setBikeGrade(json.res[0].grade === "-" ? "" : json.res[0].grade);
+        setBikeModelYear(
+          json.res[0].bike_year === "-" || json.res[0].bike_year == null ? "" : json.res[0].bike_year
+        );
+        setBikeRegYear(
+          json.res[0].registration_year === "-" || json.res[0].registration_year == null
+            ? ""
+            : json.res[0].registration_year
+        );
+        setBikeChassisNumber(json.res[0].chassis_no === "-" ? "" : json.res[0].chassis_no);
+        setBikeRegNumber(json.res[0].registration_no === "-" ? "" : json.res[0].registration_no);
+        setBikeColor(json.res[0].bike_color == null ? "" : json.res[0].bike_color.color_id);
+        setBikeBodyType(json.res[0].bike_body_type.id);
+        setBikeEngineCC(json.res[0].engine_capacity);
+        setBikeFuelEconomy(json.res[0].fuel_efficiency == null ? "" : json.res[0].fuel_efficiency);
+        setBikeFrontSuspension(json.res[0].front_suspension == null ? "" : json.res[0].front_suspension.suspension_id);
+        setBikeRearSuspension(json.res[0].rear_suspension == null ? "" : json.res[0].rear_suspension.suspension_id);
+        setBikeFrontBrake(json.res[0].front_brake == null ? "" : json.res[0].front_brake.brake_id);
+        setBikeRearBrake(json.res[0].rear_brake == null ? "" : json.res[0].rear_brake.brake_id);
+        setBikeNoOfGear(json.res[0].gear == null ? "" : json.res[0].gear.gear_id);
+        setBikeMileage(
+          json.res[0].mileage === "-" || json.res[0].mileage == null ? "" : json.res[0].mileage
+        );
+
+        let feature = json.res[0].bike_features;
+        if (feature.length > 0) {
+          for (let i = 0; i < feature.length; i++) {
+            features[i] = feature[i].id;
+          }
+        }
+
+        setCheckBoxInput(features);
+        setBikeImages(json.res[0].images);
+        setNewBikeImages(json.res[0].images);
+        let images = json.res[0].images;
+        let last_id = 0;
+        if (images.length > 0) {
+          for (let i = 0; i < images.length; i++) {
+            const fileFromWebUrl = createSyntheticFile(
+              "image-from-web.webp",
+              2900000000,
+              "image/webp"
+            );
+
+            //create FileValidate object instances
+            const validateFileFromWebUrl = makeSynthticFileValidate(
+              fileFromWebUrl,
+              true,
+              "success"
+            );
+
+
+            //add the image URL
+            validateFileFromWebUrl.imageUrl = images[i].image_url;
+            setSyntheticFiles((prev) => [...prev, validateFileFromWebUrl]);
+            last_id = validateFileFromWebUrl.id;
+          }
+        }
+        setLastID(last_id);
+        setImagesCount(images.length);
+
+        setBikeDescription(json.res[0].description);
+        setBikeVideoLink({...bikeVideoLink, ["video1"]: json.res[0].bike_video_link});
+        setBikePrice({
+          ...bikePrice,
+          ["asking_price"]: json.res[0].price_to,
+          ["selling_price"]: json.res[0].price_from,
+        });
+
+        setBikeOldPrice({
+          ...bikeOldPrice,
+          ["asking_price"]: json.res[0].price_to,
+          ["selling_price"]: json.res[0].price_from,
+        });
+      }
+      // })
+      // .catch((err) => {});
+    })();
+  }, []);
+
   return (
     <GridContainer spacing={2}>
       <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
@@ -634,7 +836,7 @@ export default function BikeUpload() {
             <GridItem item xs={12}>
               <FormControl className="w-full">
                 <TextField
-                  value={bikeChassisNumber}
+                  value={bikeChassisNumber || ""}
                   label="Enter Chassis Number "
                   name={"bike_chassis_number"}
                   autoComplete="off"
@@ -659,7 +861,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeType}
+                value={parseInt(bikeType)}
                 label="Bike Types"
                 name="bike_type"
                 onChange={onBikeTypeChange}
@@ -685,7 +887,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeMaker}
+                value={parseInt(bikeMaker)}
                 label="Bike Makers"
                 name="bike_maker"
                 // onChange={onBikeMakerChange}
@@ -717,7 +919,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeModel}
+                value={parseInt(bikeModel)}
                 label="Bike Models"
                 name="bike_model"
                 onChange={onBikeModelChange}
@@ -739,7 +941,7 @@ export default function BikeUpload() {
           </GridItem>
           <GridItem item xs={12}>
             <TextField
-              value={bikeGrade}
+              value={bikeGrade || ""}
               label="Edition/Version"
               name={"bike_grade"}
               fullWidth
@@ -755,7 +957,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeModelYear}
+                value={parseInt(bikeModelYear)}
                 label="Bike Model Years"
                 name="bike_model_year"
                 onChange={onBikeModelYearChange}
@@ -779,7 +981,7 @@ export default function BikeUpload() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={bikeRegYear}
+                  value={parseInt(bikeRegYear)}
                   label="Bike Reg Years"
                   name="bike_reg_year"
                   onChange={onBikeRegYearChange}
@@ -799,7 +1001,7 @@ export default function BikeUpload() {
             <GridItem item xs={12}>
               <TextField
                 label="Registration Number"
-                value={bikeRegNumber}
+                value={bikeRegNumber || ""}
                 name={"bike_registration_number"}
                 autoComplete="off"
                 fullWidth
@@ -817,7 +1019,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeColor}
+                value={parseInt(bikeColor)}
                 label="Bike Color"
                 name="bike_color"
                 onChange={onBikeColorChange}
@@ -835,6 +1037,20 @@ export default function BikeUpload() {
         </GridContainer>
       </GridItem>
       <GridItem item xs={12} className={classes.uploadOptions}>
+        <FileItemContainer view="list">
+          {syntheticFiles.map((f, index) => (
+            <FileItem
+              {...f}
+              key={f.id}
+              onDelete={deleteBikeImage}
+              // info
+              // preview
+              // resultOnTooltip
+            />
+          ))}
+        </FileItemContainer>
+      </GridItem>
+      <GridItem item xs={12} className={classes.uploadOptions}>
         <GridContainer>
           <h2 className={classes.paperTitle}>Choose Bike Details</h2>
           <GridItem item xs={12} sm={12} md={4}>
@@ -847,6 +1063,7 @@ export default function BikeUpload() {
                 id="demo-simple-select"
                 label="Bike Body Types"
                 name="bike_body_type"
+                value={parseInt(bikeBodyType)}
                 onChange={onBikeBodyTypeChange}
               >
                 {bikeBodyTypes.map((l, index) => {
@@ -867,7 +1084,7 @@ export default function BikeUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               label="Engine CC"
-              value={bikeEngineCC}
+              value={bikeEngineCC || ""}
               name={"bike_engine_cc"}
               autoComplete="off"
               fullWidth
@@ -879,7 +1096,7 @@ export default function BikeUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               label="Fuel Efficiency"
-              value={bikeFuelEconomy}
+              value={bikeFuelEconomy || ""}
               name={"bike_fuel_economy"}
               autoComplete="off"
               fullWidth
@@ -890,7 +1107,7 @@ export default function BikeUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={bikeMileage}
+              value={bikeMileage || ""}
               name={"bike_mileage"}
               autoComplete="off"
               label="Mileage"
@@ -909,7 +1126,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeFrontSuspension}
+                value={parseInt(bikeFrontSuspension)}
                 label="Front Suspension"
                 name="bike_front_suspension"
                 onChange={onBikeFrontSuspensionChange}
@@ -933,7 +1150,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeRearSuspension}
+                value={parseInt(bikeRearSuspension)}
                 label="Rear Suspension"
                 name="bike_rear_suspension"
                 onChange={onBikeRearSuspensionChange}
@@ -956,7 +1173,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeFrontBrake}
+                value={parseInt(bikeFrontBrake)}
                 label="Front Brake"
                 name="bike_front_brake"
                 onChange={onBikeFrontBrakeChange}
@@ -979,7 +1196,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeRearBrake}
+                value={parseInt(bikeRearBrake)}
                 label="Rear Brake"
                 name="bike_rear_brake"
                 onChange={onBikeRearBrakeChange}
@@ -1002,7 +1219,7 @@ export default function BikeUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeNoOfGear}
+                value={parseInt(bikeNoOfGear)}
                 label="No. of Gear"
                 name="bike_no_of_gear"
                 onChange={onBikeNoOfGearChange}
@@ -1032,6 +1249,7 @@ export default function BikeUpload() {
                       control={
                         <Checkbox
                           onChange={onBikeFeaturesInputChange}
+                          checked={checkChecked(item.id)}
                           name={`${item.id}`}
                         />
                       }
@@ -1047,13 +1265,13 @@ export default function BikeUpload() {
       <GridItem item xs={12} className={classes.uploadOptions}>
         <GridContainer>
           <h2 className={classes.paperTitle}>Set your asking price</h2>
-          <p className={classes.carPriceText }>
+          <p className={classes.carPriceText}>
             Please kindly set the asking price and final price for your Bike.
           </p>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               label="Asking Price *"
-              value={bikePrice.asking_price}
+              value={bikePrice.asking_price || ""}
               name={"asking_price"}
               autoComplete="off"
               fullWidth
@@ -1081,7 +1299,7 @@ export default function BikeUpload() {
               InputLabelProps={{
                 className: "focus:text-bhalogari",
               }}
-              value={bikePrice.selling_price}
+              value={bikePrice.selling_price || ""}
               name={"selling_price"}
               autoComplete="off"
               fullWidth
@@ -1106,7 +1324,7 @@ export default function BikeUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               label="Video Link"
-              value={bikeVideoLink.video1}
+              value={bikeVideoLink.video1 || ""}
               name={videoName[0]}
               autoComplete="off"
               fullWidth
@@ -1123,7 +1341,7 @@ export default function BikeUpload() {
             {editorLoaded ? (
               <CKEditor
                 editor={ClassicEditor}
-                // data={bikeDescription}
+                data={bikeDescription}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
                   // console.log("Editor is ready to use!", editor);
@@ -1157,7 +1375,7 @@ export default function BikeUpload() {
               startIcon={<Bike/>}
               onClick={onSubmit}
             >
-              submit listing
+              Update listing
             </Button>
             <Snackbar
               place="br"

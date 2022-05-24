@@ -11,24 +11,24 @@ import carimage from "../../assets/img/listing/picture.svg";
 
 const UploadedBikesList = ({ data }) => {
   const {
-    BikesApp_bikemanufacturer: car_manufacturer,
+    BikesApp_bikemanufacturer: bike_manufacturer,
     BikesApp_bikeimage: images,
     BikesApp_bikemodel: model_name,
-    id: car_id,
+    id: bike_id,
     fixed_price,
-    car_year,
+    bike_year,
     mileage,
     date,
     transmission_type,
-    BikesApp_biketype: car_type,
+    BikesApp_biketype: bike_type,
     registration_year,
   } = data;
 
   const router = useRouter();
   const handleEdit = () => {
     router.push({
-      pathname: "/msf/edit-list/[cid]",
-      query: { cid: car_id },
+      pathname: "/msf/edit-bike-list/[bid]",
+      query: { bid: bike_id },
     });
   };
 
@@ -50,7 +50,7 @@ const UploadedBikesList = ({ data }) => {
         )}
         <div className="px-5 py-5">
           <h6 className="mb-1 text-sm tracking-tight text-gray-600 dark:text-white font-sans ">
-            {car_manufacturer.maker_name}
+            {bike_manufacturer.maker_name}
           </h6>
           <h5 className="mb-1 text-xl font-bold tracking-tight text-orange-500 dark:text-white font-sans">
             {model_name.model_name}
@@ -64,10 +64,10 @@ const UploadedBikesList = ({ data }) => {
           </div>
 
           <h6 className="mb-1 text-sm tracking-tight text-gray-900 dark:text-white">
-            Category: <span className="font-bold">{car_type.type_name}</span>
+            Category: <span className="font-bold">{bike_type.type_name}</span>
           </h6>
           <h6 className="mb-1 text-sm tracking-tight text-gray-900 dark:text-white">
-            Model Year: {car_year}
+            Model Year: {bike_year}
           </h6>
           <div className="">
             <div className="flex items-center space-x-1 ">
@@ -91,24 +91,16 @@ const UploadedBikesList = ({ data }) => {
                   src={Used}
                   className=" bg-gray-200 rounded-full width-1"
                 />
-
-                {transmission_type === "A" && (
-                  <p className="text-sm">Automatic</p>
-                )}
-                {transmission_type === "M" && <p className="text-sm">Manual</p>}
-                {transmission_type === "N/A" && (
-                  <p className="text-sm"> N/A </p>
-                )}
               </div>
             </div>
           </div>
-          {/*<button*/}
-          {/*  type="submit"*/}
-          {/*  className="w-full bg-orange-500 text-white py-3.5 px-5 my-2 mx-0 border-none rounded cursor-pointer"*/}
-          {/*  onClick={() => handleEdit()}*/}
-          {/*>*/}
-          {/*  Edit*/}
-          {/*</button>*/}
+          <button
+            type="submit"
+            className="w-full bg-orange-500 text-white py-3.5 px-5 my-2 mx-0 border-none rounded cursor-pointer"
+            onClick={() => handleEdit()}
+          >
+            Edit
+          </button>
         </div>
       </div>
     </>
