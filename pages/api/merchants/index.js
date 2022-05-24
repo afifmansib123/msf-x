@@ -24,9 +24,7 @@ async function getMerchantList(page) {
             orderBy: {
                 id: 'asc'
             },
-            include: {
-                MerchantStorefront_package: true,
-            },
+            
         });
     } else {
         merchants = await prisma.UsersApp_customuser.findMany({
@@ -35,9 +33,7 @@ async function getMerchantList(page) {
             orderBy: {
                 id: 'asc'
             },
-            include: {
-                MerchantStorefront_package: true,
-            },
+           
         });
     }
 
