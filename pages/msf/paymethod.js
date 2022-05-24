@@ -1,24 +1,24 @@
 import React from "react";
 import MSF from "layouts/MSF.js";
-import GridContainer from "../../../components/Grid/GridContainer";
-import GridItem from "../../../components/Grid/GridItem";
-import Card from "../../../components/Card/Card";
-import CardHeader from "../../../components/Card/CardHeader";
-import CardBody from "../../../components/Card/CardBody";
-import CustomButton from '../../../components/CustomButtons/Button'
-import {bhalogariCardHeader} from "../../../assets/jss/nextjs-material-dashboard";
-import prisma from "../../../PrismaConnect";
+import GridContainer from "../../components/Grid/GridContainer";
+import GridItem from "../../components/Grid/GridItem";
+import Card from "../../components/Card/Card";
+import CardHeader from "../../components/Card/CardHeader";
+import CardBody from "../../components/Card/CardBody";
+import CustomButton from '../../components/CustomButtons/Button'
+import {bhalogariCardHeader} from "../../assets/jss/nextjs-material-dashboard";
+import prisma from "../../PrismaConnect";
 import axios from "axios";
 import { useRouter } from "next/router";
 import {Container} from "@mui/material";
 
 function Paymethod(props) {
     const [selectPay, setSelectPay] = React.useState(0);
-    const [payid, setpayid] = React.useState(0);
+    const [payid, setpayid] = React.useState(1);
     const {choices} = props;
     const router = useRouter();
     const choicesarr = choices||["choice 1", "choice 2", "choice 3", "choice 4"];
-    let {total_amount, user_id, package_id,cus_name } = router.query;
+    let {total_amount, user_id, package_id,cus_name, package_type} = router.query;
     total_amount = parseInt(total_amount);
     user_id = parseInt(user_id);
     package_id = parseInt(package_id);
@@ -31,11 +31,11 @@ function Paymethod(props) {
     const choiceBtn = () => {
         return choicesarr.map((v, index) => {
             return (<GridItem xs={12} sm={12} md={12} key={index}>
-                {selectPay===index && <div onClick={() => {onClickHandle(index, v.id)}} className={"text-bhalogari text-center font-extrabold border-bhalogari shadow-bhalogari shadow-md border-2 md:p-5 md:rounded-xl md:text-3xl "}>
+                {selectPay===index && <div onClick={() => {onClickHandle(index, v.id)}} className={"text-bhalogari text-center font-extrabold border-bhalogari shadow-bhalogari shadow-md border-2 md:p-5 md:rounded-xl md:text-3xl cursor-pointer select-none"}>
                     { v.payment_method || v}
                 </div>}
                 {
-                    selectPay!==index &&  <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-gray-100 hover:border-bhalogari border-[1px] md:p-5 md:rounded-xl  md:text-3xl "}>
+                    selectPay!==index &&  <div onClick={() => {onClickHandle(index, v.id)}} className={"text-center border-gray-100 hover:border-bhalogari border-[1px] md:p-5 md:rounded-xl  md:text-3xl cursor-pointer select-none"}>
                         { v.payment_method || v}
                     </div>
                 }
@@ -58,7 +58,8 @@ function Paymethod(props) {
             user_id: user_id,
             package_id: package_id,
             cus_name: cus_name,
-            pay_method: 3
+            pay_method: 3,
+            package_type: package_type
         };
 
         const response = await axios.post(
@@ -75,7 +76,8 @@ function Paymethod(props) {
             user_id: user_id,
             package_id: package_id,
             cus_name: cus_name,
-            pay_method: payid
+            pay_method: payid,
+            package_type: package_type
         };
         const response = await axios.post(
             `/api/payment/others`,
