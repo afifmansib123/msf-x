@@ -6,7 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-
+import { useRouter } from "next/router";
 
 import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
@@ -55,10 +55,11 @@ function MerchantCardDetail(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const inputElement = useRef();
-  const {packages,store} = props;
+  const {packages,store,tableData} = props;
   const [date, setDate] = React.useState(new Date());
   const [data, setData] = useState({});
   const [editFlag, setEditFlag] = useState(false);
+  const [showList, setshowList] = useState([]);
 
   let { uploadToS3 } = useS3Upload();
   // let { store } = props;
@@ -69,7 +70,7 @@ function MerchantCardDetail(props) {
   const [readOnly, setReadOnly] = useState(true);
   const [logoUrl, setLogoUrl] = useState(store.logo_url);
   const [backdropUrl, setBackdropUrl] = useState(store.backdrop_url);
-
+  const router = useRouter();
 
   const { data: session, status } = useSession();
 
@@ -91,6 +92,7 @@ function MerchantCardDetail(props) {
   // }
   const handleEdit = (e) => {
     setEditFlag(e);
+
 
   };
 
@@ -254,7 +256,11 @@ function MerchantCardDetail(props) {
            
             {editFlag ? (
               props.tableData.map((v,i)=>{
-              return(  <ProfileForm data={data} date={date} userID={v.id} handleEdit={handleEdit} />)
+              return(  <ProfileForm data={data} date={date} userID={v.id} handleEdit={handleEdit} />
+             
+              )
+            
+              
               })
 
        
@@ -400,7 +406,7 @@ function MerchantCardDetail(props) {
             </div>
 
 
-            {showedDetail}
+
            
 
           </CardBody>
@@ -448,11 +454,11 @@ export async function getServerSideProps(context) {
     // check whether the store is empty, {}
     // No store found, create new one
     // console.debug(`\tNo store found. Creating a new one for [${session.user.name}]`);
-
+    
     userStore = await prisma.MerchantStorefront_store.create({
       data: {
 
-        owner_user_id: id,
+        owner_user_id:  BigInt(id),
         // created_at: new Date(),
         // updated_at: new Date(),
       },
@@ -461,7 +467,7 @@ export async function getServerSideProps(context) {
     userStore = JSON.parse(
       JSON.stringify(userStore, (key, value) => (typeof value === "bigint" ? value.toString() : value))
     );
-  }
+   }
 
 
   packages = JSON.parse(
@@ -481,7 +487,7 @@ async function getUserDetail(user_id) {
   const prisma = new PrismaClient();
   const data = await prisma.UsersApp_customuser.findMany({
     where: {
-      id: user_id,
+      id: BigInt(user_id) || null,
 
     },
     include: {
