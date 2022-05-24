@@ -90,10 +90,10 @@ function CurrentGiftCard(props) {
 
 
     const renderPackageItems = getPackage().map((item, i) => {
-        console.log("item", item)
+        // console.log("item", item)
         return (
             item.map((subItem, y) => {
-                console.log("subItem", subItem)
+                // console.log("subItem", subItem)
                 if (subItem.package_id_id > 3) { // show card except package type 1,2,3
                     return (
                         <GridItem xs={12} sm={12} md={4}>
@@ -109,6 +109,9 @@ function CurrentGiftCard(props) {
                                 <CardBody>
                                     <CardContent className="text-center my-[50px]">
                                         {renderPerk(subItem.serial_no).map((item, i) => {
+                                            // console.log("bello", item.MerchantStorefront_perks.perks)
+                                            // console.log("bello2", item.MerchantStorefront_perks.id)
+
                                             return (
                                                 <>
                                                     <br />

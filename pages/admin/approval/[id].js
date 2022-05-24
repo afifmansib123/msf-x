@@ -81,12 +81,12 @@ function DetailCarLog(props) {
             <ul style={{ overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0 }}>
               {selectedCar != null
                 ? selectedCar.carImage.map((value) => {
-                    return (
-                      <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
-                        <img src={value} width={350} height={350} />
-                      </li>
-                    );
-                  })
+                  return (
+                    <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
+                      <img src={value} width={350} height={350} />
+                    </li>
+                  );
+                })
                 : ""}
             </ul>
           </GridItem>
@@ -432,13 +432,13 @@ async function getDetail(car_id) {
         image_url: true,
       },
     }).then((imgResponse) => {
-          const img = imgResponse.map((v) => {
-            return v.image_url;
-          });
-          return img;
-        }).catch((err) => {
-          throw new Error(err);
-        });
+      const img = imgResponse.map((v) => {
+        return v.image_url;
+      });
+      return img;
+    }).catch((err) => {
+      throw new Error(err);
+    });
   }
 
   // console.debug("parsedData", parsedData);

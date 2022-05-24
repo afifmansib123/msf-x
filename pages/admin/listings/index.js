@@ -14,9 +14,9 @@ import CardBody from "components/Card/CardBody.js";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
 // import prisma from "PrismaConnect";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import Divider from "@mui/material/Divider";
-import {Button, CardContent} from "@mui/material";
+import { Button, CardContent } from "@mui/material";
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -71,7 +71,7 @@ function TableList(props) {
     });
 
     const [searchTitle, setSearchTitle] = React.useState("");
-    const [searchState, setSearchState]= React.useState({
+    const [searchState, setSearchState] = React.useState({
         Storename: true,
         MerchantName: false
     });
@@ -94,20 +94,21 @@ function TableList(props) {
         });
     }
 
-    const {Approved, Rejected, Pending} = state;
-    const {Storename,  MerchantName} = searchState;
+    const { Approved, Rejected, Pending } = state;
+    const { Storename, MerchantName } = searchState;
 
     const [totalPage, setTotalPage] = React.useState(1);
 
     const onDetailClick = async (car_id) => {
-        console.log(car_id)
-        await router.push({pathname: `/admin/listings/${car_id}`});
+        // console.log(car_id)
+        await router.push({ pathname: `/admin/listings/${car_id}` });
     };
 
     const error = [Storename, MerchantName].filter((v) => v).length === 0;
 
     const loadPageTitle = async () => {
         const carCount = await axios.get(`/api/cars/pageNumber?status=${JSON.stringify(state)}&searchTitle=${searchTitle}&searchState=${JSON.stringify(searchState)}`)
+        // console.log("data count", carCount.data.data)
         setTotalPage(Math.ceil((carCount.data.data) / 20));
         setPage(1);
     }
@@ -118,13 +119,13 @@ function TableList(props) {
 
     React.useEffect(async () => {
         const carlist = await axios.get(`/api/cars?page=${page}&status=${JSON.stringify(state)}&searchTitle=${searchTitle}&searchState=${JSON.stringify(searchState)}`)
-        let {cars} = carlist.data;
+        let { cars } = carlist.data;
         cars = cars || [];
         let result = cars.map((item, index) => {
             return (
                 <div key={index}>
                     <div className={"md:flex my-10"}>
-                        <div className={"md:flex-row"}><img src={item?.img[0] ?? "/assets/img/car_placeholder.png"} width={250}/></div>
+                        <div className={"md:flex-row"}><img src={item.img[0]} width={250} /></div>
                         <div className={"md:flex-row md:ml-10 mt-8"}>
                             <div>
                                 <div className={"md:grid md:grid-cols"}>
@@ -142,12 +143,12 @@ function TableList(props) {
                                 <div className={"md:grid md:grid-cols"}>
                                     <span className={"font-semibold md:col"}>Status</span>
                                     <span>
-                                         <CusButton disabled round color="warning" size="sm">
-                                        {
-                                            item?.status === "A"? "Approved" : item?.status === "R" ? "Rejected" : "Pending"
+                                        <CusButton disabled round color="warning" size="sm">
+                                            {
+                                                item?.status === "A" ? "Approved" : item?.status === "R" ? "Rejected" : "Pending"
 
-                                        }
-                                    </CusButton>
+                                            }
+                                        </CusButton>
                                     </span>
 
                                 </div>
@@ -156,7 +157,7 @@ function TableList(props) {
 
                         </div>
                     </div>
-                    {cars.length - 1 !== index && <Divider/>}
+                    {cars.length - 1 !== index && <Divider />}
                 </div>
             )
         })
@@ -170,7 +171,7 @@ function TableList(props) {
             <div className={"text-center"}>
                 <Stack spacing={2} className={"items-center"}>
                     <Pagination count={totalPage} page={page} onChange={handleChange} howFirstButton showLastButton
-                                size="large"/>
+                        size="large" />
                     <Typography>Page: {page}</Typography>
                 </Stack>
             </div>
@@ -185,8 +186,8 @@ function TableList(props) {
                                     <FormLabel component="legend">Pick At least One</FormLabel>
                                     <FormHelperText hidden={!error}>Cannot search, Please check at least one</FormHelperText>
                                     <FormGroup row>
-                                        <FormControlLabel control={<Checkbox  checked={Storename} name={"Storename"} onChange={onSearchCheckChange}/>} label="StoreName" />
-                                        <FormControlLabel control={<Checkbox  checked={MerchantName} name={"MerchantName"} onChange={onSearchCheckChange}/>} label="MerchantName" />
+                                        <FormControlLabel control={<Checkbox checked={Storename} name={"Storename"} onChange={onSearchCheckChange} />} label="StoreName" />
+                                        <FormControlLabel control={<Checkbox checked={MerchantName} name={"MerchantName"} onChange={onSearchCheckChange} />} label="MerchantName" />
                                     </FormGroup>
 
                                 </FormControl>
@@ -194,31 +195,31 @@ function TableList(props) {
                             </div>
                             <TextField fullWidth label="Filter" id="fullWidth" disabled={error} error={error} onChange={(e) => {
                                 setSearchTitle(e.target.value)
-                            }}/>
+                            }} />
                         </div>
 
                     </div>
 
                     <div className={"md:flex md:gap-5"}>
                         <div className={"md:flex-row  border-r-[1px] border-gray-200"}>
-                            <FormControl sx={{m: 3}} component="fieldset" variant="standard">
+                            <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
                                 <FormLabel component="legend">Approve Status</FormLabel>
                                 <FormGroup>
                                     <FormControlLabel
                                         control={
-                                            <Checkbox checked={Approved} onChange={onCheckChange} name="Approved"/>
+                                            <Checkbox checked={Approved} onChange={onCheckChange} name="Approved" />
                                         }
                                         label="Approved"
                                     />
                                     <FormControlLabel
                                         control={
-                                            <Checkbox checked={Rejected} onChange={onCheckChange} name="Rejected"/>
+                                            <Checkbox checked={Rejected} onChange={onCheckChange} name="Rejected" />
                                         }
                                         label="Rejected"
                                     />
                                     <FormControlLabel
                                         control={
-                                            <Checkbox checked={Pending} onChange={onCheckChange} name="Pending"/>
+                                            <Checkbox checked={Pending} onChange={onCheckChange} name="Pending" />
                                         }
                                         label="Pending"
                                     />
@@ -242,7 +243,7 @@ function TableList(props) {
             <div className={"text-center"}>
                 <Stack spacing={2} className={"items-center"}>
                     <Pagination count={totalPage} page={page} onChange={handleChange} howFirstButton showLastButton
-                                size="large"/>
+                        size="large" />
                     <Typography>Page: {page}</Typography>
                 </Stack>
             </div>
