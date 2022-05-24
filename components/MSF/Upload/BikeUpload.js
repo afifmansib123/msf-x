@@ -33,7 +33,7 @@ import Joi from "joi-browser";
 import {Dropzone, FileItem, FullScreenPreview} from "@dropzone-ui/react";
 
 
-export default function CarUpload() {
+export default function BikeUpload() {
   const [bikeType, setBikeType] = useState();
   const [bikeTypes, setBikeTypes] = useState([]);
   const [bikeMaker, setBikeMaker] = useState();
@@ -64,8 +64,6 @@ export default function CarUpload() {
   const [bikeEngineCC, setBikeEngineCC] = useState();
   const [bikeMileage, setBikeMileage] = useState();
   const [bikeFrontSuspension, setBikeFrontSuspension] = useState();
-  const [carDrive, setCarDrive] = useState();
-
   const [bikeFrontSuspensions, setBikeFrontSuspensions] = useState([]);
   const [bikeRearSuspensions, setBikeRearSuspensions] = useState([]);
   const [bikeFeaturesInput, setBikeFeaturesInput] = useState([]);
@@ -416,13 +414,14 @@ export default function CarUpload() {
       rear_suspension: bikeRearSuspension,
       bike_manufacturer: bikeMaker,
       model_name: bikeModel,
-      rear_brake: bikeRearBrake !== "" ? bikeRearBrake : 21,
-      exterior_color: bikeNoOfGear !== "" ? bikeNoOfGear : 54,
+      rear_brake: bikeRearBrake,
+      bike_color: bikeColor,
+      gear: bikeNoOfGear,
       bike_body_type: bikeBodyType,
       engine_capacity: bikeEngineCC !== "" ? bikeEngineCC : 0.0,
       front_brake: bikeFrontBrake,
       created_by: user_id,
-      car_video_link: bikeVideoLink.video1 !== "" ? bikeVideoLink.video1 : "-",
+      bike_video_link: bikeVideoLink.video1 !== "" ? bikeVideoLink.video1 : "-",
       bike_type: bikeType,
       front_suspension: bikeFrontSuspension,
       description: bikeDescription !== "" ? bikeDescription : "-",
@@ -781,8 +780,8 @@ export default function CarUpload() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={bikeRegYear}
-                  label="Car Reg Years"
-                  name="car_reg_year"
+                  label="Bike Reg Years"
+                  name="bike_reg_year"
                   onChange={onBikeRegYearChange}
                 >
                   {bikeRegYears.map((l, index) => {

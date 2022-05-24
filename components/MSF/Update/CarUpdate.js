@@ -705,7 +705,7 @@ export default function CarUpdate() {
           setRedirect(true);
         } else {
           setLoading(false);
-          setSnackMsg("Please fill all the required fieldss");
+          setSnackMsg("Please fill all the required fields");
           setOpen(true);
         }
       } else {
@@ -722,7 +722,7 @@ export default function CarUpdate() {
       setOpen(true);
     } else {
       setLoading(false);
-      setSnackMsg("Please fill all the required fieldsss");
+      setSnackMsg("Please fill all the required fields");
       setOpen(true);
     }
     // }
@@ -844,40 +844,6 @@ export default function CarUpdate() {
   let features = [];
 
   const [syntheticFiles, setSyntheticFiles] = useState([]);
-
-  const makeSyntheticFiles = (imageUrl) => {
-    console.log(syntheticFiles);
-    //create File object instances
-    const fileFromWebUrl = createSyntheticFile(
-      "image-from-web.webp",
-      290000000,
-      "image/webp"
-    );
-
-    //create FileValidate object instances
-    const validateFileFromWebUrl = makeSynthticFileValidate(
-      fileFromWebUrl,
-      true,
-      "success"
-    );
-
-
-    //add the image URL
-    validateFileFromWebUrl.imageUrl = imageUrl;
-
-
-    //set the state
-    return [
-      validateFileFromWebUrl
-    ];
-  };
-
-  // useEffect(() => {
-  //   setSyntheticFiles(makeSyntheticFiles());
-  //   return () => {
-  //     setSyntheticFiles([]);
-  //   };
-  // }, []);
 
   function arrayEquals(a, b) {
     return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((val, index) => val === b[index]);

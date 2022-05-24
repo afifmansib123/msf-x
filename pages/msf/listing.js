@@ -46,20 +46,20 @@ function Listing(props) {
           headerColor="bhalogari"
           tabs={[
             {
-              tabName: "Car",
-              tabIcon: Car,
-              tabContent: (
-                <>
-                  <CarListing cars={cars}/>
-                </>
-              ),
-            },
-            {
               tabName: "Bike",
               tabIcon: Bike,
               tabContent: (
                 <>
                   <BikeListing bikes={bikes}/>
+                </>
+              ),
+            },
+            {
+              tabName: "Car",
+              tabIcon: Car,
+              tabContent: (
+                <>
+                  <CarListing cars={cars}/>
                 </>
               ),
             },

@@ -36,7 +36,7 @@ function cid() {
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
                 <CustomTabs
-                    title="Upload Car / Bike:"
+                    title="Update Bike:"
                     headerColor="bhalogari"
                     tabs={[
                         {

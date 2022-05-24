@@ -91,14 +91,6 @@ const UploadedBikesList = ({ data }) => {
                   src={Used}
                   className=" bg-gray-200 rounded-full width-1"
                 />
-
-                {transmission_type === "A" && (
-                  <p className="text-sm">Automatic</p>
-                )}
-                {transmission_type === "M" && <p className="text-sm">Manual</p>}
-                {transmission_type === "N/A" && (
-                  <p className="text-sm"> N/A </p>
-                )}
               </div>
             </div>
           </div>
