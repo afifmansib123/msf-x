@@ -8,6 +8,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
 const ProfileView = ({ data }) => {
+      console.log(data);
       return (
             <><Card>
                   <CardHeader color={"bhalogari"} className={"m-3"}>
@@ -22,7 +23,7 @@ const ProfileView = ({ data }) => {
                               <div className="mt-5 border-4 border-white rounded-full flex items-center">
                                     <Image className="rounded-full pt-2"
                                           unoptimized
-                                          src={data.image ? data.image : ProfileImg}
+                                          src={data.image_url ? data.image_url : ProfileImg}
                                           alt="Profile Image"
                                           width={135}
                                           height={135} />
@@ -55,7 +56,7 @@ const ProfileView = ({ data }) => {
 
                                     <div className="flex">
                                     <h3 className="text-base font-bold mr-2">Date of Birth:</h3>
-                                          <h3 className="text-base ">{data.date_of_birth}</h3>
+                                          <h3 className="text-base ">{data.date_of_birth.slice(0,10)}</h3>
                                           </div>
                                     <div className="flex"> 
                                     <h3 className="text-base font-bold mr-2">NID:</h3>

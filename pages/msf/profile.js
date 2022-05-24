@@ -4,11 +4,9 @@ import { useSession } from "next-auth/react";
 
 //Edit profile Imports
 import makeStyles from "@mui/styles/makeStyles";
-import ProfileView from "../../components/ProfileView/ProfileView";
 import ProfileForm from "../../components/ProfileForm/ProfileForm";
-import axios from "axios";
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
+import { getSession } from "next-auth/react";
+import { PrismaClient } from "@prisma/client";
 
 //Edit Profile styles
 const useStyles = makeStyles((theme) => ({
@@ -38,9 +36,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Profile(props) {
+function ProfilePage(props) {
+  const { user } = props
   const classes = useStyles();
-  const [date, setDate] = React.useState(new Date());
+  const [date, setDate] = React.useState(user.date_of_birth.slice(0, 10));
   const [data, setData] = useState({});
   const [editFlag, setEditFlag] = useState(false);
   const { data: session, status } = useSession();
@@ -48,60 +47,56 @@ function Profile(props) {
   const { token } = session;
   const { id } = token;
 
+  
+  // setDate(user.date_of_birth);
   // console.log("User ID", id);
 
-  // Switch functionality between Profile and Edit Profile
-  const handleEdit = (e) => {
-    setEditFlag(e);
-  };
+  // Switch functionality between Profile and Edit Profil
 
   //Profile Functionality here
-  React.useEffect(async () => {
-    try {
-      const apiURL = `${process.env.NEXT_PUBLIC_BG_API}user/profile/?user_id=${id}`;
-      // console.debug("apiURL", apiURL);
-      const { data } = await axios.get(apiURL);
-      // const res = await response.json();
-      // console.debug("res", data);
-      setData(data);
-      setDate(data.date_of_birth);
-      // setAlignment(data.individual_user);
-      // date=res.date_of_birth;
-    } catch (err) {
-      console.error(err);
-    }
-  }, [editFlag]);
+  // React.useEffect(async () => {
+  //   try {
+  //     // const apiURL = `${process.env.NEXT_PUBLIC_BG_API}user/profile/?user_id=${id}`;
+  //     // console.debug("apiURL", apiURL);
+  //     // const { data } = await axios.get(apiURL);
+  //     // const res = await response.json();
+  //     // console.debug("res", data);
+  //     setData(user);
+  //     setDate(user.date_of_birth);
+  //     // setAlignment(data.individual_user);
+  //     // date=res.date_of_birth;
+  //   } catch (err) {
+  //     // console.error(err);
+  //   }
+  // }, [editFlag]);
 
   //Need to send the Profile Image and A callback function of handleEdit
 
   return (
     <>
-      {editFlag ? (
-        <ProfileForm data={data} date={date} userID={id} handleEdit={handleEdit} />
-      ) : (
-        <>
-        <div className="container">
-            <div className="grid justify-items-end">
-              <button
-                className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-2 px-5 rounded-full transition-all"
-                onClick={() => {
-                  handleEdit(true);
-                }}
-              >
-                Edit Profile
-              </button>
-              </div>
-          </div>
-          <ProfileView data={data} />
-          
-        </>
-      )}
+      <ProfileForm data={user} date={date} userId={id} />
     </>
   );
 }
 
-export async function getServerSideProps() {
-  // const { data: session } = useSession();
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  // console.log("session",session)
+  // const userId = session.token.id
+
+  const prisma = new PrismaClient();
+  var userInfo = await prisma.UsersApp_customuser.findUnique({
+    where: {
+      id: BigInt(session?.token.id),
+    },
+  });
+
+  userInfo = JSON.parse(
+    JSON.stringify(userInfo, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  );
+
+  console.debug(userInfo)
+
   // console.log("getServerSideProps", session);
   // const allCars = await prisma.carsApp_car.findMany()
   // return {
@@ -111,13 +106,15 @@ export async function getServerSideProps() {
   // };
 
   return {
-    props: {},
+    props: {
+      user: userInfo
+    },
   };
 }
 
-Profile.layout = MSF;
-Profile.auth = true;
+ProfilePage.layout = MSF;
+ProfilePage.auth = true;
 
 //Profile view CSS
 
-export default Profile;
+export default ProfilePage;
