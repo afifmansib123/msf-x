@@ -10,16 +10,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import PaidIcon from "@mui/icons-material/Paid";
 import CallIcon from "@mui/icons-material/Call";
-import Warning from "@mui/icons-material/Warning";
-import DateRange from "@mui/icons-material/DateRange";
-import LocalOffer from "@mui/icons-material/LocalOffer";
-import Update from "@mui/icons-material/Update";
-import ArrowUpward from "@mui/icons-material/ArrowUpward";
-import AccessTime from "@mui/icons-material/AccessTime";
-import Accessibility from "@mui/icons-material/Accessibility";
-import BugReport from "@mui/icons-material/BugReport";
-import Code from "@mui/icons-material/Code";
-import Cloud from "@mui/icons-material/Cloud";
+
 // layout for this page
 import Admin from "layouts/Admin.js";
 // core components
@@ -312,6 +303,7 @@ export async function getServerSideProps(context) {
       totalCar: carCount,
       totalMerchant: merchantCount,
       totalPayment: paymentCount._sum.amount,
+      totalMessage: messageCount
     },
   };
 }
