@@ -54,10 +54,10 @@ async function getMessageList(page, filter1, filter2) {
     else if (filter1 == 'true') {
       console.log("option2")
       messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        take: 6,
         where: {
           status: 'waiting'
         },
-        take: 6,
         orderBy: {
           id: 'asc'
         },
@@ -66,13 +66,14 @@ async function getMessageList(page, filter1, filter2) {
     else if (filter2 == 'true') {
       console.log("option3")
       messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        take: 6,
         where: {
           status: 'solved'
         },
-        take: 6,
         orderBy: {
           id: 'asc'
         },
+        
       });
     }
     else {
@@ -88,7 +89,7 @@ async function getMessageList(page, filter1, filter2) {
 
 
   else {
-    if (filter1 & filter2) {
+    if (filter1 == 'true' && filter2 == 'true') {
       messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
         skip: ((page - 1) * 6),
         take: 6,
@@ -97,25 +98,25 @@ async function getMessageList(page, filter1, filter2) {
         },
       });
     }
-    else if (filter1) {
+    else if (filter1 == 'true') {
       messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        skip: ((page - 1) * 6),
+        take: 6,
         where: {
           status: 'waiting'
         },
-        skip: ((page - 1) * 6),
-        take: 6,
         orderBy: {
           id: 'asc'
         },
       });
     }
-    else if (filter2) {
+    else if (filter2 == 'true') {
       messages = await prisma.MerchantStorefront_messagetoadmin.findMany({
+        skip: ((page - 1) * 6),
+        take: 6,
         where: {
           status: 'solved'
         },
-        skip: ((page - 1) * 6),
-        take: 6,
         orderBy: {
           id: 'asc'
         },

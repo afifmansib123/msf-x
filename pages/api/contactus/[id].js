@@ -20,7 +20,8 @@ export default async function handler(req, res) {
                     id: int_id
                 },
                 data: {
-                    status: req.body.status
+                    status: req.body.status,
+                    updated_at: new Date()
                 }
             }).catch(err => { throw new Error(err) });
 

@@ -145,7 +145,7 @@ function MessagesPage(props) {
                 return (
                     <TableBody key={index}>
                         <TableRow   >
-                            <StyledTableCell>{m.user_id_id}</StyledTableCell>
+                            <StyledTableCell align="center">{m.user_id_id}</StyledTableCell>
                             <StyledTableCell>{m.subject}</StyledTableCell>
                             <StyledTableCell>{m.message}</StyledTableCell>
                             {
@@ -174,9 +174,9 @@ function MessagesPage(props) {
                             }
 
 
-                            <StyledTableCell>{timeFormat(m.created_at)}</StyledTableCell>
-                            <StyledTableCell>{timeFormat(m.updated_at)}</StyledTableCell>
-                            <StyledTableCell>
+                            <StyledTableCell align="center">{timeFormat(m.created_at)}</StyledTableCell>
+                            <StyledTableCell align="center">{timeFormat(m.updated_at)}</StyledTableCell>
+                            <StyledTableCell align="center">
 
 
                                 {updateId != m.id ?
@@ -231,13 +231,13 @@ function MessagesPage(props) {
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <StyledTableCell >ID</StyledTableCell>
-                                    <StyledTableCell align="center">Subject</StyledTableCell>
+                                    <StyledTableCell align="center" style={{width: '5%'}}>ID</StyledTableCell>
+                                    <StyledTableCell align="center" style={{width: '20%'}}>Subject</StyledTableCell>
                                     <StyledTableCell align="center">Message</StyledTableCell>
-                                    <StyledTableCell align="center">Status</StyledTableCell>
-                                    <StyledTableCell align="center">Created at</StyledTableCell>
-                                    <StyledTableCell align="center">Update At</StyledTableCell>
-                                    <StyledTableCell align="center"></StyledTableCell>
+                                    <StyledTableCell align="center" style={{width: '10%'}}>Status</StyledTableCell>
+                                    <StyledTableCell align="center" style={{width: '12%'}}>Created at</StyledTableCell>
+                                    <StyledTableCell align="center" style={{width: '12%'}}>Update At</StyledTableCell>
+                                    <StyledTableCell align="center" style={{width: '5%'}}></StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             {messagesList}
