@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Image from 'next/image';
+import { useS3Upload } from "next-s3-upload";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,6 +13,14 @@ import { useForm } from "react-hook-form";
 import proImage from "../../assets/img/profile/add-picture.svg";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Button from "@mui/material/Button";
+
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+      return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
       rootBox: {
@@ -111,28 +120,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ProfileForm = ({ data, date, userID, handleEdit }) => {
+const ProfileForm = ({ data, date, userId, handleEdit }) => {
+      let { uploadToS3 } = useS3Upload();
       const classes = useStyles();
       const { register, handleSubmit } = useForm();
       const { data: session, status } = useSession();
       const [img, setImg] = useState();
-      const [userimg, setUserimg] = useState(data.image ? data.image : proImage);
+      const [message, setMessage] = useState("");
+      const [open, setOpen] = useState(false);
+      const [userimg, setUserimg] = useState(data.image_url ? data.image_url : proImage);
       const [errorText, setErrorText] = useState("");
+      const [logoUrl, setLogoUrl] = useState(data.image_url);
+      const [readOnly, setReadOnly] = useState(true);
       let okay = false;
+      console.log(data);
 
+      const handleImage = async (e) => {
+            let file = e.target.files[0];
+            // console.log(file)
+            let { url } = await uploadToS3(file, {
+                  endpoint: {
+                        request: {
+                              body: {
+                                    path: `api/profile/${userId}/image`, // Path without leading and trailing slashes
+                              },
+                        },
+                  },
+            });
+            console.log("S3 url", url);
 
-      const handleImage = e => {
+            // Update user image
+            let patchedUser = await axios.patch(`/api/profile/${userId}/`, {
+                  image_url: url
+            })
+
+            setLogoUrl(e.target.files[0]);
             setImg(e.target.files[0]);
             setUserimg(URL.createObjectURL(e.target.files[0]));
       }
       const onSubmit = async (userData) => {
-            let formData = new FormData();
-
             var regex = /(^(\+8801|01))?[3-9]{1}(\d){8}/;
 
             if (regex.test(userData.contact_number) && (userData.contact_number.length == 11 || userData.contact_number.length == 14)) {
-
-                  formData.append("contact_number", userData.contact_number);
+                  userData.user_id = userId;
+                  userData.date_of_birth= userData.date_of_birth.concat('T00:00:00.000Z');
+                  userData.country='BD';
+                  console.log(userData);
                   setErrorText("");
                   okay = true;
             } else {
@@ -141,202 +174,256 @@ const ProfileForm = ({ data, date, userID, handleEdit }) => {
             }
 
             if (okay == true) {
-                  if (img !== undefined) {
-                        formData.append("image", img);
-                  }
-                  formData.append("first_name", userData.first_name);
-                  formData.append("last_name", userData.last_name);
-                  formData.append("email", userData.email);
-                  formData.append("date_of_birth", userData.date_of_birth);
-                  formData.append("gender", userData.gender);
-                  formData.append("post_code", userData.post_code);
-                  formData.append("user_district", userData.user_district);
-                  formData.append("nid_number", userData.nid_number);
-                  formData.append("country", userData.country);
-                  formData.append("tin_number", userData.tin_number);
-                  formData.append("address", userData.address);
 
-                  const token = session.accessToken;
-                  try {
-                        const response = await axios.patch(`${process.env.NEXT_PUBLIC_BG_API}user/profile/update/${userID}/`, formData,
-                              {
-                                    headers: {
-                                          Authorization: `Bearer ${token}`,
-                                          "Content-Type": "multipart/form-data"
-                                    },
-                              })
-                        if (response.status == '200') {
-                              alert("Profile Updated");
-                              handleEdit(false);
-                        }
-                  } catch (error) {
-                        console.log(error);
+                  
+                  let updatedUser = await axios.patch(`/api/profile`, userData);
+                  // console.log(updatedUser);
+                  if (updatedUser.status == 200) {
+                        setMessage("Update Successful");
+                        setOpen(true);
+                        setReadOnly(true);
                   }
+
+
+                  // formData.append("first_name", userData.first_name);
+                  // formData.append("last_name", userData.last_name);
+                  // formData.append("email", userData.email);
+                  // formData.append("date_of_birth", userData.date_of_birth);
+                  // formData.append("gender", userData.gender);
+                  // formData.append("post_code", userData.post_code);
+                  // formData.append("user_district", userData.user_district);
+                  // formData.append("nid_number", userData.nid_number);
+                  // formData.append("country", userData.country);
+                  // formData.append("tin_number", userData.tin_number);
+                  // formData.append("address", userData.address);
+
+                  // const token = session.accessToken;
+                  // try {
+                  //       const response = await axios.patch(`api/profile/`, formData,
+                  //             {
+                  //                   headers: {
+                  //                         Authorization: `Bearer ${token}`,
+                  //                         "Content-Type": "multipart/form-data"
+                  //                   },
+                  //             })
+                  //       if (response.status == '200') {
+                  //             alert("Profile Updated");
+                  //             handleEdit(false);
+                  //             setReadOnly(true);
+                  //       }
+                  // } catch (error) {
+                  //       console.log(error);
+                  // }
             }
 
 
       };
+      const handleEditMode = () => {
+            setReadOnly(false);
+      };
       return (
-            <div className={classes.rootBox}>
-                  <div className={classes.cardBox}>
-                        <div>
-                              <Typography component="h1">Edit Your Account Details</Typography>
-                              <div className={classes.box}>
+            <>
+                  <Snackbar
+                        anchorOrigin={{
+                              vertical: "top",
+                              horizontal: "center",
+                        }}
+                        open={open}
+                        autoHideDuration={6000}
+                        onClose={() => setOpen(false)}
+                  >
+                        <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: "100%" }}>
+                              {message}
+                        </Alert>
+                  </Snackbar>
+                  <div className={classes.rootBox}>
+
+                        <div className={classes.cardBox}>
+                              <div>
                                     <form onSubmit={handleSubmit(onSubmit)} className="">
-                                          <div className={classes.profileImage}>
-                                                <label for="file-input">
-                                                      <Image
-                                                            unoptimized
-                                                            layout='fill'
-                                                            src={userimg}
-                                                            style={{ cursor: 'pointer' }}
-                                                            alt="Profile Image"
-                                                            className={classes.image}
+                                          <Typography component="h1">
+                                                {readOnly && (
+                                                      <Button className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-2 px-2 transition-all" onClick={() => handleEditMode()}>
+                                                            Edit Your Account Details
+                                                      </Button>
+                                                )}
+                                                {!readOnly && (
+                                                      <Button className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-2 px-2 transition-all" type="submit" variant="contained" color="success">
+                                                            Save
+                                                      </Button>
+                                                )}
+                                          </Typography>
+                                          <div className={classes.box}>
+
+                                                <div className={classes.profileImage}>
+                                                      <label htmlFor="file-input">
+                                                            <Image
+                                                                  unoptimized
+                                                                  layout='fill'
+                                                                  src={userimg}
+                                                                  style={{ cursor: 'pointer' }}
+                                                                  alt="Profile Image"
+                                                                  className={classes.image}
+                                                            />
+                                                      </label>
+                                                      <input
+                                                            type="file"
+                                                            id="file-input"
+                                                            style={{ display: "none" }}
+                                                            name="image"
+                                                            onChange={handleImage}
                                                       />
-                                                </label>
-                                                <input
-                                                      type="file"
-                                                      id="file-input"
-                                                      style={{ display: "none" }}
-                                                      name="image"
-                                                      onChange={handleImage}
-                                                />
-                                          </div>
-                                          <div className={classes.editProfileLayout}>
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="first_name"
-                                                      label="First Name"
-                                                      defaultValue={data.first_name}
-                                                      helpertext={data.first_name}
-                                                      {...register("first_name")}
-                                                />
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="last_name"
-                                                      label="Last Name"
-                                                      defaultValue={data.last_name}
-                                                      helpertext={data.last_name}
-                                                      {...register("last_name")}
-                                                />
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="contact_number"
-                                                      type="text"
-                                                      label="Your Mobile Number"
-                                                      defaultValue={data.contact_number}
-                                                      helpertext={data.contact_number}
-                                                      error={errorText.length > 0}
-                                                      {...register("contact_number")}
-                                                />
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="email"
-                                                      label="Email"
-                                                      helpertext={data.email}
-                                                      defaultValue={data.email}
-                                                      {...register("email")}
-                                                />
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="date_of_birth"
-                                                      type="date"
-                                                      defaultValue={date}
-                                                      label="Date of Birth"
-                                                      helpertext={data.date_of_birth}
-                                                      {...register("date_of_birth")}
-                                                />
-                                                <Box sx={{ minWidth: 120 }}>
-                                                      <FormControl {...register("gender")} fullWidth>
-                                                            <InputLabel id="demo-simple-select-label">
-                                                                  Gender
-                                                            </InputLabel>
-                                                            <Select
-                                                                  labelId="demo-simple-select-label"
-                                                                  id="demo-simple-select"
-                                                                  name="gender"
-                                                                  defaultValue={data.gender}
-                                                                  label="Gender"
-                                                            >
-                                                                  <MenuItem value={"M"}>Male</MenuItem>
-                                                                  <MenuItem value={"F"}>Female</MenuItem>
-                                                            </Select>
-                                                      </FormControl>
-                                                </Box>
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="address"
-                                                      label="Address"
-                                                      helpertext={data.address}
-                                                      defaultValue={data.address}
-                                                      {...register("address")}
-                                                />
-                                                <TextField
-                                                      // required
-                                                      id="outlined-required"
-                                                      name="post_code"
-                                                      label="Zip Code"
-                                                      helpertext={data.post_code}
-                                                      defaultValue={data.post_code}
-                                                      {...register("post_code")}
-                                                />
-                                                {/* use autocomplete here for all the districts */}
-                                                <TextField
-                                                      // required
-                                                      id="outlined-required"
-                                                      name="user_district"
-                                                      label="Area"
-                                                      helpertext={data.user_district}
-                                                      defaultValue={data.user_district}
-                                                      {...register("user_district")}
-                                                />
-                                                <TextField
-                                                      required
-                                                      id="outlined-required"
-                                                      name="country"
-                                                      label="Country"
-                                                      defaultValue="Bangladesh"
-                                                      {...register("country")}
-                                                />
-                                                {data.individual_user ? (
-                                                      <TextField
-                                                            // required
-                                                            id="outlined-required"
-                                                            name="nid_number"
-                                                            label="NID"
-                                                            helpertext={data.nid_number}
-                                                            defaultValue={data.nid_number}
-                                                            {...register("nid_number")}
-                                                      />
-                                                ) : (
+                                                </div>
+                                                <div className={classes.editProfileLayout}>
                                                       <TextField
                                                             required
                                                             id="outlined-required"
-                                                            name="tin_number"
-                                                            label="Tin Number"
-                                                            helpertext={data.tin_number}
-                                                            defaultValue={data.tin_number}
-                                                            {...register("tin_number")}
+                                                            name="first_name"
+                                                            label="First Name"
+                                                            defaultValue={data.first_name}
+                                                            helpertext={data.first_name}
+                                                            {...register("first_name")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
                                                       />
-                                                )}
-                                                <button
-                                                      className="bg-orange-600 hover:bg-black font-sans font-bold text-white py-5 px-10 rounded-full transition-all"
-                                                      type="submit"
-                                                >
-                                                      Update Information
-                                                </button>
+                                                      <TextField
+                                                            required
+                                                            id="outlined-required"
+                                                            name="last_name"
+                                                            label="Last Name"
+                                                            defaultValue={data.last_name}
+                                                            helpertext={data.last_name}
+                                                            {...register("last_name")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      <TextField
+                                                            required
+                                                            id="outlined-required"
+                                                            name="contact_number"
+                                                            type="text"
+                                                            label="Your Mobile Number"
+                                                            defaultValue={data.contact_number}
+                                                            helpertext={data.contact_number}
+                                                            error={errorText.length > 0}
+                                                            {...register("contact_number")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      <TextField
+                                                            required
+                                                            id="outlined-required"
+                                                            name="email"
+                                                            label="Email"
+                                                            helpertext={data.email}
+                                                            defaultValue={data.email}
+                                                            {...register("email")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      <TextField
+                                                            required
+                                                            id="outlined-required"
+                                                            name="date_of_birth"
+                                                            type="date"
+                                                            defaultValue={date}
+                                                            label="Date of Birth"
+                                                            helpertext={data.date_of_birth}
+                                                            {...register("date_of_birth")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      <Box sx={{ minWidth: 120 }}>
+                                                            <FormControl {...register("gender")} fullWidth>
+                                                                  <InputLabel id="demo-simple-select-label">
+                                                                        Gender
+                                                                  </InputLabel>
+                                                                  <Select
+                                                                        labelId="demo-simple-select-label"
+                                                                        id="demo-simple-select"
+                                                                        name="gender"
+                                                                        defaultValue={data.gender}
+                                                                        label="Gender"
+                                                                  >
+                                                                        <MenuItem value={"M"}>Male</MenuItem>
+                                                                        <MenuItem value={"F"}>Female</MenuItem>
+                                                                  </Select>
+                                                            </FormControl>
+                                                      </Box>
+                                                      <TextField
+                                                            required
+                                                            id="outlined-required"
+                                                            name="address"
+                                                            label="Address"
+                                                            helpertext={data.address}
+                                                            defaultValue={data.address}
+                                                            {...register("address")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      <TextField
+                                                            // required
+                                                            id="outlined-required"
+                                                            name="post_code"
+                                                            label="Zip Code"
+                                                            helpertext={data.post_code}
+                                                            defaultValue={data.post_code}
+                                                            {...register("post_code")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      <TextField
+                                                            required
+                                                            id="outlined-required"
+                                                            name="country"
+                                                            label="Country"
+                                                            defaultValue="Bangladesh"
+                                                            {...register("country")}
+                                                            InputProps={{
+                                                                  readOnly: readOnly,
+                                                            }}
+                                                      />
+                                                      {data.individual_user ? (
+                                                            <TextField
+                                                                  // required
+                                                                  id="outlined-required"
+                                                                  name="nid_number"
+                                                                  label="NID"
+                                                                  helpertext={data.nid_number}
+                                                                  defaultValue={data.nid_number}
+                                                                  {...register("nid_number")}
+                                                                  InputProps={{
+                                                                        readOnly: readOnly,
+                                                                  }}
+                                                            />
+                                                      ) : (
+                                                            <TextField
+                                                                  required
+                                                                  id="outlined-required"
+                                                                  name="tin_number"
+                                                                  label="Tin Number"
+                                                                  helpertext={data.tin_number}
+                                                                  defaultValue={data.tin_number}
+                                                                  {...register("tin_number")}
+                                                                  InputProps={{
+                                                                        readOnly: readOnly,
+                                                                  }}
+                                                            />
+                                                      )}
+                                                </div>
                                           </div>
                                     </form>
                               </div>
                         </div>
                   </div>
-            </div>
+            </>
       );
 };
 

@@ -13,6 +13,14 @@ function ApprovalIndexPage(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const router = useRouter();
+  const [page, setPage] = React.useState(1);
+  const totalCount = props.totalCarlog || 0;
+  let totalPage = Math.ceil(totalCount/10);
+  totalPage = totalPage < 1 ? 1: (totalPage);
+
+  React.useEffect(() => {
+    setPage(1)
+  }, []);
 
   const callback = (car_id) => {
     router.push({ pathname: `/admin/approval/${car_id}`});
@@ -30,27 +38,38 @@ function ApprovalIndexPage(props) {
       approvedTab={props.approvedTabData}
       rejectedTab={props.rejectedTabData}
       historyBtnClicked={onHistoryClicked}
+      totalPage={totalPage}
+      page={page}
+      handleChange={(e, value) => {
+        setPage(value);
+        router.push(`/admin/approval?page=${page}`);
+      }}
     />
   );
 }
 
 export async function getServerSideProps(context) {
+  let carlogCount = await prisma.CarsApp_car.count();
   var tableResponse;
   var pendingTabResponse;
   var approvedTabResponse;
   var rejectTabResponse;
+  const {page} = context.query || 1
+
   try {
-    tableResponse = await getPending();
+    tableResponse = await getPending(page);
     pendingTabResponse = await getPendingApprove();
     approvedTabResponse = await getApproveApproval();
     rejectTabResponse = await getRejectedApproval();
   } catch (e) {
+    console.error(e)
     return {
       props: {
         tableData: [],
         pendingTabData: [],
         approvedTabData: [],
         rejectedTabData: [],
+        totalCarlog: carlogCount
       },
     };
   }
@@ -59,17 +78,17 @@ export async function getServerSideProps(context) {
     tableResponse !== undefined
       ? tableResponse.map((value, index) => {
           return {
-            Merchant_Name: value.merchant,
-            Car_Maker: value.carMaker,
-            Car_Model: value.carModel,
+            Merchant_Name: value?.merchant || null,
+            Car_Maker: value?.carMaker || null,
+            Car_Model: value?.carModel || null,
             Preview_Image:
-              value.carImage === undefined || value.carImage === []
+              value.carImage === undefined || value.carImage === [] || value.carImage === null
                 ? `/assets/img/car_placeholder.png`
                 : value.carImage,
-            modelData: value.modelData,
-            manufacturerData: value.manufacturerData,
-            carId: value.carId,
-            carName: value.carName,
+            modelData: value?.modelData || null,
+            manufacturerData: value?.manufacturerData || null,
+            carId: value?.carId || null,
+            carName: value?.carName || null,
           };
         })
       : [];
@@ -78,19 +97,19 @@ export async function getServerSideProps(context) {
     pendingTabResponse !== undefined
       ? pendingTabResponse.map((value, index) => {
           return {
-            record_ID: value.id,
-            Merchant_Name: value.merchant,
-            Car_Maker: value.carMaker,
-            Car_Model: value.carModel,
+            record_ID: value?.id || null,
+            Merchant_Name: value?.merchant || null,
+            Car_Maker: value?.carMaker || null,
+            Car_Model: value?.carModel || null,
             Preview_Image:
-              value.carImage === undefined || value.carImage === []
+              value.carImage === undefined || value.carImage === [] || value.carImage === null
                 ? `/assets/img/car_placeholder.png`
                 : value.carImage,
-            modelData: value.modelData,
-            manufacturerData: value.manufacturerData,
-            carId: value.carId,
-            create_at: value.create_at || null,
-            carName: value.carName || "",
+            modelData: value?.modelData || null,
+            manufacturerData: value?.manufacturerData || null,
+            carId: value?.carId || null,
+            create_at: value?.create_at || null,
+            carName: value?.carName || "",
           };
         })
       : [];
@@ -99,21 +118,21 @@ export async function getServerSideProps(context) {
     approvedTabResponse !== undefined
       ? approvedTabResponse.map((value, index) => {
           return {
-            record_ID: value.id,
-            Merchant_Name: value.merchant,
-            Car_Maker: value.carMaker,
-            Car_Model: value.carModel,
+            record_ID: value?.id || null,
+            Merchant_Name: value?.merchant || null,
+            Car_Maker: value?.carMaker || null,
+            Car_Model: value?.carModel || null,
             Preview_Image:
-              value.carImage === undefined || value.carImage === []
+              value.carImage === undefined || value.carImage === [] || value.carImage === null
                 ? `/assets/img/car_placeholder.png`
                 : value.carImage,
-            modelData: value.modelData,
-            manufacturerData: value.manufacturerData,
-            carId: value.carId,
-            create_at: value.create_at || null,
-            carName: value.carName || "",
-            approveBy: value.approveBy,
-            reason: value.reason,
+            modelData: value?.modelData || null,
+            manufacturerData: value?.manufacturerData || null,
+            carId: value?.carId || null,
+            create_at: value?.create_at || null,
+            carName: value?.carName || "",
+            approveBy: value?.approveBy || null,
+            reason: value?.reason || null,
           };
         })
       : [];
@@ -122,21 +141,21 @@ export async function getServerSideProps(context) {
     rejectTabResponse !== undefined
       ? rejectTabResponse.map((value, index) => {
           return {
-            record_ID: value.id,
-            Merchant_Name: value.merchant,
-            Car_Maker: value.carMaker,
-            Car_Model: value.carModel,
+            record_ID: value.id || null,
+            Merchant_Name: value.merchant || null,
+            Car_Maker: value.carMaker || null,
+            Car_Model: value.carModel || null,
             Preview_Image:
-              value.carImage === undefined || value.carImage === []
+              value.carImage === undefined || value.carImage === [] || value.carImage === null
                 ? `/assets/img/car_placeholder.png`
                 : value.carImage,
-            modelData: value.modelData,
-            manufacturerData: value.manufacturerData,
-            carId: value.carId,
+            modelData: value.modelData || null,
+            manufacturerData: value.manufacturerData || null,
+            carId: value.carId || null,
             create_at: value.create_at || null,
             carName: value.carName || "",
-            approveBy: value.approveBy,
-            reason: value.reason,
+            approveBy: value.approveBy || null,
+            reason: value.reason || null,
           };
         })
       : [];
@@ -202,46 +221,47 @@ async function getRejectedApproval() {
   );
 
   const endResultData =
-    parsedData != undefined
-      ? parsedData.map(async (value) => {
-          const first_name = value.CarsApp_car.UsersApp_customuser.first_name;
-          const last_name = value.CarsApp_car.UsersApp_customuser.last_name;
+    parsedData != undefined?
+       parsedData.map(async (value) => {
+          const first_name = value?.CarsApp_car?.UsersApp_customuser?.first_name;
+          const last_name = value?.CarsApp_car?.UsersApp_customuser?.last_name;
 
-          const approvalFirstName = value.UsersApp_customuser.first_name || "UNKNOWN";
-          const approvalLastName = value.UsersApp_customuser.last_name || "NAME";
+          const approvalFirstName = value?.UsersApp_customuser?.first_name || "UNKNOWN";
+          const approvalLastName = value?.UsersApp_customuser?.last_name || "NAME";
 
-          const carID = value.CarsApp_car.id;
-          const img = await prisma.CarsApp_carimage.findMany({
-            where: {
-              car_id: Number(carID),
-            },
-            select: {
-              image_url: true,
-            },
-          })
-            .then((imgResponse) => {
-              const img = imgResponse.map((v) => {
-                return v.image_url;
-              });
-              return img;
-            })
-            .catch((err) => {
-              throw new Error(err);
-            });
+          const carID = value?.CarsApp_car?.id;
+          let img = null;
+          if (carID) {
+            img = await prisma.CarsApp_carimage.findMany({
+              where: {
+                car_id: Number(carID),
+              },
+              select: {
+                image_url: true,
+              },
+            }).then((imgResponse) => {
+                  const img = imgResponse.map((v) => {
+                    return v.image_url;
+                  });
+                  return img;
+                }).catch((err) => {
+                  throw new Error(err);
+                });
+          }
 
           return {
-            id: value.id,
-            carModel: value.CarsApp_car.CarsApp_carmodel.model_name,
+            id: value?.id,
+            carModel: value?.CarsApp_car?.CarsApp_carmodel?.model_name,
             carImage: img,
-            carMaker: value.CarsApp_car.CarsApp_carmanufacturer.maker_name,
+            carMaker: value?.CarsApp_car?.CarsApp_carmanufacturer?.maker_name,
             merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
             approveBy: `${approvalFirstName} ${approvalLastName}`,
-            modelData: value.CarsApp_car.CarsApp_carmodel,
-            manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
-            carId: value.car_id_id,
-            create_at: value.created_at,
-            carName: value.CarsApp_car.car_name,
-            reason: value.review,
+            modelData: value?.CarsApp_car?.CarsApp_carmodel,
+            manufacturerData: value?.CarsApp_car?.CarsApp_carmanufacturer,
+            carId: value?.car_id_id,
+            create_at: value?.created_at,
+            carName: value?.CarsApp_car?.car_name,
+            reason: value?.review,
           };
         })
       : [];
@@ -304,43 +324,46 @@ async function getApproveApproval() {
   const endResultData =
     parsedData != undefined
       ? parsedData.map(async (value) => {
-          const first_name = value.CarsApp_car.UsersApp_customuser.first_name;
-          const last_name = value.CarsApp_car.UsersApp_customuser.last_name;
+          const first_name = value?.CarsApp_car?.UsersApp_customuser?.first_name;
+          const last_name = value?.CarsApp_car?.UsersApp_customuser?.last_name;
 
-          const approvalFirstName = value.UsersApp_customuser.first_name || "UNKNOWN";
-          const approvalLastName = value.UsersApp_customuser.last_name || "NAME";
-          const carID = value.CarsApp_car.id;
-          const img = await prisma.CarsApp_carimage.findMany({
-            where: {
-              car_id: Number(carID),
-            },
-            select: {
-              image_url: true,
-            },
-          })
-            .then((imgResponse) => {
-              const img = imgResponse.map((v) => {
-                return v.image_url;
-              });
-              return img;
+          const approvalFirstName = value?.UsersApp_customuser?.first_name || "UNKNOWN";
+          const approvalLastName = value?.UsersApp_customuser?.last_name || "NAME";
+          const carID = value?.CarsApp_car?.id;
+          let img = null;
+          if (carID) {
+            img = await prisma.CarsApp_carimage.findMany({
+              where: {
+                car_id: Number(carID),
+              },
+              select: {
+                image_url: true,
+              },
             })
-            .catch((err) => {
-              throw new Error(err);
-            });
+                .then((imgResponse) => {
+                  const img = imgResponse.map((v) => {
+                    return v.image_url;
+                  });
+                  return img;
+                })
+                .catch((err) => {
+                  throw new Error(err);
+                });
+          }
 
           return {
-            id: value.id,
-            carModel: value.CarsApp_car.CarsApp_carmodel.model_name,
+            id: value?.id,
+            carModel: value?.CarsApp_car?.CarsApp_carmodel?.model_name,
             carImage: img,
-            carMaker: value.CarsApp_car.CarsApp_carmanufacturer.maker_name,
+            carMaker: value?.CarsApp_car?.CarsApp_carmanufacturer?.maker_name,
             merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
             approveBy: `${approvalFirstName} ${approvalLastName}`,
-            modelData: value.CarsApp_car.CarsApp_carmodel,
-            manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
-            carId: value.car_id_id,
-            create_at: value.created_at,
-            carName: value.CarsApp_car.car_name,
-            reason: value.review,
+            modelData: value?.CarsApp_car?.CarsApp_carmodel,
+            manufacturerData: value?.CarsApp_car?.CarsApp_carmanufacturer,
+            carId: value?.car_id_id,
+            create_at: value?.created_at,
+            carName: value?.CarsApp_car?.car_name,
+            reason: value?.review,
           };
         })
       : [];
@@ -396,38 +419,43 @@ async function getPendingApprove() {
   const endResultData =
     parsedData != undefined
       ? parsedData.map(async (value) => {
-          const first_name = value.CarsApp_car.UsersApp_customuser.first_name;
-          const last_name = value.CarsApp_car.UsersApp_customuser.last_name;
-          const carID = value.CarsApp_car.id;
-          const img = await prisma.CarsApp_carimage.findMany({
-            where: {
-              car_id: Number(carID),
-            },
-            select: {
-              image_url: true,
-            },
-          })
-            .then((imgResponse) => {
-              const img = imgResponse.map((v) => {
-                return v.image_url;
-              });
-              return img;
+          const first_name = value?.CarsApp_car?.UsersApp_customuser?.first_name;
+          const last_name = value?.CarsApp_car?.UsersApp_customuser?.last_name;
+          const carID = value?.CarsApp_car?.id;
+          let img = null;
+
+          if(carID) {
+            img = await prisma.CarsApp_carimage.findMany({
+              where: {
+                car_id: Number(carID),
+              },
+              select: {
+                image_url: true,
+              },
             })
-            .catch((err) => {
-              throw new Error(err);
-            });
+                .then((imgResponse) => {
+                  const img = imgResponse.map((v) => {
+                    return v.image_url;
+                  });
+                  return img;
+                })
+                .catch((err) => {
+                  throw new Error(err);
+                });
+          }
+
 
           return {
-            id: value.id,
-            carModel: value.CarsApp_car.CarsApp_carmodel.model_name,
+            id: value?.id,
+            carModel: value?.CarsApp_car?.CarsApp_carmodel?.model_name,
             carImage: img,
-            carMaker: value.CarsApp_car.CarsApp_carmanufacturer.maker_name,
+            carMaker: value?.CarsApp_car?.CarsApp_carmanufacturer?.maker_name,
             merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
-            modelData: value.CarsApp_car.CarsApp_carmodel,
-            manufacturerData: value.CarsApp_car.CarsApp_carmanufacturer,
-            carId: value.car_id_id,
-            create_at: value.created_at,
-            carName: value.CarsApp_car.car_name,
+            modelData: value?.CarsApp_car?.CarsApp_carmodel,
+            manufacturerData: value?.CarsApp_car?.CarsApp_carmanufacturer,
+            carId: value?.car_id_id,
+            create_at: value?.created_at,
+            carName: value?.CarsApp_car?.car_name,
           };
         })
       : [];
@@ -438,6 +466,6 @@ async function getPendingApprove() {
 }
 
 ApprovalIndexPage.layout = Admin;
-//Index.auth = true;
+ApprovalIndexPage.auth = true;
 
 export default ApprovalIndexPage;

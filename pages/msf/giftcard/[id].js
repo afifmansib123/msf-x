@@ -88,58 +88,64 @@ function CurrentGiftCard(props) {
 
 
 
+
     const renderPackageItems = getPackage().map((item, i) => {
         // console.log("item", item)
         return (
             item.map((subItem, y) => {
                 // console.log("subItem", subItem)
-                return (
-                    <GridItem xs={12} sm={12} md={4}>
-                        <Card>
-                            <CardHeader color={"bhalogari"} className={"m-3"}>
-                                <h1 className="text-center text-xl font-semibold">
-                                    {/* Package ID Type{subItem.package_id_id} */}
+                if (subItem.package_id_id > 3) { // show card except package type 1,2,3
+                    return (
+                        <GridItem xs={12} sm={12} md={4}>
+                            <Card>
+                                <CardHeader color={"bhalogari"} className={"m-3"}>
+                                    <h1 className="text-center text-xl font-semibold">
+                                        {/* Package ID Type{subItem.package_id_id} */}
 
-                                    {showName(subItem.package_id_id)}
-                                </h1>
-                            </CardHeader>
+                                        {showName(subItem.package_id_id)}
+                                    </h1>
+                                </CardHeader>
 
-                            <CardBody>
-                                <CardContent className="text-center my-[50px]">
-                                    {renderPerk(subItem.serial_no).map((item, i) => {
-                                        return (
-                                            <>
-                                                <br />
-                                                <div>{item.MerchantStorefront_perks.perks}</div>
-                                                <div>{`(remain ${item.amount_remain - item.amount_used})`}</div>
-                                                <br />
-                                                {
-                                                    (renderPerk(subItem.serial_no).length - 1) !== i && <Divider />
-                                                }
-                                            </>
-                                        )
-                                    })}
-                                </CardContent>
-                            </CardBody>
+                                <CardBody>
+                                    <CardContent className="text-center my-[50px]">
+                                        {renderPerk(subItem.serial_no).map((item, i) => {
+                                            // console.log("bello", item.MerchantStorefront_perks.perks)
+                                            // console.log("bello2", item.MerchantStorefront_perks.id)
 
-                            <CardFooter>
-                                <div>
+                                            return (
+                                                <>
+                                                    <br />
+                                                    <div>{item.MerchantStorefront_perks.perks}</div>
+                                                    <div>{`(remain ${item.amount_remain - item.amount_used})`}</div>
+                                                    <br />
+                                                    {
+                                                        (renderPerk(subItem.serial_no).length - 1) !== i && <Divider />
+                                                    }
+                                                </>
+                                            )
+                                        })}
+                                    </CardContent>
+                                </CardBody>
+
+                                <CardFooter>
                                     <div>
-                                        Serial number: {subItem.serial_no}
+                                        <div>
+                                            Serial number: {subItem.serial_no}
+                                        </div>
+                                        <div>
+                                            Created date: {renderPerk(subItem.serial_no)[0]?.created_at.slice(0, 10) ?? "-"}
+                                        </div>
+                                        <div>
+                                            Expired date: {renderPerk(subItem.serial_no)[0]?.expired_at.slice(0, 10) ?? "-"}
+                                        </div>
                                     </div>
-                                    <div>
-                                        Created date: {renderPerk(subItem.serial_no)[0].created_at}
-                                    </div>
-                                    <div>
-                                        Expired date: {renderPerk(subItem.serial_no)[0].expired_at}
-                                    </div>
-                                </div>
-                            </CardFooter>
-                        </Card>
-                    </GridItem>
+                                </CardFooter>
+                            </Card>
+                        </GridItem>
 
 
-                )
+                    )
+                }
             })
         )
 

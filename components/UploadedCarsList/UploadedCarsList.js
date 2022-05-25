@@ -6,7 +6,7 @@ import Calendar from "/assets/CarListPageIcons/calendar.svg";
 import Used from "/assets/CarListPageIcons/transmission.svg";
 import taka from "/assets/CarListPageIcons/taka.fb378b29.svg";
 import Image from "next/image";
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import carimage from '../../assets/img/listing/picture.svg';
 
 const UploadedCarsList = ({ data }) => {
@@ -25,12 +25,12 @@ const UploadedCarsList = ({ data }) => {
     registration_year,
   } = data;
 
-  const router = useRouter()
+  const router = useRouter();
   const handleEdit = () => {
     router.push({
-      pathname: '/msf/edit-list/[cid]',
-      query: { cid: car_id },
-    }, )
+      pathname: `/msf/edit-list/${data.id}`,
+      // query: { cid: car_id },
+    })
   }
 
   return (
@@ -97,3 +97,5 @@ const UploadedCarsList = ({ data }) => {
 };
 
 export default UploadedCarsList;
+
+

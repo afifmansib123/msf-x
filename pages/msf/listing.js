@@ -1,45 +1,72 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import makeStyles from "@mui/styles/makeStyles";
+import React, {useState, useMemo} from "react";
+import PropTypes from "prop-types";
+import {useQuery} from "react-query";
+import Box from "@mui/material/Box";
+
+
+// react plugin for creating charts
+import makeStyles from '@mui/styles/makeStyles';
+
+// @mui/icons-material
+import Car from "@mui/icons-material/DirectionsCar";
+import Bike from "@mui/icons-material/TwoWheeler";
 
 // layout for this page
 import MSF from "layouts/MSF.js";
-import styles from "assets/jss/nextjs-material-dashboard/views/iconsStyle.js";
-import { useSession } from "next-auth/react";
-import axios from "axios";
-import UploadedCarsList from "/components/UploadedCarsList/UploadedCarsList";
-import { getSession } from "next-auth/react";
-import prisma from "/PrismaConnect";
-// import { PrismaClient } from "@prisma/client";
 
-export default function ListingPage(props) {
+// core components
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import Tasks from "components/Tasks/Tasks.js";
+import CustomTabs from "components/CustomTabs/CustomTabs.js";
+
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+
+//components
+import CarListing from "../../components/MSF/Listing/CarListing.js";
+import BikeListing from "../../components/MSF/Listing/BikeListing.js";
+import {getSession} from "next-auth/react";
+
+import prisma from "/PrismaConnect";
+
+
+function Listing(props) {
+
   const { cars } = props;
+  const { bikes } = props;
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-  const [items, setItems] = useState([]);
-
-  const { data: session, status } = useSession();
-  // console.log("Session Status", status);
-  // console.log(session.user);
-  const id = session.token.id;
-  React.useEffect(async () => {
-    try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BG_API}cars/user-car-list/${id}/`);
-      // console.log(data);
-      setItems(data.results);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  console.log(props.cars);
 
   return (
-    <div>
-      <div className="grid lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center items-center rounded-lg border bg-white sm:p-8 p-2 sm:mx-32 lg:mx-0 md:mx-4 mt lg:space-x-1 gap-5 ">
-        {cars.map((data) => (
-          <UploadedCarsList key={data.car_id} data={data}></UploadedCarsList>
-        ))}
-      </div>
-    </div>
+    <GridContainer>
+      <GridItem xs={12} sm={12} md={12}>
+        <CustomTabs
+          title="Uploaded List:"
+          headerColor="bhalogari"
+          tabs={[
+            {
+              tabName: "Car",
+              tabIcon: Car,
+              tabContent: (
+                <>
+                  <CarListing cars={cars}/>
+                </>
+              ),
+            },
+            {
+              tabName: "Bike",
+              tabIcon: Bike,
+              tabContent: (
+                <>
+                  <BikeListing bikes={bikes}/>
+                </>
+              ),
+            },
+          ]}
+        />
+      </GridItem>
+    </GridContainer>
   );
 }
 
@@ -60,12 +87,25 @@ export async function getServerSideProps(context) {
     },
   });
 
+  var bikes = await prisma.bikesApp_bike.findMany({
+    where: {
+      created_by_id: user_id,
+    },
+    include: {
+      BikesApp_bikemanufacturer: true,
+      BikesApp_bikemodel: true,
+      BikesApp_biketype: true,
+      BikesApp_bikeimage: true,
+    },
+  });
+
   cars = JSON.parse(JSON.stringify(cars, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+  bikes = JSON.parse(JSON.stringify(bikes, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
 
   // console.log(cars[0]);
   // console.log("session", session);
   // console.log("user_id", user_id);
-  return { props: { cars: cars } };
+  return { props: { cars: cars , bikes: bikes} };
 }
 
 /*
@@ -83,5 +123,8 @@ export async function getServerSideProps() {
 >>>>>>> uat
 }
 */
-ListingPage.layout = MSF;
-ListingPage.auth = true;
+
+Listing.layout = MSF;
+Listing.auth = true;
+
+export default Listing;

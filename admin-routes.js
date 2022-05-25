@@ -14,6 +14,8 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import DiscountIcon from '@mui/icons-material/Discount';
+import CallIcon from '@mui/icons-material/Call';
+
 
 const dashboardRoutes = [
   {
@@ -73,6 +75,13 @@ const dashboardRoutes = [
     path: "/verify",
     name: "Manage Gift Card",
     icon: "content_paste",
+    layout: "/admin",
+  },  
+
+  {
+    path: "/messages",
+    name: "Messages",
+    icon: CallIcon,
     layout: "/admin",
   },  
 

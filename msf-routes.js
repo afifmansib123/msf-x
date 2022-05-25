@@ -7,6 +7,7 @@ import Unarchive from "@mui/icons-material/Unarchive";
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import Car from "@mui/icons-material/DirectionsCar";
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import CallIcon from '@mui/icons-material/Call';
 
 const dashboardRoutes = [
   {
@@ -85,6 +86,12 @@ const dashboardRoutes = [
     path: "/store",
     name: "Store",
     icon: StorefrontIcon,
+    layout: "/msf",
+  },  
+  {
+    path: "/contactus",
+    name: "Contact Us",
+    icon: CallIcon,
     layout: "/msf",
   },  
 ];

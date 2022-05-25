@@ -179,6 +179,21 @@ export default function Sidebar(props) {
   );
 }
 
+
+export async function getServerSideProps(context) {
+  // const session = await getSession(context);
+  // console.log("AdminSidebar.session",session)
+
+  return {
+    // redirect: {
+    //   permanent: false,
+    //   destination: "/login",
+    // },
+    props:{},
+  };
+}
+
+
 Sidebar.propTypes = {
   rtlActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,

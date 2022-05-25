@@ -119,16 +119,16 @@ function PackageManagement(props) {
     // const deleteUser = await prisma.user.delete({where: {id: id}})
     if (window.confirm(`Are you sure you want to delete this record?`)) {
       try {
-        console.log("yo id", data);
+        // console.log("yo id", data);
         const apiURL = `${process.env.NEXT_PUBLIC_API}perk/perk`;
-        console.log("API URL", apiURL, { data: data });
+        // console.log("API URL", apiURL, { data: data });
         const ret = await axios.delete(apiURL, { data: data });
-        console.log("ret ja", ret);
+        // console.log("ret ja", ret);
         if (ret.status == 200) {
           // delete from perks as well
-          for (const p of perkList) {
-            console.log("perkList", { pid: p.id, dataid: data.id });
-          }
+          // for (const p of perkList) {
+          //   console.log("perkList", { pid: p.id, dataid: data.id });
+          // }
           const newPerks = perkList.filter((item) => item.id !== data.id);
           setPerkList(newPerks);
           // location.reload();
@@ -148,11 +148,11 @@ function PackageManagement(props) {
     // do something
     // Cannot connect to the database from here. It has to call through an API
     try {
-      console.log("yo data", data);
+      // console.log("yo data", data);
       const apiURL = `${process.env.NEXT_PUBLIC_API}perk/perk`;
-      console.log("API URL", apiURL, data);
+      // console.log("API URL", apiURL, data);
       const ret = await axios.put(apiURL, data);
-      console.log("ret ja", ret);
+      // console.log("ret ja", ret);
       if (ret.status == 200) {
         alert(
           "Your new feature has been successfully updated into the database"
@@ -180,16 +180,16 @@ function PackageManagement(props) {
   const handleRemovePackage = async (data) => {
     if (window.confirm(`Are you sure you want to delete this record?`)) {
       try {
-        console.log("yo id", data);
+        // console.log("yo id", data);
         const apiURL = `${process.env.NEXT_PUBLIC_API}package/package`;
-        console.log("API URL", apiURL, { data: data });
+        // console.log("API URL", apiURL, { data: data });
         const ret = await axios.delete(apiURL, { data: data });
-        console.log("ret ja", ret);
+        // console.log("ret ja", ret);
         if (ret.status == 200) {
           // delete from perks as well
-          for (const p of packageList) {
-            console.log("packageList", { pid: p.id, dataid: data.id });
-          }
+          // for (const p of packageList) {
+          //   console.log("packageList", { pid: p.id, dataid: data.id });
+          // }
           const newPackage = packageList.filter((item) => item.id !== data.id);
           setPackageList(newPackage);
           // location.reload();
@@ -208,11 +208,11 @@ function PackageManagement(props) {
 
   const updatePackage = async (packagedata) => {
     try {
-      console.log("yo data", packagedata);
+      // console.log("yo data", packagedata);
       const apiURL = `${process.env.NEXT_PUBLIC_API}package/package`;
-      console.log("API URL", apiURL, packagedata);
+      // console.log("API URL", apiURL, packagedata);
       const ret = await axios.put(apiURL, packagedata);
-      console.log("ret ja", ret);
+      // console.log("ret ja", ret);
       router.push("/admin/packages");
       if (ret.status == 200) {
         // router.push("/admin/subscriptions/package")
@@ -239,7 +239,7 @@ function PackageManagement(props) {
   };
   useEffect(() => {
     const showFeature = perkList.map((value, index) => {
-      console.log(index);
+      // console.log(index);
       return [
         packageList.map((p, i) => {
           if (value.package_id_id === p.id) {
@@ -651,8 +651,8 @@ export async function getServerSideProps() {
       typeof value === "bigint" ? value.toString() : value
     )
   );
-  console.log("Original", packages[0], perks[0]);
-  console.log("Transformed", packages[0], perks[0]);
+  // console.log("Original", packages[0], perks[0]);
+  // console.log("Transformed", packages[0], perks[0]);
   return {
     props: {
       packages: packages,

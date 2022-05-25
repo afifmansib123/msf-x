@@ -4,6 +4,9 @@ import Link from "next/link";
 // import Image from "next/image";
 // import topImage from "/assets/Header/bhalogari.0bdbffc9.png";
 // import sideImage from "/assets/Header/ss.0bdbffc9.png";
+
+import packageJson from "/package.json";
+
 function Login() {
   return (
     <div className="flex justify-center item-center" style={{height:"100vh"}}>
@@ -43,7 +46,7 @@ function Login() {
             </ul>
           </div>
           <p style={{ marginTop: "80px", textAlign: "center", fontSize: "14px" }}>
-            © 2022 <Link href="https://bhalogari.com">Bhalogari</Link>
+            © 2022 <Link href="https://bhalogari.com">Bhalogari</Link> - ({packageJson.version})
           </p>
         </div>
       </div>

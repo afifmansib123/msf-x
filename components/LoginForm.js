@@ -4,11 +4,13 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
+import React from "react";
 // import Image from "next/image";
 // import topImage from "../assets/Header/bhalogari.0bdbffc9.png";
 
 function LoginForm(props) {
   const { title, subTitle, onSignIn, onSignUp, signUp } = props;
+  const [disable, setDisable] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -16,7 +18,13 @@ function LoginForm(props) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = onSignIn;
+  // const onSubmit = onSignIn;
+
+  const onSubmit = async(data) => {
+    console.log(data)
+    onSignIn(data)
+    setDisable(true);
+  }
 
   // console.debug(watch("username"), watch("password"));
 
@@ -107,6 +115,7 @@ function LoginForm(props) {
                   className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"
                   style={{ backgroundColor: "#ED7117", marginTop: "30px", height: "50px" }}
                   onClick={handleSubmit(onSubmit)}
+                  disabled={disable}
                 >
                   Login
                 </button>
