@@ -63,6 +63,7 @@ const styles = {
   },
 };
 import styles2 from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import {es, th} from "date-fns/locale";
 function StoreDashboardPage(props) {
   const { promotions, user, packages, acceptedCar, rejectedCar, pendingCar } = props;
   // console.log("MSF[user]", user);
@@ -247,7 +248,7 @@ function StoreDashboardPage(props) {
                       <TableCell>{row.package_type}</TableCell>
                       <TableCell>
                         {row.created_at
-                          ? format(new Date(row.created_at), "dd MMM yyyy")
+                          ? format(new Date(row.created_at), "dd MMM yyyy", { locale: es })
                           : "-"}
                       </TableCell>
                       <TableCell>{row.status}</TableCell>
