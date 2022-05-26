@@ -27,8 +27,8 @@ const is_live = false; //true for live, false for sandbox
 // export ISSANDBOX=TRUE
 
 export default async function handler(req, res) {
-  if (req.method === "POST" || true) {
-    const { body } = res;
+  if (req.method === "POST") {
+    const { body } = req;
     // 1. Extract data
     // 2. pass to SSLC
     // 3. Create a record in payment history
@@ -60,21 +60,33 @@ export default async function handler(req, res) {
     // post_body['product_category'] = product_category
     // post_body['product_profile'] = product_profile
     // post_body['vat'] = vat
+    const trn_id = uuid();
+    const total_amount = parseInt(body.total_amount);
+    const user_id = parseInt(body.user_id);
+    const package_id = parseInt(body.package_id);
+    const cus_name = "test_name";
+    const cus_email = "customer@example.com";
+    const pay_method = parseInt(body.pay_method) || 3;
+    const package_type = body.package_type;
+
+    const success_url = `${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=success&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const fail_url = `${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=fail&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const cancel_url = `${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=cancel&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
 
     const data = {
-      total_amount: 100,
+      total_amount: total_amount,
       currency: "BDT",
-      tran_id: "REF123", // use unique tran_id for each api call
-      success_url: "http://localhost:3000/admin/giftcard/payment/success",
-      fail_url: "http://localhost:3000/admin/giftcard/payment/fail",
-      cancel_url: "http://localhost:3000/admin/giftcard/payment/cancel",
-      ipn_url: "http://localhost:3000/admin/giftcard/payment/ipn",
+      tran_id: trn_id, // use unique tran_id for each api call
+      success_url: success_url,
+      fail_url: fail_url,
+      cancel_url: cancel_url,
+      ipn_url: `${process.env.PAYMENT_GATE_CALLBACK}admin/${package_type}/payment/ipn`,
       shipping_method: "Courier",
       product_name: "Computer.",
       product_category: "Electronic",
       product_profile: "general",
-      cus_name: "Customer Name",
-      cus_email: "customer@example.com",
+      cus_name: cus_name,
+      cus_email: cus_email ,
       cus_add1: "Dhaka",
       cus_add2: "Dhaka",
       cus_city: "Dhaka",
@@ -101,13 +113,15 @@ export default async function handler(req, res) {
     //     console.log('Redirecting to: ', GatewayPageURL)
     // });
     // Redirect the user to payment gateway
-    console.log("apiResponse",apiResponse)
+    // console.log("apiResponse",apiResponse)
     let {GatewayPageURL} = apiResponse;
-    res.redirect(GatewayPageURL);
-    console.log("Redirecting to: ", GatewayPageURL);
-
+    if (!GatewayPageURL) {
+      return res.status(200).send(`${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=fail`)
+    }
+    return res.status(200).send(GatewayPageURL);
+    // console.log("Redirecting to: ", GatewayPageURL);
     // res.status(200).json({ trx: uuid(), ...req.body });
-    return;
+    // return;
   }
   /*
    const prisma = new PrismaClient();
@@ -129,5 +143,5 @@ export default async function handler(req, res) {
    console.log(cars)
    */
 
-  res.status(200).json("Hello");
+  // res.status(200).json("Hello");
 }

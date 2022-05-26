@@ -14,10 +14,9 @@ import Icon from "@mui/material/Icon";
 // core components
 import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 import Dashboard from "@mui/icons-material/Dashboard";
-import LogoutIcon from "@mui/icons-material/Logout";
+import LogoutIcon from '@mui/icons-material/Logout';
 import styles from "assets/jss/nextjs-material-dashboard/components/sidebarStyle.js";
-
-import { signOut } from "next-auth/react";
+import { signOut } from "next-auth/react"
 
 export default function Sidebar(props) {
   // used for checking current route
@@ -31,10 +30,8 @@ export default function Sidebar(props) {
   }
 
   const handleSignOut = () => {
-    // call nextAuth signout and redirect back to root page
-    console.debug("handleSignOut");
-    signOut({ callbackUrl: "/" });
-  };
+    signOut({ callbackUrl: '/' })
+  }
 
   const { color, logo, image, logoText, routes } = props;
   var links = (
@@ -126,20 +123,22 @@ export default function Sidebar(props) {
           <div className={classes.sidebarWrapper}>
             {links}
 
-            <a className={classes.settings + " " + classes.item}>
-              <ListItem button className={classes.itemLink + " white"} onClick={handleSignOut}>
-                <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
-                <ListItemText
-                  primary={"Sign Out"}
-                  className={classNames(classes.itemText, classes.whiteFont)}
-                  disableTypography={true}
-                />
-              </ListItem>
-            </a>
-          </div>
+              <a className={classes.settings +" "+ classes.item}>
+              <ListItem button className={classes.itemLink + " white"} onClick={()=>handleSignOut()}>
+                  <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
+                  <ListItemText
+                    primary={"Sign Out"}
+                    className={classNames(classes.itemText, classes.whiteFont)}
+                    disableTypography={true}
+                  />
+                </ListItem>
+              </a>
+
+          </div>          
           {image !== undefined ? (
             <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
           ) : null}
+          
         </Drawer>
       </Hidden>
 
@@ -158,16 +157,18 @@ export default function Sidebar(props) {
           <div className={classes.sidebarWrapper}>
             {links}
 
-            <a className={classes.settings + " " + classes.item}>
-              <ListItem button className={classes.itemLink + " white"} onClick={handleSignOut}>
-                <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
-                <ListItemText
-                  primary={"Sign Out"}
-                  className={classNames(classes.itemText, classes.whiteFont)}
-                  disableTypography={true}
-                />
-              </ListItem>
-            </a>
+
+              <a className={classes.settings +" "+ classes.item}>
+              <ListItem button className={classes.itemLink + " white"} onClick={()=>handleSignOut()}>
+                  <LogoutIcon className={classNames(classes.itemIcon, classes.whiteFont)} />
+                  <ListItemText
+                    primary={"Sign Out"}
+                    className={classNames(classes.itemText, classes.whiteFont)}
+                    disableTypography={true}
+                  />
+                </ListItem>
+              </a>
+
           </div>
           {image !== undefined ? (
             <div className={classes.background} style={{ backgroundImage: "url(" + image + ")" }} />
@@ -177,6 +178,21 @@ export default function Sidebar(props) {
     </div>
   );
 }
+
+
+export async function getServerSideProps(context) {
+  // const session = await getSession(context);
+  // console.log("AdminSidebar.session",session)
+
+  return {
+    // redirect: {
+    //   permanent: false,
+    //   destination: "/login",
+    // },
+    props:{},
+  };
+}
+
 
 Sidebar.propTypes = {
   rtlActive: PropTypes.bool,

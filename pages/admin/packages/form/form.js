@@ -25,7 +25,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 
 function PackageManagementPage(props) {
-  const router = useRouter()
+  const router = useRouter();
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState("");
 
@@ -47,7 +47,7 @@ function PackageManagementPage(props) {
       console.log("ret ja", ret);
       if (ret.status == 200) {
         alert("Your new feature has been successfully added into the database");
-        router.push("/admin/subscriptions/package")
+        router.push("/admin/packages");
       } else {
         // there's an error
         alert("Error! A problem has been occured while adding your data");
@@ -62,20 +62,16 @@ function PackageManagementPage(props) {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <CardHeader className="text-4xl font-semibold text-center">Add New Feature</CardHeader>
+          <CardHeader className="text-4xl font-semibold text-center">
+            Add New Feature
+          </CardHeader>
           <div className="grid grid-cols-1 pl-4 pr-4 gap-4">
-            {/* <Box
-              component="form"
-              sx={{
-                "& > :not(style)": { width: "50ch", ml: 20, mt: 4 },
-              }}
-              noValidate
-              autoComplete="off"
-            > */}
-
-            {/* <TextField id="outlined-basic" label="Feature ID" variant="outlined" {...register("id")} /> */}
-
-            <TextField id="outlined-basic" label="Feature Name" variant="outlined" {...register("perks")} />
+            <TextField
+              id="outlined-basic"
+              label="Feature Name"
+              variant="outlined"
+              {...register("perks")}
+            />
 
             <TextField
               id="outlined-basic"
@@ -84,36 +80,20 @@ function PackageManagementPage(props) {
               {...register("description")}
             />
 
-            <TextField id="outlined-basic" label="Amount" variant="outlined" {...register("amount")} />
-            <TextField id="outlined-basic" label="Unit (ex: times, posts" variant="outlined" {...register("unit")} />
+            <TextField
+              id="outlined-basic"
+              label="Amount"
+              variant="outlined"
+              {...register("amount")}
+            />
 
-            {/* <TextField
-                id="outlined-basic"
-                label="Price"
-                variant="outlined"
-                {...register("price")}
-              /> */}
-            {/* </Box>
+            <TextField
+              id="outlined-basic"
+              label="Unit (ex: times, posts"
+              variant="outlined"
+              {...register("unit")}
+            />
 
-<Box
-component="form"
-sx={{
-  "& > :not(style)": { ml: 20, mt: 4, width: "109ch" },
-}}
-noValidate
-autoComplete="off"
-> */}
-
-            {/* </Box>
-
-<Box
-component="form"
-sx={{
-                "& > :not(style)": { ml: 63, mt: 4, width: "30ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            > */}
             <Button type="submit" sx={{ ml: 40 }} autoFocus color="warning">
               Add Feature
             </Button>
@@ -133,7 +113,15 @@ PackageManagementPage.defaultProps = {
 };
 
 PackageManagementPage.propTypes = {
-  tableHeaderColor: PropTypes.oneOf(["warning", "primary", "danger", "success", "info", "rose", "gray"]),
+  tableHeaderColor: PropTypes.oneOf([
+    "warning",
+    "primary",
+    "danger",
+    "success",
+    "info",
+    "rose",
+    "gray",
+  ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
   callback: PropTypes.func,

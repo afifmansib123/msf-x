@@ -1,6 +1,6 @@
-import Image from "next/image";
 import React, { useState } from "react";
-import topImage from "../../assets/Header/bhalogari.0bdbffc9.png";
+// import Image from "next/image";  // TODO does not support PNG
+// import topImage from "../../assets/Header/bhalogari.0bdbffc9.png";
 
 const TopBar = () => {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
@@ -15,7 +15,8 @@ const TopBar = () => {
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <div class="flex items-center flex-shrink-0 text-white ml-32">
-              <Image width={60} height={60} src={topImage}></Image>
+              {/* <Image width={60} height={60} src={topImage}></Image> */}
+              <img src="/assets/img/bhalogari.png"/>
             </div>
             <button
               className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"

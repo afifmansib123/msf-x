@@ -6,8 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import LoginForm from "/components/LoginForm";
+import { getSession, useSession, signOut } from "next-auth/react";
 
-export default function Index(props) {
+export default function AdminIndexPage(props) {
   const router = useRouter();
   const { error } = router.query;
 
@@ -38,9 +39,23 @@ export default function Index(props) {
     </div>
   );
 }
+export async function getServerSideProps(context) {
 
-export async function getStaticProps(context) {
+  const session = await getSession(context);
+  console.log("admin/index.session",session)
+
   return {
-    props: {},
+    // redirect: {
+    //   permanent: false,
+    //   destination: "/login",
+    // },
+    props:{},
   };
 }
+
+
+// export async function getStaticProps(context) {
+//   return {
+//     props: {},
+//   };
+// }

@@ -4,11 +4,13 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
-import Image from "next/image";
-import topImage from "../assets/Header/bhalogari.0bdbffc9.png";
+import React from "react";
+// import Image from "next/image";
+// import topImage from "../assets/Header/bhalogari.0bdbffc9.png";
 
 function LoginForm(props) {
   const { title, subTitle, onSignIn, onSignUp, signUp } = props;
+  const [disable, setDisable] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -16,9 +18,15 @@ function LoginForm(props) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = onSignIn;
+  // const onSubmit = onSignIn;
 
-  console.debug(watch("username"), watch("password"));
+  const onSubmit = async(data) => {
+    console.log(data)
+    onSignIn(data)
+    setDisable(true);
+  }
+
+  // console.debug(watch("username"), watch("password"));
 
   return (
     <div>
@@ -61,42 +69,41 @@ function LoginForm(props) {
 
       {/* my code start */}
 
-      <div class="flex items-start md:items-center justify-center min-h-screen bg-grey-200">
-        <div class="h-full m-4 px-6 py-20 text-left bg-white shadow-lg rounded-xl">
-          <div class="flex items-center flex-shrink-0 text-white ml-28">
-            <Image width={90} height={90} src={topImage}></Image>
+      <div className="flex items-start md:items-center justify-center min-h-screen bg-grey-200">
+        <div className="h-full m-4 px-6 py-20 text-left bg-white shadow-lg rounded-xl">
+          <div className="flex items-center justify-center flex-shrink-0 text-white">
+            {/* <Image width={90} height={90} src={topImage}></Image> */}
+            <img src="/assets/img/bhalogari.png" />
           </div>
-          <h3 class="text-2xl font-bold text-center text-black mb-[15px] mt-[20px]">{title}</h3>
+          <h3 className="text-2xl font-bold text-center text-black mb-[15px] mt-[20px]">{title}</h3>
           {subTitle && <h2 className="text-center text-[#FC6A03] mt-[15px]">{subTitle}</h2>}
           <form action="">
-            <div class="mt-4">
+            <div className="mt-4">
               <div>
-                <label class="block" for="email">
-                  Username
+                <label className="block" htmlFor="username">
+                  Phone Number
                 </label>
                 <input
                   type="text"
-                  placeholder="Email"
-                  class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
+                  placeholder="eg: 01777664033 "
+                  className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
                   autoComplete="name"
                   required
                   {...register("username")}
                 />
-                <span style={{ fontSize: "12px", color: "#000000" }}>e.g: 01777664033 </span>
-                <br></br>
-                <span class="text-xs tracking-wide text-red-600" style={{ fontSize: "11px" }}>
+                <span className="text-xs tracking-wide text-red-600" style={{ fontSize: "11px" }}>
                   {" "}
                   * Username is required to login{" "}
                 </span>
-                {/* <span class="text-xs tracking-wide text-red-600">Username field is required </span> */}
+                {/* <span className="text-xs tracking-wide text-red-600">Username field is required </span> */}
               </div>
 
-              <div class="mt-4">
-                <label class="block">Password</label>
+              <div className="mt-4">
+                <label className="block">Password</label>
                 <input
                   type="password"
                   placeholder="Password"
-                  class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
+                  className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-red-600"
                   autoComplete="name"
                   required
                   {...register("password", { required: true })}
@@ -108,10 +115,11 @@ function LoginForm(props) {
                   className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"
                   style={{ backgroundColor: "#ED7117", marginTop: "30px", height: "50px" }}
                   onClick={handleSubmit(onSubmit)}
+                  disabled={disable}
                 >
                   Login
                 </button>
-                {/* TODO <a href="#" class="text-sm text-blue-600 hover:underline" >Forgot password?</a> */}
+                {/* TODO <a href="#" className="text-sm text-blue-600 hover:underline" >Forgot password?</a> */}
               </div>
             </div>
             <div className="flex items-center justify-center pt-4">
@@ -146,15 +154,15 @@ LoginForm.defaultProps = {
 };
 
 {
-  /* <div class="px-4 py-5 mx-auto border-2 border-orange-600 rounded-xl w-1/3">
-          <div class="max-w-lg mx-auto">
-            <div class="text-center mb-8">
-              <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Merchant Storefront</h2>
-              <h2 class="text-lg md:text-lg font-extrabold mb-2">{title}</h2>
+  /* <div className="px-4 py-5 mx-auto border-2 border-orange-600 rounded-xl w-1/3">
+          <div className="max-w-lg mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Merchant Storefront</h2>
+              <h2 className="text-lg md:text-lg font-extrabold mb-2">{title}</h2>
             </div>
             <form action="">
-              <div class="mb-6">
-                <label class="block mb-2 font-extrabold" for="">
+              <div className="mb-6">
+                <label className="block mb-2 font-extrabold" for="">
                   Username *
                 </label>
                 <input
@@ -167,8 +175,8 @@ LoginForm.defaultProps = {
                   {...register("username")}
                 />
               </div>
-              <div class="mb-6">
-                <label class="block mb-2 font-extrabold" for="">
+              <div className="mb-6">
+                <label className="block mb-2 font-extrabold" for="">
                   Password
                 </label>
                 <input
@@ -184,7 +192,7 @@ LoginForm.defaultProps = {
 
               <button
                 onClick={handleSubmit(onSubmit)}
-                class="border-2 border-orange-600 inline-block w-full py-4 px-6 mb-6 text-center text-lg leading-6 text-white hover:text-orange-600 font-extrabold bg-orange-600 hover:bg-slate-100 border-3 shadow rounded transition duration-200"
+                className="border-2 border-orange-600 inline-block w-full py-4 px-6 mb-6 text-center text-lg leading-6 text-white hover:text-orange-600 font-extrabold bg-orange-600 hover:bg-slate-100 border-3 shadow rounded transition duration-200"
               >
                 Sign in
               </button>

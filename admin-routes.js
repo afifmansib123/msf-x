@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* * NextJS Material Dashboard v1.1.0 based on Material Dashboard React v1.9.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/nextjs-material-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/nextjs-material-dashboard/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 // @mui/icons-material
 import Dashboard from "@mui/icons-material/Dashboard";
 import Person from "@mui/icons-material/Person";
@@ -29,6 +13,9 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import DiscountIcon from '@mui/icons-material/Discount';
+import CallIcon from '@mui/icons-material/Call';
+
 
 const dashboardRoutes = [
   {
@@ -69,19 +56,35 @@ const dashboardRoutes = [
 
     layout: "/admin",
   },
+
   {
-    path: "/subscriptions",
-    name: "Subscriptions",
+    path: "/packages",
+    name: "Packages / Subscriptions",
     icon: CardMembershipIcon,
+    layout: "/admin",
+  },
+
+  {
+    path: "/promotion",
+    name: "Promotions",
+    icon: DiscountIcon,
+    layout: "/admin",
+  },
+
+  {
+    path: "/verify",
+    name: "Manage Gift Card",
+    icon: "content_paste",
     layout: "/admin",
   },  
 
   {
-    path: "/package",
-    name: "Package",
-    icon: InventoryIcon,
+    path: "/messages",
+    name: "Messages",
+    icon: CallIcon,
     layout: "/admin",
   },  
+
   // {
   //   path: "/typography",
   //   name: "Typography",

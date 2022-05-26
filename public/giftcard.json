@@ -1,0 +1,26 @@
+[
+    {
+        "id": "0000",
+        "serial_number": "008258505",
+        "status": "Active",
+        "car_id": "0000",
+        "amount_used": "0",
+        "amount_remain": "10"
+    },
+    {
+        "id": "0001",
+        "serial_number": "008593845",
+        "status": "Active",
+        "car_id": "0252",
+        "amount_used": "2",
+        "amount_remain": "8"
+    },
+    {
+        "id": "0002",
+        "serial_number": "999999999",
+        "status": "Invalid",
+        "car_id": "8888",
+        "amount_used": "10",
+        "amount_remain": "0"
+    }
+]
