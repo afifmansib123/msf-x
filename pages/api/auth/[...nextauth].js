@@ -8,11 +8,12 @@ import axios from "axios";
 import { HowToReg } from "@mui/icons-material";
 import Cryptr from "cryptr";
 import { PrismaClient } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
 
 export default NextAuth({
   pages: {
-    signIn: "/msf",
-    // signIn: "/",
+    // signIn: "/msf",
+    signIn: "/",
     // signOut: '/auth/signout',
     // error: "/auth/error", // Error code passed in query string as ?error=
     error: "/", // Error code passed in query string as ?error=
@@ -70,20 +71,33 @@ export default NextAuth({
         } catch (err) {
           // console.error("Axios", err.response);
           const { response } = err;
-          console.error("Axios", response.status, response.statusText, response.data);
+          console.error("\taxios.post", response.status, response.statusText, response.data);
         }
 
-        // console.log("res", res.status, res.statusText);
+        console.log("\tCredentialsProvider.res", res.status, res.statusText);
 
         if (res.status && res.status === 200) {
           const { data } = res;
-          console.log("NextAuth Authenticated", data);
+          console.log("\tdata", data);
           // JWT cannot add other info into it?
           // Save to DB
           const prisma = new PrismaClient();
-          const { user_id, token } = data;
+          let { user_id, token } = data;
+
+          if (token.detail == "No active account found with the given credentials") {
+            // TODO Dummy accesstoken for testing
+
+            // const secret = process.env.NEXTAUTH_SECRET;
+            // token = await getToken({ req, secret });
+            // console.log("\tgenerated token", token);
+  
+            token.id = user_id;
+            token.access =
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzMjg5OTQzLCJpYXQiOjE2NTMyMDM1NDMsImp0aSI6IjEyNmFiYTZmMDNlZTQ4YWZiZGIwYmNkOTRlMGY0OTRhIiwidXNlcl9pZCI6NDEsImNvbnRhY3RfbnVtYmVyIjoiKzg4MDE3Nzc2NjQwMzMiLCJpc19zdXBlcnVzZXIiOmZhbHNlfQ.krhExGRWLpFDiAn8zCQ2Tx2QSuWvI6b8mRYhYf6JKrw";
+          }
           console.log("---", user_id, token.access);
           console.log("1...");
+
           try {
             // var upsertRecord = await prisma.user_session.create({
             //   data: {
@@ -132,12 +146,22 @@ export default NextAuth({
     }),
   ],
 
+  // jwt: {
+  //   // The maximum age of the NextAuth.js issued JWT in seconds.
+  //   // Defaults to `session.maxAge`.
+  //   maxAge: 60 * 60 * 24 * 30,
+  //   // You can define your own encode/decode functions for signing and encryption
+  //   async encode() {},
+  //   async decode() {},
+  // },
+
   callbacks: {
     async jwt(args) {
       const { token, user } = args;
-      console.log("callbacks.jwt", args);
+      // console.log("callbacks.jwt", args);
       if (user) {
         token.id = user.user_id;
+        token.isStaff = user.is_staff;
       }
       return token;
     },
@@ -146,7 +170,7 @@ export default NextAuth({
       const { session, token } = args;
       // Send properties to the client, like an access_token from a provider.
       // session.accessToken = token.accessToken;
-      console.log("callbacks.session", args);
+      // console.log("callbacks.session", args);
 
       const prisma = new PrismaClient();
       var userSessionRecord = await prisma.user_session.findUnique({
@@ -156,14 +180,14 @@ export default NextAuth({
         },
       });
 
-      console.log("session.userSessionRecord", userSessionRecord);
+      // console.log("session.userSessionRecord", userSessionRecord);
 
       session.token = token;
       // session.hello = "use this token to look up id";
       session.accessToken = userSessionRecord.access_token;
       session.refreshToken = userSessionRecord.refresh_token;
       // session.accessToken = token;
-      console.log("\tcallback", { session, token });
+      // console.debug("\tcallback", { session, token });
       return session;
     },
   },

@@ -13,6 +13,7 @@ export default async function handler(req, res) {
       throw new Error("No body");
     }
   } catch (e) {
+    console.error(e)
     res.status(400).json({
       error: e,
       result: null,
@@ -36,57 +37,133 @@ async function createData(car_id) {
 
   return car_approve;
 }
-export async function getPending() {
-  var data = await prisma.CarsApp_carapprovallog.groupBy({
-    by: ["car_id_id", "status", "created_at"],
-    orderBy: {
-      created_at: "desc",
-    },
-    where: {
-      status: "P",
-    },
-  });
+export async function getPending(page=1) {
+  let data;
+  let detail;
+  page = parseInt(page);
+  if(page === 1 || page=== undefined || page === null) {
+    data = await prisma.CarsApp_carapprovallog.groupBy({
+      take: 20,
+      by: ["car_id_id", "status", "created_at"],
+      orderBy: {
+        created_at: "desc",
+      },
+      where: {
+        status: "P",
+        car_id_id: {
+          not: null
+        }
+      },
+    });
 
-  data = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+    data = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
 
-  const id = data.map((v) => {
-    return parseInt(v.car_id_id);
-  });
+    const id = data.map((v) => {
+      return parseInt(v.car_id_id);
+    });
 
-  const detail = await prisma.CarsApp_car.findMany({
-    where: {
-      id: {
-        in: id,
+    console.log("id pending", id)
+
+    detail = await prisma.CarsApp_car.findMany({
+      take: 20,
+      orderBy: {
+        id: 'asc'
       },
-    },
-    include: {
-      CarsApp_carmanufacturer: {
-        select: {
-          maker_name: true,
-          maker_country: true,
-          maker_logo_url: true,
-          serial: true,
+      where: {
+        id: {
+          in: id,
         },
       },
-      CarsApp_carmodel: {
-        select: {
-          model_name: true,
-          release_year: true,
+      include: {
+        CarsApp_carmanufacturer: {
+          select: {
+            maker_name: true,
+            maker_country: true,
+            maker_logo_url: true,
+            serial: true,
+          },
+        },
+        CarsApp_carmodel: {
+          select: {
+            model_name: true,
+            release_year: true,
+          },
+        },
+        CarsApp_carimage: {
+          select: {
+            image_url: true,
+          },
+        },
+        UsersApp_customuser: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
         },
       },
-      CarsApp_carimage: {
-        select: {
-          image_url: true,
+    });
+  } else {
+    data = await prisma.CarsApp_carapprovallog.groupBy({
+      take: 20,
+      skip: ((page - 1) * 20),
+      by: ["car_id_id", "status", "created_at"],
+      orderBy: {
+        created_at: "desc",
+      },
+      where: {
+        status: "P",
+        car_id_id: {
+          not: null
+        }
+      },
+    });
+
+    data = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+
+    const id = data.map((v) => {
+      return parseInt(v.car_id_id);
+    });
+
+    detail = await prisma.CarsApp_car.findMany({
+      take: 20,
+      skip: ((page - 1) * 20),
+      orderBy: {
+        id: 'asc'
+      },
+      where: {
+        id: {
+          in: id,
         },
       },
-      UsersApp_customuser: {
-        select: {
-          first_name: true,
-          last_name: true,
+      include: {
+        CarsApp_carmanufacturer: {
+          select: {
+            maker_name: true,
+            maker_country: true,
+            maker_logo_url: true,
+            serial: true,
+          },
+        },
+        CarsApp_carmodel: {
+          select: {
+            model_name: true,
+            release_year: true,
+          },
+        },
+        CarsApp_carimage: {
+          select: {
+            image_url: true,
+          },
+        },
+        UsersApp_customuser: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
         },
       },
-    },
-  });
+    });
+  }
 
   const pDetail = JSON.parse(
     JSON.stringify(detail, (key, value) => (typeof value === "bigint" ? value.toString() : value))
@@ -94,9 +171,9 @@ export async function getPending() {
   const endResultData =
     pDetail !== undefined
       ? pDetail.map(async (value) => {
-          const first_name = value.UsersApp_customuser.first_name;
-          const last_name = value.UsersApp_customuser.last_name;
-          const carID = value.id;
+          const first_name = value?.UsersApp_customuser?.first_name;
+          const last_name = value?.UsersApp_customuser?.last_name;
+          const carID = value?.id;
           const img = await prisma.CarsApp_carimage.findMany({
             where: {
               car_id: Number(carID),
@@ -116,14 +193,14 @@ export async function getPending() {
             });
 
           return {
-            carModel: value.CarsApp_carmodel.model_name,
+            carModel: value?.CarsApp_carmodel?.model_name,
             carImage: img,
-            carMaker: value.CarsApp_carmanufacturer.maker_name,
+            carMaker: value?.CarsApp_carmanufacturer?.maker_name,
             merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
-            modelData: value.CarsApp_carmodel,
-            manufacturerData: value.CarsApp_carmanufacturer,
-            carId: parseInt(value.id),
-            carName: value.car_name,
+            modelData: value?.CarsApp_carmodel,
+            manufacturerData: value?.CarsApp_carmanufacturer,
+            carId: parseInt(value?.id),
+            carName: value?.car_name,
           };
         })
       : [];

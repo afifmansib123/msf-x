@@ -1,31 +1,13 @@
-/*!
-
-=========================================================
-* * NextJS Material Dashboard v1.1.0 based on Material Dashboard React v1.9.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/nextjs-material-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/nextjs-material-dashboard/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 // @mui/icons-material
 import Dashboard from "@mui/icons-material/Dashboard";
 import Person from "@mui/icons-material/Person";
-import LibraryBooks from "@mui/icons-material/LibraryBooks";
-import BubbleChart from "@mui/icons-material/BubbleChart";
-import LocationOn from "@mui/icons-material/LocationOn";
 import Notifications from "@mui/icons-material/Notifications";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import Unarchive from "@mui/icons-material/Unarchive";
-import Language from "@mui/icons-material/Language";
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import Car from "@mui/icons-material/DirectionsCar";
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import CallIcon from '@mui/icons-material/Call';
 
 const dashboardRoutes = [
   {
@@ -34,12 +16,12 @@ const dashboardRoutes = [
     icon: Dashboard,
     layout: "/msf",
   },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: Notifications,
-    layout: "/msf",
-  },
+  // {
+  //   path: "/notifications",
+  //   name: "Notifications",
+  //   icon: Notifications,
+  //   layout: "/msf",
+  // },
   // {
   //   path: "/listings",
   //   name: "Listings",
@@ -58,6 +40,12 @@ const dashboardRoutes = [
     path: "/subscriptions",
     name: "Subscriptions",
     icon: SubscriptionsIcon,
+    layout: "/msf",
+  },
+  {
+    path: "/giftcard",
+    name: "GiftCard",
+    icon: CardGiftcardIcon,
     layout: "/msf",
   },
   {
@@ -80,20 +68,32 @@ const dashboardRoutes = [
   //   layout: "/msf",
   // },
 
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: Unarchive,
+  // {
+  //   path: "/settings",
+  //   name: "Settings",
+  //   icon: Unarchive,
 
-    layout: "/msf",
-  },
+  //   layout: "/msf",
+  // },
+  
   {
     path: "/profile",
     name: "User Profile",
     icon: Person,
-
     layout: "/msf",
   },
+  {
+    path: "/store",
+    name: "Store",
+    icon: StorefrontIcon,
+    layout: "/msf",
+  },  
+  {
+    path: "/contactus",
+    name: "Contact Us",
+    icon: CallIcon,
+    layout: "/msf",
+  },  
 ];
 
 export default dashboardRoutes;

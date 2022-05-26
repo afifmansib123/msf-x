@@ -87,9 +87,9 @@ export default class MyApp extends App {
 
 function Auth({ children }) {
   // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
-  const { status } = useSession({ required: true });
+  const { data:session, status } = useSession({ required: true });
 
-  console.debug("Authenticating...", status);
+  console.debug("_app.authenticating...", status,session);
   if (status === "loading") {
     return <div>Loading...</div>;
   }

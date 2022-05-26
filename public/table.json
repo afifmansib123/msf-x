@@ -1,0 +1,18 @@
+[
+    {
+        "package_id": 1,    
+        "package_name": "Silver",
+        "description": "smth smth",
+        "created_at": "15/04/2022",
+        "created_by": "Chayapam"
+        
+    },
+    {
+        "package_id": 2,    
+        "package_name": "Silver",
+        "description": "smth smth smth smth smth smth smth smth",
+        "created_at": "16/04/2022",
+        "created_by": "Sirikarn"
+        
+    }
+]

@@ -20,11 +20,8 @@ function DetailCarLog(props) {
   const selectedCar = props.car;
   const router = useRouter();
   const { data: session, status } = useSession();
-  console.log("useSession", session);
   const { token } = session;
   const { id } = token;
-
-  console.log("User ID", id);
 
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {
@@ -66,6 +63,7 @@ function DetailCarLog(props) {
         await router.push(`/admin/approval/`);
       }
     } catch (e) {
+      console.error(e)
       alert("Something went wrong");
     }
   };
@@ -76,19 +74,19 @@ function DetailCarLog(props) {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <h1 className="text-center text-2xl font-bold">
-              {selectedCar != null ? selectedCar.carOverview.carName : ""}
+              {selectedCar?.carOverview?.carName ?? "UNKNOWN CAR NAME"}
             </h1>
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
             <ul style={{ overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0 }}>
               {selectedCar != null
                 ? selectedCar.carImage.map((value) => {
-                    return (
-                      <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
-                        <img src={value} width={350} height={350} />
-                      </li>
-                    );
-                  })
+                  return (
+                    <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
+                      <img src={value} width={350} height={350} />
+                    </li>
+                  );
+                })
                 : ""}
             </ul>
           </GridItem>
@@ -107,20 +105,42 @@ function DetailCarLog(props) {
           </GridItem>
 
           <GridItem xs={12} sm={12} md={12}>
-            <Card profile>
+            <Card>
               <CardHeader color="info">
                 <h2 className="font-medium text-center">Car's Model</h2>
               </CardHeader>
 
               <CardContent>
                 <CardBody>
-                  <div>condition: {selectedCar.carOverview.condition || "-"}</div>
-                  <div>Maker: {selectedCar.carMaker || "-"}</div>
-                  <div>Model: {selectedCar.modelData.model_name || "-"}</div>
-                  <div>Car Grade/Package: {selectedCar.carOverview.grade || "-"}</div>
-                  <div>Model year: {selectedCar.modelData.release_year || "-"}</div>
-                  <div>Chassis Number: {selectedCar.carOverview.chassis_no || "-"}</div>
-                  <div>Engine Number: {selectedCar.carOverview.engine_no || "-"}</div>
+                  <GridContainer>
+                    <GridItem xs={3} sm={3} md={3} style={{ textAlign: "start" }}>
+                      condition: {selectedCar.carOverview.condition || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Maker: {selectedCar.carMaker || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Model: {selectedCar.modelData.model_name || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3} style={{ textAlign: "start" }}>
+                      Car Grade/Package: {selectedCar.carOverview.grade || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Model year: {selectedCar.modelData.release_year || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Chassis Number: {selectedCar.carOverview.chassis_no || "-"}
+                    </GridItem>
+
+                    <GridItem xs={3} sm={3} md={3}>
+                      Engine Number: {selectedCar.carOverview.engine_no || "-"}
+                    </GridItem>
+                  </GridContainer>
                 </CardBody>
               </CardContent>
             </Card>
@@ -190,11 +210,15 @@ function DetailCarLog(props) {
                 <h2 className="font-medium">Car's Features</h2>
               </CardHeader>
               <CardBody>
-                <GridContainer>{showFeatureCard()}</GridContainer>
+                {showFeatureCard().length > 0 && <GridContainer>{showFeatureCard()}</GridContainer>}
+                {showFeatureCard().length === 0 && (
+                  <div>
+                    <div className={"text-center text-3xl"}>No data</div>
+                  </div>
+                )}
               </CardBody>
             </Card>
           </GridItem>
-
           <GridItem xs={12} sm={12} md={12}>
             <Card plain profile>
               <CardHeader color="info">
@@ -286,11 +310,11 @@ async function handleApprove(review_string, approval_id, car_id) {
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
-      status: "A"
+      status: "A",
     }),
   });
 
-  if(response.status !== 200) {
+  if (response.status !== 200) {
     throw new Error();
   }
 }
@@ -305,11 +329,11 @@ async function handleReject(review_string, approval_id, car_id) {
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
-      status: "R"
+      status: "R",
     }),
   });
 
-  if(response.status !== 200) {
+  if (response.status !== 200) {
     throw new Error();
   }
 }
@@ -395,53 +419,55 @@ async function getDetail(car_id) {
     JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
 
-  const first_name = parsedData.CarsApp_car.UsersApp_customuser.first_name;
-  const last_name = parsedData.CarsApp_car.UsersApp_customuser.last_name;
-  const carID = parsedData.CarsApp_car.id;
-  const img = await prisma.CarsApp_carimage.findMany({
-    where: {
-      car_id: Number(carID),
-    },
-    select: {
-      image_url: true,
-    },
-  })
-    .then((imgResponse) => {
+  const first_name = parsedData?.CarsApp_car?.UsersApp_customuser?.first_name;
+  const last_name = parsedData?.CarsApp_car?.UsersApp_customuser?.last_name;
+  const carID = parsedData?.CarsApp_car?.id;
+  let img = [];
+  if (carID) {
+    img = await prisma.CarsApp_carimage.findMany({
+      where: {
+        car_id: Number(carID),
+      },
+      select: {
+        image_url: true,
+      },
+    }).then((imgResponse) => {
       const img = imgResponse.map((v) => {
         return v.image_url;
       });
       return img;
-    })
-    .catch((err) => {
+    }).catch((err) => {
       throw new Error(err);
     });
+  }
 
+  // console.debug("parsedData", parsedData);
   const jsonData = {
-    id: parsedData.id,
-    carModel: parsedData.CarsApp_car.CarsApp_carmodel.model_name,
+    id: parsedData?.id ?? "-",
+    carModel: parsedData?.CarsApp_car?.CarsApp_carmodel?.model_name ?? "-",
     carImage: img,
-    carMaker: parsedData.CarsApp_car.CarsApp_carmanufacturer.maker_name,
-    merchant: `${first_name == null ? "UNKNOWN" : first_name} ${last_name == null ? "NAME" : last_name}`,
-    modelData: parsedData.CarsApp_car.CarsApp_carmodel,
-    manufacturerData: parsedData.CarsApp_car.CarsApp_carmanufacturer,
+    carMaker: parsedData?.CarsApp_car?.CarsApp_carmanufacturer?.maker_name ?? "-",
+    merchant: `${first_name ?? "UNKNOWN"} ${last_name ?? "NAME"}`,
+    modelData: parsedData?.CarsApp_car?.CarsApp_carmodel ?? "-",
+    manufacturerData: parsedData?.CarsApp_car?.CarsApp_carmanufacturer ?? "-",
     carOverview: {
-      carName: parsedData.CarsApp_car.car_name,
-      seatingCapacity: parsedData.CarsApp_car.seating_capacity,
-      engineCapacity: parsedData.CarsApp_car.engine_capacity,
-      drive: parsedData.CarsApp_car.drive,
-      mileage: parsedData.CarsApp_car.mileage,
-      transmission_type: parsedData.CarsApp_car.transmission_type,
-      description: parsedData.CarsApp_car.description,
-      fuelType: parsedData.CarsApp_car.CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel.fuel_type,
-      condition: parsedData.CarsApp_car.CarsApp_cartype.car_type,
-      sell_option: parsedData.CarsApp_car.sell_option,
-      body: parsedData.CarsApp_car.CarsApp_carbodytype.body_name,
-      status: parsedData.CarsApp_car.car_status,
-      interior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor.car_color,
-      exterior_color: parsedData.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor.car_color,
-      chassis_no: parsedData.CarsApp_car.chassis_no,
-      engine_no: parsedData.CarsApp_car.engine_no,
-      grade: parsedData.CarsApp_car.grade,
+      carName: parsedData?.CarsApp_car?.car_name ?? "-",
+      seatingCapacity: parsedData?.CarsApp_car?.seating_capacity ?? "-",
+      engineCapacity: parsedData?.CarsApp_car?.engine_capacity ?? "-",
+      drive: parsedData?.CarsApp_car?.drive ?? "-",
+      mileage: parsedData?.CarsApp_car?.mileage ?? "-",
+      transmission_type: parsedData?.CarsApp_car?.transmission_type ?? "-",
+      description: parsedData?.CarsApp_car?.description ?? "-",
+      fuelType: parsedData?.CarsApp_car?.CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel?.fuel_type ?? "-",
+      condition: parsedData?.CarsApp_car?.CarsApp_cartype?.car_type ?? "-",
+      sell_option: parsedData?.CarsApp_car?.sell_option ?? "-",
+      body: parsedData?.CarsApp_car?.CarsApp_carbodytype?.body_name ?? "-",
+      status: parsedData?.CarsApp_car?.car_status ?? "-",
+      interior_color: parsedData?.CarsApp_car?.CarsApp_carcolor_CarsApp_car_interior_color_idToCarsApp_carcolor?.car_color ?? "-",
+      exterior_color: parsedData?.CarsApp_car.CarsApp_carcolor_CarsApp_car_exterior_color_idToCarsApp_carcolor?.car_color ?? "-",
+      chassis_no: parsedData?.CarsApp_car?.chassis_no ?? "-",
+      engine_no: parsedData?.CarsApp_car?.engine_no ?? "-",
+      grade: parsedData?.CarsApp_car?.grade ?? "-",
     },
   };
 

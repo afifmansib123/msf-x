@@ -1,8 +1,7 @@
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
+// @mui/icons-material
 import AddAlert from "@mui/icons-material/AddAlert";
 import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
-import { InputBase } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
 // core components
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -26,7 +25,7 @@ import Joi from "joi-browser";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import fakeData from "../../../pages/api/cars/carUpload_api.json";
+import fakeData from "../../../pages/api/car_api.json";
 
 export default function CarUpload() {
   const [carType, setCarType] = useState();
@@ -114,7 +113,7 @@ export default function CarUpload() {
     setFilteredResults(filteredData);
     setMakerName(filteredData[0]?.maker);
   };
-  console.log(filteredResults);
+
   useEffect(() => {
     setJsonData(fakeData);
   }, []);
@@ -179,7 +178,7 @@ export default function CarUpload() {
   // };
 
   if (redirect) {
-    router.push("/msf/listings");
+    router.push("/msf/listing");
   }
 
   const updateFiles = (incomingFiles) => {
@@ -625,12 +624,12 @@ export default function CarUpload() {
       setOpen(true);
     } else {
       setLoading(true);
-      console.log(carObject);
+
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BG_API}cars/upload/`,
         carObject
       );
-      console.log(response);
+
       if (response.status === 201) {
         const id = response.data.car_id;
         localStorage.setItem("car_id", id);
@@ -642,7 +641,7 @@ export default function CarUpload() {
             formData.append("image", images[item]);
           }
         });
-        console.log(images);
+
         const response1 = await fetch(
           `${process.env.NEXT_PUBLIC_BG_API}cars/image-upload/`,
           {
@@ -650,7 +649,7 @@ export default function CarUpload() {
             body: formData,
           }
         );
-        console.log(response1);
+
         if (response1.status === 201) {
           setSnackMsg("");
           setOpen(true);
@@ -714,7 +713,6 @@ export default function CarUpload() {
         );
         const json4 = await response4.json();
 
-        console.log(json);
         setCarBodyTypes(json);
         setCarInteriorColors(json1);
         setCarFuelEconomys(json2);
@@ -811,7 +809,7 @@ export default function CarUpload() {
                   name={"car_chassis_number"}
                   autoComplete="off"
                   fullWidth
-                  onChange={(e) => searchItems(e.target.value)}
+                  onChange={onCarChassisNumberChange}
                   variant="outlined"
                   placeholder="Enter Chassis Number"
                 />
@@ -849,61 +847,29 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              {/* <>
-                <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Car Makers"
-                  name="car_maker"
-                  // onChange={onCarMakerChange}
-                >
-                  {carMakers.map((l, index) => {
-                    return (
-                      <MenuItem
-                        key={index}
-                        value={l.maker_id}
-                        onClick={(event) =>
-                          onCarMakerChange(event, l.maker_id, l.maker_name)
-                        }
-                      >
-                        {l.maker_name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </> */}
-
-              <Autocomplete
-                id="custom-input-demo"
-                options={carMakers}
-                autoComplete
-                inputValue={makerName}
-                getOptionLabel={(option) => option.maker_name}
-                renderInput={(params) => {
-                  const { InputLabelProps, InputProps, ...rest } = params;
-                  return <InputBase {...params.InputProps} {...rest} />;
-                }}
-              />
-              {/* <select
-                {...carMakers}
-                className="form-control"
-                value={JSON.stringify({ name: makerName[0]?.maker })}
+              <InputLabel id="demo-simple-select-label">Maker *</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carMaker}
+                label="Car Makers"
+                name="car_maker"
+                // onChange={onCarMakerChange}
               >
-                {Object.keys(carMakers).map((key) => {
+                {carMakers.map((l, index) => {
                   return (
-                    <option
-                      value={JSON.stringify({
-                        id: key.maker_id,
-                        name: makerName[0]?.maker,
-                      })}
-                      key={key.maker_id}
+                    <MenuItem
+                      key={index}
+                      value={l.maker_id}
+                      onClick={(event) =>
+                        onCarMakerChange(event, l.maker_id, l.maker_name)
+                      }
                     >
-                      {key.maker_name}
-                    </option>
+                      {l.maker_name}
+                    </MenuItem>
                   );
                 })}
-              </select> */}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
@@ -928,6 +894,36 @@ export default function CarUpload() {
               {inputErrors.car_model && (
                 <div className={classes.errorDiv}>{inputErrors.car_model}</div>
               )}
+            </FormControl>
+          </GridItem>
+          <GridItem item xs={12}>
+            <TextField
+              label="Grade/Package"
+              name={"car_grade"}
+              fullWidth
+              onChange={onCarGradeChange}
+              placeholder={"Enter Grade/Package"}
+            />
+          </GridItem>
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              <InputLabel id="demo-simple-select-label">Model Year</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carModelYear}
+                label="Car Model Years"
+                name="car_model_year"
+                onChange={onCarModelYearChange}
+              >
+                {carModelYears.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.id}>
+                      {l.year}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </GridItem>
           <GridItem item xs={12}>
@@ -1207,9 +1203,9 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>Select Your Car Features</h2>
 
           {carFeaturesInput.map((item, index) => (
-            <GridItem item xs={12} sm={12} md={4}>
+            <GridItem key={index} item xs={12} sm={12} md={4}>
               <FormControl className="w-full">
-                <div key={index}>
+                <div>
                   <span>
                     <FormControlLabel
                       control={
