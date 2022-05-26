@@ -5283,5 +5283,143 @@
     "fuel": ["PETROL"],
     "drive": ["RWD"],
     "year": [2018, 2022]
+  },
+  {
+    "cn": "W168",
+    "maker": "MERCEDES BENZ",
+    "model": "A CLASS",
+    "body": ["HATCHBACK"],
+    "seat": [5],
+    "transmission": ["automatic", "manual"],
+    "grade": [
+      "A 140",
+      "A 140 (Automatik)",
+      "A 160",
+      "A 190",
+      "A 210 Evolution",
+      "A160 ,CDI",
+      "A170CDI",
+      "A150"
+    ],
+    "engine": [1397, 1598, 1598, 1898, 2084, 1689, 1689],
+    "fuel": ["PETROL", "Diesel"],
+    "drive": ["FWD"],
+    "year": [1997, 2004]
+  },
+  {
+    "cn": "W177",
+    "maker": "MERCEDES BENZ",
+    "model": "A CLASS",
+    "body": ["HATCHBACK"],
+    "seat": [5],
+    "transmission": ["automatic", "manual"],
+    "grade": [
+      "A160",
+      "A180",
+      "A200",
+      "A220",
+      "A220 4MATIC",
+      "A 250",
+      "A 250 4MATIC",
+      "A 45 AMG 4MATIC+",
+      "A 45 S AMG 4MATIC+",
+      "A 220 e",
+      "A 250 e",
+      "A 160 d",
+      "A 180 d",
+      "A 200 d",
+      "A 220 d"
+    ],
+    "engine": [1332, 1991, 1332, 1461, 1950],
+    "fuel": ["PETROL", "Diesel"],
+    "drive": ["FWD", "AWD"],
+    "year": [2018, 2021]
+  },
+  {
+    "cn": "W245",
+    "maker": "MERCEDES BENZ",
+    "model": "B CLASS",
+    "body": ["HATCHBACK"],
+    "seat": [5],
+    "transmission": ["manual"],
+    "grade": [
+      "B610",
+      "B170, B180",
+      "B200",
+      "B200 Turbo",
+      "B180 CDI",
+      "B200 CDI"
+    ],
+    "engine": [1500, 1700, 2000],
+    "fuel": ["PETROL", "Diesel"],
+    "drive": ["FWD"],
+    "year": [2005, 2011]
+  },
+  {
+    "cn": "W246",
+    "maker": "MERCEDES BENZ",
+    "model": "B CLASS",
+    "body": ["HATCHBACK"],
+    "seat": [5],
+    "transmission": ["manual"],
+    "grade": [
+      "B 180 BlueEFFICIENCY",
+      "B 200 BlueEFFICIENCY",
+      "B 220 4MATIC",
+      "B 220 4MATIC BlueEFFICIENCY",
+      "B 250 BlueEFFICIENCY",
+      "B 160 CDI",
+      "B 180 CDI (OM 651)",
+      "B 180 CDI BlueEFFICIENCY",
+      "B 200 CDI BlueEFFICIENCY"
+    ],
+    "engine": [1595, 1991, 1461, 1796],
+    "fuel": ["PETROL", "Diesel"],
+    "drive": ["FWD"],
+    "year": [2011, 2019]
+  },
+  {
+    "cn": "W202",
+    "maker": "MERCEDES BENZ",
+    "model": "C CLASS",
+    "body": ["SEDAN"],
+    "seat": [5],
+    "transmission": ["manual", "automatic"],
+    "grade": [
+      "C 180",
+      "C 200",
+      "C 220",
+      "C 230",
+      "C 200 Diesel",
+      "C 200 CDI",
+      "C 220 Diesel",
+      "C 220 CDI"
+    ],
+    "engine": [1799, 1998, 2199, 2295, 1997, 2151, 2155, 2151],
+    "fuel": ["PETROL", "Diesel"],
+    "drive": ["FWD"],
+    "year": [1993, 2000]
+  },
+  {
+    "cn": "W203",
+    "maker": "MERCEDES BENZ",
+    "model": "C CLASS",
+    "body": ["SEDAN"],
+    "seat": [5],
+    "transmission": ["manual", "automatic"],
+    "grade": [
+      "C 180",
+      "C 200",
+      "C 220",
+      "C 230",
+      "C 200 Diesel",
+      "C 200 CDI",
+      "C 220 Diesel",
+      "C 220 CDI"
+    ],
+    "engine": [1799, 1998, 2199, 2295, 1997, 2151, 2155, 2151],
+    "fuel": ["PETROL", "Diesel"],
+    "drive": ["FWD"],
+    "year": [1993, 2000]
   }
 ]

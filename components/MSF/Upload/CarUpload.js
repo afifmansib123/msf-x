@@ -25,7 +25,7 @@ import Joi from "joi-browser";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import fakeData from "../../../pages/api/car_api.json";
+import JsonData from "../../../pages/api/cars/carUpload_api.json";
 
 export default function CarUpload() {
   const [carType, setCarType] = useState();
@@ -115,7 +115,7 @@ export default function CarUpload() {
   };
 
   useEffect(() => {
-    setJsonData(fakeData);
+    setJsonData(JsonData);
   }, []);
   const [carDrives] = useState([
     { id: 1, option: "Front Wheel Drive (FWD)" },
