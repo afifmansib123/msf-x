@@ -32,6 +32,7 @@ export default function CarUpload() {
   const [carTypes, setCarTypes] = useState([]);
   const [carMaker, setCarMaker] = useState();
   const [carMakers, setCarMakers] = useState([]);
+  const [carMakerName, setCarMakerName] = useState();
   const [carModel, setCarModel] = useState();
   const [carModels, setCarModels] = useState([]);
   const [carGrade, setCarGrade] = useState();
@@ -44,7 +45,6 @@ export default function CarUpload() {
   const [carChassisNumber, setCarChassisNumber] = useState();
   const [carEngineNumber, setCarEngineNumber] = useState();
   const [carRegNumber, setCarRegNumber] = useState();
-  console.log(carMakers);
   const [modelOptions] = useState([
     {
       title: "Condition*",
@@ -102,17 +102,54 @@ export default function CarUpload() {
   const [jsonData, setJsonData] = useState([]);
   const [filteredResults, setFilteredResults] = useState("");
 
-  const searchItems = (searchValue) => {
+  const searchItems = (e) => {
+    setCarChassisNumber(e.target.value);
     const filteredData = jsonData?.filter((item) => {
       return Object.values(item)
         .join("")
         .toLowerCase()
-        .includes(searchValue.toLowerCase());
+        .includes(e.target.value.toLowerCase());
     });
     // setCarBodyType(parseInt(filteredData[0]?.body_name));
+    console.log(filteredData);
     setFilteredResults(filteredData);
-    setMakerName(filteredData[0]?.maker);
+    let maker = carMakers.filter((x) => x.maker_name.toLowerCase() === filteredData[0]?.maker.toLowerCase());
+    let bodyType = carBodyTypes.filter((x) => x.body_name.toLowerCase() === filteredData[0]?.body[0].toLowerCase());
+    console.log(bodyType);
+    setCarMaker(maker[0].maker_id);
+    setCarMakerName(maker[0].maker_name);
+    setCarGrade(filteredData[0]?.grade[0]);
+    setCarModelYear(bodyType[0]?.id);
   };
+
+  useEffect(() => {
+    if (carMaker !== "") {
+      setCarModels([]);
+      setLoading(true);
+      (async () => {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${carMakerName}`);
+          const json = await response.json();
+          if (response.status === 200) {
+            setCarModels(json.result);
+            let filteredYear = json.result.filter((item) => item.release_year !== "-");
+            let model = json.result.filter((x) => x.model_name.toLowerCase() === filteredResults[0]?.model.toLowerCase());
+            setCarModel(model[0].model_id);
+            setCarModelYears(getYears());
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setSnackMsg("Search Alert: Model not available for this brand!");
+            setOpen(true);
+          }
+        } catch (err) {
+          setLoading(false);
+          setSnackMsg("Something went wrong!");
+        }
+      })();
+
+    }
+  }, [carMaker]);
 
   useEffect(() => {
     setJsonData(JsonData);
@@ -809,7 +846,7 @@ export default function CarUpload() {
                   name={"car_chassis_number"}
                   autoComplete="off"
                   fullWidth
-                  onChange={onCarChassisNumberChange}
+                  onChange={searchItems}
                   variant="outlined"
                   placeholder="Enter Chassis Number"
                 />
@@ -851,7 +888,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carMaker}
+                value={parseInt(carMaker)}
                 label="Car Makers"
                 name="car_maker"
                 // onChange={onCarMakerChange}
@@ -878,7 +915,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carModel}
+                value={parseInt(carModel)}
                 label="Car Models"
                 name="car_model"
                 onChange={onCarModelChange}
@@ -900,6 +937,7 @@ export default function CarUpload() {
             <TextField
               label="Grade/Package"
               name={"car_grade"}
+              value={carGrade || ''}
               fullWidth
               onChange={onCarGradeChange}
               placeholder={"Enter Grade/Package"}
@@ -911,38 +949,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carModelYear}
-                label="Car Model Years"
-                name="car_model_year"
-                onChange={onCarModelYearChange}
-              >
-                {carModelYears.map((l, index) => {
-                  return (
-                    <MenuItem key={index} value={l.id}>
-                      {l.year}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </GridItem>
-          <GridItem item xs={12}>
-            <TextField
-              // value={filteredResults[0]?.package_type.map((p) => p)}
-              label="Grade/Package"
-              name={"car_grade"}
-              fullWidth
-              onChange={onCarGradeChange}
-              placeholder={"Enter Grade/Package"}
-            />
-          </GridItem>
-          <GridItem item xs={12}>
-            <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">Model Year</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={carModelYear}
+                value={parseInt(carModelYear)}
                 label="Car Model Years"
                 name="car_model_year"
                 onChange={onCarModelYearChange}
@@ -1026,6 +1033,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 label="Car Body Types"
                 name="car_body_type"
+                value={parseInt(carBodyType)}
                 onChange={onCarBodyTypeChange}
               >
                 {carBodyTypes.map((l, index) => {
