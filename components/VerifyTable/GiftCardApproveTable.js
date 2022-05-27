@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import makeStyles from '@mui/styles/makeStyles';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -16,6 +16,9 @@ import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import { useRouter } from "next/router";
+import Typography from "@mui/material/Typography";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 import Link from "next/link";
 
 function CardApproveLog(props) {
@@ -26,6 +29,17 @@ function CardApproveLog(props) {
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const inputElement = useRef();
+  const [data, setData] = useRef(props.tableData);
+  const [page, setPage] = React.useState(1);
+  const [dataPerPage, setDataPerPage] = useState(15)
+
+
+
+  const handleChange = (e, value) => {
+    setPage(value);
+  };
+  
+
 
   const onClickAccept = (cardRecord) => {
     handleClickOpen(cardRecord, "approve");
@@ -65,15 +79,22 @@ function CardApproveLog(props) {
   const showedData = props.tableData.filter(val => {
     if (search == "") {
       return val;
-    } else if (
-      val.serial_no.toLowerCase().includes(search.toLowerCase())
-    ) {
+    } else if ( val.serial_no != null && val.serial_no.toLowerCase().includes(search.toLowerCase())) {
       return val
     }
   }).map((value, index) => {
     return [value.serial_no, value.package_id_id, value.id,
     (<Button variant="outlined" onClick={() => { handleClickOpen(value) }} color="success">Details</Button>)]
   });
+
+  const indexOfLastData = page * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const totalPage = Math.ceil(showedData.length / 15);
+  const currentData = showedData.slice(indexOfFirstData,indexOfLastData)
+  
+
+
+
   return (
     <>
       <GridItem xs={12} sm={12} md={6}>
@@ -107,7 +128,7 @@ function CardApproveLog(props) {
               <Table
                 tableHeaderColor={props.tableHeaderColor}
                 tableHead={props.tableHead}
-                tableData={showedData}
+                tableData={currentData}
               />
             </CardBody>
           </Card>
@@ -144,6 +165,17 @@ function CardApproveLog(props) {
           </DialogActions>
         </Dialog>
       </div>
+
+      <div className={"text-center"}>
+        <Stack spacing={2} className={"items-center"}>
+          <Typography>Page: {page}</Typography>
+          <Pagination count={totalPage} page={page} onChange={handleChange} showFirstButton showLastButton size="large" />
+        </Stack>
+      </div>
+
+
+
+
     </>
   );
 }
