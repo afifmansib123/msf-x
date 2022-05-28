@@ -37,6 +37,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 ;
 function MerchantCardDetail(props) {
+
   const [open, setOpen] = useState(false);
   const [selectedCard, setSelected] = useState(null);
   const [type, setType] = useState("");
@@ -132,6 +133,7 @@ function MerchantCardDetail(props) {
 
   return (
     <>
+
       <GridItem xs={12} sm={12} md={6}>
         <Card >
           <CardHeader color={"bhalogari"} className={"m-3"}>

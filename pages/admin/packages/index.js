@@ -181,7 +181,7 @@ function PackageManagement(props) {
       const apiURL = `${process.env.NEXT_PUBLIC_API}perk/perk`;
       // console.log("API URL", apiURL, data);
       const ret = await axios.put(apiURL, data);
-      console.log("ret ja", ret);
+      // console.log("ret ja", ret);
       if (ret.status == 200) {
         alert(
           "Your new feature has been successfully updated into the database"
