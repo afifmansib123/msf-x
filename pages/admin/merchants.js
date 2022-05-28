@@ -30,7 +30,9 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { isTemplateExpression } from "typescript";
+// import { isTemplateExpression } from "typescript";
+import { format } from "date-fns";
+
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -229,7 +231,10 @@ function MerchantPage(props) {
                       <StyledTableCell>{item.name}</StyledTableCell>
                       <StyledTableCell>{item.phone_num}</StyledTableCell>
                       <StyledTableCell>{item.subscription}</StyledTableCell>
-                      <StyledTableCell>{item.last_login}</StyledTableCell>
+                     
+                      <StyledTableCell> {item.last_login
+                          ? format(new Date(item?.last_login), "dd MMM yyyy")
+                          : "-"}</StyledTableCell>
                       <StyledTableCell> <Button
                         color="warning"
                         variant="outlined"

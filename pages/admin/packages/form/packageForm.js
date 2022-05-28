@@ -12,6 +12,7 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { PrismaClient } from "@prisma/client";
 
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -23,17 +24,30 @@ import TextField from "@mui/material/TextField";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 
 function PackageManagementPage(props) {
+
   const router = useRouter();
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState("");
-
+  const {packages} = props;
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modeAdd, setModeAdd] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [type, setType] = useState('');
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+    // register(type)
+  };
+
+  const unique = [...new Set(packages.map(item => item.package_type))];
 
   const onSubmit = async (data) => {
     // do something
@@ -46,7 +60,7 @@ function PackageManagementPage(props) {
       const ret = await axios.post(apiURL, data);
       console.log("ret ja", ret);
       if (ret.status == 200) {
-        alert("Your new feature has been successfully added into the database");
+        alert("Your new Package has been successfully added into the database");
         router.push("/admin/packages");
       } else {
         // there's an error
@@ -78,13 +92,28 @@ function PackageManagementPage(props) {
               variant="outlined"
               {...register("description")}
             />
-
-            <TextField
-              id="outlined-basic"
+            <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Package Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              // value={type}
               label="Package Type"
-              variant="outlined"
+               onChange={handleChange}
               {...register("type")}
-            />
+             
+            >
+              {unique.map(p => {
+                  return <MenuItem value={p}>{p}</MenuItem>
+                  {/* <MenuItem value={}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem> */}
+                  
+              })
+              
+            }
+            </Select>
+            </FormControl>
+          
             <TextField
               id="outlined-basic"
               label="Price"
@@ -115,6 +144,27 @@ function PackageManagementPage(props) {
 }
 
 PackageManagementPage.layout = Admin;
+export async function getServerSideProps() {
+  const prisma = new PrismaClient();
+  var packages = await prisma.MerchantStorefront_package.findMany({
+    orderBy: [{ package_type: "desc" }],
+  });
+
+  packages = JSON.parse(
+    JSON.stringify(packages, (key, value) =>
+      typeof value === "bigint" ? value.toString() : value
+    )
+  );
+
+  // console.log("Original", packages[0], perks[0]);
+  // console.log("Transformed", packages[0], perks[0]);
+  return {
+    props: {
+      packages: packages,
+
+    },
+  };
+}
 PackageManagementPage.auth = false;
 
 PackageManagementPage.defaultProps = {

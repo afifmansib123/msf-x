@@ -5,6 +5,7 @@
 import React, { useEffect } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { PrismaClient } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -36,6 +37,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import { Select } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -48,6 +53,11 @@ import { orange } from "@mui/material/colors";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import Avatar from "@mui/material/Avatar";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
 // import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -82,9 +92,11 @@ TabPanel.propTypes = {
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
+
 function a11yProps(index) {
   return {
     id: `vertical-tab-${index}`,
+        
     "aria-controls": `vertical-tabpanel-${index}`,
   };
 }
@@ -108,12 +120,29 @@ function PackageManagement(props) {
   const handleClose = () => {
     setOpen(false);
     setOpenEdit(false);
-    router.push("/admin/packages");
   };
+
+
   const handleChange = (event, newValue) => {
-    console.debug("handleChange[newValue]", newValue);
-    setValue(newValue);
+    // console.debug("handleChange[newValue]", event.target.value);
+    setValue(newValue)
+
+
   };
+  const [pType, setPType] = React.useState("");
+  const [name, setName] = React.useState("");
+
+  const handleChangeT = (event) => {
+    setPType(event.target.value);
+    { register("package_name") }
+  };
+  const handleChangeP = (event) => {
+    setName(event.target.value);
+    { register("package_id_id") }
+  };
+
+  const unique = [...new Set(packageList.map((item) => item.package_type))];
+  const uniqueName = [...new Set(packageList.map((item) => item.package_name))];
 
   const handleRemove = async (data) => {
     // const deleteUser = await prisma.user.delete({where: {id: id}})
@@ -152,11 +181,14 @@ function PackageManagement(props) {
       const apiURL = `${process.env.NEXT_PUBLIC_API}perk/perk`;
       // console.log("API URL", apiURL, data);
       const ret = await axios.put(apiURL, data);
-      // console.log("ret ja", ret);
+      console.log("ret ja", ret);
       if (ret.status == 200) {
         alert(
           "Your new feature has been successfully updated into the database"
         );
+
+        window.location.reload(false)
+
         // search in perkList and update it
         // TODO we can do better by using map, now it's sequential search
         for (let i = 0; i < perkList.length; i++) {
@@ -166,7 +198,9 @@ function PackageManagement(props) {
             break;
           }
         }
-        setPerkList([...perkList]); // create new array with the same data, otherwise state will not change due to the same array ref.
+
+        setPerkList([...perkList]);
+        window.location.reload(false); // create new array with the same data, otherwise state will not change due to the same array ref.
       } else {
         // there's an error
         alert("Error! A problem has been occured while updating your data");
@@ -231,9 +265,7 @@ function PackageManagement(props) {
   const [packageValue, setPackageValue] = useState([]);
   const [datas, setData] = useState([]);
   const handleForm = (data) => {
-    // const newList = perkList.filter((item) => item.id !== id);
-    // const deleteUser = await prisma.user.delete({where: {id: id}})
-    //       // there's an error
+
     setOpen(true);
     setData(data);
   };
@@ -272,7 +304,7 @@ function PackageManagement(props) {
       ];
     });
     setFeatureList(showFeature);
-  }, [perkList]);
+  }, [perkList, packageList]);
   //form
   return (
     <>
@@ -428,7 +460,6 @@ function PackageManagement(props) {
               </>
             );
 
-            // <Tab label={p.package_name} {...a11yProps(p.id)} />;
           })}
         </Card>
       </div>
@@ -467,25 +498,120 @@ function PackageManagement(props) {
                           noValidate
                           autoComplete="off"
                         >
-                          <TextField
+                          <input
                             name="id"
                             label="id"
                             value={datas.id}
-                            hidden
+                            type="hidden"
                             {...register("id")}
                           />
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">
+                              Package Type
+                            </InputLabel>
+                            {packageList.map((p, i) => {
+                              if (datas.package_id_id === p.id) {
+                                return (
+                                  <>
+                                    <Select
+                                      labelId="demo-simple-select-label"
+                                      id="demo-simple-select"
+                                      name="type"
+                                      label="Package Type"
+                                      defaultValue={p.package_type || pType}
+                                      {...register("package_type")}
+                                      onChange={handleChangeT}
+                                    >
+                                      {unique.map((k) => {
+                                        return (
+                                          <MenuItem value={k}>{k}</MenuItem>
+                                        );
+                                      })}
+                                    </Select>
+                                  </>
+                                );
+                              }
+                            })}
+                          </FormControl>
+
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">
+                              Package Name
+                            </InputLabel>
+
+
+                            {packageList.map((p, i) => {
+                              if (datas.package_id_id === p.id) {
+                                // setName(datas.package_id_id)
+                                return (
+                                  <>
+                                    <Select
+                                      labelId="demo-simple-select-label"
+                                      id="demo-simple-select"
+                                      // name="package_id_id"
+                                      label="Package Name"
+                                      // ref={packageType}
+                                      // value={name}
+                                      defaultValue={datas.package_id_id || name}
+                                      {...register("package_id_id")}
+                                      onChange={handleChangeP}
+                                    >
+                                      {packageList.map((k, index) => {
+                                        if (
+                                          pType == "" &&
+                                          k.package_type == p.package_type
+                                        ) {
+                                          // packageId = k.id
+                                          return (
+                                            <MenuItem value={k.id}>
+                                              {k.package_name}
+                                            </MenuItem>
+                                          );
+                                        }
+                                        if (
+                                          pType == k.package_type &&
+                                          pType != ""
+                                        ) {
+                                          return (
+                                            <MenuItem value={k.id}>
+                                              {k.package_name}
+                                            </MenuItem>
+                                          );
+                                        }
+
+
+                                      })}
+                                    </Select>
+
+                                  </>
+                                );
+                              }
+                            })}
+                          </FormControl>
+
                           <TextField
                             id="outlined-basic"
                             label="Feature Name"
                             variant="outlined"
-                            defaultValue={datas.perks}
+                            defaultValue={datas.perks || value}
+                            // {...register("perks", {
+                            //   onChange: (e) => {setValue(e.target.value)},
+                            //   // onBlur: (e) => {setValue(e.target.value)},
+
+                            // })}
                             {...register("perks")}
+                          // onChange={(e) => setValue(e.target.value)}
                           />
                           <TextField
                             id="outlined-basic"
                             label="Feature Description"
                             variant="outlined"
-                            defaultValue={datas.description}
+                            defaultValue={datas.description || value}
+                            // {...register("description", {
+                            //   onChange: (e) => {setValue(e.target.value)},
+
+                            // })}
+                            // onChange={(e) => setValue(e.target.value)}
                             {...register("description")}
                           />
                           <TextField
@@ -510,7 +636,6 @@ function PackageManagement(props) {
                       <Button onClick={handleClose}>Close</Button>
                       <Button
                         onClick={handleClose}
-                        autoFocus
                         color="warning"
                         type="submit"
                       >
@@ -552,25 +677,34 @@ function PackageManagement(props) {
                             variant="outlined"
                             defaultValue={packageValue.package_name}
                             {...register("name")}
-                            // onChange={(e) => setPerkID(e.target.value)}
+                          // onChange={(e) => setPerkID(e.target.value)}
                           />
 
-                          <TextField
-                            id="outlined-basic"
-                            label="Package Type"
-                            variant="outlined"
-                            defaultValue={packageValue.package_type}
-                            {...register("type")}
-                            // {...unregister("unit")}
-                            // onChange={(e) => setPerk(e.target.value)}
-                          />
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">
+                              Package Type
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              // value={type}
+                              label="Package Type"
+                              defaultValue={packageValue.package_type}
+                              onChange={handleChange}
+                              {...register("type")}
+                            >
+                              {unique.map((p) => {
+                                return <MenuItem value={p}>{p}</MenuItem>;
+                              })}
+                            </Select>
+                          </FormControl>
                           <TextField
                             id="outlined-basic"
                             label="Description"
                             variant="outlined"
                             defaultValue={packageValue.description}
                             {...register("description")}
-                            // onChange={(e) => setPerk(e.target.value)}
+                          // onChange={(e) => setPerk(e.target.value)}
                           />
                           <TextField
                             id="outlined-basic"
@@ -578,7 +712,7 @@ function PackageManagement(props) {
                             variant="outlined"
                             defaultValue={packageValue.price}
                             {...register("price")}
-                            // onChange={(e) => setPerk(e.target.value)}
+                          // onChange={(e) => setPerk(e.target.value)}
                           />
                           <TextField
                             id="outlined-basic"
@@ -586,7 +720,7 @@ function PackageManagement(props) {
                             variant="outlined"
                             defaultValue={packageValue.amount}
                             {...register("amount")}
-                            // onChange={(e) => setPerk(e.target.value)}
+                          // onChange={(e) => setPerk(e.target.value)}
                           />
                           <TextField
                             id="outlined-basic"
@@ -594,7 +728,7 @@ function PackageManagement(props) {
                             variant="outlined"
                             defaultValue={packageValue.unit}
                             {...register("unit")}
-                            // onChange={(e) => setPerk(e.target.value)}
+                          // onChange={(e) => setPerk(e.target.value)}
                           />
                         </Box>
                       </DialogContentText>
