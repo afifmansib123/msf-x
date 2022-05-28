@@ -282,11 +282,41 @@ export async function getServerSideProps(context) {
     };
   }
 
-  let carApproval = await prisma.CarsApp_carapprovallog.count({
+  // let carApproval = await prisma.CarsApp_carapprovallog.count({
+  //   where: {
+  //     status: "P",
+  //   },
+  // });
+
+  let data = await prisma.CarsApp_carapprovallog.groupBy({
+    by: ["car_id_id", "status", "created_at"],
+    orderBy: {
+      created_at: "desc",
+    },
     where: {
-      is_approved: false,
+      status: "P",
+      car_id_id: {
+        not: null
+      }
     },
   });
+  data = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+  const id = data.map((v) => {
+    return parseInt(v.car_id_id);
+  });
+  let carApproval = await prisma.CarsApp_car.count({ 
+    orderBy: {
+      id: 'asc'
+    },
+    where: {
+      id: {
+        in: id,
+      },
+    },
+  })
+  
+
+
   let carCount = await prisma.CarsApp_car.count();
   let merchantCount = await prisma.UsersApp_customuser.count();
   let paymentCount = await prisma.MerchantStorefront_paymenthistory.aggregate({
