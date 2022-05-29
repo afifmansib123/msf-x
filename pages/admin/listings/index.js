@@ -239,76 +239,6 @@ function TableList(props) {
         setCars(result);
     }, [page, state]);
 
-    const handleChange = (e, value) => {
-        setPage(value);
-    };
-
-    const onCheckChange = (event) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked,
-        });
-    }
-
-    const onSearchCheckChange = (event) => {
-        setSearchState({
-            ...searchState,
-            [event.target.name]: event.target.checked,
-        });
-    }
-
-    const { Approved, Rejected, Pending } = state;
-    const { Storename, MerchantName } = searchState;
-
-    const [totalPage, setTotalPage] = React.useState(1);
-
-    const onDetailClick = async (car_id) => {
-        // console.log(car_id)
-        await router.push({ pathname: `/admin/listings/${car_id}` });
-    };
-
-    const error = [Storename, MerchantName].filter((v) => v).length === 0;
-
-    const loadPageTitle = async () => {
-        const carCount = await axios.get(`/api/cars/pageNumber?status=${JSON.stringify(state)}&searchTitle=${searchTitle}&searchState=${JSON.stringify(searchState)}`)
-        // console.log("data count", carCount.data.data)
-        setTotalPage(Math.ceil((carCount.data.data) / 20));
-        setPage(1);
-    }
-
-    React.useEffect(async () => {
-        await loadPageTitle();
-    }, [state, searchTitle])
-
-    React.useEffect(async () => {
-        const carlist = await axios.get(`/api/cars?page=${page}&status=${JSON.stringify(state)}&searchTitle=${searchTitle}&searchState=${JSON.stringify(searchState)}`)
-        let { cars } = carlist.data;
-        cars = cars || [];
-        let result = cars.map((item, index) => {
-            return (
-                <div key={index}>
-                    <div className={"md:flex my-10"}>
-                        <div className={"md:flex-row"}><img src={item.img[0]} width={250} /></div>
-                        <div className={"md:flex-row md:ml-10 mt-8"}>
-                            <div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Car Name</span>
-                                    <span className={""}>{item?.car?.car_name || "-"}</span>
-                                </div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Store Name</span>
-                                    <span className={""}>{item.store || '-'}</span>
-                                </div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Merchant Name</span>
-                                    <span className={""}>{`${item?.first_name} ${item?.last_name}`}</span>
-                                </div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Status</span>
-                                    <span>
-                                        <CusButton disabled round color="warning" size="sm">
-                                            {
-                                                item?.status === "A" ? "Approved" : item?.status === "R" ? "Rejected" : "Pending"
 
     return (
         <>
@@ -316,7 +246,7 @@ function TableList(props) {
             <div className={"text-center"}>
                 <Stack spacing={2} className={"items-center"}>
                     <Pagination count={totalPage} page={page} onChange={handleChange} howFirstButton showLastButton
-                        size="large" />
+                                size="large" />
                     <Typography>Page: {page}</Typography>
                 </Stack>
             </div>
@@ -408,7 +338,7 @@ function TableList(props) {
             <div className={"text-center"}>
                 <Stack spacing={2} className={"items-center"}>
                     <Pagination count={totalPage} page={page} onChange={handleChange} howFirstButton showLastButton
-                        size="large" />
+                                size="large" />
                     <Typography>Page: {page}</Typography>
                 </Stack>
             </div>

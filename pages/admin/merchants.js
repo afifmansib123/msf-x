@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -7,11 +6,6 @@ import Admin from "layouts/Admin.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 // import Table from "components/Table/Table.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import { PrismaClient } from "@prisma/client";
-import axios from "axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 // import StyledTableCell from "@mui/material/StyledTableCell";
@@ -27,11 +21,20 @@ import makeStyles from "@mui/styles/makeStyles";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-// import { isTemplateExpression } from "typescript";
+import TextField from "@mui/material/TextField";
+import prisma from "../../PrismaConnect";
+
 import { format } from "date-fns";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import { useRouter } from "next/router";
 
 const styles = {
   cardCategoryWhite: {
@@ -62,7 +65,10 @@ const styles = {
     },
   },
 };
+
 function MerchantPage(props) {
+  const [errorDialog, setOpenDialog] = React.useState(false);
+  const router = useRouter();
   const [merList, setMerList] = React.useState([])
   const useStyles = makeStyles(styles);
   const [itemList, setItemList] = React.useState([])
@@ -74,6 +80,9 @@ function MerchantPage(props) {
   const [checkbox1, setCheckedBox1] = React.useState(false)
   const [checkbox2, setCheckedBox2] = React.useState(false)
   const [page, setPage] = React.useState(1);
+  const [searchTitle, setSearchTitle] = React.useState("");
+  const { res_status, message, title } = router.query;
+
   const [state, setState] = React.useState({
     NonSub: false,
     Sub: false,
@@ -85,6 +94,19 @@ function MerchantPage(props) {
     last_login: "",
     merchantid: ""
   }
+
+  const onSearch = (e)=> {
+    console.log(e.target.value);
+    setSearchTitle(e.target.value);
+  }
+
+  const handleClose = async () => {
+    setOpenDialog(false)
+    await router.replace({
+      pathname: '../../../admin/merchants'
+    })
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -121,6 +143,13 @@ function MerchantPage(props) {
       fontSize: 14,
     },
   }));
+
+  React.useEffect(() => {
+    if (res_status) {
+      setOpenDialog(true)
+    }
+  }, []);
+
   React.useEffect(() => {
     let { merchants } = props;
     merchants = merchants || [];
@@ -157,23 +186,36 @@ function MerchantPage(props) {
             ) {
               found1 = true;
               found2 = true;
-              return a = k.package_name
+              return a = k.package_name;
             }
           });
         }
       })
       if (a != "") {
-        arrobj.subscription = a
+        arrobj.subscription = a;
       } else {
-        arrobj.subscription = foundFunc(found2)
+        arrobj.subscription = foundFunc(found2);
       }
-      arrobj.last_login = m.last_login
-      arrobj.merchantid = m.id
-      merList.push(arrobj)
+      arrobj.last_login = m.last_login;
+      arrobj.merchantid = m.id;
+      merList.push(arrobj);
     })
-    setItemList(merList)
-    setMerList(merList)
+    setItemList(merList);
+    setMerList(merList);
   }, [])
+
+  React.useEffect(async() => {
+    if (searchTitle.trim() !== "") {
+      const filteredName = merList.filter(value => {
+        return value.name.toLowerCase().startsWith(searchTitle.trim().toLowerCase());
+      });
+      setItemList(filteredName);
+    } else {
+      setItemList(merList);
+    }
+  }, [searchTitle]);
+
+
   function filterSub(box1, box2) {
     if (box1 == false && box2 == false || box1 == true && box2 == true) {
       totalCount = itemList.length || 0; // 59
@@ -199,6 +241,13 @@ function MerchantPage(props) {
   return (
     <>
       <h1 className="text-4xl font-semibold text-center mb-4">Merchants</h1>
+      <div className={"border-b-[1px] px-8 border-b-gray-200"}>
+        <div className={"mb-8"}>
+          <h1 className={"text-2xl text-bold"}>Search</h1>
+          <TextField fullWidth value={searchTitle} onChange={ (e) => onSearch(e)}/>
+        </div>
+      </div>
+
       <div>
         <FormGroup row>
           <FormControlLabel
@@ -222,6 +271,7 @@ function MerchantPage(props) {
                   <StyledTableCell>Subscription</StyledTableCell>
                   <StyledTableCell>Last Login</StyledTableCell>
                   <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -231,7 +281,7 @@ function MerchantPage(props) {
                       <StyledTableCell>{item.name}</StyledTableCell>
                       <StyledTableCell>{item.phone_num}</StyledTableCell>
                       <StyledTableCell>{item.subscription}</StyledTableCell>
-                     
+
                       <StyledTableCell> {item.last_login
                           ? format(new Date(item?.last_login), "dd MMM yyyy")
                           : "-"}</StyledTableCell>
@@ -241,6 +291,13 @@ function MerchantPage(props) {
                         href={`/admin/merchants/${item.merchantid}`}
                       >
                         Details
+                      </Button></StyledTableCell>
+                      <StyledTableCell> <Button
+                          color="info"
+                          variant="outlined"
+                          href={`/admin/merchants/package-manage/${item.merchantid}`}
+                      >
+                        Package Management
                       </Button></StyledTableCell>
                     </TableRow>
                   )
@@ -266,11 +323,53 @@ function MerchantPage(props) {
           </div>
         </GridItem>
       </GridContainer>
+
+      <div>
+        <Dialog
+            className={"overflow-visible"}
+            open={errorDialog}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            PaperProps={{
+              style: { borderRadius: 20}
+            }}
+            fullWidth>
+          <DialogTitle id="alert-dialog-title">
+            <div className={"sticky flex text-center self-center align-middle center-block justify-center"}>
+              {res_status === "success" &&
+                  <div className={"rounded-full border-[4px] border-green-800"}>
+                    <CheckOutlinedIcon color={"success"} className={"text-[7rem] text-center "}></CheckOutlinedIcon>
+                  </div>
+              }
+
+              {( res_status === "fail" || res_status === "cancel") &&
+                  <div className={"rounded-full border-[4px] border-red-800"}>
+                    <CloseIcon color={"error"} className={"text-[7rem] text-center "}></CloseIcon>
+                  </div>
+              }
+
+            </div>
+
+            <div className={"text-center mt-3 text-bhalogari"}>
+              {title}
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description" className={"text-center"}>
+              {message}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions className={"justify-center"}>
+            <Button variant={"contained"} className={"bg-bhalogari px-10"} size={"large"} onClick={handleClose}>OK</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </>
   );
 }
+
 export async function getServerSideProps() {
-  const prisma = new PrismaClient();
   var allMerchants = await prisma.UsersApp_customuser.findMany({
     include: {
       MerchantStorefront_paymenthistory: true,
