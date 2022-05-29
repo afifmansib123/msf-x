@@ -166,7 +166,7 @@ function Subscriptions(props) {
       })}
       <Snackbar
         place="br"
-        color="bhalogari"
+        color="info"
         icon={AddAlert}
         message={snackMsg}
         open={open}
