@@ -1,18 +1,14 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useSession} from "next-auth/react";
-import {useRouter} from "next/router";
-import axios from "axios";
-
+import {
+  createSyntheticFile,
+  Dropzone,
+  FileItem,
+  FileItemContainer,
+  FullScreenPreview,
+  makeSynthticFileValidate,
+} from "@dropzone-ui/react";
 // @mui/icons-material
 import AddAlert from "@mui/icons-material/AddAlert";
-import Car from "@mui/icons-material/DirectionsCar";
-import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
 import Bike from "@mui/icons-material/TwoWheeler";
-
-// react plugin for creating charts
-import makeStyles from "@mui/styles/makeStyles";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-
 // core components
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -24,21 +20,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import GridItem from "components/Grid/GridItem.js";
+// react plugin for creating charts
+import makeStyles from "@mui/styles/makeStyles";
+import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import axios from "axios";
 import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
 import Snackbar from "components/Snackbar/Snackbar.js";
-
 // plugins
 import Joi from "joi-browser";
-import {
-  createSyntheticFile,
-  Dropzone,
-  FileItem,
-  FileItemContainer,
-  FullScreenPreview,
-  makeSynthticFileValidate
-} from "@dropzone-ui/react";
-
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function BikeUpdate() {
   const [bikeType, setBikeType] = useState();
@@ -47,6 +40,8 @@ export default function BikeUpdate() {
   const [bikeMakers, setBikeMakers] = useState([]);
   const [bikeMakerName, setBikeMakerName] = useState();
   const [bikeModel, setBikeModel] = useState();
+  const [bikeCities, setBikeCities] = useState([]);
+  const [bikeCity, setBikeCity] = useState();
   const [bikeModels, setBikeModels] = useState([]);
   const [bikeGrade, setBikeGrade] = useState();
   const [bikeModelYear, setBikeModelYear] = useState();
@@ -78,7 +73,7 @@ export default function BikeUpdate() {
   const [bikeFeatures, setbikeFeatures] = useState([]);
   const editorRef = useRef();
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const {CKEditor, ClassicEditor} = editorRef.current || {};
+  const { CKEditor, ClassicEditor } = editorRef.current || {};
   const [images, setImages] = useState([]);
   const [fileLimitExceeded, setFileLimitExceeded] = useState(false);
   const [bikePrice, setBikePrice] = useState({
@@ -94,7 +89,7 @@ export default function BikeUpdate() {
   const [redirect, setRedirect] = useState(false);
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
   const [checkBoxInput, setCheckBoxInput] = useState([]);
   const router = useRouter();
 
@@ -153,29 +148,86 @@ export default function BikeUpdate() {
 
   const schema = isUsed
     ? {
-      bike_chassis_number: Joi.string().max(20).regex(/^[a-zA-Z-0-9]+$/).label("Chassis"),
-      bike_registration_number: Joi.string().max(20).regex(/^[a-zA-Z-0-9]+$/).allow("").label("Registration No"),
-      bike_type: Joi.number().required().label("Type"),
-      bike_maker: Joi.number().required().label("Maker"),
-      bike_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number().positive().integer().min(10000).max(1000000).required().label("Asking Price"),
-      bike_mileage: Joi.number().min(-1).max(999999).allow("").label("Mileage"),
-      bike_engine_cc: Joi.number().precision(2).min(60).max(250).allow("").label("Engine Capacity"),
-      bike_body_type: Joi.number().required().label("Body Type"),
-      selling_price: Joi.number().positive().integer().min(10000).max(1000000).required().label("Selling Price"),
-    }
+        bike_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .label("Chassis"),
+        bike_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        bike_type: Joi.number().required().label("Type"),
+        bike_maker: Joi.number().required().label("Maker"),
+        bike_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(10000)
+          .max(1000000)
+          .required()
+          .label("Asking Price"),
+        bike_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        bike_engine_cc: Joi.number()
+          .precision(2)
+          .min(60)
+          .max(250)
+          .allow("")
+          .label("Engine Capacity"),
+        bike_body_type: Joi.number().required().label("Body Type"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(10000)
+          .max(1000000)
+          .required()
+          .label("Selling Price"),
+      }
     : {
-      bike_chassis_number: Joi.string().max(20).regex(/^[a-zA-Z-0-9]+$/).required().label("Chassis"),
-      bike_registration_number: Joi.string().max(20).regex(/^[a-zA-Z-0-9]+$/).allow("").label("Registration No"),
-      bike_type: Joi.number().required().label("Type"),
-      bike_maker: Joi.number().required().label("Maker"),
-      bike_model: Joi.number().required().label("Model"),
-      asking_price: Joi.number().positive().integer().min(10000).max(1000000).required().label("Asking Price"),
-      bike_mileage: Joi.number().min(-1).max(999999).allow("").label("Mileage"),
-      bike_engine_cc: Joi.number().precision(2).min(60).max(250).allow("").label("Engine Capacity"),
-      bike_body_type: Joi.number().required().label("Body Type"),
-      selling_price: Joi.number().positive().integer().min(10000).max(1000000).required().label("Selling Price"),
-    };
+        bike_chassis_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .required()
+          .label("Chassis"),
+        bike_registration_number: Joi.string()
+          .max(20)
+          .regex(/^[a-zA-Z-0-9]+$/)
+          .allow("")
+          .label("Registration No"),
+        bike_type: Joi.number().required().label("Type"),
+        bike_maker: Joi.number().required().label("Maker"),
+        bike_model: Joi.number().required().label("Model"),
+        asking_price: Joi.number()
+          .positive()
+          .integer()
+          .min(10000)
+          .max(1000000)
+          .required()
+          .label("Asking Price"),
+        bike_mileage: Joi.number()
+          .min(-1)
+          .max(999999)
+          .allow("")
+          .label("Mileage"),
+        bike_engine_cc: Joi.number()
+          .precision(2)
+          .min(60)
+          .max(250)
+          .allow("")
+          .label("Engine Capacity"),
+        bike_body_type: Joi.number().required().label("Body Type"),
+        selling_price: Joi.number()
+          .positive()
+          .integer()
+          .min(10000)
+          .max(1000000)
+          .required()
+          .label("Selling Price"),
+      };
 
   useEffect(() => {
     if (
@@ -202,29 +254,29 @@ export default function BikeUpdate() {
   }, [bikePrice.selling_price, bikePrice.asking_price]);
 
   const propertyValidate = (name, value) => {
-    const obj = {[name]: value};
-    const singleSchema = {[name]: schema[name]};
-    const {error} = Joi.validate(obj, singleSchema);
+    const obj = { [name]: value };
+    const singleSchema = { [name]: schema[name] };
+    const { error } = Joi.validate(obj, singleSchema);
 
     return error ? error.details[0].message : null;
   };
 
   const propertyValidationHelper = (name, value) => {
-    const errors = {...inputErrors};
+    const errors = { ...inputErrors };
     const errorMessage = propertyValidate(name, value);
     if (errorMessage) errors[name] = errorMessage;
     else delete errors[name];
     setError(errors);
   };
 
-  const onBikePriceChange = ({target: input}) => {
-    const {name, value} = input;
+  const onBikePriceChange = ({ target: input }) => {
+    const { name, value } = input;
     if (name === "selling_price") {
       propertyValidationHelper("selling_price", value);
     } else if (name === "asking_price") {
       propertyValidationHelper("asking_price", value);
     }
-    setBikePrice({...bikePrice, [name]: value});
+    setBikePrice({ ...bikePrice, [name]: value });
   };
 
   const [bikeDescription, setBikeDescription] = useState("");
@@ -251,7 +303,7 @@ export default function BikeUpdate() {
   const getYears = () => {
     const arr = [];
     for (let i = new Date().getFullYear(); i >= 1971; i--) {
-      arr.push({id: i, year: i});
+      arr.push({ id: i, year: i });
     }
     return arr;
   };
@@ -287,14 +339,17 @@ export default function BikeUpdate() {
           setBikeModelYears(getYears());
         } else {
         }
-      } catch (err) {
-      }
+      } catch (err) {}
     })();
     propertyValidationHelper("bike_maker", e.target.value);
   };
   const onBikeModelChange = (e) => {
     setBikeModel(e.target.value);
     propertyValidationHelper("bike_model", e.target.value);
+  };
+
+  const onBikeCityChange = (e) => {
+    setBikeCity(e.target.value);
   };
   const onBikeGradeChange = (e) => {
     setBikeGrade(e.target.value);
@@ -344,7 +399,7 @@ export default function BikeUpdate() {
     setBikeRearSuspension(e.target.value);
   };
   const onBikeFeaturesInputChange = (e) => {
-    const {name} = e.target;
+    const { name } = e.target;
     const index = checkBoxInput.indexOf(parseInt(name));
     if (index !== -1) {
       const newBox = [...checkBoxInput];
@@ -354,8 +409,8 @@ export default function BikeUpdate() {
       setCheckBoxInput([...checkBoxInput, parseInt(name)]);
     }
   };
-  const onBikeVideoLinkChange = ({target: input}) => {
-    setBikeVideoLink({...bikeVideoLink, [input.name]: input.value});
+  const onBikeVideoLinkChange = ({ target: input }) => {
+    setBikeVideoLink({ ...bikeVideoLink, [input.name]: input.value });
   };
 
   function checkChecked(id) {
@@ -386,28 +441,28 @@ export default function BikeUpdate() {
   const validate = () => {
     const inputs = isUsed
       ? {
-        // bikeColor: bikeColor,
-        // bikeChassisNumber: bikeChassisNumber,
-        bike_type: bikeType,
-        bike_maker: bikeMaker,
-        bike_model: bikeModel,
-        asking_price: bikePrice.asking_price,
-        bike_body_type: bikeBodyType,
-        selling_price: bikePrice.selling_price,
-        bike_engine_cc: bikeEngineCC,
-      }
+          // bikeColor: bikeColor,
+          // bikeChassisNumber: bikeChassisNumber,
+          bike_type: bikeType,
+          bike_maker: bikeMaker,
+          bike_model: bikeModel,
+          asking_price: bikePrice.asking_price,
+          bike_body_type: bikeBodyType,
+          selling_price: bikePrice.selling_price,
+          bike_engine_cc: bikeEngineCC,
+        }
       : {
-        // bikeColor: bikeColor,
-        bike_chassis_number: bikeChassisNumber,
-        bike_type: bikeType,
-        bike_maker: bikeMaker,
-        bike_model: bikeModel,
-        asking_price: bikePrice.asking_price,
-        bike_body_type: bikeBodyType,
-        selling_price: bikePrice.selling_price,
-        bike_engine_cc: bikeEngineCC,
-      };
-    const {error} = Joi.validate(inputs, schema, {abortEarly: false});
+          // bikeColor: bikeColor,
+          bike_chassis_number: bikeChassisNumber,
+          bike_type: bikeType,
+          bike_maker: bikeMaker,
+          bike_model: bikeModel,
+          asking_price: bikePrice.asking_price,
+          bike_body_type: bikeBodyType,
+          selling_price: bikePrice.selling_price,
+          bike_engine_cc: bikeEngineCC,
+        };
+    const { error } = Joi.validate(inputs, schema, { abortEarly: false });
     if (!error) return null;
 
     const errors = {}; // TODO what is the point to set error to empty and iterate later?
@@ -464,8 +519,13 @@ export default function BikeUpdate() {
     };
 
     if (!arrayEquals(bikeImages, newBikeImages)) {
-      const delImages = bikeImages.filter((val) => !newBikeImages.includes(val));
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BG_API}bikes/delete-images/`, delImages);
+      const delImages = bikeImages.filter(
+        (val) => !newBikeImages.includes(val)
+      );
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BG_API}bikes/delete-images/`,
+        delImages
+      );
       // console.log(response);
     }
 
@@ -589,12 +649,18 @@ export default function BikeUpdate() {
         );
         const json5 = await response5.json();
 
+        const response6 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/locations/`
+        );
+        const json6 = await response6.json();
+
         setBikeBodyTypes(json);
         setBikeRearBrakes(json1);
         setBikeFrontSuspensions(json2);
         setBikeFrontBrakes(json3);
         setBikeNoOfGears(json4);
         setBikeRearSuspensions(json5);
+        setBikeCities(json6);
       } catch (err) {
         console.error(err);
       }
@@ -629,11 +695,15 @@ export default function BikeUpdate() {
       setLoading(true);
       (async () => {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}bikes/bike-model-list/?maker_name=${bikeMakerName}`);
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BG_API}bikes/bike-model-list/?maker_name=${bikeMakerName}`
+          );
           const json = await response.json();
           if (response.status === 200) {
             setBikeModels(json.result);
-            let filteredYear = json.result.filter((item) => item.release_year !== "-");
+            let filteredYear = json.result.filter(
+              (item) => item.release_year !== "-"
+            );
 
             setBikeModelYears(getYears());
             setLoading(false);
@@ -647,11 +717,10 @@ export default function BikeUpdate() {
           setSnackMsg("Something went wrong!");
         }
       })();
-
     }
   }, [bikeMaker, bikeMakerName]);
 
-  const {bid} = router.query
+  const { bid } = router.query;
 
   let val = [];
   val["New"] = 1;
@@ -662,7 +731,12 @@ export default function BikeUpdate() {
   const [syntheticFiles, setSyntheticFiles] = useState([]);
 
   function arrayEquals(a, b) {
-    return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((val, index) => val === b[index]);
+    return (
+      Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index])
+    );
   }
 
   const deleteBikeImage = (id) => {
@@ -684,7 +758,9 @@ export default function BikeUpdate() {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}bikes/details/${bid}/`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BG_API}bikes/details/${bid}/`
+      );
       const json = await response.json();
       console.log(json.res[0]);
       // .then((res) => {
@@ -700,26 +776,55 @@ export default function BikeUpdate() {
         setBikeModel(json.res[0].model_name.model_id);
         setBikeGrade(json.res[0].grade === "-" ? "" : json.res[0].grade);
         setBikeModelYear(
-          json.res[0].bike_year === "-" || json.res[0].bike_year == null ? "" : json.res[0].bike_year
+          json.res[0].bike_year === "-" || json.res[0].bike_year == null
+            ? ""
+            : json.res[0].bike_year
         );
         setBikeRegYear(
-          json.res[0].registration_year === "-" || json.res[0].registration_year == null
+          json.res[0].registration_year === "-" ||
+            json.res[0].registration_year == null
             ? ""
             : json.res[0].registration_year
         );
-        setBikeChassisNumber(json.res[0].chassis_no === "-" ? "" : json.res[0].chassis_no);
-        setBikeRegNumber(json.res[0].registration_no === "-" ? "" : json.res[0].registration_no);
-        setBikeColor(json.res[0].bike_color == null ? "" : json.res[0].bike_color.color_id);
+        setBikeChassisNumber(
+          json.res[0].chassis_no === "-" ? "" : json.res[0].chassis_no
+        );
+        setBikeRegNumber(
+          json.res[0].registration_no === "-" ? "" : json.res[0].registration_no
+        );
+        setBikeColor(
+          json.res[0].bike_color == null ? "" : json.res[0].bike_color.color_id
+        );
         setBikeBodyType(json.res[0].bike_body_type.id);
         setBikeEngineCC(json.res[0].engine_capacity);
-        setBikeFuelEconomy(json.res[0].fuel_efficiency == null ? "" : json.res[0].fuel_efficiency);
-        setBikeFrontSuspension(json.res[0].front_suspension == null ? "" : json.res[0].front_suspension.suspension_id);
-        setBikeRearSuspension(json.res[0].rear_suspension == null ? "" : json.res[0].rear_suspension.suspension_id);
-        setBikeFrontBrake(json.res[0].front_brake == null ? "" : json.res[0].front_brake.brake_id);
-        setBikeRearBrake(json.res[0].rear_brake == null ? "" : json.res[0].rear_brake.brake_id);
-        setBikeNoOfGear(json.res[0].gear == null ? "" : json.res[0].gear.gear_id);
+        setBikeFuelEconomy(
+          json.res[0].fuel_efficiency == null ? "" : json.res[0].fuel_efficiency
+        );
+        setBikeFrontSuspension(
+          json.res[0].front_suspension == null
+            ? ""
+            : json.res[0].front_suspension.suspension_id
+        );
+        setBikeRearSuspension(
+          json.res[0].rear_suspension == null
+            ? ""
+            : json.res[0].rear_suspension.suspension_id
+        );
+        setBikeFrontBrake(
+          json.res[0].front_brake == null
+            ? ""
+            : json.res[0].front_brake.brake_id
+        );
+        setBikeRearBrake(
+          json.res[0].rear_brake == null ? "" : json.res[0].rear_brake.brake_id
+        );
+        setBikeNoOfGear(
+          json.res[0].gear == null ? "" : json.res[0].gear.gear_id
+        );
         setBikeMileage(
-          json.res[0].mileage === "-" || json.res[0].mileage == null ? "" : json.res[0].mileage
+          json.res[0].mileage === "-" || json.res[0].mileage == null
+            ? ""
+            : json.res[0].mileage
         );
 
         let feature = json.res[0].bike_features;
@@ -749,7 +854,6 @@ export default function BikeUpdate() {
               "success"
             );
 
-
             //add the image URL
             validateFileFromWebUrl.imageUrl = images[i].image_url;
             setSyntheticFiles((prev) => [...prev, validateFileFromWebUrl]);
@@ -760,7 +864,10 @@ export default function BikeUpdate() {
         setImagesCount(images.length);
 
         setBikeDescription(json.res[0].description);
-        setBikeVideoLink({...bikeVideoLink, ["video1"]: json.res[0].bike_video_link});
+        setBikeVideoLink({
+          ...bikeVideoLink,
+          ["video1"]: json.res[0].bike_video_link,
+        });
         setBikePrice({
           ...bikePrice,
           ["asking_price"]: json.res[0].price_to,
@@ -785,7 +892,7 @@ export default function BikeUpdate() {
           <h2 className={classes.paperTitle}>UPLOAD Bike Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{minHeight: "542px", maxHeight: "542px"}}
+              style={{ minHeight: "620px", maxHeight: "542px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -855,9 +962,7 @@ export default function BikeUpdate() {
           )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                Bike Type *
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Bike Type *</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -875,9 +980,7 @@ export default function BikeUpdate() {
                 })}
               </Select>
               {inputErrors.bike_type && (
-                <div className={classes.errorDiv}>
-                  {inputErrors.bike_type}
-                </div>
+                <div className={classes.errorDiv}>{inputErrors.bike_type}</div>
               )}
             </FormControl>
           </GridItem>
@@ -907,9 +1010,7 @@ export default function BikeUpdate() {
                 })}
               </Select>
               {inputErrors.bike_maker && (
-                <div className={classes.errorDiv}>
-                  {inputErrors.bike_maker}
-                </div>
+                <div className={classes.errorDiv}>{inputErrors.bike_maker}</div>
               )}
             </FormControl>
           </GridItem>
@@ -933,9 +1034,7 @@ export default function BikeUpdate() {
                 })}
               </Select>
               {inputErrors.bike_model && (
-                <div className={classes.errorDiv}>
-                  {inputErrors.bike_model}
-                </div>
+                <div className={classes.errorDiv}>{inputErrors.bike_model}</div>
               )}
             </FormControl>
           </GridItem>
@@ -951,9 +1050,7 @@ export default function BikeUpdate() {
           </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                Model Year
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Model Year</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -1013,9 +1110,7 @@ export default function BikeUpdate() {
           )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                Color
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Color</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -1028,6 +1123,27 @@ export default function BikeUpdate() {
                   return (
                     <MenuItem key={index} value={l.color_id}>
                       {l.bike_color}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </GridItem>
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              <InputLabel id="demo-simple-select-label">City</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={bikeCity}
+                label="City"
+                name="city_name"
+                onChange={onBikeCityChange}
+              >
+                {bikeCities.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.location_id}>
+                      {l.city.district_name}
                     </MenuItem>
                   );
                 })}
@@ -1055,9 +1171,7 @@ export default function BikeUpdate() {
           <h2 className={classes.paperTitle}>Choose Bike Details</h2>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                Bike Body *
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Bike Body *</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -1167,9 +1281,7 @@ export default function BikeUpdate() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                Front Brake
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Front Brake</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -1190,9 +1302,7 @@ export default function BikeUpdate() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                Rear Brake
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Rear Brake</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -1213,9 +1323,7 @@ export default function BikeUpdate() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">
-                No. of Gear
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">No. of Gear</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -1335,9 +1443,7 @@ export default function BikeUpdate() {
           </GridItem>
 
           <GridItem item xs={12} sm={12} md={8}>
-            <InputLabel>
-              Bike Description
-            </InputLabel>
+            <InputLabel>Bike Description</InputLabel>
             {editorLoaded ? (
               <CKEditor
                 editor={ClassicEditor}
@@ -1363,7 +1469,7 @@ export default function BikeUpdate() {
                   }}
                   unmountOnExit
                 >
-                  <CircularProgress className={"text-bhalogari"}/>
+                  <CircularProgress className={"text-bhalogari"} />
                 </Fade>
               </div>
             )}
@@ -1371,8 +1477,11 @@ export default function BikeUpdate() {
               variant="contained"
               color="inherit"
               // disabled={loading}
-              className={classes.button + " mt-6 bg-bhalogari text-white hover:text-bhalogari"}
-              startIcon={<Bike/>}
+              className={
+                classes.button +
+                " mt-6 bg-bhalogari text-white hover:text-bhalogari"
+              }
+              startIcon={<Bike />}
               onClick={onSubmit}
             >
               Update listing
