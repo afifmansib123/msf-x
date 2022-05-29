@@ -44,6 +44,8 @@ export default function CarUpload() {
   const [carChassisNumber, setCarChassisNumber] = useState();
   const [carEngineNumber, setCarEngineNumber] = useState();
   const [carRegNumber, setCarRegNumber] = useState();
+  const [carCities, setCarCities] = useState([]);
+  const [carCity, setCarCity] = useState();
   const [modelOptions] = useState([
     {
       title: "Condition*",
@@ -467,6 +469,9 @@ export default function CarUpload() {
   const onCarEngineNumberChange = (e) => {
     setCarEngineNumber(e.target.value);
   };
+  const onCarCityChange = (e) => {
+    setCarCity(e.target.value);
+  };
   const onCarRegNumberChange = (e) => {
     setCarRegNumber(e.target.value);
   };
@@ -609,6 +614,7 @@ export default function CarUpload() {
       registration_year: carRegYear,
       registration_no: carRegNumber,
       grade: carGrade,
+      car_location: carCity,
     };
 
     if (images.length === 0) {
@@ -709,12 +715,17 @@ export default function CarUpload() {
           `${process.env.NEXT_PUBLIC_BG_API}cars/exterior-color/`
         );
         const json4 = await response4.json();
+        const response5 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/locations/`
+        );
+        const json5 = await response5.json();
 
         setCarBodyTypes(json);
         setCarInteriorColors(json1);
         setCarFuelEconomys(json2);
         setCarFuelTypes(json3);
         setCarExteriorColors(json4);
+        setCarCities(json5);
       } catch (err) {
         console.error(err);
       }
@@ -750,7 +761,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{ minHeight: "542px", maxHeight: "542px" }}
+              style={{ minHeight: "620px", maxHeight: "542px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -979,6 +990,28 @@ export default function CarUpload() {
               />
             </GridItem>
           )}
+
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              <InputLabel id="demo-simple-select-label">City</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carCity}
+                label="City"
+                name="city_name"
+                onChange={onCarCityChange}
+              >
+                {carCities.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.location_id}>
+                      {l.city.district_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </GridItem>
         </GridContainer>
       </GridItem>
       <GridItem item xs={12} className={classes.uploadOptions}>
