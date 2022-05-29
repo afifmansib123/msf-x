@@ -3148,7 +3148,7 @@
   {
     "cn": "NCP110",
     "maker": "Toyota",
-    "model": "I.S.T",
+    "model": "IST",
     "body": ["HATCHBACK"],
     "seat": [5],
     "transmission": ["automatic"],
@@ -3161,7 +3161,7 @@
   {
     "cn": "ZSP110",
     "maker": "Toyota",
-    "model": "I.S.T",
+    "model": "IST",
     "body": ["HATCHBACK"],
     "seat": [5],
     "transmission": ["automatic"],
@@ -3174,7 +3174,7 @@
   {
     "cn": "NCP60",
     "maker": "Toyota",
-    "model": "I.S.T",
+    "model": "IST",
     "body": ["HATCHBACK"],
     "seat": [5],
     "transmission": ["automatic"],
@@ -3187,7 +3187,7 @@
   {
     "cn": "NCP61",
     "maker": "Toyota",
-    "model": "I.S.T",
+    "model": "IST",
     "body": ["HATCHBACK"],
     "seat": [5],
     "transmission": ["automatic"],
@@ -3200,7 +3200,7 @@
   {
     "cn": "NCP65",
     "maker": "Toyota",
-    "model": "I.S.T",
+    "model": "IST",
     "body": ["HATCHBACK"],
     "seat": [5],
     "transmission": ["automatic"],

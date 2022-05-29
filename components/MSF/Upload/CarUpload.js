@@ -102,31 +102,48 @@ export default function CarUpload() {
   const [carDrive, setCarDrive] = useState();
   const [makerName, setMakerName] = useState("");
   const [jsonData, setJsonData] = useState([]);
-  const [filteredResults, setFilteredResults] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
 
   const searchItems = (e) => {
     setCarChassisNumber(e.target.value);
-    const filteredData = jsonData?.filter((item) => {
-      return Object.values(item)
-        .join("")
-        .toLowerCase()
-        .includes(e.target.value.toLowerCase());
-    });
-    // setCarBodyType(parseInt(filteredData[0]?.body_name));
-    console.log(filteredData);
-    setFilteredResults(filteredData);
-    let maker = carMakers.filter(
-      (x) => x.maker_name.toLowerCase() === filteredData[0]?.maker.toLowerCase()
+    const filteredData = jsonData?.filter(
+      (item) => item.cn.toLowerCase() === e.target.value.toLowerCase()
     );
-    let bodyType = carBodyTypes.filter(
-      (x) =>
-        x.body_name.toLowerCase() === filteredData[0]?.body[0].toLowerCase()
-    );
-    console.log(bodyType);
-    setCarMaker(maker[0].maker_id);
-    setCarMakerName(maker[0].maker_name);
-    setCarGrade(filteredData[0]?.grade[0]);
-    setCarModelYear(bodyType[0]?.id);
+    if(filteredData.length > 0) {
+      setFilteredResults(filteredData);
+      let maker = carMakers.filter(
+        (x) => x.maker_name.toLowerCase() === filteredData[0]?.maker.toLowerCase()
+      );
+      let bodyType = carBodyTypes.filter(
+        (x) => x.body_name.toLowerCase() === filteredData[0]?.body[0].toLowerCase()
+      );
+      let transmission = carTransmissions.filter(
+        (x) => x.title.toLowerCase() === filteredData[0]?.transmission[0].toLowerCase()
+      );
+      let fuelType = carFuelTypes.filter(
+        (x) => x.fuel_type.toLowerCase() === filteredData[0]?.fuel[0].toLowerCase()
+      );
+      setCarMaker(maker[0].maker_id);
+      setCarMakerName(maker[0].maker_name);
+      setCarGrade(filteredData[0]?.grade[0]);
+      setCarModelYear(filteredData[0]?.year[0]);
+      setCarBodyType(bodyType[0]?.id);
+      setCarEngineCC(filteredData[0]?.engine[0]);
+      setCarSeat(filteredData[0]?.seat[0]);
+      setCarTransmission(transmission[0]?.id);
+      setCarFuelType(fuelType[0]?.fuel_id);
+    } else {
+      setCarMaker();
+      setCarModel();
+      setCarMakerName();
+      setCarGrade();
+      setCarModelYear();
+      setCarBodyType();
+      setCarEngineCC();
+      setCarSeat();
+      setCarTransmission();
+      setCarFuelType();
+    }
   };
 
   useEffect(() => {
@@ -163,7 +180,7 @@ export default function CarUpload() {
         }
       })();
     }
-  }, [carMaker]);
+  }, [carMaker,filteredResults]);
 
   useEffect(() => {
     setJsonData(JsonData);
@@ -911,7 +928,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={parseInt(carMaker)}
+                value={parseInt(carMaker) || ''}
                 label="Car Makers"
                 name="car_maker"
                 // onChange={onCarMakerChange}
@@ -938,7 +955,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={parseInt(carModel)}
+                value={parseInt(carModel) || ''}
                 label="Car Models"
                 name="car_model"
                 onChange={onCarModelChange}
@@ -972,7 +989,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={parseInt(carModelYear)}
+                value={parseInt(carModelYear) || ''}
                 label="Car Model Years"
                 name="car_model_year"
                 onChange={onCarModelYearChange}
@@ -1078,7 +1095,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 label="Car Body Types"
                 name="car_body_type"
-                value={parseInt(carBodyType)}
+                value={parseInt(carBodyType) || ''}
                 onChange={onCarBodyTypeChange}
               >
                 {carBodyTypes.map((l, index) => {
@@ -1099,7 +1116,7 @@ export default function CarUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               label="Engine CC"
-              value={carEngineCC}
+              value={carEngineCC || ''}
               name={"car_engine_cc"}
               autoComplete="off"
               fullWidth
@@ -1143,7 +1160,7 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carSeat}
+              value={carSeat || ''}
               name={"car_seat"}
               autoComplete="off"
               label="Seats"
@@ -1162,7 +1179,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carTransmission}
+                value={carTransmission || ''}
                 label="Car Transmission"
                 name="car_transmission"
                 onChange={onCarTransmissionChange}
@@ -1183,7 +1200,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carFuelType}
+                value={parseInt(carFuelType) || ''}
                 label="Car Fuel Type"
                 name="car_fuel_type"
                 onChange={onCarFuelTypeChange}
