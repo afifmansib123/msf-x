@@ -47,6 +47,8 @@ export default function CarUpload() {
   const [carChassisNumber, setCarChassisNumber] = useState();
   const [carEngineNumber, setCarEngineNumber] = useState();
   const [carRegNumber, setCarRegNumber] = useState();
+  const [carCities, setCarCities] = useState([]);
+  const [carCity, setCarCity] = useState();
   const [modelOptions] = useState([
     {
       title: "Condition*",
@@ -537,6 +539,9 @@ export default function CarUpload() {
   };
   const onCarEngineNumberChange = (e) => {
     setCarEngineNumber(e.target.value);
+  };
+  const onCarCityChange = (e) => {
+    setCarCity(e.target.value);
   };
   const onCarRegNumberChange = (e) => {
     setCarRegNumber(e.target.value);
