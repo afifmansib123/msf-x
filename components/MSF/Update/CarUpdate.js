@@ -699,7 +699,7 @@ export default function CarUpdate() {
           setOpen(true);
         }
       } else {
-        setSnackMsg("Successfully Uploaded");
+        setSnackMsg("Successfully Updated");
         setOpen(true);
         setLoading(false);
         setRedirect(true);
@@ -908,6 +908,9 @@ export default function CarUpdate() {
         );
         setCarRegNumber(
           json.result.registration_no === "-" ? "" : json.result.registration_no
+        );
+        setCarCity(
+          json.result.car_location === "-" || json.result.car_location === "N/A" || json.result.car_location == null ? "" : json.result.car_location.city_id
         );
         setCarBodyType(json.result.car_body_type.body_id);
         setCarEngineCC(json.result.engine_capacity);
@@ -1257,7 +1260,7 @@ export default function CarUpdate() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carCity}
+                value={parseInt(carCity) || ''}
                 label="City"
                 name="city_name"
                 onChange={onCarCityChange}

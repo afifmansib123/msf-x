@@ -516,6 +516,7 @@ export default function BikeUpdate() {
       registration_year: bikeRegYear,
       registration_no: bikeRegNumber,
       grade: bikeGrade,
+      bike_location: bikeCity,
     };
 
     if (!arrayEquals(bikeImages, newBikeImages)) {
@@ -577,7 +578,7 @@ export default function BikeUpdate() {
           setOpen(true);
         }
       } else {
-        setSnackMsg("Successfully Uploaded");
+        setSnackMsg("Successfully Updated");
         setOpen(true);
         setLoading(false);
         setRedirect(true);
@@ -794,6 +795,9 @@ export default function BikeUpdate() {
         );
         setBikeColor(
           json.res[0].bike_color == null ? "" : json.res[0].bike_color.color_id
+        );
+        setBikeCity(
+          json.res[0].bike_location === "-" || json.res[0].bike_location === "N/A" || json.res[0].bike_location == null ? "" : json.res[0].bike_location
         );
         setBikeBodyType(json.res[0].bike_body_type.id);
         setBikeEngineCC(json.res[0].engine_capacity);
@@ -1135,7 +1139,7 @@ export default function BikeUpdate() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={bikeCity}
+                value={parseInt(bikeCity) || ''}
                 label="City"
                 name="city_name"
                 onChange={onBikeCityChange}
