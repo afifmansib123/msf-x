@@ -96,6 +96,7 @@ model BikesApp_bike {
   tyre_type_id                BigInt?
   model_bike                  Boolean?
   registration_no             String?                       @db.VarChar(50)
+  expired_on                  DateTime?                     @db.Date
   BikesApp_bikebodytype       BikesApp_bikebodytype?        @relation(fields: [bike_body_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bike_bike_body_type_id_67119148_fk_BikesApp_")
   BikesApp_bikecolor          BikesApp_bikecolor?           @relation(fields: [bike_color_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bike_bike_color_id_b69889ec_fk_BikesApp_bikecolor_id")
   BikesApp_bikefuel           BikesApp_bikefuel?            @relation(fields: [bike_fuel_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "BikesApp_bike_bike_fuel_id_38d58ab8_fk_BikesApp_bikefuel_id")
@@ -381,6 +382,7 @@ model CarsApp_car {
   registration_year                                                String?                    @db.VarChar(20)
   model_car                                                        Boolean?
   registration_no                                                  String?                    @db.VarChar(50)
+  expired_on                                                       DateTime?                  @db.Date
   CarsApp_carbacklight                                             CarsApp_carbacklight?      @relation(fields: [car_back_light_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_car_car_back_light_id_9d982cf8_fk_CarsApp_c")
   CarsApp_carbodytype                                              CarsApp_carbodytype?       @relation(fields: [car_body_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_car_car_body_type_id_8548470e_fk_CarsApp_carbodytype_id")
   CarsApp_carbrake                                                 CarsApp_carbrake?          @relation(fields: [car_brake_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "CarsApp_car_car_brake_id_0d75a50b_fk_CarsApp_carbrake_id")
