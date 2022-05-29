@@ -33,6 +33,7 @@ export default function CarUpload() {
   const [carMaker, setCarMaker] = useState();
   const [carMakers, setCarMakers] = useState([]);
   const [carMakerName, setCarMakerName] = useState();
+  const [cityName, setCityName] = useState();
   const [carModel, setCarModel] = useState();
   const [carModels, setCarModels] = useState([]);
   const [carGrade, setCarGrade] = useState();
@@ -113,8 +114,13 @@ export default function CarUpload() {
     // setCarBodyType(parseInt(filteredData[0]?.body_name));
     console.log(filteredData);
     setFilteredResults(filteredData);
-    let maker = carMakers.filter((x) => x.maker_name.toLowerCase() === filteredData[0]?.maker.toLowerCase());
-    let bodyType = carBodyTypes.filter((x) => x.body_name.toLowerCase() === filteredData[0]?.body[0].toLowerCase());
+    let maker = carMakers.filter(
+      (x) => x.maker_name.toLowerCase() === filteredData[0]?.maker.toLowerCase()
+    );
+    let bodyType = carBodyTypes.filter(
+      (x) =>
+        x.body_name.toLowerCase() === filteredData[0]?.body[0].toLowerCase()
+    );
     console.log(bodyType);
     setCarMaker(maker[0].maker_id);
     setCarMakerName(maker[0].maker_name);
@@ -128,12 +134,20 @@ export default function CarUpload() {
       setLoading(true);
       (async () => {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${carMakerName}`);
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${carMakerName}`
+          );
           const json = await response.json();
           if (response.status === 200) {
             setCarModels(json.result);
-            let filteredYear = json.result.filter((item) => item.release_year !== "-");
-            let model = json.result.filter((x) => x.model_name.toLowerCase() === filteredResults[0]?.model.toLowerCase());
+            let filteredYear = json.result.filter(
+              (item) => item.release_year !== "-"
+            );
+            let model = json.result.filter(
+              (x) =>
+                x.model_name.toLowerCase() ===
+                filteredResults[0]?.model.toLowerCase()
+            );
             setCarModel(model[0].model_id);
             setCarModelYears(getYears());
             setLoading(false);
@@ -147,7 +161,6 @@ export default function CarUpload() {
           setSnackMsg("Something went wrong!");
         }
       })();
-
     }
   }, [carMaker]);
 
@@ -790,7 +803,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{ minHeight: "542px", maxHeight: "542px" }}
+              style={{ minHeight: "620px", maxHeight: "542px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -937,7 +950,7 @@ export default function CarUpload() {
             <TextField
               label="Grade/Package"
               name={"car_grade"}
-              value={carGrade || ''}
+              value={carGrade || ""}
               fullWidth
               onChange={onCarGradeChange}
               placeholder={"Enter Grade/Package"}
@@ -1020,6 +1033,37 @@ export default function CarUpload() {
               />
             </GridItem>
           )}
+
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              <InputLabel id="demo-simple-select-label">City*</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={cityName}
+                label="City"
+                name="city_name"
+                // onChange={}
+              >
+                {[
+                  { city_name: "dhaka", city_id: 1 },
+                  { city_name: "mohamadpur", city_id: 2 },
+                ].map((area, index) => {
+                  return (
+                    <MenuItem
+                      key={index}
+                      value={area.city_id}
+                      onClick={(event) =>
+                        setCityName(event, area.city_id, area.city_name)
+                      }
+                    >
+                      {area.city_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </GridItem>
         </GridContainer>
       </GridItem>
       <GridItem item xs={12} className={classes.uploadOptions}>
