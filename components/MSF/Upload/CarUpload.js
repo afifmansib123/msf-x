@@ -33,7 +33,8 @@ export default function CarUpload() {
   const [carMaker, setCarMaker] = useState();
   const [carMakers, setCarMakers] = useState([]);
   const [carMakerName, setCarMakerName] = useState();
-  const [cityName, setCityName] = useState();
+  const [carCities, setCarCities] = useState([]);
+  const [carCity, setCarCity] = useState();
   const [carModel, setCarModel] = useState();
   const [carModels, setCarModels] = useState([]);
   const [carGrade, setCarGrade] = useState();
@@ -523,6 +524,9 @@ export default function CarUpload() {
   const onCarRegNumberChange = (e) => {
     setCarRegNumber(e.target.value);
   };
+  const onCarCityChange = (e) => {
+    setCarCity(e.target.value);
+  };
   const onCarBodyTypeChange = (e) => {
     setCarBodyType(e.target.value);
     propertyValidationHelper("car_body_type", e.target.value);
@@ -662,6 +666,7 @@ export default function CarUpload() {
       registration_year: carRegYear,
       registration_no: carRegNumber,
       grade: carGrade,
+      car_location: carCity,
     };
 
     if (images.length === 0) {
@@ -762,12 +767,17 @@ export default function CarUpload() {
           `${process.env.NEXT_PUBLIC_BG_API}cars/exterior-color/`
         );
         const json4 = await response4.json();
+        const response5 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/locations/`
+        );
+        const json5 = await response5.json();
 
         setCarBodyTypes(json);
         setCarInteriorColors(json1);
         setCarFuelEconomys(json2);
         setCarFuelTypes(json3);
         setCarExteriorColors(json4);
+        setCarCities(json5);
       } catch (err) {
         console.error(err);
       }
@@ -1036,28 +1046,19 @@ export default function CarUpload() {
 
           <GridItem item xs={12}>
             <FormControl className="w-full">
-              <InputLabel id="demo-simple-select-label">City*</InputLabel>
+              <InputLabel id="demo-simple-select-label">City</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={cityName}
+                value={carCity}
                 label="City"
                 name="city_name"
-                // onChange={}
+                onChange={onCarCityChange}
               >
-                {[
-                  { city_name: "dhaka", city_id: 1 },
-                  { city_name: "mohamadpur", city_id: 2 },
-                ].map((area, index) => {
+                {carCities.map((l, index) => {
                   return (
-                    <MenuItem
-                      key={index}
-                      value={area.city_id}
-                      onClick={(event) =>
-                        setCityName(event, area.city_id, area.city_name)
-                      }
-                    >
-                      {area.city_name}
+                    <MenuItem key={index} value={l.location_id}>
+                      {l.city.district_name}
                     </MenuItem>
                   );
                 })}
