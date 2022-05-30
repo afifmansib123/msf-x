@@ -59,13 +59,18 @@ const Verifystyle = {
 }
 export async function getServerSideProps() {
     // const prisma = new PrismaClient();
-    var tableData = await prisma.MerchantStorefront_merchantpackage.findMany()
+    var tableData = await prisma.MerchantStorefront_merchantpackage.findMany({
+      include:{
+        MerchantStorefront_package:true,
+      }
+    })
     //var tableData = await prisma.MerchantStorefront_merchantperkhistory.findMany()
     console.log(tableData);
 
     tableData = JSON.parse(
       JSON.stringify(tableData, (key, value)=> (typeof value === "bigint" ? value.toString(): value))
     );
+    
   return {
       props: {
         tableData: tableData

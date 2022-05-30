@@ -278,7 +278,6 @@ export default function CarUpdate() {
         car_chassis_number: Joi.string()
           .max(20)
           .regex(/^[a-zA-Z-0-9]+$/)
-          .required()
           .label("Chassis"),
         car_engine_number: Joi.string()
           .max(20)
@@ -409,11 +408,11 @@ export default function CarUpdate() {
     setCarDescription(element.textContent || element.innerText);
   };
   const onCarTypeChange = (e) => {
-    if (carType !== "") {
-      setCarMaker("");
-      setCarModel("");
-      setCarModelYear("");
-    }
+    // if (carType !== "") {
+    //   setCarMaker("");
+    //   setCarModel("");
+    //   setCarModelYear("");
+    // }
     if (e.target.name === "car_type" && e.target.value === 2) {
       setCarRegYears(getYears());
       setIsRegYear(true);
@@ -1068,8 +1067,6 @@ export default function CarUpdate() {
       <GridItem item xs={12} sm={12} md={6} className={classes.uploadOptions}>
         <GridContainer>
           <h2 className={classes.paperTitle}>Choose your car model</h2>
-
-          {!isUsed && (
             <GridItem item xs={12}>
               <FormControl className="w-full">
                 <TextField
@@ -1089,7 +1086,6 @@ export default function CarUpdate() {
                 )}
               </FormControl>
             </GridItem>
-          )}
           <GridItem item xs={12}>
             <FormControl className="w-full">
               <InputLabel id="demo-simple-select-label">Car *</InputLabel>
