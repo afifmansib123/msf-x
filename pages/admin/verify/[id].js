@@ -115,9 +115,9 @@ function DeductPerk(props) {
         (<IconButton variant="outlined" key={index} onClick={() => handlevoucherchange(value)}>
             <EditIcon />
           </IconButton>),
-          (<IconButton variant="outlined" key={index} onClick={() => Delete(value)}>
-          <DeleteIcon/>
-        </IconButton> )
+        //   (<IconButton variant="outlined" key={index} onClick={() => Delete(value)}>
+        //   <DeleteIcon/>
+        // </IconButton> )
       ];
     });
     setAllperklist(ManagePerk);
@@ -160,7 +160,7 @@ function DeductPerk(props) {
           <Card>
             <CardHeader color="danger">
               <h4 style={{ color: "danger", fontWeight: 500, fontSize: 18 }}>
-                Update Perk
+                Manage Feature
               </h4>
             </CardHeader>
             <CardBody>
@@ -246,7 +246,7 @@ function DeductPerk(props) {
               </div>
               <Table
                 tableHeaderColor="danger"
-                tableHead={["Perk","Price","Description","Package Type","Amount","Unit","",""]}
+                tableHead={["Feature","Price","Description","Package Type","Amount","Unit",""]}
                 tableData={allperklist}
               />
             </CardBody>

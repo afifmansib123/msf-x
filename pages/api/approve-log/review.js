@@ -21,7 +21,8 @@ export default async function handler(req, res) {
   }
 }
 
-async function updateApprove({ review_string, approval_id, car_id, status }) {
+async function updateApprove({ approvelogId, review_string, approval_id, car_id, status }) {
+
   const lastest_record = await prisma.CarsApp_carapprovallog.findFirst({
     orderBy: {
       created_at: "desc",
@@ -34,9 +35,11 @@ async function updateApprove({ review_string, approval_id, car_id, status }) {
     JSON.stringify(lastest_record, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
 
+  console.log(parsed_data);
+
   const car_approve = await prisma.CarsApp_carapprovallog.update({
     where: {
-      id: parseInt(parsed_data.id),
+      id: parseInt(approvelogId),
     },
     data: {
       is_approved: true,
@@ -49,6 +52,8 @@ async function updateApprove({ review_string, approval_id, car_id, status }) {
     throw new Error(err);
   });
 
+  console.log(car_approve)
+
   // If status is "A"
   // Also update the car is_active = true
   if (status == "A") {
@@ -58,6 +63,18 @@ async function updateApprove({ review_string, approval_id, car_id, status }) {
       },
       data: {
         is_active: true,
+        car_status: 'A'
+      },
+    });
+    // TODO handle error
+  } else if (status == "R") {
+    const car = await prisma.CarsApp_car.update({
+      where: {
+        id: car_id,
+      },
+      data: {
+        is_active: true,
+        car_status: 'R'
       },
     });
     // TODO handle error

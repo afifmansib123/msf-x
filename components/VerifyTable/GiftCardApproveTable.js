@@ -83,7 +83,9 @@ function CardApproveLog(props) {
       return val
     }
   }).map((value, index) => {
-    return [value.serial_no, value.package_id_id, value.id,
+    return [value.serial_no, 
+      value.MerchantStorefront_package.package_name, value.user_id_id,
+
     (<Button variant="outlined" onClick={() => { handleClickOpen(value) }} color="success">Details</Button>)]
   });
 
@@ -128,6 +130,7 @@ function CardApproveLog(props) {
               <Table
                 tableHeaderColor={props.tableHeaderColor}
                 tableHead={props.tableHead}
+              
                 tableData={currentData}
               />
             </CardBody>
@@ -182,7 +185,7 @@ function CardApproveLog(props) {
 
 CardApproveLog.defaultProps = {
   tableHeaderColor: "danger",
-  tableHead: ["Serial No", "Package ID", "User ID", ""],
+  tableHead: ["Serial No", "Package Name", "User ID", ""],
 };
 
 CardApproveLog.propTypes = {
@@ -199,5 +202,6 @@ CardApproveLog.propTypes = {
   tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.any)),
   callback: PropTypes.func
 };
+
 
 export default CardApproveLog;

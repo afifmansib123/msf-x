@@ -23,6 +23,7 @@ function DetailCarLog(props) {
   const { token } = session;
   const { id } = token;
 
+
   const showFeatureCard = () => {
     if (props.carFeature === null || props.carFeature === undefined) {
       return <p>None</p>;
@@ -56,10 +57,10 @@ function DetailCarLog(props) {
 
     try {
       if (type === "approve") {
-        await handleApprove(reason, id, parseInt(router.query.id));
+        await handleApprove(reason, id, parseInt(router.query.id), parseInt(props.car.id));
         await router.push(`/admin/approval/`);
       } else {
-        await handleReject(reason, id, parseInt(router.query.id));
+        await handleReject(reason, id, parseInt(router.query.id), parseInt(props.car.id));
         await router.push(`/admin/approval/`);
       }
     } catch (e) {
@@ -67,6 +68,8 @@ function DetailCarLog(props) {
       alert("Something went wrong");
     }
   };
+
+
 
   return (
     <Container className="px-0">
@@ -267,6 +270,9 @@ function DetailCarLog(props) {
               </CardBody>
             </Card>
           </GridItem>
+
+
+
           <GridItem xs={12} sm={12} md={12}>
             <CusButton color="success" round={true} onClick={() => handleSubmit("approve")}>
               Approve
@@ -300,13 +306,14 @@ export async function getServerSideProps(context) {
   };
 }
 
-async function handleApprove(review_string, approval_id, car_id) {
+async function handleApprove(review_string, approval_id, car_id, approvelogId) {
   const response = await fetch("/api/approve-log/review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      approvelogId: approvelogId,
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
@@ -319,13 +326,14 @@ async function handleApprove(review_string, approval_id, car_id) {
   }
 }
 
-async function handleReject(review_string, approval_id, car_id) {
+async function handleReject(review_string, approval_id, car_id, approvelogId) {
   const response = await fetch("/api/approve-log/review", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      approvelogId: approvelogId,
       review_string: review_string,
       approval_id: approval_id,
       car_id: car_id,
@@ -473,6 +481,9 @@ async function getDetail(car_id) {
 
   return jsonData;
 }
+
+
+
 DetailCarLog.layout = Admin;
 DetailCarLog.auth = true;
 
