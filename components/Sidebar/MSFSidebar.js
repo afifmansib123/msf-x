@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -12,7 +11,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Icon from "@mui/material/Icon";
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
+// import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 
 import styles from "assets/jss/nextjs-material-dashboard/components/sidebarStyle.js";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -90,7 +89,7 @@ export default function Sidebar(props) {
   var brand = (
     <div className={classes.logo}>
       <a
-        href="/"
+        href="/msf/dashboard"
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: props.rtlActive,
         })}

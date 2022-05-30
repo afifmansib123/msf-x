@@ -28,6 +28,7 @@ import React, { useEffect, useRef, useState } from "react";
 import JsonData from "../../../pages/api/cars/carUpload_api.json";
 
 export default function CarUpload() {
+  // TODO Use react-hook-form to reduce these states
   const [carType, setCarType] = useState();
   const [carTypes, setCarTypes] = useState([]);
   const [carMaker, setCarMaker] = useState();
@@ -47,8 +48,6 @@ export default function CarUpload() {
   const [carChassisNumber, setCarChassisNumber] = useState();
   const [carEngineNumber, setCarEngineNumber] = useState();
   const [carRegNumber, setCarRegNumber] = useState();
-  const [carCities, setCarCities] = useState([]);
-  const [carCity, setCarCity] = useState();
   const [modelOptions] = useState([
     {
       title: "Condition*",
@@ -546,9 +545,7 @@ export default function CarUpload() {
   const onCarRegNumberChange = (e) => {
     setCarRegNumber(e.target.value);
   };
-  const onCarCityChange = (e) => {
-    setCarCity(e.target.value);
-  };
+
   const onCarBodyTypeChange = (e) => {
     setCarBodyType(e.target.value);
     propertyValidationHelper("car_body_type", e.target.value);

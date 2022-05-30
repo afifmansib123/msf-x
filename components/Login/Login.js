@@ -28,7 +28,7 @@ function Login() {
             <ul>
               <Link href="/msf">
                 <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 border border-orange-700 rounded">
-                  Merchant Storefront{" "}
+                  Merchant Storefront
                 </button>
               </Link>
 
