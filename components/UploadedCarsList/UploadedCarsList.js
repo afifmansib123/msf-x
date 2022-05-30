@@ -13,11 +13,10 @@ const UploadedCarsList = ({ data }) => {
     CarsApp_carfuel_CarsApp_car_car_fuel_idToCarsApp_carfuel: car_fuel,
     date,
     transmission_type,
-    CarsApp_cartype: car_type,
+    CarsApp_cartype,
     registration_year,
     car_status,
   } = data;
-
   const router = useRouter();
   const handleEdit = () => {
     router.push({
@@ -43,24 +42,21 @@ const UploadedCarsList = ({ data }) => {
               alt="Landscape picture"
             />
           )}
-          {car_status === "active" && (
+          {(car_status === "active" || car_status === "A") && (
             <p className="text-sm absolute top-0 right-0 py-1 px-2 bg-orange-500 rounded text-white m-2">
               Approved
             </p>
           )}
           {car_status === "P" && (
-            <p className="text-sm absolute top-0 right-0 p-2 bg-orange-500 rounded text-white m-2">
+            <p className="text-sm absolute top-0 right-0 py-1 px-2 bg-orange-500 rounded text-white m-2">
               Pending
             </p>
           )}
           {car_status === "R" && (
-            <p className="text-sm absolute top-0 right-0 p-2 bg-orange-500 rounded text-white m-2">
+            <p className="text-sm absolute top-0 right-0 py-1 px-2 bg-orange-500 rounded text-white m-2">
               Rejected
             </p>
           )}
-          {/* <p className="absolute top-0 right-0 p-2 bg-orange-500 rounded text-white m-2">
-            {car_status}
-          </p> */}
         </div>
         <div className="px-5 py-5">
           <h6 className="mb-1 text-sm tracking-tight text-gray-600 dark:text-white font-sans ">
@@ -78,13 +74,11 @@ const UploadedCarsList = ({ data }) => {
           </div>
 
           <h6 className="mb-1 text-sm tracking-tight text-gray-900 dark:text-white">
-            Category: <span className="font-bold">{car_type.type_name}</span>
+            Category:{" "}
+            <span className="font-bold">{CarsApp_cartype.car_type}</span>
           </h6>
           <h6 className="mb-1 text-sm tracking-tight text-gray-900 dark:text-white">
             Model Year: {car_year}
-          </h6>
-          <h6 className="mb-1 text-sm tracking-tight text-gray-900 dark:text-white">
-            Model Year: {car_status}
           </h6>
           <div className="">
             <div className="flex items-center space-x-1 ">
