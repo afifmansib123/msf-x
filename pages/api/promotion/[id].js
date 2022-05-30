@@ -1,4 +1,4 @@
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 import formidable from "formidable";
 import fs from "fs";
 

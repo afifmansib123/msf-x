@@ -9,7 +9,8 @@ import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import { prisma, PrismaClient } from "@prisma/client";
+// import { prisma, PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import Link from 'next/link'
 import { useRouter } from "next/router";
 
@@ -57,7 +58,7 @@ const Verifystyle = {
       }
 }
 export async function getServerSideProps() {
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
     var tableData = await prisma.MerchantStorefront_merchantpackage.findMany()
     //var tableData = await prisma.MerchantStorefront_merchantperkhistory.findMany()
     console.log(tableData);

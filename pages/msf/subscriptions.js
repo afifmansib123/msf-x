@@ -25,7 +25,7 @@ import AddAlert from "@mui/icons-material/AddAlert";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { orange } from "@mui/material/colors";
 import { getSession } from "next-auth/react"
-import prisma from "../../PrismaConnect";
+import prisma from "/PrismaConnect";
 
 function Subscriptions(props) {
   const [packages, setPackages] = useState([]);

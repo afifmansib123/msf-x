@@ -1,4 +1,4 @@
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 import * as crypto from "crypto";
 export default async function handler(req, res) {
     // example url:  /api/gift?status=success&&trn=sdakdaskdj12321321 --> for transaction success

@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import prisma from "PrismaConnect";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
+
 export default async function handler(req, res) {
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
     const statusArr = [];
     var filtering = {};
     let {page, status, searchBy, searchState} = req.query;

@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import { useRouter } from "next/router";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -294,7 +295,7 @@ export async function getServerSideProps(context) {
 }
 
 async function getManagePerk(package_id_id) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const data = await prisma.MerchantStorefront_perks.findMany({
     where: {
       package_id_id: package_id_id,

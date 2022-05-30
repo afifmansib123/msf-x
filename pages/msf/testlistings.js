@@ -10,7 +10,8 @@ import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 const styles = {
@@ -89,7 +90,7 @@ function Listing(props) {
 }
 
 export async function getServerSideProps() {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   var allCars = await prisma.carsApp_car.findMany({
     where: {
       created_by_id: 19,

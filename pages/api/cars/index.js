@@ -1,7 +1,7 @@
 /**
  * Sample Car API
  */
-import prisma from "../../../PrismaConnect";
+ import prisma from "/PrismaConnect";
 
 export default async function handler(req, res) {
     const {page, status, searchTitle} = req.query;

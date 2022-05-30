@@ -21,7 +21,8 @@ import CardFooter from "components/Card/CardFooter.js";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 // import { prisma } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 const styles = {
   cardCategoryWhite: {
@@ -244,7 +245,7 @@ export async function getServerSideProps(context) {
 }
 
 async function getPromo(promo_id) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const data = await prisma.MerchantStorefront_promotion.findUnique({
     where: {
       id: promo_id,

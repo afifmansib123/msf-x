@@ -7,7 +7,8 @@
 import React, { useState } from "react";
 import MSF from "layouts/MSF.js";
 import { getSession } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import { useForm } from "react-hook-form";
 import { useS3Upload } from "next-s3-upload";
 import axios from "axios";
@@ -210,7 +211,7 @@ export default function StorePage(props) {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   console.debug("\tFinding store with owner ID:", session.token.id);
   // console.log("\tType of", BigInt(session.token.id), typeof BigInt(session.token.id));
   var userStore = await prisma.MerchantStorefront_store.findFirst({

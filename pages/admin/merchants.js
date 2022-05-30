@@ -24,7 +24,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from "@mui/material/TextField";
-import prisma from "../../PrismaConnect";
+import prisma from "/PrismaConnect";
 
 import { format } from "date-fns";
 import Dialog from "@mui/material/Dialog";

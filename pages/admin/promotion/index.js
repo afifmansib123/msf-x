@@ -22,7 +22,8 @@ import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
 // import {updatePromo} from "../../api/promotion"
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 const styles = {
   cardCategoryWhite: {
@@ -160,7 +161,7 @@ function PromotionPage(props) {
 PromotionPage.layout = Admin;
 
 export async function getServerSideProps() {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   var allPromotions = await prisma.MerchantStorefront_promotion.findMany({
     orderBy: {
       start_at: "desc",

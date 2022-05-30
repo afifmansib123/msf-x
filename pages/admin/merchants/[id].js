@@ -16,7 +16,8 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import { useSession } from "next-auth/react";
 import IconButton from '@mui/material/IconButton';
 import Image from 'next/image'
@@ -284,7 +285,7 @@ function MerchantCardDetail(props) {
   );
       }
 export async function getServerSideProps(context) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const id = context.params.id;
   const tableData = await getUserDetail(parseInt(id));
   var packages = await prisma.MerchantStorefront_package.findMany({
@@ -327,7 +328,7 @@ export async function getServerSideProps(context) {
   }
 }
 async function getUserDetail(user_id) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const data = await prisma.UsersApp_customuser.findUnique({
     where: {
       id: BigInt(user_id),

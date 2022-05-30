@@ -1,4 +1,4 @@
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 
 
 

@@ -7,7 +7,8 @@ import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import { useRouter } from "next/router";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -768,7 +769,7 @@ function PackageManagement(props) {
 }
 PackageManagement.layout = Admin;
 export async function getServerSideProps() {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   var packages = await prisma.MerchantStorefront_package.findMany({
     orderBy: [{ package_type: "desc" }],
   });

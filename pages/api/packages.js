@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 export default async function handler(req, res) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   var packages = await prisma.MerchantStorefront_package.findMany({
     // where: {
     // business_user: true,
