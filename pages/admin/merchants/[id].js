@@ -17,11 +17,11 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 // import { PrismaClient } from "@prisma/client";
+// import { prisma } from "@prisma/client";
 import prisma from "/PrismaConnect";
 import { useSession } from "next-auth/react";
 import IconButton from '@mui/material/IconButton';
 import Image from 'next/image'
-import { prisma } from "@prisma/client";
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack'
 import { useForm } from "react-hook-form";
