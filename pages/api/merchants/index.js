@@ -6,7 +6,8 @@ export default async function handler(req, res) {
     // const prisma = new PrismaClient();
     const { page } = req.query;
     try {
-        const data = await getMerchantList(parseInt(page));
+        console.log("page",page)
+        const data = await getMerchantList(page?parseInt(page):1);
         return res.status(200).json(data);
     } catch (e) {
         console.error(e)
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
 
 }
 
-async function getMerchantList(page) {
+async function getMerchantList(page=1) {
     let merchants;
 
     if (page === 1) {
