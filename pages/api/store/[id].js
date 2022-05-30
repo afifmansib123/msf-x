@@ -54,5 +54,16 @@ export default async function handler(req, res) {
       console.error(error);
       res.status(500).json(error);
     }
+  } else {
+    // Default case, req.method === "GET"
+    let data = await prisma.MerchantStorefront_store.findUnique({
+      where: {
+        id: BigInt(id),
+      },
+
+    });
+
+    data = JSON.parse(JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value)));
+    res.status(200).json(data);
   }
 }
