@@ -31,7 +31,7 @@ import MSF from "layouts/MSF.js";
 // import styles from "assets/jss/nextjs-material-dashboard/views/iconsStyle.js";
 import { getSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 const styles = {
@@ -66,8 +66,11 @@ const styles = {
 import styles2 from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import {es, th} from "date-fns/locale";
 function StoreDashboardPage(props) {
-  const { promotions, user, packages, acceptedCar, rejectedCar, pendingCar } = props;
+  const { promotions, user, userId, packages, acceptedCar, rejectedCar, pendingCar } = props;
+  // console.log(props.MerchantStorefront_package?.package_type);
   // console.log("MSF[user]", user);
+  // const [subType, setSubType] = useState('');
+  let subType ='';
   const useStyles = makeStyles(styles);
   const classes = useStyles();
   const useStyles2 = makeStyles(styles2);
@@ -95,6 +98,15 @@ function StoreDashboardPage(props) {
     console.log(allCars)
     // console.log(acceptedCar, rejectedCar, pendingCar);
   }
+  // packages.map(p =>{console.log(p.MerchantStorefront_package.package_name)});
+  
+  packages.map(p =>{
+    // console.log(p.MerchantStorefront_package.package_type);
+    if(p.MerchantStorefront_package.package_type == 'subscription'){
+      subType = p.MerchantStorefront_package.package_name;
+      // console.log(p.MerchantStorefront_package.package_name);
+    }
+  });
 
   return (
     <GridContainer>
@@ -115,7 +127,7 @@ function StoreDashboardPage(props) {
             <CardIcon color="warning">
               <CarCrashIcon />
             </CardIcon>
-            <p className={classes2.cardCategory}>Peding Vehicles</p>
+            <p className={classes2.cardCategory} style={{color:'#000'}}>Peding Vehicles</p>
             <h3 className={classes2.cardTitle}>{pendingCar}</h3>
           </CardHeader>
           <CardFooter stats>
@@ -135,7 +147,7 @@ function StoreDashboardPage(props) {
             <CardIcon color="info">
               <CheckCircleIcon />
             </CardIcon>
-            <p className={classes2.cardCategory}>Accept Vehicles</p>
+            <p className={classes2.cardCategory} style={{color:'#000'}}>Accept Vehicles</p>
             <h3 className={classes2.cardTitle}>{acceptedCar}</h3>
           </CardHeader>
           <CardFooter stats>
@@ -155,13 +167,19 @@ function StoreDashboardPage(props) {
             <CardIcon color="danger">
               <CancelIcon />
             </CardIcon>
-            <p className={classes2.cardCategory}>Rejected Vehicles</p>
+            <p className={classes2.cardCategory} style={{color:'#000'}}>Rejected Vehicles</p>
             <h3 className={classes2.cardTitle}>{rejectedCar}</h3>
           </CardHeader>
           <CardFooter stats>
 
           </CardFooter>
         </Card>
+      </GridItem>
+
+      <GridItem xs={12} sm={6} md={3}>
+        <div className='text-center mt-6 mx-12'>
+          <h2 className='font-bold bg-bhalogari p-4 mx-8 text-white rounded'>Subscrption Type: {subType}</h2>
+        </div>
       </GridItem>
 
 
@@ -241,7 +259,7 @@ function StoreDashboardPage(props) {
                 </TableHead>
                 <TableBody>
                   {packages.map((row) => {
-                      console.log(row);
+                      // console.log(row);
                     return (<TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -285,6 +303,10 @@ export async function getServerSideProps(context) {
     },
     orderBy: { timestamp: "desc" },
   });
+
+  // User subscription packages
+  // var userSubs = await 
+
   // The package is nested
   // userPackages = userPackages.map((p) => p.MerchantStorefront_package);
   userPackages = JSON.parse(
@@ -357,8 +379,8 @@ export async function getServerSideProps(context) {
       // next-auth prevent from sending sensitive information, passing session object will get undefined
       // session: session,
       user: session.user,
+      userId: session.token.id,
       packages: userPackages,
-      
       acceptedCar: acceptedCar,
       rejectedCar: rejectedCar,
       pendingCar: pendingCar
