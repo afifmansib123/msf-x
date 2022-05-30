@@ -69,9 +69,9 @@ export default async function handler(req, res) {
     const pay_method = parseInt(body.pay_method) || 3;
     const package_type = body.package_type;
 
-    const success_url = `http://localhost:3000/api/${package_type}?status=success&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
-    const fail_url = `http://localhost:3000/api/${package_type}?status=fail&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
-    const cancel_url = `http://localhost:3000/api/${package_type}?status=cancel&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const success_url = `${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=success&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const fail_url = `${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=fail&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
+    const cancel_url = `${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=cancel&trx_id=${trn_id}&total_amount=${total_amount}&user_id=${user_id}&package_id=${package_id}&pay_method=${pay_method}`;
 
     const data = {
       total_amount: total_amount,
@@ -80,7 +80,7 @@ export default async function handler(req, res) {
       success_url: success_url,
       fail_url: fail_url,
       cancel_url: cancel_url,
-      ipn_url: `http://localhost:3000/admin/${package_type}/payment/ipn`,
+      ipn_url: `${process.env.PAYMENT_GATE_CALLBACK}admin/${package_type}/payment/ipn`,
       shipping_method: "Courier",
       product_name: "Computer.",
       product_category: "Electronic",
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
     // console.log("apiResponse",apiResponse)
     let {GatewayPageURL} = apiResponse;
     if (!GatewayPageURL) {
-      return res.status(200).send(`http://localhost:3000/api/${package_type}?status=fail`)
+      return res.status(200).send(`${process.env.PAYMENT_GATE_CALLBACK}api/${package_type}?status=fail`)
     }
     return res.status(200).send(GatewayPageURL);
     // console.log("Redirecting to: ", GatewayPageURL);

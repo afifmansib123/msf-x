@@ -63,6 +63,7 @@ const styles = {
   },
 };
 import styles2 from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
+import {es, th} from "date-fns/locale";
 function StoreDashboardPage(props) {
   const { promotions, user, packages, acceptedCar, rejectedCar, pendingCar } = props;
   // console.log("MSF[user]", user);
@@ -238,23 +239,28 @@ function StoreDashboardPage(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {packages.map((row) => (
-                    <TableRow
+                  {packages.map((row) => {
+                      console.log(row);
+                    return (<TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{row.package_name}</TableCell>
-                      <TableCell>{row.package_type}</TableCell>
+                      <TableCell>{row?.MerchantStorefront_package?.package_name}</TableCell>
+                      <TableCell>{row?.MerchantStorefront_package?.package_type}</TableCell>
                       <TableCell>
-                        {row.created_at
-                          ? format(new Date(row.created_at), "dd MMM yyyy")
+                        {row.timestamp
+                          ? format(new Date(row?.timestamp), "dd MMM yyyy")
                           : "-"}
                       </TableCell>
-                      <TableCell>{row.status}</TableCell>
+                      <TableCell>{row?.status === true ?
+                          "PAID":
+                          "UNPAID"}</TableCell>
                       {/* <TableCell align="right">{row.carbs}</TableCell>
               <TableCell align="right">{row.protein}</TableCell> */}
-                    </TableRow>
-                  ))}
+                    </TableRow>)
+                  }
+                  )
+                  }
                 </TableBody>
               </Table>
             </TableContainer>
@@ -269,23 +275,22 @@ export async function getServerSideProps(context) {
   // console.log("dashboard.session", session);
   const prisma = new PrismaClient();
   // UserInfo
-  var userPackages = await prisma.merchantStorefront_merchantpackage.findMany({
+  var userPackages = await prisma.MerchantStorefront_paymenthistory.findMany({
     where: {
       user_id_id: session.token.id,
     },
-    select: {
+    include: {
       MerchantStorefront_package: true,
     },
-    orderBy: { created_at: "desc" },
+    orderBy: { timestamp: "desc" },
   });
   // The package is nested
-  userPackages = userPackages.map((p) => p.MerchantStorefront_package);
+  // userPackages = userPackages.map((p) => p.MerchantStorefront_package);
   userPackages = JSON.parse(
     JSON.stringify(userPackages, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value
+      typeof value === "bigint" ? parseInt(value) : value
     )
   );
-  console.log("package", userPackages);
   // Promotions
   var allPromotions = await prisma.MerchantStorefront_promotion.findMany({});
   allPromotions = JSON.parse(

@@ -17,12 +17,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getGiftPackage } from '../../api/gift/packages'
 import useMediaQuery from '@mui/material/useMediaQuery';
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { orange } from "@mui/material/colors";
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 function merchantGiftCard(props) {
     const [errorDialog, setOpenDialog] = React.useState(false);
-    const [paymentDialog, setPaymentDialog] = React.useState(false);
     const router = useRouter();
     const { data: session, status } = useSession();
     const { res_status, message, title } = router.query;
@@ -37,22 +36,22 @@ function merchantGiftCard(props) {
     }, []);
 
     const buyPackage = (subPackage) => async (e) => {
-        await router.push({
+        await router.replace({
             pathname: '/msf/paymethod',
             query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name, package_type: "gift"}
         });
     }
 
 
-    const handleClose = () => {
+    const handleClose = async () => {
         setOpenDialog(false)
-        router.push({
+        await router.replace({
             pathname: '/msf/giftcard'
         })
     }
 
-    const onCurrentPackageClick = (user_id) => {
-        router.push(`/msf/giftcard/${user_id}`);
+    const onCurrentPackageClick = async (user_id) => {
+        await router.push(`/msf/giftcard/${user_id}`);
     }
 
     const packageCard = packages.map((v,index) => {
@@ -141,22 +140,43 @@ function merchantGiftCard(props) {
 
             <div>
                 <Dialog
+                    className={"overflow-visible"}
                     open={errorDialog}
                     onClose={handleClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                     fullScreen={fullScreen}
+                    PaperProps={{
+                        style: { borderRadius: 20}
+                    }}
                     fullWidth>
                     <DialogTitle id="alert-dialog-title">
-                        {title}
+                        <div className={"sticky flex text-center self-center align-middle center-block justify-center"}>
+                            {res_status === "success" &&
+                                <div className={"rounded-full border-[4px] border-green-800"}>
+                                    <CheckOutlinedIcon color={"success"} className={"text-[7rem] text-center "}></CheckOutlinedIcon>
+                                </div>
+                            }
+
+                            {( res_status === "fail" || res_status === "cancel") &&
+                                <div className={"rounded-full border-[4px] border-red-800"}>
+                                    <CloseIcon color={"error"} className={"text-[7rem] text-center "}></CloseIcon>
+                                </div>
+                            }
+
+                        </div>
+
+                        <div className={"text-center mt-3 text-bhalogari"}>
+                            {title}
+                        </div>
                     </DialogTitle>
                     <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
+                        <DialogContentText id="alert-dialog-description" className={"text-center"}>
                             {message}
                         </DialogContentText>
                     </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>OK</Button>
+                    <DialogActions className={"justify-center"}>
+                        <Button variant={"contained"} className={"bg-bhalogari px-10"} size={"large"} onClick={handleClose}>OK</Button>
                     </DialogActions>
                 </Dialog>
             </div>

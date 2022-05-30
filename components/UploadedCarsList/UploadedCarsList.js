@@ -1,13 +1,5 @@
 import React from "react";
-import Link from "next/link";
-import Milage from "/assets/CarListPageIcons/milage.svg";
-import Fuel from "/assets/CarListPageIcons/fuel.svg";
-import Calendar from "/assets/CarListPageIcons/calendar.svg";
-import Used from "/assets/CarListPageIcons/transmission.svg";
-import taka from "/assets/CarListPageIcons/taka.fb378b29.svg";
-import Image from "next/image";
 import { useRouter } from 'next/router';
-import carimage from '../../assets/img/listing/picture.svg';
 
 const UploadedCarsList = ({ data }) => {
   const {
@@ -39,7 +31,7 @@ const UploadedCarsList = ({ data }) => {
         {images.length > 0 ? (
           <img className="rounded-t-lg h-36 w-full object-cover" src={images[0].image_url} alt="Landscape picture" />
         ) : (
-          <img className="rounded-t-lg h-36 mx-auto object-cover" src={carimage.src} alt="Landscape picture" />
+          <img className="rounded-t-lg h-36 mx-auto object-cover" src="/assets/img/listing/picture.svg" alt="Landscape picture" />
         )}
         <div className="px-5 py-5">
           <h6 className="mb-1 text-sm tracking-tight text-gray-600 dark:text-white font-sans ">
@@ -50,7 +42,7 @@ const UploadedCarsList = ({ data }) => {
           </h5>
 
           <div className="flex space-x-1 mb-1">
-            <Image src={taka}></Image>
+            <img src="/assets/CarListPageIcons/taka.fb378b29.svg"></img>
             <h5 className=" text-sm font-bold tracking-tight text-gray-900 dark:text-white">{fixed_price}</h5>
           </div>
 
@@ -61,21 +53,21 @@ const UploadedCarsList = ({ data }) => {
           <div className="">
             <div className="flex items-center space-x-1 ">
               <div className="flex  items-center  flex-col w-1/4">
-                <Image src={Milage} className=" bg-gray-200 rounded-full width-1" />
+                <img src="/assets/CarListPageIcons/milage.svg" className=" bg-gray-200 rounded-full width-1" />
 
                 <p className="text-sm">{mileage}</p>
               </div>
               <div className="flex  items-center flex-col w-1/4">
-                <Image src={Fuel} className=" bg-gray-200 rounded-full width-1" />
+                <img src="/assets/CarListPageIcons/fuel.svg" className=" bg-gray-200 rounded-full width-1" />
 
                 <p className="text-sm">{car_fuel.fuel_type}</p>
               </div>
               <div className="flex items-center flex-col w-1/4">
-                <Image src={Calendar} className=" bg-gray-200 rounded-full width-1" />
+                <img src="/assets/CarListPageIcons/calendar.svg" className=" bg-gray-200 rounded-full width-1" />
                 <p className="text-sm">{registration_year}</p>
               </div>
               <div className="flex  justify-center items-center flex-col w-1/4">
-                <Image src={Used} className=" bg-gray-200 rounded-full width-1" />
+                <img src="/assets/CarListPageIcons/transmission.svg" className=" bg-gray-200 rounded-full width-1"/>
 
                 {transmission_type === "A" && <p className="text-sm">Automatic</p>}
                 {transmission_type === "M" && <p className="text-sm">Manual</p>}

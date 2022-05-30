@@ -25,13 +25,17 @@ import Joi from "joi-browser";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import fakeData from "../../../pages/api/car_api.json";
+import JsonData from "../../../pages/api/cars/carUpload_api.json";
 
 export default function CarUpload() {
+  // TODO Use react-hook-form to reduce these states
   const [carType, setCarType] = useState();
   const [carTypes, setCarTypes] = useState([]);
   const [carMaker, setCarMaker] = useState();
   const [carMakers, setCarMakers] = useState([]);
+  const [carMakerName, setCarMakerName] = useState();
+  const [carCities, setCarCities] = useState([]);
+  const [carCity, setCarCity] = useState();
   const [carModel, setCarModel] = useState();
   const [carModels, setCarModels] = useState([]);
   const [carGrade, setCarGrade] = useState();
@@ -97,22 +101,90 @@ export default function CarUpload() {
   const [carMileage, setCarMileage] = useState();
   const [carSeat, setCarSeat] = useState();
   const [carDrive, setCarDrive] = useState();
-
+  const [makerName, setMakerName] = useState("");
   const [jsonData, setJsonData] = useState([]);
-  const [filteredResults, setFilteredResults] = useState("");
-  const searchItems = (searchValue) => {
-    const filteredData = jsonData?.chassis_number_prefix?.filter((item) => {
-      return Object.values(item)
-        .join("")
-        .toLowerCase()
-        .includes(searchValue.toLowerCase());
-    });
-    // setCarBodyType(parseInt(filteredData[0]?.body_name));
-    setFilteredResults(filteredData);
+  const [filteredResults, setFilteredResults] = useState([]);
+
+  const searchItems = (e) => {
+    setCarChassisNumber(e.target.value);
+    const filteredData = jsonData?.filter(
+      (item) => item.cn.toLowerCase() === e.target.value.toLowerCase()
+    );
+    if(filteredData.length > 0) {
+      setFilteredResults(filteredData);
+      let maker = carMakers.filter(
+        (x) => x.maker_name.toLowerCase() === filteredData[0]?.maker.toLowerCase()
+      );
+      let bodyType = carBodyTypes.filter(
+        (x) => x.body_name.toLowerCase() === filteredData[0]?.body[0].toLowerCase()
+      );
+      let transmission = carTransmissions.filter(
+        (x) => x.title.toLowerCase() === filteredData[0]?.transmission[0].toLowerCase()
+      );
+      let fuelType = carFuelTypes.filter(
+        (x) => x.fuel_type.toLowerCase() === filteredData[0]?.fuel[0].toLowerCase()
+      );
+      setCarMaker(maker[0].maker_id);
+      setCarMakerName(maker[0].maker_name);
+      setCarGrade(filteredData[0]?.grade[0]);
+      setCarModelYear(filteredData[0]?.year[0]);
+      setCarBodyType(bodyType[0]?.id);
+      setCarEngineCC(filteredData[0]?.engine[0]);
+      setCarSeat(filteredData[0]?.seat[0]);
+      setCarTransmission(transmission[0]?.id);
+      setCarFuelType(fuelType[0]?.fuel_id);
+    } else {
+      setCarMaker();
+      setCarModel();
+      setCarMakerName();
+      setCarGrade();
+      setCarModelYear();
+      setCarBodyType();
+      setCarEngineCC();
+      setCarSeat();
+      setCarTransmission();
+      setCarFuelType();
+    }
   };
 
   useEffect(() => {
-    setJsonData(fakeData);
+    if (carMaker !== "") {
+      setCarModels([]);
+      setLoading(true);
+      (async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BG_API}cars/model-list/?maker_name=${carMakerName}`
+          );
+          const json = await response.json();
+          if (response.status === 200) {
+            setCarModels(json.result);
+            let filteredYear = json.result.filter(
+              (item) => item.release_year !== "-"
+            );
+            let model = json.result.filter(
+              (x) =>
+                x.model_name.toLowerCase() ===
+                filteredResults[0]?.model.toLowerCase()
+            );
+            setCarModel(model[0].model_id);
+            setCarModelYears(getYears());
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setSnackMsg("Search Alert: Model not available for this brand!");
+            setOpen(true);
+          }
+        } catch (err) {
+          setLoading(false);
+          setSnackMsg("Something went wrong!");
+        }
+      })();
+    }
+  }, [carMaker,filteredResults]);
+
+  useEffect(() => {
+    setJsonData(JsonData);
   }, []);
   const [carDrives] = useState([
     { id: 1, option: "Front Wheel Drive (FWD)" },
@@ -467,9 +539,13 @@ export default function CarUpload() {
   const onCarEngineNumberChange = (e) => {
     setCarEngineNumber(e.target.value);
   };
+  const onCarCityChange = (e) => {
+    setCarCity(e.target.value);
+  };
   const onCarRegNumberChange = (e) => {
     setCarRegNumber(e.target.value);
   };
+
   const onCarBodyTypeChange = (e) => {
     setCarBodyType(e.target.value);
     propertyValidationHelper("car_body_type", e.target.value);
@@ -609,6 +685,7 @@ export default function CarUpload() {
       registration_year: carRegYear,
       registration_no: carRegNumber,
       grade: carGrade,
+      car_location: carCity,
     };
 
     if (images.length === 0) {
@@ -709,12 +786,17 @@ export default function CarUpload() {
           `${process.env.NEXT_PUBLIC_BG_API}cars/exterior-color/`
         );
         const json4 = await response4.json();
+        const response5 = await fetch(
+          `${process.env.NEXT_PUBLIC_BG_API}cars/locations/`
+        );
+        const json5 = await response5.json();
 
         setCarBodyTypes(json);
         setCarInteriorColors(json1);
         setCarFuelEconomys(json2);
         setCarFuelTypes(json3);
         setCarExteriorColors(json4);
+        setCarCities(json5);
       } catch (err) {
         console.error(err);
       }
@@ -750,7 +832,7 @@ export default function CarUpload() {
           <h2 className={classes.paperTitle}>UPLOAD Car Photo*</h2>
           <GridItem item xs={12}>
             <Dropzone
-              style={{ minHeight: "542px", maxHeight: "542px" }}
+              style={{ minHeight: "620px", maxHeight: "542px" }}
               //view={"list"}
               onChange={updateFiles}
               minHeight="195px"
@@ -806,7 +888,7 @@ export default function CarUpload() {
                   name={"car_chassis_number"}
                   autoComplete="off"
                   fullWidth
-                  onChange={onCarChassisNumberChange}
+                  onChange={searchItems}
                   variant="outlined"
                   placeholder="Enter Chassis Number"
                 />
@@ -848,7 +930,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carMaker}
+                value={parseInt(carMaker) || ''}
                 label="Car Makers"
                 name="car_maker"
                 // onChange={onCarMakerChange}
@@ -875,7 +957,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carModel}
+                value={parseInt(carModel) || ''}
                 label="Car Models"
                 name="car_model"
                 onChange={onCarModelChange}
@@ -897,6 +979,7 @@ export default function CarUpload() {
             <TextField
               label="Grade/Package"
               name={"car_grade"}
+              value={carGrade || ""}
               fullWidth
               onChange={onCarGradeChange}
               placeholder={"Enter Grade/Package"}
@@ -908,7 +991,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carModelYear}
+                value={parseInt(carModelYear) || ''}
                 label="Car Model Years"
                 name="car_model_year"
                 onChange={onCarModelYearChange}
@@ -979,6 +1062,28 @@ export default function CarUpload() {
               />
             </GridItem>
           )}
+
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              <InputLabel id="demo-simple-select-label">City</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={carCity}
+                label="City"
+                name="city_name"
+                onChange={onCarCityChange}
+              >
+                {carCities.map((l, index) => {
+                  return (
+                    <MenuItem key={index} value={l.location_id}>
+                      {l.city.district_name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </GridItem>
         </GridContainer>
       </GridItem>
       <GridItem item xs={12} className={classes.uploadOptions}>
@@ -992,6 +1097,7 @@ export default function CarUpload() {
                 id="demo-simple-select"
                 label="Car Body Types"
                 name="car_body_type"
+                value={parseInt(carBodyType) || ''}
                 onChange={onCarBodyTypeChange}
               >
                 {carBodyTypes.map((l, index) => {
@@ -1012,7 +1118,7 @@ export default function CarUpload() {
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
               label="Engine CC"
-              value={carEngineCC}
+              value={carEngineCC || ''}
               name={"car_engine_cc"}
               autoComplete="off"
               fullWidth
@@ -1056,7 +1162,7 @@ export default function CarUpload() {
           </GridItem>
           <GridItem item xs={12} sm={12} md={4}>
             <TextField
-              value={carSeat}
+              value={carSeat || ''}
               name={"car_seat"}
               autoComplete="off"
               label="Seats"
@@ -1075,7 +1181,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carTransmission}
+                value={carTransmission || ''}
                 label="Car Transmission"
                 name="car_transmission"
                 onChange={onCarTransmissionChange}
@@ -1096,7 +1202,7 @@ export default function CarUpload() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={carFuelType}
+                value={parseInt(carFuelType) || ''}
                 label="Car Fuel Type"
                 name="car_fuel_type"
                 onChange={onCarFuelTypeChange}

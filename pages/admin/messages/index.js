@@ -68,6 +68,7 @@ function MessagesPage(props) {
     const useStyles = makeStyles(styles);
     const classes = useStyles();
     const [page, setPage] = React.useState(1);
+    const [totalPage, setTotalPage] = React.useState(1);
     const [messagesList, setMessagesList] = React.useState([]);
     const [updateId, setUpdateId] = React.useState();
     const [status, setStatus] = React.useState();
@@ -83,8 +84,6 @@ function MessagesPage(props) {
     const handleChange = (e, value) => {
         setPage(value);
     };
-    const totalCount = props.totalMessage || 0;
-    const totalPage = Math.ceil(totalCount / 6);
 
     
 
@@ -133,11 +132,25 @@ function MessagesPage(props) {
     const handleChange4 = (event) => {
         setChecked2(event.target.checked);
     };
-    
+
+
+    const loadPageTitle = async () => {
+        const messageCount = await axios.get(`/api/contactus/pageNumber?page=${page}&filter1=${checked1}&filter2=${checked2}`)
+        console.log("data count", messageCount.data.data)
+        setTotalPage(Math.ceil((messageCount.data.data) / 6));
+        setPage(1);
+    }
+
+    React.useEffect(async () => {
+        await loadPageTitle();
+    }, [status, checked1, checked2])
+
 
 
     React.useEffect(() => {
         const response = axios.get(`/api/contactus?page=${page}&filter1=${checked1}&filter2=${checked2}`).then((v) => {
+            
+            
             let { messages } = v.data;
             messages = messages || [];
 
@@ -194,6 +207,7 @@ function MessagesPage(props) {
                 )
             })
             setMessagesList(result)
+            
         })
 
     }, [page, updateId, status, checked1, checked2]);
