@@ -108,7 +108,7 @@ export default function CarUpload() {
   const searchItems = (e) => {
     setCarChassisNumber(e.target.value);
     const filteredData = jsonData?.filter(
-      (item) => item.cn.toLowerCase() === e.target.value.toLowerCase()
+      (item) => e.target.value.toLowerCase().includes(item.cn.toLowerCase())
     );
     if(filteredData.length > 0) {
       setFilteredResults(filteredData);
@@ -293,118 +293,117 @@ export default function CarUpload() {
 
   const schema = isUsed
     ? {
-        car_chassis_number: Joi.string()
-          .max(20)
-          .regex(/^[a-zA-Z-0-9]+$/)
-          .label("Chassis"),
-        car_engine_number: Joi.string()
-          .max(20)
-          .regex(/^[a-zA-Z-0-9]+$/)
-          .allow("")
-          .label("Engine No"),
-        car_registration_number: Joi.string()
-          .max(20)
-          .regex(/^[a-zA-Z-0-9]+$/)
-          .allow("")
-          .label("Registration No"),
-        car_type: Joi.number().required().label("Type"),
-        car_maker: Joi.number().required().label("Maker"),
-        car_model: Joi.number().required().label("Model"),
-        asking_price: Joi.number()
-          .positive()
-          .integer()
-          .min(100000)
-          .max(500000000)
-          .required()
-          .label("Asking Price"),
-        car_mileage: Joi.number()
-          .min(-1)
-          .max(999999)
-          .allow("")
-          .label("Mileage"),
-        car_seat: Joi.number()
-          .positive()
-          .integer()
-          .min(1)
-          .max(45)
-          .allow("")
-          .label("Seat"),
-        car_engine_cc: Joi.number()
-          .precision(2)
-          .min(660)
-          .max(9999)
-          .allow("")
-          .label("Engine Capacity"),
-        car_body_type: Joi.number().required().label("Body Type"),
-        car_fuel_type: Joi.number().required().label("Fuel Type"),
-        car_reg_year: isRegYear
-          ? Joi.required().label("Registration Year")
-          : Joi.allow().label("Registration Year"),
-        selling_price: Joi.number()
-          .positive()
-          .integer()
-          .min(100000)
-          .max(500000000)
-          .required()
-          .label("Selling Price"),
-      }
+      car_chassis_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .label("Chassis"),
+      car_engine_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Engine No"),
+      car_registration_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Registration No"),
+      car_type: Joi.number().required().label("Type"),
+      car_maker: Joi.number().required().label("Maker"),
+      car_model: Joi.number().required().label("Model"),
+      asking_price: Joi.number()
+        .positive()
+        .integer()
+        .min(100000)
+        .max(500000000)
+        .required()
+        .label("Asking Price"),
+      car_mileage: Joi.number()
+        .min(-1)
+        .max(999999)
+        .allow("")
+        .label("Mileage"),
+      car_seat: Joi.number()
+        .positive()
+        .integer()
+        .min(1)
+        .max(45)
+        .allow("")
+        .label("Seat"),
+      car_engine_cc: Joi.number()
+        .precision(2)
+        .min(660)
+        .max(9999)
+        .allow("")
+        .label("Engine Capacity"),
+      car_body_type: Joi.number().required().label("Body Type"),
+      car_fuel_type: Joi.number().required().label("Fuel Type"),
+      car_reg_year: isRegYear
+        ? Joi.required().label("Registration Year")
+        : Joi.allow().label("Registration Year"),
+      selling_price: Joi.number()
+        .positive()
+        .integer()
+        .min(100000)
+        .max(500000000)
+        .required()
+        .label("Selling Price"),
+    }
     : {
-        car_chassis_number: Joi.string()
-          .max(20)
-          .regex(/^[a-zA-Z-0-9]+$/)
-          .required()
-          .label("Chassis"),
-        car_engine_number: Joi.string()
-          .max(20)
-          .regex(/^[a-zA-Z-0-9]+$/)
-          .allow("")
-          .label("Engine No"),
-        car_registration_number: Joi.string()
-          .max(20)
-          .regex(/^[a-zA-Z-0-9]+$/)
-          .allow("")
-          .label("Registration No"),
-        car_type: Joi.number().required().label("Type"),
-        car_maker: Joi.number().required().label("Maker"),
-        car_model: Joi.number().required().label("Model"),
-        asking_price: Joi.number()
-          .positive()
-          .integer()
-          .min(100000)
-          .max(500000000)
-          .required()
-          .label("Asking Price"),
-        car_mileage: Joi.number()
-          .min(-1)
-          .max(999999)
-          .allow("")
-          .label("Mileage"),
-        car_seat: Joi.number()
-          .positive()
-          .integer()
-          .min(1)
-          .max(45)
-          .allow("")
-          .label("Seat"),
-        car_engine_cc: Joi.number()
-          .precision(2)
-          .min(660)
-          .max(9999)
-          .allow("")
-          .label("Engine Capacity"),
-        car_body_type: Joi.number().required().label("Body Type"),
-        car_fuel_type: Joi.number().required().label("Fuel Type"),
-        car_reg_year: isRegYear
-          ? Joi.required().label("Registration Year")
-          : Joi.allow().label("Registration Year"),
-        selling_price: Joi.number()
-          .positive()
-          .integer()
-          .min(100000)
-          .max(500000000)
-          .required()
-          .label("Selling Price"),
-      };
+      car_chassis_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .label("Chassis"),
+      car_engine_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Engine No"),
+      car_registration_number: Joi.string()
+        .max(20)
+        .regex(/^[a-zA-Z-0-9]+$/)
+        .allow("")
+        .label("Registration No"),
+      car_type: Joi.number().required().label("Type"),
+      car_maker: Joi.number().required().label("Maker"),
+      car_model: Joi.number().required().label("Model"),
+      asking_price: Joi.number()
+        .positive()
+        .integer()
+        .min(100000)
+        .max(500000000)
+        .required()
+        .label("Asking Price"),
+      car_mileage: Joi.number()
+        .min(-1)
+        .max(999999)
+        .allow("")
+        .label("Mileage"),
+      car_seat: Joi.number()
+        .positive()
+        .integer()
+        .min(1)
+        .max(45)
+        .allow("")
+        .label("Seat"),
+      car_engine_cc: Joi.number()
+        .precision(2)
+        .min(660)
+        .max(9999)
+        .allow("")
+        .label("Engine Capacity"),
+      car_body_type: Joi.number().required().label("Body Type"),
+      car_fuel_type: Joi.number().required().label("Fuel Type"),
+      car_reg_year: isRegYear
+        ? Joi.required().label("Registration Year")
+        : Joi.allow().label("Registration Year"),
+      selling_price: Joi.number()
+        .positive()
+        .integer()
+        .min(100000)
+        .max(500000000)
+        .required()
+        .label("Selling Price"),
+    };
 
   useEffect(() => {
     if (
@@ -483,11 +482,11 @@ export default function CarUpload() {
     return arr;
   };
   const onCarTypeChange = (e) => {
-    if (carType !== "") {
-      setCarMaker("");
-      setCarModel("");
-      setCarModelYear("");
-    }
+    // if (carType !== "") {
+    //   setCarMaker("");
+    //   setCarModel("");
+    //   setCarModelYear("");
+    // }
     if (e.target.name === "car_type" && e.target.value === 2) {
       setCarRegYears(getYears());
       setIsRegYear(true);
@@ -604,31 +603,31 @@ export default function CarUpload() {
   const validate = () => {
     const inputs = isUsed
       ? {
-          // carEngineNumber: carEngineNumber,
-          // carChassisNumber: carChassisNumber,
-          car_type: carType,
-          car_maker: carMaker,
-          car_model: carModel,
-          asking_price: carPrice.asking_price,
-          car_fuel_type: carFuelType,
-          car_body_type: carBodyType,
-          selling_price: carPrice.selling_price,
-          car_reg_year: carRegYear,
-          car_engine_cc: carEngineCC,
-        }
+        // carEngineNumber: carEngineNumber,
+        // carChassisNumber: carChassisNumber,
+        car_type: carType,
+        car_maker: carMaker,
+        car_model: carModel,
+        asking_price: carPrice.asking_price,
+        car_fuel_type: carFuelType,
+        car_body_type: carBodyType,
+        selling_price: carPrice.selling_price,
+        car_reg_year: carRegYear,
+        car_engine_cc: carEngineCC,
+      }
       : {
-          // carEngineNumber: carEngineNumber,
-          car_chassis_number: carChassisNumber,
-          car_type: carType,
-          car_maker: carMaker,
-          car_model: carModel,
-          asking_price: carPrice.asking_price,
-          car_fuel_type: carFuelType,
-          car_body_type: carBodyType,
-          selling_price: carPrice.selling_price,
-          car_reg_year: carRegYear,
-          car_engine_cc: carEngineCC,
-        };
+        // carEngineNumber: carEngineNumber,
+        car_chassis_number: carChassisNumber,
+        car_type: carType,
+        car_maker: carMaker,
+        car_model: carModel,
+        asking_price: carPrice.asking_price,
+        car_fuel_type: carFuelType,
+        car_body_type: carBodyType,
+        selling_price: carPrice.selling_price,
+        car_reg_year: carRegYear,
+        car_engine_cc: carEngineCC,
+      };
     const { error } = Joi.validate(inputs, schema, { abortEarly: false });
     if (!error) return null;
 
@@ -879,27 +878,25 @@ export default function CarUpload() {
         <GridContainer>
           <h2 className={classes.paperTitle}>Choose your car model</h2>
 
-          {!isUsed && (
-            <GridItem item xs={12}>
-              <FormControl className="w-full">
-                <TextField
-                  value={carChassisNumber}
-                  label="Enter Chassis Number "
-                  name={"car_chassis_number"}
-                  autoComplete="off"
-                  fullWidth
-                  onChange={searchItems}
-                  variant="outlined"
-                  placeholder="Enter Chassis Number"
-                />
-                {inputErrors.car_chassis_number && (
-                  <div className={classes.errorDiv}>
-                    {inputErrors.car_chassis_number}
-                  </div>
-                )}
-              </FormControl>
-            </GridItem>
-          )}
+          <GridItem item xs={12}>
+            <FormControl className="w-full">
+              <TextField
+                value={carChassisNumber}
+                label="Enter Chassis Number "
+                name={"car_chassis_number"}
+                autoComplete="off"
+                fullWidth
+                onChange={searchItems}
+                variant="outlined"
+                placeholder="Enter Chassis Number"
+              />
+              {inputErrors.car_chassis_number && (
+                <div className={classes.errorDiv}>
+                  {inputErrors.car_chassis_number}
+                </div>
+              )}
+            </FormControl>
+          </GridItem>
           <GridItem item xs={12}>
             <FormControl className="w-full">
               <InputLabel id="demo-simple-select-label">Car Type *</InputLabel>
