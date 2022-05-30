@@ -1,7 +1,8 @@
 import * as React from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import { useSession } from "next-auth/react";
 
 
@@ -276,7 +277,7 @@ function MessagesPage(props) {
 }
 
 export async function getServerSideProps() {
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
     let messageCount = await prisma.MerchantStorefront_messagetoadmin.count();
 
     return {

@@ -1,4 +1,4 @@
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 import * as crypto from "crypto";
 import uuid from "react-uuid";
 export default async function handler(req, res) {

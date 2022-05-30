@@ -1,4 +1,5 @@
-import { prisma, PrismaClient } from "@prisma/client";
+// import { prisma, PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 export default async function handler(req, res) {
   const { query } = req;

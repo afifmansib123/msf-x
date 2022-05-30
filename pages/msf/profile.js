@@ -6,7 +6,8 @@ import { useSession } from "next-auth/react";
 import makeStyles from "@mui/styles/makeStyles";
 import ProfileForm from "../../components/ProfileForm/ProfileForm";
 import { getSession } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 //Edit Profile styles
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +85,7 @@ export async function getServerSideProps(context) {
   // console.log("session",session)
   // const userId = session.token.id
 
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   var userInfo = await prisma.UsersApp_customuser.findUnique({
     where: {
       id: BigInt(session?.token.id),

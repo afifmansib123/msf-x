@@ -12,7 +12,8 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -210,7 +211,7 @@ function PackageManagementPage(props) {
 }
 
 export async function getServerSideProps() {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   var packages = await prisma.MerchantStorefront_package.findMany({
     orderBy: [{ id: "asc" }],
   });

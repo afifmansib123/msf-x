@@ -6,11 +6,11 @@
  *
  * TODO prepare bike too
  */
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import prisma from "/PrismaConnect";
 
 export default async function handler(req, res) {
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
 
   const cars = await prisma.carsApp_car.findMany();
 

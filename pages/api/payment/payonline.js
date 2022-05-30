@@ -4,7 +4,7 @@
  * TODO check status of a transasction
  */
 
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import uuid from "react-uuid";
 
 const SSLCommerzPayment = require("sslcommerz-lts");
@@ -124,7 +124,7 @@ export default async function handler(req, res) {
     // return;
   }
   /*
-   const prisma = new PrismaClient();
+  //  const prisma = new PrismaClient();
    var cars = await prisma.CarsApp_car.findMany({
      where: {
        // business_user: true,

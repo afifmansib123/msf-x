@@ -1,11 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 export default async function handler(req, res) {
   //POST: Create new package
   try {
     const { body: data } = req;
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
     if (req.method === "POST") {
       const { body: data } = req;
       var newPackage = await prisma.MerchantStorefront_package.create({

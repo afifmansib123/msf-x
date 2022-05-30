@@ -1,5 +1,5 @@
 import React from "react"
-import prisma from "../PrismaConnect";
+import prisma from "/PrismaConnect";
 
 function Cars(props) { 
     const cars = props.cars;

@@ -11,7 +11,7 @@ import {Button, CardContent, Container, TextField} from "@mui/material";
 import GridContainer from "../../../components/Grid/GridContainer";
 import CardBody from "../../../components/Card/CardBody";
 import CusButton from "../../../components/CustomButtons/Button";
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 
 function listingDetail(props) {
     const useStyles = makeStyles(styles);

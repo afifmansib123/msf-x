@@ -7,7 +7,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 import { HowToReg } from "@mui/icons-material";
 import Cryptr from "cryptr";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import { getToken } from "next-auth/jwt";
 
 export default NextAuth({
@@ -81,7 +82,7 @@ export default NextAuth({
           console.log("\tdata", data);
           // JWT cannot add other info into it?
           // Save to DB
-          const prisma = new PrismaClient();
+          // const prisma = new PrismaClient();
           let { user_id, token } = data;
 
           if (token.detail == "No active account found with the given credentials") {
@@ -172,7 +173,7 @@ export default NextAuth({
       // session.accessToken = token.accessToken;
       // console.log("callbacks.session", args);
 
-      const prisma = new PrismaClient();
+      // const prisma = new PrismaClient();
       var userSessionRecord = await prisma.user_session.findUnique({
         where: {
           // id: session.user_id.toString(),

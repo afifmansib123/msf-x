@@ -1,5 +1,5 @@
 import { data } from "autoprefixer";
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 
 export default async function handler(req, res) {
   try {

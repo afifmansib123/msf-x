@@ -6,7 +6,7 @@ import Card from "../../../components/Card/Card";
 import CardHeader from "../../../components/Card/CardHeader";
 import CardBody from "../../../components/Card/CardBody";
 import CustomButton from '../../../components/CustomButtons/Button'
-import prisma from "../../../PrismaConnect";
+import prisma from "/PrismaConnect";
 import axios from "axios";
 import { useRouter } from "next/router";
 import {Button, Container} from "@mui/material";

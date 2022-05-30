@@ -10,7 +10,8 @@ import CardHeader from "../../../components/Card/CardHeader";
 import CardBody from "../../../components/Card/CardBody";
 import CardFooter from "../../../components/Card/CardFooter";
 import CustomButton from '../../../components/CustomButtons/Button'
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -192,7 +193,7 @@ function CurrentGiftCard(props) {
 }
 
 export async function getServerSideProps(context) {
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
     const id = context.params.id
 
     const packages = await getGiftPackage() || [];

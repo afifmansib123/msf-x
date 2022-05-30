@@ -9,7 +9,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import makeStyles from "@mui/styles/makeStyles";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import prisma from "/PrismaConnect";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -273,7 +274,7 @@ function StoreDashboardPage(props) {
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   // console.log("dashboard.session", session);
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   // UserInfo
   var userPackages = await prisma.MerchantStorefront_paymenthistory.findMany({
     where: {
