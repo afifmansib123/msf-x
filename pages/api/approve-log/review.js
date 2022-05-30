@@ -63,6 +63,18 @@ async function updateApprove({ approvelogId, review_string, approval_id, car_id,
       },
       data: {
         is_active: true,
+        car_status: 'A'
+      },
+    });
+    // TODO handle error
+  } else if (status == "R") {
+    const car = await prisma.CarsApp_car.update({
+      where: {
+        id: car_id,
+      },
+      data: {
+        is_active: true,
+        car_status: 'R'
       },
     });
     // TODO handle error
