@@ -49,12 +49,12 @@ const UploadedCarsList = ({ data }) => {
             </p>
           )}
           {car_status === "P" && (
-            <p className="text-sm absolute top-0 right-0 p-2 bg-orange-500 rounded text-white m-2">
+            <p className="text-sm absolute top-0 right-0 py-1 px-2 bg-orange-500 rounded text-white m-2">
               Pending
             </p>
           )}
           {car_status === "R" && (
-            <p className="text-sm absolute top-0 right-0 p-2 bg-orange-500 rounded text-white m-2">
+            <p className="text-sm absolute top-0 right-0 py-1 px-2 bg-orange-500 rounded text-white m-2">
               Rejected
             </p>
           )}
