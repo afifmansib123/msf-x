@@ -64,7 +64,7 @@ function CarApproveLog(props) {
             <div className="">
               <h1 className="font-medium text-lg my-2">{data?.carName || "-"}</h1>
               <div className="mt-10">
-                <span className="font-medium mr-4">Requested Name:</span>
+                <span className="font-medium mr-4">Requester Name:</span>
                 <span>{data?.Merchant_Name || "-"}</span>
               </div>
               <div>
