@@ -118,10 +118,14 @@ function StoreDashboardPage(props) {
 
   return (
     <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
-        <h1 className="text-2xl font-bold pl-4">Welcome {user.name}</h1>
+      <GridItem xs={6} sm={6} md={6}>
+        <h1 className="text-2xl font-bold">Welcome {user.name}</h1>
       </GridItem>
-
+      <GridItem xs={6} sm={6} md={6}>
+        <div className='text-center md:ml-[30%] md:mr-[30%]'>
+          <h2 className='p-2 font-bold bg-bhalogari text-white rounded'>Subscrption Type: {subType}</h2>
+        </div>
+      </GridItem>
       {/* <Button onClick={() => { test() }}>Test</Button> */}
 
 
@@ -182,12 +186,6 @@ function StoreDashboardPage(props) {
 
           </CardFooter>
         </Card>
-      </GridItem>
-
-      <GridItem xs={12} sm={6} md={3}>
-        <div className='text-center mt-6 mx-12'>
-          <h2 className='font-bold bg-bhalogari p-4 mx-8 text-white rounded'>Subscrption Type: {subType}</h2>
-        </div>
       </GridItem>
 
 
