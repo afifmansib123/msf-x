@@ -70,9 +70,12 @@ function StoreDashboardPage(props) {
   // console.log(props.MerchantStorefront_package?.package_type);
   // console.log("MSF[user]", user);
   // const [subType, setSubType] = useState('');
+  // console.log(packages);
   let subType ='';
   const useStyles = makeStyles(styles);
+  
   const classes = useStyles();
+  
   const useStyles2 = makeStyles(styles2);
   const classes2 = useStyles2();
   // const { data: session, status } = useSession();
@@ -100,13 +103,18 @@ function StoreDashboardPage(props) {
   }
   // packages.map(p =>{console.log(p.MerchantStorefront_package.package_name)});
   
+  // sort the array in descending order and pick the last package
+  let arr = []
   packages.map(p =>{
     // console.log(p.MerchantStorefront_package.package_type);
+    
     if(p.MerchantStorefront_package.package_type == 'subscription'){
-      subType = p.MerchantStorefront_package.package_name;
-      // console.log(p.MerchantStorefront_package.package_name);
+      // subType = p.MerchantStorefront_package.package_name;
+      arr.push(p);
     }
   });
+  arr.sort((a,b) => b.id - a.id);
+  subType=arr[0].MerchantStorefront_package.package_name;
 
   return (
     <GridContainer>
