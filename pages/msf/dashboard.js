@@ -122,14 +122,14 @@ function StoreDashboardPage(props) {
         <h1 className="text-2xl font-bold">Welcome {user.name}</h1>
       </GridItem>
       <GridItem xs={6} sm={6} md={6}>
-        <div className='text-center md:ml-[30%] md:mr-[30%]'>
+        <div className='text-center md:ml-[50%] md:mr-[0%]'>
           <h2 className='p-2 font-bold bg-bhalogari text-white rounded'>Subscrption Type: {subType}</h2>
         </div>
       </GridItem>
       {/* <Button onClick={() => { test() }}>Test</Button> */}
 
 
-      <GridItem xs={12} sm={6} md={3}>
+      <GridItem xs={12} sm={6} md={4}>
         <Card
           onClick={() => {
             location.href = "/msf/listing";
@@ -139,7 +139,7 @@ function StoreDashboardPage(props) {
             <CardIcon color="warning">
               <CarCrashIcon />
             </CardIcon>
-            <p className={classes2.cardCategory} style={{color:'#000'}}>Peding Vehicles</p>
+            <p className={classes2.cardCategory} style={{color:'#000'}}>Pending Vehicles</p>
             <h3 className={classes2.cardTitle}>{pendingCar}</h3>
           </CardHeader>
           <CardFooter stats>
@@ -149,7 +149,7 @@ function StoreDashboardPage(props) {
       </GridItem>
 
 
-      <GridItem xs={12} sm={6} md={3}>
+      <GridItem xs={12} sm={6} md={4}>
         <Card
           onClick={() => {
             location.href = "/msf/listing";
@@ -169,7 +169,7 @@ function StoreDashboardPage(props) {
       </GridItem>
 
 
-      <GridItem xs={12} sm={6} md={3}>
+      <GridItem xs={12} sm={6} md={4}>
         <Card
           onClick={() => {
             location.href = "/msf/listing";
