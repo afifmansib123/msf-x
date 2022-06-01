@@ -7,11 +7,29 @@ import CardBody from "components/Card/CardBody";
 import CusButton from "components/CustomButtons/Button";
 import React from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle";
 import prisma from "PrismaConnect";
 import CardHeader from "components/Card/CardHeader";
 import Admin from "layouts/Admin.js";
 import { useSession } from "next-auth/react";
+import {Carousel} from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+const styles = {
+  pics: {
+    height: "20%",
+  },
+  arrows: {
+    position: "absolute",
+    zIndex: 2,
+    top: "calc(50% - 15px)",
+    width: 30,
+    height: 30,
+    cursor: "pointer",
+  }
+}
 
 function DetailCarLog(props) {
   const useStyles = makeStyles(styles);
@@ -43,7 +61,7 @@ function DetailCarLog(props) {
 
   const handleSubmit = async (type) => {
     if (type === "cancel") {
-      await router.push(`/admin/approval/`);
+      await router.push(`/admin/car-approval/`);
       return;
     }
 
@@ -58,10 +76,10 @@ function DetailCarLog(props) {
     try {
       if (type === "approve") {
         await handleApprove(reason, id, parseInt(router.query.id), parseInt(props.car.id));
-        await router.push(`/admin/approval/`);
+        await router.push(`/admin/car-approval/`);
       } else {
         await handleReject(reason, id, parseInt(router.query.id), parseInt(props.car.id));
-        await router.push(`/admin/approval/`);
+        await router.push(`/admin/car-approval/`);
       }
     } catch (e) {
       console.error(e)
@@ -80,18 +98,50 @@ function DetailCarLog(props) {
               {selectedCar?.carOverview?.carName ?? "UNKNOWN CAR NAME"}
             </h1>
           </GridItem>
+
           <GridItem xs={12} sm={12} md={12}>
-            <ul style={{ overflowX: "auto", whiteSpace: "nowrap", padding: 0, margin: 0 }}>
-              {selectedCar != null
-                ? selectedCar.carImage.map((value) => {
+            <div
+                className={"carousel-wrapper rounded-xl bg-white"}>
+              <Carousel
+                  infiniteLoop
+                  useKeyboardArrows
+                  autoPlay
+                  renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                      hasPrev && (
+                          <IconButton
+                              className={classes.arrows}
+                              aria-label="arrowBackIosNew"
+                              onClick={onClickHandler}
+                              style={{left: 15}}
+                          >
+                            <ArrowBackIosNewIcon/>
+                          </IconButton>
+                      )
+                  }
+                  renderArrowNext={(onClickHandler, hasNext, label) =>
+                      hasNext && (
+                          <IconButton
+                              className={classes.arrows}
+                              aria-label="arrowForwardIos"
+                              onClick={onClickHandler}
+                              style={{right: 15}}
+                          >
+                            <ArrowForwardIosIcon/>
+                          </IconButton>
+                      )
+                  }
+              >
+                {(selectedCar?.carImage ?? []).map((m, i) => {
                   return (
-                    <li style={{ display: "inline-block", marginInlineEnd: 18 }}>
-                      <img src={value} width={350} height={350} />
-                    </li>
+                      <div style={{height: "55vh", width: "100%", margin: "auto"}}
+                           className={classes.pics}>
+                        <img src={m} className={"object-cover"}
+                             style={{height: "100%", width: "100%"}}/>
+                      </div>
                   );
-                })
-                : ""}
-            </ul>
+                })}
+              </Carousel>
+            </div>
           </GridItem>
 
           <GridItem xs={12} sm={12} md={12}>
@@ -316,8 +366,9 @@ async function handleApprove(review_string, approval_id, car_id, approvelogId) {
       approvelogId: approvelogId,
       review_string: review_string,
       approval_id: approval_id,
-      car_id: car_id,
+      id: car_id,
       status: "A",
+      type: "car"
     }),
   });
 
@@ -336,8 +387,9 @@ async function handleReject(review_string, approval_id, car_id, approvelogId) {
       approvelogId: approvelogId,
       review_string: review_string,
       approval_id: approval_id,
-      car_id: car_id,
+      id: car_id,
       status: "R",
+      type: "car"
     }),
   });
 

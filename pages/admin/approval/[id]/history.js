@@ -13,7 +13,6 @@ import prisma from "PrismaConnect";
 
 function HistoryLog(props) {
     const router = useRouter();
-    const car_id = parseInt(router.query.id);
 
     const historyCard = () => {
         if(props.historys === null) return
@@ -99,9 +98,11 @@ function HistoryLog(props) {
 }
 
 export async function getServerSideProps(context) {
-    const car_id = parseInt(context.params.id);
-    const historys = await getHistory(car_id);
-    const merchantName = await getMerchantName(car_id);
+    const id = parseInt(context.params.id);
+    const type = context.query.type;
+    console.log(type)
+    const historys = await getHistory(id, type);
+    const merchantName = await getMerchantName(id, type);
     return {
         props: {
             historys: historys || null,
@@ -110,21 +111,36 @@ export async function getServerSideProps(context) {
     }
 }
 
-async function getHistory(id) {
+async function getHistory(id, type="car") {
     if (id) {
-        const data = await prisma.CarsApp_carapprovallog.findMany({
-            orderBy: {
-                updated_at: 'desc'
-            },
-            where: {
-                car_id_id: id,
-            },
-            include: {
-                UsersApp_customuser: true
-            }
-        }).catch((err) => {
-            throw new Error(err);
-        });
+        let data;
+        if (type === "car") {
+            data = await prisma.CarsApp_carapprovallog.findMany({
+                orderBy: {
+                    updated_at: 'desc'
+                },
+                where: {
+                    car_id_id: id,
+                },
+                include: {
+                    UsersApp_customuser: true
+                }
+            }).catch((err) => {
+                throw new Error(err);
+            });
+        } else {
+            data = await prisma.BikesApp_bikeapprovallog.findMany({
+                orderBy: {
+                    updated_at: 'desc'
+                },
+                where: {
+                    bike_id_id: id,
+                },
+                include: {
+                    UsersApp_customuser: true
+                }
+            })
+        }
 
         const parsedData = JSON.parse(
             JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
@@ -135,16 +151,29 @@ async function getHistory(id) {
     return null
 }
 
-async function getMerchantName(car_id) {
-    if (car_id) {
-        const data = await prisma.CarsApp_car.findUnique({
-            where: {
-                id:car_id
-            },
-            include: {
-                UsersApp_customuser: true
-            }
-        });
+async function getMerchantName(id, type = "car") {
+    if (id) {
+        let data;
+        if (type === "car") {
+            data = await prisma.CarsApp_car.findUnique({
+                where: {
+                    id:id
+                },
+                include: {
+                    UsersApp_customuser: true
+                }
+            });
+        } else {
+            data = await prisma.BikesApp_bike.findUnique({
+                where: {
+                    id:id
+                },
+                include: {
+                    UsersApp_customuser: true
+                }
+            });
+        }
+
         const parsedData = JSON.parse(
             JSON.stringify(data, (key, value) => (typeof value === "bigint" ? value.toString() : value))
         );

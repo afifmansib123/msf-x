@@ -14,6 +14,8 @@ function ApprovalIndexPage(props) {
   const classes = useStyles();
   const router = useRouter();
   const [page, setPage] = React.useState(1);
+  const [typeVal, setTypeVal] = React.useState("car");
+  const { type } = router.query;
   const totalCount = props.totalCarlog || 0;
   let totalPage = Math.ceil(totalCount/10);
   totalPage = totalPage < 1 ? 1: (totalPage);
@@ -23,7 +25,7 @@ function ApprovalIndexPage(props) {
   }, []);
 
   const callback = (car_id) => {
-    router.push({ pathname: `/admin/approval/${car_id}`});
+    router.push({ pathname: `/admin/car-approval/${car_id}`});
   };
 
   const onHistoryClicked = (car_id) => {
@@ -40,9 +42,13 @@ function ApprovalIndexPage(props) {
       historyBtnClicked={onHistoryClicked}
       totalPage={totalPage}
       page={page}
+      type={typeVal}
+      onTypeChange={(e) => {
+        console.log(e.target.value)
+      }}
       handleChange={(e, value) => {
         setPage(value);
-        router.push(`/admin/approval?page=${page}`);
+        router.push(`/admin/car-approval?page=${page}`);
       }}
     />
   );

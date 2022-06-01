@@ -109,6 +109,22 @@ function CarApproveLog(props) {
 
   return (
     <>
+      {/*radio button*/}
+      {/*<form  onChange={props.onTypeChange}>*/}
+      {/*  <ul className="grid grid-cols-2 m-10 max-w-md mx-auto">*/}
+      {/*    <li className="relative">*/}
+      {/*      <input className="sr-only peer" type="radio" value="car" name="answer" id="car" defaultChecked/>*/}
+      {/*      <label className="flex justify-center px-5 py-3 rounded-tl-lg rounded-bl-lg bg-white border border-gray-300 cursor-pointer focus:outline-none hover:bg-gray-50  peer-checked:text-white  peer-checked:bg-blue-600  peer-checked:border-transparent" htmlFor="car">Car</label>*/}
+      {/*    </li>*/}
+
+      {/*    <li className="relative">*/}
+      {/*      <input className="sr-only peer" type="radio" value="bike" name="answer" id="bike"/>*/}
+      {/*      <label className="flex justify-center px-5 py-3 rounded-tr-lg rounded-br-lg bg-white border border-gray-300 cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:text-white  peer-checked:bg-blue-600 peer-checked:border-transparent" htmlFor="bike">Bike</label>*/}
+      {/*    </li>*/}
+      {/*  </ul>*/}
+      {/*</form>*/}
+
+      {/*car*/}
       <h2 className="text-2xl font-bold">Waiting for Review ({showedData.length})</h2>
       <span>
         Merchants have submitted the cars to be approved. Once these are approved, they will be shown on the public

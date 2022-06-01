@@ -27,8 +27,16 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/approval",
-    name: "Approval",
+    path: "/car-approval",
+    name: "CarApproval",
+    rtlName: "",
+    icon: ApprovalIcon,
+
+    layout: "/admin",
+  },
+  {
+    path: "/bike-approval",
+    name: "BikeApproval",
     rtlName: "",
     icon: ApprovalIcon,
 

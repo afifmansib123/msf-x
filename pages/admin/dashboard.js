@@ -44,7 +44,7 @@ function Dashboard(props) {
         <GridItem xs={12} sm={6} md={3}>
           <Card
             onClick={() => {
-              location.href = "/admin/approval";
+              location.href = "/admin/car-approval";
             }}
           >
             <CardHeader color="warning" stats icon>

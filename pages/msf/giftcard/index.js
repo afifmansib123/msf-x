@@ -25,6 +25,7 @@ function merchantGiftCard(props) {
     const router = useRouter();
     const { data: session, status } = useSession();
     const { res_status, message, title } = router.query;
+
     const { packages } = props;
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));

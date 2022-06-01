@@ -1,6 +1,6 @@
 // /stories/pages/home.stories.jsx
 
-import CarApproveLog from "../../pages/admin/approval";
+import CarApproveLog from "../../pages/admin/car-approval";
 import styles from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import lightTheme from "/styles/theme/lightTheme";
