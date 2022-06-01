@@ -190,13 +190,6 @@ function StoreDashboardPage(props) {
           <CardFooter stats></CardFooter>
         </Card>
       </GridItem>
-
-      <GridItem xs={12} sm={6} md={3}>
-        <div className="text-center mt-6 mx-12">
-          <h2 className="font-bold bg-bhalogari p-4 mx-8 text-white rounded">Subscrption Type: {subType}</h2>
-        </div>
-      </GridItem>
-
       <GridItem xs={12} sm={12} md={12}>
         <div
           style={{
