@@ -53,49 +53,75 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
 
+      // Will just query from the database and that's it.
+      // TODO the database does not store encrypted password,
+      // but as of now, things are really messy with the broken API.
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
-        const { username, password } = credentials;
+        let { username, password } = credentials;
+
+        if (username.length == 11) {
+          username = "+88" + username;
+        }
+
+        let user = await prisma.UsersApp_customuser.findFirst({
+          where: {
+            contact_number: username,
+            user_password: password,
+          },
+        });
+        console.log("USER", user);
 
         // Call BG API to verify the credential
         // const res = await axios.post("https://backend.bhalogari.com/api/user/verify-password/", {
-        const authenticationURL = `${process.env.NEXT_PUBLIC_BG_API}user/verify-password/`;
-        console.log("authenticationURL", authenticationURL, { username, password });
 
-        let res;
-        try {
-          res = await axios.post(authenticationURL, {
-            contact_number: username,
-            password: password,
-            // user_email: user_mail1,
-          });
-        } catch (err) {
-          // console.error("Axios", err.response);
-          const { response } = err;
-          console.error("\taxios.post", response.status, response.statusText, response.data);
-        }
+        // const authenticationURL = `${process.env.NEXT_PUBLIC_BG_API}user/verify-password/`;
+        // console.log("authenticationURL", authenticationURL, { username, password });
 
-        console.log("\tCredentialsProvider.res", res.status, res.statusText);
+        // let res;
+        // try {
+        //   res = await axios.post(authenticationURL, {
+        //     contact_number: username,
+        //     password: password,
+        //     // user_email: user_mail1,
+        //   });
+        // } catch (err) {
+        //   // console.error("Axios", err.response);
+        //   const { response } = err;
+        //   console.error("\taxios.post", response.status, response.statusText, response.data);
+        // }
 
-        if (res.status && res.status === 200) {
-          const { data } = res;
-          console.log("\tdata", data);
+        // console.log("\tCredentialsProvider.res", res.status, res.statusText);
+
+        // if (res.status && res.status === 200) {
+        //   const { data } = res;
+        if (user) {
+          // Found user
+          let data = user;
+          // console.log("\tdata", data);
+          let { id: user_id } = data;
+          const token = {
+            id: user_id,
+            access:
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzMjg5OTQzLCJpYXQiOjE2NTMyMDM1NDMsImp0aSI6IjEyNmFiYTZmMDNlZTQ4YWZiZGIwYmNkOTRlMGY0OTRhIiwidXNlcl9pZCI6NDEsImNvbnRhY3RfbnVtYmVyIjoiKzg4MDE3Nzc2NjQwMzMiLCJpc19zdXBlcnVzZXIiOmZhbHNlfQ.krhExGRWLpFDiAn8zCQ2Tx2QSuWvI6b8mRYhYf6JKrw",
+          };
+          console.log("\ttoken", token);
           // JWT cannot add other info into it?
           // Save to DB
           // const prisma = new PrismaClient();
-          let { user_id, token } = data;
+          // let { user_id, token } = data;
 
-          if (token.detail == "No active account found with the given credentials") {
-            // TODO Dummy accesstoken for testing
+          // if (token.detail == "No active account found with the given credentials") {
+          //   // TODO Dummy accesstoken for testing
 
-            // const secret = process.env.NEXTAUTH_SECRET;
-            // token = await getToken({ req, secret });
-            // console.log("\tgenerated token", token);
-  
-            token.id = user_id;
-            token.access =
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzMjg5OTQzLCJpYXQiOjE2NTMyMDM1NDMsImp0aSI6IjEyNmFiYTZmMDNlZTQ4YWZiZGIwYmNkOTRlMGY0OTRhIiwidXNlcl9pZCI6NDEsImNvbnRhY3RfbnVtYmVyIjoiKzg4MDE3Nzc2NjQwMzMiLCJpc19zdXBlcnVzZXIiOmZhbHNlfQ.krhExGRWLpFDiAn8zCQ2Tx2QSuWvI6b8mRYhYf6JKrw";
-          }
+          //   // const secret = process.env.NEXTAUTH_SECRET;
+          //   // token = await getToken({ req, secret });
+          //   // console.log("\tgenerated token", token);
+
+          //   token.id = user_id;
+          //   token.access =
+          //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUzMjg5OTQzLCJpYXQiOjE2NTMyMDM1NDMsImp0aSI6IjEyNmFiYTZmMDNlZTQ4YWZiZGIwYmNkOTRlMGY0OTRhIiwidXNlcl9pZCI6NDEsImNvbnRhY3RfbnVtYmVyIjoiKzg4MDE3Nzc2NjQwMzMiLCJpc19zdXBlcnVzZXIiOmZhbHNlfQ.krhExGRWLpFDiAn8zCQ2Tx2QSuWvI6b8mRYhYf6JKrw";
+          // }
           console.log("---", user_id, token.access);
           console.log("1...");
 
@@ -159,9 +185,10 @@ export default NextAuth({
   callbacks: {
     async jwt(args) {
       const { token, user } = args;
-      // console.log("callbacks.jwt", args);
+      console.log("callbacks.jwt", args);
       if (user) {
-        token.id = user.user_id;
+        // token.id = user.user_id;
+        token.id = parseInt(token.sub);
         token.isStaff = user.is_staff;
       }
       return token;
