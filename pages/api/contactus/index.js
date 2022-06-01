@@ -50,6 +50,9 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
+        include: {
+          UsersApp_customuser: true,
+        }
       });
     }
     else if (filter1 == 'true') {
@@ -62,6 +65,9 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
+        include: {
+          UsersApp_customuser: true,
+        }
       });
     }
     else if (filter2 == 'true') {
@@ -74,7 +80,9 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
-        
+        include: {
+          UsersApp_customuser: true,
+        }
       });
     }
     else {
@@ -83,8 +91,10 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
+        include: {
+          UsersApp_customuser: true,
+        }
       });
-
     }
   }
 
@@ -97,6 +107,9 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
+        include: {
+          UsersApp_customuser: true,
+        }
       });
     }
     else if (filter1 == 'true') {
@@ -109,6 +122,9 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
+        include: {
+          UsersApp_customuser: true,
+        }
       });
     }
     else if (filter2 == 'true') {
@@ -121,6 +137,9 @@ async function getMessageList(page, filter1, filter2) {
         orderBy: {
           id: 'asc'
         },
+        include: {
+          UsersApp_customuser: true,
+        },
       });
     }
     else {
@@ -129,6 +148,9 @@ async function getMessageList(page, filter1, filter2) {
         take: 6,
         orderBy: {
           id: 'asc'
+        },
+        include: {
+          UsersApp_customuser: true,
         },
       });
     }

@@ -86,7 +86,7 @@ function MessagesPage(props) {
         setPage(value);
     };
 
-    
+
 
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -150,16 +150,17 @@ function MessagesPage(props) {
 
     React.useEffect(() => {
         const response = axios.get(`/api/contactus?page=${page}&filter1=${checked1}&filter2=${checked2}`).then((v) => {
-            
-            
+
+
             let { messages } = v.data;
             messages = messages || [];
-
+            console.log(messages)
             let result = messages.map((m, index) => {
                 return (
                     <TableBody key={index}>
-                        <TableRow   >
-                            <StyledTableCell align="center">{m.user_id_id}</StyledTableCell>
+                        <TableRow>
+                            <StyledTableCell align="center">{m.UsersApp_customuser.first_name} {m.UsersApp_customuser.last_name}</StyledTableCell>
+                            <StyledTableCell align="center">{m.UsersApp_customuser.contact_number}</StyledTableCell>
                             <StyledTableCell>{m.subject}</StyledTableCell>
                             <StyledTableCell>{m.message}</StyledTableCell>
                             {
@@ -208,7 +209,7 @@ function MessagesPage(props) {
                 )
             })
             setMessagesList(result)
-            
+
         })
 
     }, [page, updateId, status, checked1, checked2]);
@@ -246,13 +247,14 @@ function MessagesPage(props) {
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <StyledTableCell align="center" style={{width: '5%'}}>ID</StyledTableCell>
-                                    <StyledTableCell align="center" style={{width: '20%'}}>Subject</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '10%' }}>Name</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '7%' }}>Phone Number</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '25%' }}>Subject</StyledTableCell>
                                     <StyledTableCell align="center">Message</StyledTableCell>
-                                    <StyledTableCell align="center" style={{width: '10%'}}>Status</StyledTableCell>
-                                    <StyledTableCell align="center" style={{width: '12%'}}>Created at</StyledTableCell>
-                                    <StyledTableCell align="center" style={{width: '12%'}}>Update At</StyledTableCell>
-                                    <StyledTableCell align="center" style={{width: '5%'}}></StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '10%' }}>Status</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '10%' }}>Created at</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '10%' }}>Update At</StyledTableCell>
+                                    <StyledTableCell align="center" style={{ width: '3%' }}></StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             {messagesList}
