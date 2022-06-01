@@ -25,7 +25,6 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from "@mui/material/TextField";
 import prisma from "/PrismaConnect";
-
 import { format } from "date-fns";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -35,7 +34,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { useRouter } from "next/router";
-
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -65,7 +63,6 @@ const styles = {
     },
   },
 };
-
 function MerchantPage(props) {
   const [errorDialog, setOpenDialog] = React.useState(false);
   const router = useRouter();
@@ -82,7 +79,6 @@ function MerchantPage(props) {
   const [page, setPage] = React.useState(1);
   const [searchTitle, setSearchTitle] = React.useState("");
   const { res_status, message, title } = router.query;
-
   const [state, setState] = React.useState({
     NonSub: false,
     Sub: false,
@@ -94,19 +90,16 @@ function MerchantPage(props) {
     last_login: "",
     merchantid: ""
   }
-
   const onSearch = (e)=> {
     console.log(e.target.value);
     setSearchTitle(e.target.value);
   }
-
   const handleClose = async () => {
     setOpenDialog(false)
     await router.replace({
       pathname: '../../../admin/merchants'
     })
   }
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -143,13 +136,11 @@ function MerchantPage(props) {
       fontSize: 14,
     },
   }));
-
   React.useEffect(() => {
     if (res_status) {
       setOpenDialog(true)
     }
   }, []);
-
   React.useEffect(() => {
     let { merchants } = props;
     merchants = merchants || [];
@@ -203,19 +194,16 @@ function MerchantPage(props) {
     setItemList(merList);
     setMerList(merList);
   }, [])
-
   React.useEffect(async() => {
     if (searchTitle.trim() !== "") {
       const filteredName = merList.filter(value => {
-        return value.name.toLowerCase().startsWith(searchTitle.trim().toLowerCase());
+        return value.name.toLowerCase().startsWith(searchTitle.trim().toLowerCase()) || value.phone_num.toLowerCase().includes(searchTitle.trim().toLowerCase()) ;
       });
       setItemList(filteredName);
     } else {
       setItemList(merList);
     }
   }, [searchTitle]);
-
-
   function filterSub(box1, box2) {
     if (box1 == false && box2 == false || box1 == true && box2 == true) {
       totalCount = itemList.length || 0; // 59
@@ -243,11 +231,10 @@ function MerchantPage(props) {
       <h1 className="text-4xl font-semibold text-center mb-4">Merchants</h1>
       <div className={"border-b-[1px] px-8 border-b-gray-200"}>
         <div className={"mb-8"}>
-          <h1 className={"text-2xl text-bold"}>Search</h1>
-          <TextField fullWidth value={searchTitle} onChange={ (e) => onSearch(e)}/>
+          {/* <h1 className={"text-2xl text-bold"}>Search</h1> */}
+          <TextField fullWidth placeholder="Search with name or phone number" value={searchTitle} onChange={ (e) => onSearch(e)}/>
         </div>
       </div>
-
       <div>
         <FormGroup row>
           <FormControlLabel
@@ -281,7 +268,6 @@ function MerchantPage(props) {
                       <StyledTableCell>{item.name}</StyledTableCell>
                       <StyledTableCell>{item.phone_num}</StyledTableCell>
                       <StyledTableCell>{item.subscription}</StyledTableCell>
-
                       <StyledTableCell> {item.last_login
                           ? format(new Date(item?.last_login), "dd MMM yyyy")
                           : "-"}</StyledTableCell>
@@ -323,7 +309,6 @@ function MerchantPage(props) {
           </div>
         </GridItem>
       </GridContainer>
-
       <div>
         <Dialog
             className={"overflow-visible"}
@@ -342,15 +327,12 @@ function MerchantPage(props) {
                     <CheckOutlinedIcon color={"success"} className={"text-[7rem] text-center "}></CheckOutlinedIcon>
                   </div>
               }
-
               {( res_status === "fail" || res_status === "cancel") &&
                   <div className={"rounded-full border-[4px] border-red-800"}>
                     <CloseIcon color={"error"} className={"text-[7rem] text-center "}></CloseIcon>
                   </div>
               }
-
             </div>
-
             <div className={"text-center mt-3 text-bhalogari"}>
               {title}
             </div>
@@ -368,7 +350,6 @@ function MerchantPage(props) {
     </>
   );
 }
-
 export async function getServerSideProps() {
   var allMerchants = await prisma.UsersApp_customuser.findMany({
     include: {
