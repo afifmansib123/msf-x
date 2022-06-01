@@ -17,9 +17,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardFooter from "components/Card/CardFooter.js";
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CarCrashIcon from '@mui/icons-material/CarCrash';
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CarCrashIcon from "@mui/icons-material/CarCrash";
 
 import Button from "@mui/material/Button";
 
@@ -64,18 +64,18 @@ const styles = {
   },
 };
 import styles2 from "assets/jss/nextjs-material-dashboard/views/dashboardStyle.js";
-import {es, th} from "date-fns/locale";
+import { es, th } from "date-fns/locale";
 function StoreDashboardPage(props) {
   const { promotions, user, userId, packages, acceptedCar, rejectedCar, pendingCar } = props;
   // console.log(props.MerchantStorefront_package?.package_type);
   // console.log("MSF[user]", user);
   // const [subType, setSubType] = useState('');
   // console.log(packages);
-  let subType ='';
+  let subType = "";
   const useStyles = makeStyles(styles);
-  
+
   const classes = useStyles();
-  
+
   const useStyles2 = makeStyles(styles2);
   const classes2 = useStyles2();
   // const { data: session, status } = useSession();
@@ -98,23 +98,29 @@ function StoreDashboardPage(props) {
   };
 
   function test() {
-    console.log(allCars)
+    console.log(allCars);
     // console.log(acceptedCar, rejectedCar, pendingCar);
   }
   // packages.map(p =>{console.log(p.MerchantStorefront_package.package_name)});
-  
+
   // sort the array in descending order and pick the last package
-  let arr = []
-  packages.map(p =>{
+  let arr = [];
+  packages.map((p) => {
     // console.log(p.MerchantStorefront_package.package_type);
-    
-    if(p.MerchantStorefront_package.package_type == 'subscription'){
+
+    if (p.MerchantStorefront_package.package_type == "subscription") {
       // subType = p.MerchantStorefront_package.package_name;
       arr.push(p);
     }
   });
-  arr.sort((a,b) => b.id - a.id);
-  subType=arr[0].MerchantStorefront_package.package_name;
+
+  // TODO sorting by id for the package, does not guarantee type of subscription!
+  arr.sort((a, b) => b.id - a.id);
+  if (arr.length > 0) {
+    subType = arr[0].MerchantStorefront_package.package_name;
+  } else {
+    subType = "Unsubscribed"
+  }
 
   return (
     <GridContainer>
@@ -122,12 +128,11 @@ function StoreDashboardPage(props) {
         <h1 className="text-2xl font-bold">Welcome {user.name}</h1>
       </GridItem>
       <GridItem xs={6} sm={6} md={6}>
-        <div className='text-center md:ml-[50%] md:mr-[0%]'>
-          <h2 className='p-2 font-bold bg-bhalogari text-white rounded'>Subscrption Type: {subType}</h2>
+        <div className="text-center md:ml-[50%] md:mr-[0%]">
+          <h2 className="p-2 font-bold bg-bhalogari text-white rounded">Subscrption Type: {subType}</h2>
         </div>
       </GridItem>
       {/* <Button onClick={() => { test() }}>Test</Button> */}
-
 
       <GridItem xs={12} sm={6} md={4}>
         <Card
@@ -139,15 +144,14 @@ function StoreDashboardPage(props) {
             <CardIcon color="warning">
               <CarCrashIcon />
             </CardIcon>
-            <p className={classes2.cardCategory} style={{color:'#000'}}>Pending Vehicles</p>
+            <p className={classes2.cardCategory} style={{ color: "#000" }}>
+              Pending Vehicles
+            </p>
             <h3 className={classes2.cardTitle}>{pendingCar}</h3>
           </CardHeader>
-          <CardFooter stats>
-
-          </CardFooter>
+          <CardFooter stats></CardFooter>
         </Card>
       </GridItem>
-
 
       <GridItem xs={12} sm={6} md={4}>
         <Card
@@ -159,15 +163,14 @@ function StoreDashboardPage(props) {
             <CardIcon color="info">
               <CheckCircleIcon />
             </CardIcon>
-            <p className={classes2.cardCategory} style={{color:'#000'}}>Accept Vehicles</p>
+            <p className={classes2.cardCategory} style={{ color: "#000" }}>
+              Accept Vehicles
+            </p>
             <h3 className={classes2.cardTitle}>{acceptedCar}</h3>
           </CardHeader>
-          <CardFooter stats>
-
-          </CardFooter>
+          <CardFooter stats></CardFooter>
         </Card>
       </GridItem>
-
 
       <GridItem xs={12} sm={6} md={4}>
         <Card
@@ -179,24 +182,20 @@ function StoreDashboardPage(props) {
             <CardIcon color="danger">
               <CancelIcon />
             </CardIcon>
-            <p className={classes2.cardCategory} style={{color:'#000'}}>Rejected Vehicles</p>
+            <p className={classes2.cardCategory} style={{ color: "#000" }}>
+              Rejected Vehicles
+            </p>
             <h3 className={classes2.cardTitle}>{rejectedCar}</h3>
           </CardHeader>
-          <CardFooter stats>
-
-          </CardFooter>
+          <CardFooter stats></CardFooter>
         </Card>
       </GridItem>
 
       <GridItem xs={12} sm={6} md={3}>
-        <div className='text-center mt-6 mx-12'>
-          <h2 className='font-bold bg-bhalogari p-4 mx-8 text-white rounded'>Subscrption Type: {subType}</h2>
+        <div className="text-center mt-6 mx-12">
+          <h2 className="font-bold bg-bhalogari p-4 mx-8 text-white rounded">Subscrption Type: {subType}</h2>
         </div>
       </GridItem>
-
-
-
-
 
       <GridItem xs={12} sm={12} md={12}>
         <div
@@ -239,14 +238,8 @@ function StoreDashboardPage(props) {
           >
             {promotions.map((m, i) => {
               return (
-                <div
-                  style={{ height: "55vh", width: "100%", margin: "auto" }}
-                  className={classes.pics}
-                >
-                  <img
-                    style={{ height: "100%", width: "100%" }}
-                    src={m.image_url}
-                  />
+                <div style={{ height: "55vh", width: "100%", margin: "auto" }} className={classes.pics}>
+                  <img style={{ height: "100%", width: "100%" }} src={m.image_url} />
                 </div>
               );
             })}
@@ -271,27 +264,18 @@ function StoreDashboardPage(props) {
                 </TableHead>
                 <TableBody>
                   {packages.map((row) => {
-                      // console.log(row);
-                    return (<TableRow
-                      key={row.id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>{row?.MerchantStorefront_package?.package_name}</TableCell>
-                      <TableCell>{row?.MerchantStorefront_package?.package_type}</TableCell>
-                      <TableCell>
-                        {row.timestamp
-                          ? format(new Date(row?.timestamp), "dd MMM yyyy")
-                          : "-"}
-                      </TableCell>
-                      <TableCell>{row?.status === true ?
-                          "PAID":
-                          "UNPAID"}</TableCell>
-                      {/* <TableCell align="right">{row.carbs}</TableCell>
+                    // console.log(row);
+                    return (
+                      <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableCell>{row?.MerchantStorefront_package?.package_name}</TableCell>
+                        <TableCell>{row?.MerchantStorefront_package?.package_type}</TableCell>
+                        <TableCell>{row.timestamp ? format(new Date(row?.timestamp), "dd MMM yyyy") : "-"}</TableCell>
+                        <TableCell>{row?.status === true ? "PAID" : "UNPAID"}</TableCell>
+                        {/* <TableCell align="right">{row.carbs}</TableCell>
               <TableCell align="right">{row.protein}</TableCell> */}
-                    </TableRow>)
-                  }
-                  )
-                  }
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -317,21 +301,17 @@ export async function getServerSideProps(context) {
   });
 
   // User subscription packages
-  // var userSubs = await 
+  // var userSubs = await
 
   // The package is nested
   // userPackages = userPackages.map((p) => p.MerchantStorefront_package);
   userPackages = JSON.parse(
-    JSON.stringify(userPackages, (key, value) =>
-      typeof value === "bigint" ? parseInt(value) : value
-    )
+    JSON.stringify(userPackages, (key, value) => (typeof value === "bigint" ? parseInt(value) : value))
   );
   // Promotions
   var allPromotions = await prisma.MerchantStorefront_promotion.findMany({});
   allPromotions = JSON.parse(
-    JSON.stringify(allPromotions, (key, value) =>
-      typeof value === "bigint" ? value.toString() : value
-    )
+    JSON.stringify(allPromotions, (key, value) => (typeof value === "bigint" ? value.toString() : value))
   );
   // console.log("promotions: ", allPromotions[0]);
 
@@ -340,50 +320,51 @@ export async function getServerSideProps(context) {
       created_by_id: session.token.id,
       CarsApp_carapprovallog: {
         some: {
-          status: 'A'
-        }
-      }
+          status: "A",
+        },
+      },
     },
     include: {
       CarsApp_carapprovallog: true,
     },
-    
-  })
-  acceptedCar = (JSON.parse(JSON.stringify(acceptedCar, (key, value) => typeof value === "bigint" ? value.toString() : value))).length
+  });
+  acceptedCar = JSON.parse(
+    JSON.stringify(acceptedCar, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  ).length;
 
   var rejectedCar = await prisma.CarsApp_car.findMany({
     where: {
       created_by_id: session.token.id,
       CarsApp_carapprovallog: {
         some: {
-          status: 'R'
-        }
-      }
+          status: "R",
+        },
+      },
     },
     include: {
       CarsApp_carapprovallog: true,
     },
-    
-  })
-  rejectedCar = (JSON.parse(JSON.stringify(rejectedCar, (key, value) => typeof value === "bigint" ? value.toString() : value))).length
+  });
+  rejectedCar = JSON.parse(
+    JSON.stringify(rejectedCar, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  ).length;
 
   var pendingCar = await prisma.CarsApp_car.findMany({
     where: {
       created_by_id: session.token.id,
       CarsApp_carapprovallog: {
         some: {
-          status: 'P'
-        }
-      }
+          status: "P",
+        },
+      },
     },
     include: {
       CarsApp_carapprovallog: true,
     },
-    
-  })
-  pendingCar = (JSON.parse(JSON.stringify(pendingCar, (key, value) => typeof value === "bigint" ? value.toString() : value))).length
-
-
+  });
+  pendingCar = JSON.parse(
+    JSON.stringify(pendingCar, (key, value) => (typeof value === "bigint" ? value.toString() : value))
+  ).length;
 
   return {
     props: {
@@ -395,8 +376,7 @@ export async function getServerSideProps(context) {
       packages: userPackages,
       acceptedCar: acceptedCar,
       rejectedCar: rejectedCar,
-      pendingCar: pendingCar
-
+      pendingCar: pendingCar,
     },
   };
 }
