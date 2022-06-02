@@ -108,7 +108,7 @@ function Subscriptions(props) {
     if (threeSubcription[subPackage.id - 1].length == 0 || subPackage.id == 1) { // allow only package id 1 to buy more than one subscribtion
       await router.push({
         pathname: '/msf/paymethod',
-        query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name, package_type: "subscription" }
+        query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name, package_type: "subscription", package_name: subPackage.package_name}
       });
 
     } else {

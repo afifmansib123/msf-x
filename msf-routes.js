@@ -89,7 +89,7 @@ const dashboardRoutes = [
     layout: "/msf",
   },  
   {
-    path: "/contactus",
+    path: `/contactus`,
     name: "Contact Us",
     icon: CallIcon,
     layout: "/msf",

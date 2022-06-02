@@ -8,6 +8,7 @@ import { useS3Upload } from "next-s3-upload";
 import proImage from "/assets/img/profile/add-picture.svg";
 import Image from "next/image";
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
+import { useRouter } from "next/router";
 
 // layout for this page
 import MSF from "layouts/MSF.js";
@@ -50,6 +51,11 @@ function contactUs() {
     const useStyles = makeStyles(styles);
     const classes = useStyles();
     const { data: session } = useSession();
+    const router = useRouter();
+    const titleInput = React.useRef();
+    const messageInput = React.useRef();
+    let {title, message} = router.query;
+
     const {
         register,
         handleSubmit,
@@ -77,8 +83,6 @@ function contactUs() {
     //       setImageUrl(URL.createObjectURL(selectedImage));
     //     }
     //   }, [selectedImage]);
-
-
 
     async function addMessage(data) {
 
@@ -148,7 +152,9 @@ function contactUs() {
                                 {/* Subject Input */}
                                 <GridItem xs={12} sm={12} md={12}>
                                     <TextField
+                                        defaultValue={title}
                                         fullWidth
+                                        ref={titleInput}
                                         id="subject"
                                         label="Subject"
                                         variant="outlined"
@@ -159,7 +165,9 @@ function contactUs() {
                                 <GridItem xs={12} sm={12} md={12}>
                                     <TextField
                                         fullWidth
+                                        defaultValue={message}
                                         id="message"
+                                        ref={messageInput}
                                         label="Message"
                                         variant="outlined"
                                         multiline

@@ -39,7 +39,7 @@ function merchantGiftCard(props) {
     const buyPackage = (subPackage) => async (e) => {
         await router.replace({
             pathname: '/msf/paymethod',
-            query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name, package_type: "gift"}
+            query: { total_amount: subPackage.price, user_id: session.token.id, package_id: subPackage.id, cus_name: session.token.name, package_type: "gift", package_name: subPackage.package_name}
         });
     }
 

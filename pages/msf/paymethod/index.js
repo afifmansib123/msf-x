@@ -23,7 +23,7 @@ function PaymethodIndex(props) {
     const {choices} = props;
     const router = useRouter();
     const choicesarr = choices||["choice 1", "choice 2", "choice 3", "choice 4"];
-    let {total_amount, user_id, package_id,cus_name, package_type} = router.query;
+    let {total_amount, user_id, package_id,cus_name, package_type, package_name} = router.query;
     total_amount = parseInt(total_amount);
     user_id = parseInt(user_id);
     package_id = parseInt(package_id);
@@ -79,19 +79,24 @@ function PaymethodIndex(props) {
     }
 
     const buyOther = async (e) => {
-        const dataParams = {
-            total_amount: total_amount, // the amount goes to SSL checkout page
-            user_id: user_id,
-            package_id: package_id,
-            cus_name: cus_name,
-            pay_method: payid,
-            package_type: package_type
-        };
-        const response = await axios.post(
-            `/api/payment/others`,
-            dataParams
-        );
-        await router.replace(response.data);
+        // const dataParams = {
+        //     total_amount: total_amount, // the amount goes to SSL checkout page
+        //     user_id: user_id,
+        //     package_id: package_id,
+        //     cus_name: cus_name,
+        //     pay_method: payid,
+        //     package_type: package_type
+        // };
+        // const response = await axios.post(
+        //     `/api/payment/others`,
+        //     dataParams
+        // );
+        // await router.replace(response.data);
+
+        //go to contract us page
+        let title = `Buy ${package_type}, ${package_name}`;
+        let message = `would like to buy ${package_type}, ${package_name} with ${choicesarr[selectPay].payment_method}`
+        await router.push(`contactus?title=${title}&message=${message}`);
     }
 
     return (
