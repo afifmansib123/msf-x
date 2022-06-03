@@ -86,6 +86,19 @@ function NewPage() {
     const token = session.accessToken;
 
     const body = new FormData();
+
+    let { url } = await uploadToS3(image, {
+      endpoint: {
+        request: {
+          body: {
+            path: `promotion/banner`, // Path without leading and trailing slashes
+          },
+        },
+      },
+    });
+
+    console.log(url)
+
     body.append("file", url);
     body.append("headline", data.headline);
     body.append("description", data.description);
