@@ -33,14 +33,10 @@ function CardApproveLog(props) {
   const [page, setPage] = React.useState(1);
   const [dataPerPage, setDataPerPage] = useState(15)
 
-
-
   const handleChange = (e, value) => {
     setPage(value);
   };
   
-
-
   const onClickAccept = (cardRecord) => {
     handleClickOpen(cardRecord, "approve");
   }
@@ -68,7 +64,7 @@ function CardApproveLog(props) {
 
   }*/
   const handleClickOpen = (Record) => {
-    props.callback(Record.package_id_id);
+    props.callback(Record.id);
   };
 
   const router = useRouter();
@@ -83,8 +79,11 @@ function CardApproveLog(props) {
       return val
     }
   }).map((value, index) => {
-    return [value.serial_no, 
-      value.MerchantStorefront_package.package_name, value.user_id_id,
+    return [value.serial_no,  
+      //value.MerchantStorefront_package.description,
+
+      value.MerchantStorefront_package.package_name, 
+      value.user_id_id,
 
     (<Button variant="outlined" onClick={() => { handleClickOpen(value) }} color="success">Details</Button>)]
   });
@@ -94,9 +93,6 @@ function CardApproveLog(props) {
   const totalPage = Math.ceil(showedData.length / 15);
   const currentData = showedData.slice(indexOfFirstData,indexOfLastData)
   
-
-
-
   return (
     <>
       <GridItem xs={12} sm={12} md={6}>
@@ -121,7 +117,7 @@ function CardApproveLog(props) {
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color={props.tableHeaderColor}>
-              <h4 className={classes.cardTitleWhite}>Gift Card Approval Log</h4>
+              <h4 className={classes.cardTitleWhite}>Manage Give Card</h4>
               <p className={classes.cardCategoryWhite}>
                 Give Card Package
               </p>

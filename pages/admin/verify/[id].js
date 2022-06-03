@@ -46,7 +46,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 // import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 //font
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -68,13 +67,18 @@ function DeductPerk(props) {
   
   const handleClickOpen = (data) => {
     setOpenEdit(true);
-    
   };
+
   const handleClose = () => {
     setOpen(false);
     setOpenEdit(false);
     //router.push(`/admin/verify/`);
   };
+
+  const TimeFormat =(t) =>{
+    let newTime = (new Date(t).toLocaleString("en-GB", { timeZone: "UTC" })).replace(",", " ");
+    return newTime;
+  }
   
   const UpdatePerkList = async (data) => {
     try {
@@ -111,13 +115,20 @@ function DeductPerk(props) {
   useEffect(() => {
     const ManagePerk = perkdata.map((value, index) => {
       console.log(index);
-      return [value.perks,value.price,value.description,value.package_type,value.amount,value.unit,
+      return [
+        //value.perks,
+        //value.price,
+        //value.description,
+        //value.package_type,
+        value.MerchantStorefront_perks.perks,
+        TimeFormat(value.created_at),
+        TimeFormat(value.expired_at),
+        value.amount_used,
+        value.amount_remain,
+        value.unit,
         (<IconButton variant="outlined" key={index} onClick={() => handlevoucherchange(value)}>
             <EditIcon />
           </IconButton>),
-        //   (<IconButton variant="outlined" key={index} onClick={() => Delete(value)}>
-        //   <DeleteIcon/>
-        // </IconButton> )
       ];
     });
     setAllperklist(ManagePerk);
@@ -132,26 +143,21 @@ function DeductPerk(props) {
         const ret = await axios.delete(apiURL, { data: data });
         console.log("ret ja", ret);
         if (ret.status == 200) {
-          
-          for (const p of perkdata) {
-            console.log("perkList", { pid: p.id, dataid: data.id });
+            for (const p of perkdata) {
+              console.log("perkList", { pid: p.id, dataid: data.id });
           }
-          const newPerks = perkdata.filter((item) => item.id !== data.id);
+        const newPerks = perkdata.filter((item) => item.id !== data.id);
           setPerkData(newPerks);
-       
-          alert("successfully deleted");
-        } else {
-       
-          alert("Error");
+            alert("successfully deleted");
+        } else {      
+            alert("Error");
         }
       } catch (err) {
-        alert("Error Caught", err);
-        console.error("Error", err);
+          alert("Error Caught", err);
+          console.error("Error", err);
       }
     }
-    
-  };
-  
+};
   //form
   return (
     <>
@@ -194,35 +200,19 @@ function DeductPerk(props) {
                           /> 
 
                           <TextField
-                            id="perks"
-                            label="Perk Name"
-                            value={voucher.perks}
-                            //hidden
-                            {...register("perks")}
-                          /> 
-
-                          <TextField
-                            id="price"
-                            label="Price"
-                            value={voucher.price}
-                            //hidden
-                            {...register("price")}
-                          /> 
-
-                          <TextField
                             id="Amount Used"
                             label="Amount Used"
                             variant="outlined"
-                            defaultValue={voucher.amount}
+                            defaultValue={voucher.amount_used}
                             {...register("amount")}
                           />
 
                           <TextField
-                            id="Package Type"
-                            label="Package Type"
+                            id="Amount Remain"
+                            label="Amount Remain"
                             variant="outlined"
-                            value={voucher.package_type}
-                            {...register("package_type")}
+                            value={voucher.amount_remain}
+                            {...register("amount_remain")}
                           />
                           <TextField
                             id="Unit"
@@ -246,7 +236,7 @@ function DeductPerk(props) {
               </div>
               <Table
                 tableHeaderColor="danger"
-                tableHead={["Feature","Price","Description","Package Type","Amount","Unit",""]}
+                tableHead={["Feature","Created","Expired","Amount Used","Amount Remain","Unit", ""]}
                 tableData={allperklist}
               />
             </CardBody>
@@ -281,7 +271,6 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-
 DeductPerk.layout = Admin;
 
 export async function getServerSideProps(context) {
@@ -294,12 +283,17 @@ export async function getServerSideProps(context) {
   };
 }
 
-async function getManagePerk(package_id_id) {
+async function getManagePerk(id) {
   // const prisma = new PrismaClient();
-  const data = await prisma.MerchantStorefront_perks.findMany({
+  //const data = await prisma.MerchantStorefront_perks.findMany({
+  const data = await prisma.MerchantStorefront_merchantperkhistory.findMany({
     where: {
-      package_id_id: package_id_id,
+      id: id,
+    },
+     include:{
+      MerchantStorefront_perks:true,
     }
+   
   }).catch((err) => {
     throw new Error(err);
   });
