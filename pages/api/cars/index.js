@@ -25,6 +25,7 @@ async function getCarList(page, status, searchTitle) {
         if (textArr.length === 1) {
             console.log("case 1")
             merchant_id = await prisma.UsersApp_customuser.findMany({
+                take:30,
                 where: {
                     first_name: {
                         startsWith: textArr[0]
@@ -39,6 +40,7 @@ async function getCarList(page, status, searchTitle) {
 
         } else {
             merchant_id = await prisma.UsersApp_customuser.findMany({
+                take: 30,
                 where: {
                     first_name: {
                         startsWith: textArr[0]

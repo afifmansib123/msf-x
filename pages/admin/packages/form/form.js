@@ -4,7 +4,7 @@
  * Those functions can do data fetching (READ) only.
  *
  * If you wish to do data modification (CREATE, UPDATE, DELETE), do it with an API.
- * In this case, see /pages/api/merchants/index.js
+ * In this case, see /pages/api/merchants/[id].js
  * So handle the submit button by calling the API and pass the data for the API to process it.
  */
 

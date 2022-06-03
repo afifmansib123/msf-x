@@ -30,6 +30,7 @@ import Slide from '@mui/material/Slide';
 import Toolbar from "@mui/material/Toolbar";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import {data} from "autoprefixer";
 
 const styles = {
     cardCategoryWhite: {
@@ -87,6 +88,8 @@ function TableList(props) {
         MerchantName: false
     });
 
+    const [typeState, setTypeState] = React.useState("car");
+
     const handleChange = (e, value) => {
         setPage(value);
     };
@@ -105,6 +108,11 @@ function TableList(props) {
         });
     }
 
+    const onTypeChange = (e) => {
+        console.log(typeState)
+        setTypeState(e.target.value);
+    }
+
     const { Approved, Rejected, Pending } = state;
     const { Storename, MerchantName } = searchState;
 
@@ -112,15 +120,25 @@ function TableList(props) {
 
     const onDetailClick = async (car_id) => {
         // console.log(car_id)
-        await router.push({ pathname: `/admin/listings/${car_id}` });
+        if (typeState === "car") {
+            await router.push({ pathname: `/admin/listings/car-detail/${car_id}`});
+        } else {
+            await router.push({ pathname: `/admin/listings/bike-detail/${car_id}`});
+        }
+
     };
 
     const error = [Storename, MerchantName].filter((v) => v).length === 0;
 
     const loadPageTitle = async () => {
-        const carCount = await axios.get(`/api/cars/pageNumber?status=${JSON.stringify(state)}`)
+        let dataCount;
+        if (typeState === "car") {
+            dataCount = await axios.get(`/api/cars/pageNumber?status=${JSON.stringify(state)}`);
+        } else {
+            dataCount = await axios.get(`/api/bikes/pageNumber?status=${JSON.stringify(state)}`);
+        }
         // console.log("data count", carCount.data.data)
-        setTotalPage(Math.ceil((carCount.data.data) / 20));
+        setTotalPage(Math.ceil((dataCount.data.data) / 20));
         setPage(1);
     }
 
@@ -134,11 +152,122 @@ function TableList(props) {
             // fetch the data from api
             setDialogOpen(true);
             setOnDialogLoading(true);
-            const carlist = await axios.get(`/api/cars?searchTitle=${searchTitle}`);
-            let { cars } = carlist.data;
-            cars = cars ?? [];
 
-            let result = cars.map((item, index) => {
+            let result;
+            if (typeState === "car") {
+                const carlist = await axios.get(`/api/cars?searchTitle=${searchTitle}`);
+                let { cars } = carlist.data;
+                cars = cars ?? [];
+
+                result = cars.map((item, index) => {
+                    return (
+                        <div key={index}>
+                            <div className={"md:flex my-10"}>
+                                <div className={"md:flex-row"}><img src={item.img[0]} width={250} /></div>
+                                <div className={"md:flex-row md:ml-10 mt-8"}>
+                                    <div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Car Name</span>
+                                            <span className={""}>{item?.car?.car_name || "-"}</span>
+                                        </div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Store Name</span>
+                                            <span className={""}>{item.store || '-'}</span>
+                                        </div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Merchant Name</span>
+                                            <span className={""}>{`${item?.first_name} ${item?.last_name}`}</span>
+                                        </div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Status</span>
+                                            <span>
+                                        <CusButton disabled round color="warning" size="sm">
+                                            {
+                                                item?.status === "A" ? "Approved" : item?.status === "R" ? "Rejected" : "Pending"
+
+                                            }
+                                        </CusButton>
+                                    </span>
+
+                                        </div>
+                                        <Button onClick={() => onDetailClick(item.car.id)}>Detail</Button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            {cars.length - 1 !== index && <Divider />}
+                        </div>
+                    )
+                });
+            } else {
+                const bikelist = await axios.get(`/api/bikes?searchTitle=${searchTitle}`);
+                let { bikes } = bikelist.data;
+                bikes = bikes ?? [];
+
+                result = bikes.map((item, index) => {
+                    return (
+                        <div key={index}>
+                            <div className={"md:flex my-10"}>
+                                <div className={"md:flex-row"}><img src={item.img[0]} width={250} /></div>
+                                <div className={"md:flex-row md:ml-10 mt-8"}>
+                                    <div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Bike Name</span>
+                                            <span className={""}>{item?.bike?.bike_name || "-"}</span>
+                                        </div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Store Name</span>
+                                            <span className={""}>{item.store || '-'}</span>
+                                        </div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Merchant Name</span>
+                                            <span className={""}>{`${item?.first_name} ${item?.last_name}`}</span>
+                                        </div>
+                                        <div className={"md:grid md:grid-cols"}>
+                                            <span className={"font-semibold md:col"}>Status</span>
+                                            <span>
+                                        <CusButton disabled round color="warning" size="sm">
+                                            {
+                                                item?.status === "A" ? "Approved" : item?.status === "R" ? "Rejected" : "Pending"
+
+                                            }
+                                        </CusButton>
+                                    </span>
+
+                                        </div>
+                                        <Button onClick={() => onDetailClick(item.bike.id)}>Detail</Button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            {bikes.length - 1 !== index && <Divider />}
+                        </div>
+                    )
+                });
+            }
+
+            setOnDialogLoading(false);
+            setDialogCars(result);
+        } else {
+            setDialogCars([]);
+            setDialogOpen(false);
+        }
+    }, [searchTitle])
+
+    React.useEffect(async () => {
+        await loadPageTitle();
+    }, [state, typeState])
+
+    React.useEffect(async () => {
+        setOnload(true);
+        let result = [];
+        if (typeState === "car") {
+            const carlist = await axios.get(`/api/cars?page=${page}&status=${JSON.stringify(state)}`);
+            let { cars } = carlist.data;
+            cars = cars || [];
+
+            console.log(cars);
+            result = cars.map((item, index) => {
                 return (
                     <div key={index}>
                         <div className={"md:flex my-10"}>
@@ -178,45 +307,34 @@ function TableList(props) {
                     </div>
                 )
             })
-            setOnDialogLoading(false);
-            setDialogCars(result);
         } else {
-            setDialogCars([]);
-            setDialogOpen(false);
-        }
-    }, [searchTitle])
+            //bikes
+            const bikelist = await axios.get(`/api/bikes?page=${page}&status=${JSON.stringify(state)}`);
+            let { bikes } = bikelist.data;
+            bikes = bikes || [];
 
-    React.useEffect(async () => {
-        await loadPageTitle();
-    }, [state])
-
-    React.useEffect(async () => {
-        setOnload(true);
-        const carlist = await axios.get(`/api/cars?page=${page}&status=${JSON.stringify(state)}`);
-        let { cars } = carlist.data;
-        cars = cars || [];
-        let result = cars.map((item, index) => {
-            return (
-                <div key={index}>
-                    <div className={"md:flex my-10"}>
-                        <div className={"md:flex-row"}><img src={item.img[0]} width={250} /></div>
-                        <div className={"md:flex-row md:ml-10 mt-8"}>
-                            <div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Car Name</span>
-                                    <span className={""}>{item?.car?.car_name || "-"}</span>
-                                </div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Store Name</span>
-                                    <span className={""}>{item.store || '-'}</span>
-                                </div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Merchant Name</span>
-                                    <span className={""}>{`${item?.first_name} ${item?.last_name}`}</span>
-                                </div>
-                                <div className={"md:grid md:grid-cols"}>
-                                    <span className={"font-semibold md:col"}>Status</span>
-                                    <span>
+            result = bikes.map((item, index) => {
+                return (
+                    <div key={index}>
+                        <div className={"md:flex my-10"}>
+                            <div className={"md:flex-row"}><img src={item.img[0]} width={250} /></div>
+                            <div className={"md:flex-row md:ml-10 mt-8"}>
+                                <div>
+                                    <div className={"md:grid md:grid-cols"}>
+                                        <span className={"font-semibold md:col"}>Bike Name</span>
+                                        <span className={""}>{item?.bike?.bike_name || "-"}</span>
+                                    </div>
+                                    <div className={"md:grid md:grid-cols"}>
+                                        <span className={"font-semibold md:col"}>Store Name</span>
+                                        <span className={""}>{item.store || '-'}</span>
+                                    </div>
+                                    <div className={"md:grid md:grid-cols"}>
+                                        <span className={"font-semibold md:col"}>Merchant Name</span>
+                                        <span className={""}>{`${item?.first_name} ${item?.last_name}`}</span>
+                                    </div>
+                                    <div className={"md:grid md:grid-cols"}>
+                                        <span className={"font-semibold md:col"}>Status</span>
+                                        <span>
                                         <CusButton disabled round color="warning" size="sm">
                                             {
                                                 item?.status === "A" ? "Approved" : item?.status === "R" ? "Rejected" : "Pending"
@@ -225,24 +343,40 @@ function TableList(props) {
                                         </CusButton>
                                     </span>
 
+                                    </div>
+                                    <Button onClick={() => onDetailClick(item.bike.id)}>Detail</Button>
                                 </div>
-                                <Button onClick={() => onDetailClick(item.car.id)}>Detail</Button>
-                            </div>
 
+                            </div>
                         </div>
+                        {bikes.length - 1 !== index && <Divider />}
                     </div>
-                    {cars.length - 1 !== index && <Divider />}
-                </div>
-            )
-        })
+                )
+            })
+        }
+
         setOnload(false);
         setCars(result);
-    }, [page, state]);
+    }, [page, state, typeState]);
 
 
     return (
         <>
-            <h2 className="text-4xl font-bold text-center mb-8 text-sky-700">CAR LISTING</h2>
+            {/*<h2 className="text-4xl font-bold text-center mb-8 text-sky-700">CAR LISTING</h2>*/}
+            <form  onChange={onTypeChange}>
+              <ul className="grid grid-cols-2 m-10 max-w-md mx-auto">
+                <li className="relative">
+                  <input className="sr-only peer" type="radio" value="car" name="answer" id="car" defaultChecked/>
+                  <label className="flex justify-center px-5 py-3 rounded-tl-lg rounded-bl-lg bg-white border border-gray-300 cursor-pointer focus:outline-none hover:bg-gray-50  peer-checked:text-white  peer-checked:bg-blue-600  peer-checked:border-transparent" htmlFor="car">Car</label>
+                </li>
+
+                <li className="relative">
+                  <input className="sr-only peer" type="radio" value="bike" name="answer" id="bike"/>
+                  <label className="flex justify-center px-5 py-3 rounded-tr-lg rounded-br-lg bg-white border border-gray-300 cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:text-white  peer-checked:bg-blue-600 peer-checked:border-transparent" htmlFor="bike">Bike</label>
+                </li>
+              </ul>
+            </form>
+
             <div className={"text-center"}>
                 <Stack spacing={2} className={"items-center"}>
                     <Pagination count={totalPage} page={page} onChange={handleChange} howFirstButton showLastButton
@@ -277,7 +411,7 @@ function TableList(props) {
 
                     <div className={"border-b-[1px] px-8 border-b-gray-200"}>
                         <div className={"mb-8"}>
-                            <h1 className={"text-2xl text-bold"}>Search</h1>
+                            <h1 className={"text-2xl text-bold"}>Search {typeState === "car" ? "Cars" : "Bikes"} by merchant's name</h1>
                             <TextField fullWidth value={searchTitle} onChange={ (e) => onSearch(e)}/>
                         </div>
 
