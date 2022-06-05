@@ -78,7 +78,7 @@ function MessagesPage(props) {
     const { data: session, status1 } = useSession();
 
     function timeFormat(time) {
-        let newTime = (new Date(time).toLocaleString("en-GB", { timeZone: "UTC" })).replace(",", " ");
+        let newTime = (new Date(time).toLocaleDateString("en-GB", { timeZone: "UTC" }));
         return newTime;
     }
 
@@ -249,8 +249,8 @@ function MessagesPage(props) {
                                 <TableRow>
                                     <StyledTableCell align="center" style={{ width: '10%' }}>Name</StyledTableCell>
                                     <StyledTableCell align="center" style={{ width: '7%' }}>Phone Number</StyledTableCell>
-                                    <StyledTableCell align="center" style={{ width: '25%' }}>Subject</StyledTableCell>
-                                    <StyledTableCell align="center">Message</StyledTableCell>
+                                    <StyledTableCell style={{ width: '17%' }}>Subject</StyledTableCell>
+                                    <StyledTableCell>Message</StyledTableCell>
                                     <StyledTableCell align="center" style={{ width: '10%' }}>Status</StyledTableCell>
                                     <StyledTableCell align="center" style={{ width: '10%' }}>Created at</StyledTableCell>
                                     <StyledTableCell align="center" style={{ width: '10%' }}>Update At</StyledTableCell>
