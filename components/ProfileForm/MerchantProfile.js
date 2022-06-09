@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
             gridGap: "2.5em",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: "15px",
+            marginTop: "4rem",
             "@media(max-width: 600px)": {
                   gridTemplateColumns: "1fr",
             },
@@ -117,6 +117,11 @@ const useStyles = makeStyles((theme) => ({
             minWidth: "180px",
             height: "auto",
       },
+      root: {
+            "& .MuiInputBase-root.Mui-disabled": {
+                  color: "rgba(0, 0, 0, 0.6)" // (default alpha is 0.38)
+            }
+      }
 }));
 
 
@@ -245,6 +250,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             style={{ display: "none" }}
                                                             name="image"
                                                             onChange={handleImage}
+                                                            disabled={readOnly}
                                                       />
                                                 </div>
                                                 <div className={classes.editProfileLayout}>
@@ -256,9 +262,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             defaultValue={data.first_name}
                                                             helpertext={data.first_name}
                                                             {...register("first_name")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <TextField
                                                             required
@@ -268,9 +272,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             defaultValue={data.last_name}
                                                             helpertext={data.last_name}
                                                             {...register("last_name")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <TextField
                                                             required
@@ -282,9 +284,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             helpertext={data.contact_number}
                                                             error={errorText.length > 0}
                                                             {...register("contact_number")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <TextField
                                                             required
@@ -294,22 +294,19 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             helpertext={data.email}
                                                             defaultValue={data.email}
                                                             {...register("email")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <TextField
                                                             required
                                                             id="outlined-required"
                                                             name="date_of_birth"
                                                             type="date"
-                                                            defaultValue={data.date_of_birth}
                                                             label="Date of Birth"
+                                                            defaultValue={data.date_of_birth}
                                                             helpertext={data.date_of_birth}
+                                                            InputLabelProps={{ shrink: true }}
                                                             {...register("date_of_birth")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <Box sx={{ minWidth: 120 }}>
                                                             <FormControl {...register("gender")} fullWidth>
@@ -322,6 +319,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                                         name="gender"
                                                                         defaultValue={data.gender}
                                                                         label="Gender"
+                                                                        disabled={readOnly}
                                                                   >
                                                                         <MenuItem value={"M"}>Male</MenuItem>
                                                                         <MenuItem value={"F"}>Female</MenuItem>
@@ -336,9 +334,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             helpertext={data.address}
                                                             defaultValue={data.address}
                                                             {...register("address")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <TextField
                                                             // required
@@ -348,9 +344,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             helpertext={data.post_code}
                                                             defaultValue={data.post_code}
                                                             {...register("post_code")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       <TextField
                                                             required
@@ -359,9 +353,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                             label="Country"
                                                             defaultValue="Bangladesh"
                                                             {...register("country")}
-                                                            InputProps={{
-                                                                  readOnly: readOnly,
-                                                            }}
+                                                            disabled={readOnly}
                                                       />
                                                       {data.individual_user ? (
                                                             <TextField
@@ -372,9 +364,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                                   helpertext={data.nid_number}
                                                                   defaultValue={data.nid_number}
                                                                   {...register("nid_number")}
-                                                                  InputProps={{
-                                                                        readOnly: readOnly,
-                                                                  }}
+                                                                  disabled={readOnly}
                                                             />
                                                       ) : (
                                                             <TextField
@@ -385,9 +375,7 @@ const MerchantProfileForm = ({ data,  userId }) => {
                                                                   helpertext={data.tin_number}
                                                                   defaultValue={data.tin_number}
                                                                   {...register("tin_number")}
-                                                                  InputProps={{
-                                                                        readOnly: readOnly,
-                                                                  }}
+                                                                  disabled={readOnly}
                                                             />
                                                       )}
                                                 </div>

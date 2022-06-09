@@ -198,18 +198,14 @@ function MerchantCardDetail(props) {
                     label="Name"
                     defaultValue={store.name}
                     {...register("name")}
-                    InputProps={{
-                      readOnly: readOnly,
-                    }}
+                      disabled={readOnly}
                   />
                   <TextField
                     required
                     label="Phone"
                     defaultValue={store.phone}
                     {...register("phone")}
-                    InputProps={{
-                      readOnly: readOnly,
-                    }}
+                    disabled={readOnly}
                   />
                   <TextField
                     required
@@ -218,9 +214,7 @@ function MerchantCardDetail(props) {
                     label="Description"
                     defaultValue={store.description}
                     {...register("description")}
-                    InputProps={{
-                      readOnly: readOnly,
-                    }}
+                    disabled={readOnly}
                   />
                   <TextField
                     required
@@ -229,9 +223,7 @@ function MerchantCardDetail(props) {
                     label="About Us"
                     defaultValue={store.aboutus}
                     {...register("aboutus")}
-                    InputProps={{
-                      readOnly: readOnly,
-                    }}
+                    disabled={readOnly}
                   />
                   <TextField
                     required
@@ -240,9 +232,7 @@ function MerchantCardDetail(props) {
                     label="Address"
                     defaultValue={store.address}
                     {...register("address")}
-                    InputProps={{
-                      readOnly: readOnly,
-                    }}
+                    disabled={readOnly}
                   />
                 </div>
               </form>
@@ -251,14 +241,14 @@ function MerchantCardDetail(props) {
                 <div className="mt-4 p-4 grid gap-4 grid-cols-2 bg-white">
                   <div>
                     {/* <FileInput onChange={handleLogoChange} /> */}
-                    <Button variant="contained" component="label">
+                    <Button variant="contained" component="label" disabled={readOnly}>
                       Upload Logo
                       <input type="file" hidden onChange={handleLogoChange} />
                     </Button>
                   </div>
                   <div>
                     {/* <FileInput onChange={handleBackdropChange} /> */}
-                    <Button variant="contained" component="label">
+                    <Button variant="contained" component="label" disabled={readOnly}>
                       Upload Backdrop
                       <input type="file" hidden onChange={handleBackdropChange} />
                     </Button>
