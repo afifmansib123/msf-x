@@ -56,6 +56,12 @@ const styles = {
   tablecell: {
     fontSize: "10px",
   },
+  root: {
+    "& .MuiTableCell-head": {
+      color: "white",
+      backgroundColor: "red"
+    },
+  }
 };
 
 function PromotionPage(props) {
@@ -103,7 +109,7 @@ function PromotionPage(props) {
         <Card>
           <CardBody>
             <Table className="text-sm table-fixed">
-              <TableHead>
+              <TableHead className={classes.root}>
                 <TableRow>
                   {/* <TableCell align="center">ID</TableCell> */}
                   <TableCell align="center">Headline</TableCell>

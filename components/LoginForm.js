@@ -26,7 +26,7 @@ function LoginForm(props) {
     setDisable(true);
   }
 
-  // console.debug(watch("username"), watch("password"));
+  console.debug(watch("username"), watch("password"));
 
   return (
     <div>
